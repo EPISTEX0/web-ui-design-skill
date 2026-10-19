@@ -1,0 +1,25 @@
+{
+  "id": "slow-clay--none--2",
+  "desktop": {
+    "fullH": 2955,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 5,
+      "moderate": 0,
+      "minor": 0,
+      "rules": [
+        "color-contrast:5"
+      ]
+    }
+  },
+  "mobile": {
+    "fullH": 3407,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

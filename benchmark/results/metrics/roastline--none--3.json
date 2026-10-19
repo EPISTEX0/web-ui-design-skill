@@ -1,0 +1,27 @@
+{
+  "id": "roastline--none--3",
+  "desktop": {
+    "fullH": 1512,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 21,
+      "moderate": 2,
+      "minor": 0,
+      "rules": [
+        "aria-prohibited-attr:21",
+        "page-has-heading-one:1",
+        "region:1"
+      ]
+    }
+  },
+  "mobile": {
+    "fullH": 2998,
+    "overflowX": 230,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

@@ -1,0 +1,1 @@
+Build the main dashboard screen for Roastline, the internal tool our coffee roastery uses to track green bean inventory, roast batches and wholesale orders. Use realistic sample data. Put it in this folder as index.html (plain HTML, CSS and JS, no build step).

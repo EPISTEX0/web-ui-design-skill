@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roastline — Dashboard</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --ink-3: #6f6d68;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --wash: rgba(11,11,11,0.05);
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --warn: #fab219;
+    --warn-text: #7a5300;
+    --crit: #d03b3b;
+    --crit-text: #a32626;
+    --accent: #3b2a1e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --ink-3: #a09e97;
+      --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.06);
+      --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70;
+      --good-text: #0ca30c; --warn-text: #fab219; --crit-text: #ec7a7a;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --ink-3: #a09e97;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.06);
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70;
+    --good-text: #0ca30c; --warn-text: #fab219; --crit-text: #ec7a7a;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  button, select { font: inherit; color: inherit; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 20px 24px 48px; }
+
+  header.top { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; font-size: 18px; letter-spacing: -0.01em; }
+  .brand svg { width: 26px; height: 26px; }
+  .asof { color: var(--ink-3); font-size: 13px; }
+  .spacer { flex: 1; }
+
+  .filters { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+  .filters label { color: var(--ink-2); font-size: 13px; }
+  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); overflow: hidden; }
+  .seg button { border: 0; background: none; padding: 6px 12px; cursor: pointer; color: var(--ink-2); }
+  .seg button + button { border-left: 1px solid var(--border); }
+  .seg button:hover { background: var(--wash); }
+  .seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; background: var(--wash); box-shadow: inset 0 -2px 0 var(--ink); }
+  .btn { border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  .btn:hover { background: var(--wash); }
+  button:focus-visible, select:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .card h2 { margin: 0; font-size: 15px; font-weight: 650; }
+  .card .sub { color: var(--ink-3); font-size: 12.5px; margin-top: 2px; }
+  .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+  .kpi .label { color: var(--ink-2); font-size: 13px; }
+  .kpi .value { font-size: 30px; font-weight: 650; letter-spacing: -0.02em; margin: 4px 0 2px; }
+  .kpi .value small { font-size: 15px; font-weight: 500; color: var(--ink-2); letter-spacing: 0; margin-left: 3px; }
+  .kpi .note { font-size: 12.5px; color: var(--ink-3); }
+
+  .grid-2 { display: grid; grid-template-columns: 1.25fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .grid-2b { display: grid; grid-template-columns: 1fr 1.25fr; gap: 12px; }
+
+  .legend { display: flex; gap: 14px; font-size: 12.5px; color: var(--ink-2); flex-wrap: wrap; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .chart { position: relative; }
+  .chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .chart svg text { fill: var(--ink-3); font-size: 11.5px; font-family: inherit; }
+  .chart .gridline { stroke: var(--grid); stroke-width: 1; }
+  .chart .baseline { stroke: var(--axis); stroke-width: 1; }
+  .chart .hit { fill: transparent; }
+  .chart .hit:hover, .chart .hit:focus { fill: var(--wash); outline: none; }
+  .s1 { fill: var(--series-1); } .s2 { fill: var(--series-2); } .s3 { fill: var(--series-3); }
+  .tip {
+    position: absolute; pointer-events: none; z-index: 5; min-width: 150px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.18); font-size: 12.5px; opacity: 0; transition: opacity .08s;
+  }
+  .tip.on { opacity: 1; }
+  .tip .t { color: var(--ink-2); margin-bottom: 4px; }
+  .tip .r { display: flex; align-items: center; gap: 8px; }
+  .tip .r b { margin-left: auto; padding-left: 12px; font-weight: 650; color: var(--ink); }
+  .tip .r span.k { width: 10px; height: 3px; border-radius: 2px; }
+  .tip .r span.n { color: var(--ink-2); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-weight: 500; color: var(--ink-3); font-size: 12px; padding: 6px 8px; border-bottom: 1px solid var(--grid); white-space: nowrap; }
+  td { padding: 7px 8px; white-space: nowrap; border-bottom: 1px solid var(--grid); vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td .sub { color: var(--ink-3); font-size: 12px; }
+  .scroll { overflow-x: auto; }
+
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; white-space: nowrap; }
+  .badge svg { width: 14px; height: 14px; flex: none; }
+  .badge.good { color: var(--good-text); } .badge.warn { color: var(--warn-text); } .badge.crit { color: var(--crit-text); }
+  .badge.neutral { color: var(--ink-2); }
+  .badge.good svg { color: var(--good); } .badge.warn svg { color: var(--warn); } .badge.crit svg { color: var(--crit); }
+
+  .stockbar { position: relative; height: 8px; background: var(--wash); border-radius: 4px; min-width: 70px; }
+  .stockbar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: var(--series-1); border-radius: 4px; }
+  .stockbar .reorder { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); border-radius: 1px; }
+  .empty { color: var(--ink-3); padding: 18px 8px; text-align: center; }
+  .refetch { opacity: .55; transition: opacity .12s; }
+  footer { margin-top: 20px; color: var(--ink-3); font-size: 12px; }
+
+  @media (max-width: 980px) {
+    .kpis { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-2b { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) { .kpis { grid-template-columns: 1fr; } .wrap { padding: 14px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="16" rx="11" ry="14" transform="rotate(25 16 16)" fill="#3b2a1e"/><path d="M11 5c5 6 1 10 6 14s3 7 4 8" stroke="#f0e6d8" stroke-width="2" fill="none" stroke-linecap="round" transform="translate(-1 -1)"/></svg>
+      Roastline
+    </div>
+    <span class="asof" id="asof"></span>
+    <span class="spacer"></span>
+    <button class="btn" id="theme" type="button">Toggle theme</button>
+  </header>
+
+  <div class="filters" role="group" aria-label="Date range">
+    <label>Date range</label>
+    <div class="seg" id="range">
+      <button type="button" data-days="7" aria-pressed="false">Last 7 days</button>
+      <button type="button" data-days="30" aria-pressed="true">Last 30 days</button>
+      <button type="button" data-days="90" aria-pressed="false">Last 90 days</button>
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="kpis" id="kpis" aria-label="Key figures"></section>
+
+    <section class="grid-2">
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Roasted output</h2>
+            <div class="sub" id="chart-sub"></div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <div class="legend" id="legend"></div>
+            <button class="btn" id="viewtoggle" type="button" aria-pressed="false">View as table</button>
+          </div>
+        </div>
+        <div class="chart" id="chart"></div>
+        <div class="scroll" id="charttable" hidden></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div><h2>Green bean inventory</h2><div class="sub">On hand today · marker shows reorder point</div></div>
+        </div>
+        <div class="scroll" id="inventory"></div>
+      </div>
+    </section>
+
+    <section class="grid-2b">
+      <div class="card">
+        <div class="card-head"><div><h2>Recent roast batches</h2><div class="sub" id="batches-sub"></div></div></div>
+        <div class="scroll" id="batches"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><h2>Wholesale orders</h2><div class="sub" id="orders-sub"></div></div></div>
+        <div class="scroll" id="orders"></div>
+      </div>
+    </section>
+  </main>
+  <footer>Sample data for demonstration. Roast output = green weight in minus moisture loss (typically 13–17%).</footer>
+</div>
+
+<div class="tip" id="tip" role="status"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- helpers ---------- */
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (id) => document.getElementById(id);
+  function h(tag, attrs, ...kids) {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v == null || v === false) continue;
+      if (k === 'class') el.className = v; else el.setAttribute(k, v === true ? '' : v);
+    }
+    for (const kid of kids.flat()) if (kid != null) el.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+    return el;
+  }
+  function s(tag, attrs) {
+    const el = document.createElementNS(NS, tag);
+    for (const [k, v] of Object.entries(attrs || {})) el.setAttribute(k, v);
+    return el;
+  }
+  const fmt = (n, d = 0) => n.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const usd = (n) => '$' + fmt(n);
+  const DAY = 86400000;
+  const TODAY = new Date(Date.UTC(2026, 9, 19)); // Mon 19 Oct 2026
+  const addDays = (d, n) => new Date(d.getTime() + n * DAY);
+  const iso = (d) => d.toISOString().slice(0, 10);
+  const short = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const weekday = (d) => d.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' });
+  const mondayOf = (d) => addDays(d, -((d.getUTCDay() + 6) % 7));
+
+  /* ---------- sample data ---------- */
+  let seed = 20261019;
+  const rnd = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
+
+  const LEVELS = [
+    { key: 'light',  label: 'Light',  cls: 's1', varName: '--series-1' },
+    { key: 'medium', label: 'Medium', cls: 's2', varName: '--series-2' },
+    { key: 'dark',   label: 'Dark',   cls: 's3', varName: '--series-3' },
+  ];
+  const PRODUCTS = [
+    { name: 'Ethiopia Guji Natural',     level: 'light',  w: 2 },
+    { name: 'Kenya Nyeri AA',            level: 'light',  w: 1 },
+    { name: 'Colombia Huila',            level: 'medium', w: 3 },
+    { name: 'Guatemala Antigua',         level: 'medium', w: 2 },
+    { name: 'Brazil Cerrado',            level: 'medium', w: 2 },
+    { name: 'Decaf Colombia (SWP)',      level: 'medium', w: 1 },
+    { name: 'House Espresso Blend',      level: 'dark',   w: 4 },
+    { name: 'Sumatra Mandheling',        level: 'dark',   w: 1 },
+  ];
+  const ROASTERS = ['Probat P25', 'Probat P25', 'Loring S15'];
+  const pickProduct = () => {
+    const total = PRODUCTS.reduce((a, p) => a + p.w, 0);
+    let r = rnd() * total;
+    for (const p of PRODUCTS) { if ((r -= p.w) < 0) return p; }
+    return PRODUCTS[0];
+  };
+
+  // Batches: weekdays only, 90 days back. Newest numbering ends at #4,812.
+  const batches = [];
+  for (let i = 90; i >= 0; i--) {
+    const d = addDays(TODAY, -i);
+    if (d.getUTCDay() === 0 || d.getUTCDay() === 6) continue;
+    const n = 3 + Math.floor(rnd() * 4);
+    for (let j = 0; j < n; j++) {
+      const p = pickProduct();
+      const ro = ROASTERS[Math.floor(rnd() * ROASTERS.length)];
+      const cap = ro === 'Loring S15' ? 15 : 25;
+      const green = Math.round(cap * (0.84 + rnd() * 0.16) * 10) / 10;
+      const lossBase = p.level === 'light' ? 0.135 : p.level === 'medium' ? 0.150 : 0.168;
+      const loss = lossBase + (rnd() - 0.5) * 0.012;
+      batches.push({ date: d, product: p.name, level: p.level, roaster: ro, green, out: Math.round(green * (1 - loss) * 10) / 10, loss, hour: 6 + j * 2 });
+    }
+  }
+  batches.forEach((b, i) => (b.id = 4812 - (batches.length - 1 - i)));
+
+  const INVENTORY = [
+    { lot: 'Colombia Huila — Finca La Esperanza', bags: 22, kg: 1540, reorder: 700, weekly: 210 },
+    { lot: 'Brazil Cerrado — Fazenda Santa Inês', bags: 17, kg: 1190, reorder: 600, weekly: 150 },
+    { lot: 'Guatemala Antigua — Finca El Pilar',  bags: 9,  kg: 630,  reorder: 450, weekly: 120 },
+    { lot: 'Ethiopia Guji — Shakiso Natural',     bags: 5,  kg: 300,  reorder: 360, weekly: 135 },
+    { lot: 'Kenya Nyeri AA — Gatomboya',          bags: 3,  kg: 180,  reorder: 240, weekly: 70 },
+    { lot: 'Sumatra Mandheling — Lintong',        bags: 7,  kg: 420,  reorder: 240, weekly: 55 },
+    { lot: 'Decaf Colombia — Swiss Water',        bags: 4,  kg: 276,  reorder: 150, weekly: 45 },
+    { lot: 'Espresso base — Brazil/Honduras',     bags: 2,  kg: 138,  reorder: 500, weekly: 260 },
+  ];
+
+  const ORDERS = [
+    { id: 'WO-2291', cust: 'Harbor & Pine Café',      items: '40 kg House Espresso',                 kg: 40, value: 1180, ordered: -1,  due: 3,   status: 'Awaiting roast' },
+    { id: 'WO-2290', cust: 'Alder Hotel Group',       items: '120 kg House Espresso, 30 kg Decaf',  kg: 150, value: 4020, ordered: -2,  due: 2,   status: 'In production' },
+    { id: 'WO-2289', cust: 'Linden Street Bakery',    items: '25 kg Colombia Huila',                 kg: 25, value: 690,  ordered: -3,  due: 1,   status: 'Ready to ship' },
+    { id: 'WO-2288', cust: 'Northside Co-op',         items: '60 kg Brazil Cerrado, 20 kg Guji',     kg: 80, value: 2310, ordered: -5,  due: -1,  status: 'In production' },
+    { id: 'WO-2287', cust: 'Tamarack Books & Coffee', items: '15 kg Guatemala Antigua',              kg: 15, value: 435,  ordered: -6,  due: 0,   status: 'Ready to ship' },
+    { id: 'WO-2286', cust: 'Ridgeline Climbing Gym',  items: '50 kg House Espresso',                 kg: 50, value: 1475, ordered: -8,  due: -2,  status: 'Shipped' },
+    { id: 'WO-2285', cust: 'Alder Hotel Group',       items: '100 kg House Espresso',                kg: 100, value: 2950, ordered: -12, due: -6,  status: 'Delivered' },
+    { id: 'WO-2284', cust: 'Fennel & Fig Restaurant', items: '12 kg Kenya Nyeri, 12 kg Sumatra',     kg: 24, value: 802,  ordered: -15, due: -9,  status: 'Delivered' },
+    { id: 'WO-2283', cust: 'Harbor & Pine Café',      items: '40 kg House Espresso',                 kg: 40, value: 1180, ordered: -19, due: -13, status: 'Delivered' },
+    { id: 'WO-2282', cust: 'Northside Co-op',         items: '75 kg Colombia Huila',                 kg: 75, value: 2060, ordered: -26, due: -20, status: 'Delivered' },
+    { id: 'WO-2281', cust: 'Linden Street Bakery',    items: '25 kg Brazil Cerrado',                 kg: 25, value: 650,  ordered: -34, due: -28, status: 'Delivered' },
+    { id: 'WO-2280', cust: 'Ridgeline Climbing Gym',  items: '50 kg House Espresso',                 kg: 50, value: 1475, ordered: -47, due: -41, status: 'Delivered' },
+    { id: 'WO-2279', cust: 'Tamarack Books & Coffee', items: '15 kg Ethiopia Guji',                  kg: 15, value: 510,  ordered: -62, due: -56, status: 'Delivered' },
+    { id: 'WO-2278', cust: 'Alder Hotel Group',       items: '110 kg House Espresso',                kg: 110, value: 3245, ordered: -78, due: -72, status: 'Delivered' },
+  ].map((o) => ({ ...o, ordered: addDays(TODAY, o.ordered), due: addDays(TODAY, o.due) }));
+  const OPEN = new Set(['Awaiting roast', 'In production', 'Ready to ship']);
+
+  /* ---------- status badges (icon + label, never color alone) ---------- */
+  const ICONS = {
+    good: 'M3 8.5l3.2 3.2L13 4.8',
+    warn: 'M8 2.5l6 10.5H2z M8 7v2.8 M8 11.6v.1',
+    crit: 'M4 4l8 8 M12 4l-8 8',
+    neutral: 'M8 3.2a4.8 4.8 0 1 0 0 9.6 4.8 4.8 0 0 0 0-9.6z',
+  };
+  function badge(kind, text) {
+    const svg = s('svg', { viewBox: '0 0 16 16', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' });
+    svg.append(s('path', { d: ICONS[kind] }));
+    return h('span', { class: 'badge ' + kind }, svg, text);
+  }
+
+  /* ---------- state ---------- */
+  let days = 30;
+  let tableView = false;
+
+  const inRange = (d) => d.getTime() > addDays(TODAY, -days).getTime() && d.getTime() <= TODAY.getTime();
+
+  /* ---------- KPIs ---------- */
+  function renderKpis(rb) {
+    const roasted = rb.reduce((a, b) => a + b.out, 0);
+    const greenIn = rb.reduce((a, b) => a + b.green, 0);
+    const loss = greenIn ? (1 - roasted / greenIn) * 100 : 0;
+    const stock = INVENTORY.reduce((a, l) => a + l.kg, 0);
+    const low = INVENTORY.filter((l) => l.kg < l.reorder).length;
+    const open = ORDERS.filter((o) => OPEN.has(o.status));
+    const openVal = open.reduce((a, o) => a + o.value, 0);
+    const late = open.filter((o) => o.due < TODAY).length;
+
+    const tiles = [
+      { label: 'Green coffee on hand', value: fmt(stock), unit: 'kg', note: `${INVENTORY.length} lots · ${INVENTORY.reduce((a, l) => a + l.bags, 0)} bags` },
+      { label: `Roasted · last ${days} days`, value: fmt(roasted), unit: 'kg', note: `${rb.length} batches · ${fmt(loss, 1)}% avg weight loss` },
+      { label: 'Open wholesale orders', value: String(open.length), unit: usd(openVal), note: late ? `${late} past due date` : 'None past due' },
+      { label: 'Lots below reorder point', value: String(low), unit: low === 1 ? 'lot' : 'lots', note: INVENTORY.filter((l) => l.kg < l.reorder).map((l) => l.lot.split(' — ')[0]).join(' · ') },
+    ];
+    $('kpis').replaceChildren(...tiles.map((t) =>
+      h('div', { class: 'card kpi' },
+        h('div', { class: 'label' }, t.label),
+        h('div', { class: 'value' }, t.value, h('small', {}, t.unit)),
+        h('div', { class: 'note' }, t.note))));
+  }
+
+  /* ---------- chart ---------- */
+  function buckets(rb) {
+    const weekly = days > 31;
+    const map = new Map();
+    const start = addDays(TODAY, -days + 1);
+    if (!weekly) {
+      for (let i = 0; i < days; i++) {
+        const d = addDays(start, i);
+        if (d.getUTCDay() === 0 || d.getUTCDay() === 6) continue;
+        map.set(iso(d), { date: d, label: days <= 7 ? weekday(d) + ' ' + d.getUTCDate() : short(d), title: weekday(d) + ', ' + short(d), light: 0, medium: 0, dark: 0 });
+      }
+    } else {
+      for (let d = mondayOf(start); d <= TODAY; d = addDays(d, 7)) {
+        map.set(iso(d), { date: d, label: short(d), title: 'Week of ' + short(d), light: 0, medium: 0, dark: 0 });
+      }
+    }
+    for (const b of rb) {
+      const key = iso(weekly ? mondayOf(b.date) : b.date);
+      const bk = map.get(key);
+      if (bk) bk[b.level] += b.out;
+    }
+    return [...map.values()].map((b) => ({ ...b, total: b.light + b.medium + b.dark }));
+  }
+
+  const tip = $('tip');
+  function showTip(bucket, anchorX, anchorY) {
+    tip.replaceChildren(
+      h('div', { class: 't' }, bucket.title),
+      ...LEVELS.slice().reverse().map((l) => {
+        const k = h('span', { class: 'k' }); k.style.background = `var(${l.varName})`;
+        return h('div', { class: 'r' }, k, h('span', { class: 'n' }, l.label), h('b', {}, fmt(bucket[l.key], 1) + ' kg'));
+      }),
+      h('div', { class: 'r', style: 'margin-top:4px;padding-top:4px;border-top:1px solid var(--grid)' }, h('span', { class: 'n' }, 'Total'), h('b', {}, fmt(bucket.total, 1) + ' kg')));
+    const box = $('chart').getBoundingClientRect();
+    tip.classList.add('on');
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let x = box.left + anchorX + 14, y = box.top + anchorY - th / 2;
+    if (x + tw > window.innerWidth - 8) x = box.left + anchorX - tw - 14;
+    y = Math.max(8, Math.min(y, window.innerHeight - th - 8));
+    tip.style.left = x + window.scrollX + 'px';
+    tip.style.top = y + window.scrollY + 'px';
+  }
+  const hideTip = () => tip.classList.remove('on');
+
+  function topRounded(x, y, w, hgt, r) {
+    r = Math.min(r, w / 2, hgt);
+    return `M${x},${y + hgt}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + hgt}Z`;
+  }
+
+  function renderChart(data) {
+    const host = $('chart');
+    const W = Math.max(host.clientWidth, 320), H = 340;
+    const m = { t: 10, r: 8, b: 26, l: 40 };
+    const iw = W - m.l - m.r, ih = H - m.t - m.b;
+    const maxV = Math.max(...data.map((d) => d.total), 1);
+    const step = [50, 100, 200, 250, 500, 1000, 2000].find((st) => maxV / st <= 5) || 2000;
+    const top = Math.ceil(maxV / step) * step;
+    const y = (v) => m.t + ih - (v / top) * ih;
+
+    const svg = s('svg', { viewBox: `0 0 ${W} ${H}`, role: 'img', 'aria-label': `Stacked bar chart of roasted kilograms by roast level, last ${days} days. A table view is available.` });
+    for (let v = 0; v <= top; v += step) {
+      svg.append(s('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 0 ? 'baseline' : 'gridline' }));
+      const t = s('text', { x: m.l - 8, y: y(v) + 4, 'text-anchor': 'end' }); t.textContent = fmt(v); svg.append(t);
+    }
+    const slot = iw / data.length;
+    const bw = Math.min(Math.max(slot - 4, 3), 28);
+    const every = Math.ceil(data.length / Math.floor(iw / 62));
+    data.forEach((d, i) => {
+      const cx = m.l + slot * i + slot / 2;
+      let acc = 0;
+      const segs = LEVELS.filter((l) => d[l.key] > 0);
+      segs.forEach((l, si) => {
+        const y0 = y(acc), y1 = y(acc + d[l.key]);
+        acc += d[l.key];
+        const isTop = si === segs.length - 1;
+        const gap = isTop ? 0 : 2; // 2px surface gap between stacked fills
+        const hgt = Math.max(y0 - y1 - gap, 1);
+        const p = s('path', { class: l.cls, d: isTop ? topRounded(cx - bw / 2, y1, bw, hgt, 4) : `M${cx - bw / 2},${y1 + gap}h${bw}v${hgt}h${-bw}z` });
+        svg.append(p);
+      });
+      if (i % every === 0) {
+        const t = s('text', { x: cx, y: H - 6, 'text-anchor': 'middle' }); t.textContent = d.label; svg.append(t);
+      }
+      const hit = s('rect', { class: 'hit', x: m.l + slot * i, y: m.t, width: slot, height: ih, tabindex: 0, 'aria-label': `${d.title}: ${fmt(d.total, 1)} kg roasted` });
+      const on = () => showTip(d, cx, y(d.total) + 20);
+      hit.addEventListener('pointermove', on);
+      hit.addEventListener('focus', on);
+      hit.addEventListener('pointerleave', hideTip);
+      hit.addEventListener('blur', hideTip);
+      svg.append(hit);
+    });
+    host.replaceChildren(svg);
+  }
+
+  function renderChartTable(data) {
+    const rows = data.map((d) => h('tr', {}, h('td', {}, d.title), ...LEVELS.map((l) => h('td', { class: 'num' }, fmt(d[l.key], 1))), h('td', { class: 'num' }, fmt(d.total, 1))));
+    $('charttable').replaceChildren(h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, 'Period'), ...LEVELS.map((l) => h('th', { class: 'num' }, l.label + ' (kg)')), h('th', { class: 'num' }, 'Total (kg)'))),
+      h('tbody', {}, rows)));
+  }
+
+  /* ---------- inventory ---------- */
+  function renderInventory() {
+    const rows = INVENTORY.map((l) => ({ ...l, cover: Math.round(l.kg / l.weekly * 7) }))
+      .sort((a, b) => a.kg / a.reorder - b.kg / b.reorder);
+    const max = Math.max(...INVENTORY.map((l) => Math.max(l.kg, l.reorder))) * 1.05;
+    $('inventory').replaceChildren(h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, 'Lot'), h('th', {}, 'Stock'), h('th', { class: 'num' }, 'kg'), h('th', {}, 'Status'))),
+      h('tbody', {}, rows.map((l) => {
+        const fill = h('div', { class: 'fill' }); fill.style.width = (l.kg / max * 100) + '%';
+        const mark = h('div', { class: 'reorder', title: `Reorder point ${fmt(l.reorder)} kg` }); mark.style.left = `calc(${l.reorder / max * 100}% - 1px)`;
+        const status = l.kg < l.reorder * 0.6 ? badge('crit', `Reorder · ${l.cover} d`)
+          : l.kg < l.reorder ? badge('warn', `Low · ${l.cover} d`)
+          : badge('good', `OK · ${l.cover} d`);
+        const [origin, farm] = l.lot.split(' — ');
+        return h('tr', {},
+          h('td', {}, origin, h('div', { class: 'sub' }, `${farm} · ${l.bags} bags`)),
+          h('td', {}, h('div', { class: 'stockbar', role: 'img', 'aria-label': `${fmt(l.kg)} kg on hand, reorder point ${fmt(l.reorder)} kg` }, fill, mark)),
+          h('td', { class: 'num' }, fmt(l.kg)),
+          h('td', {}, status));
+      }))));
+  }
+
+  /* ---------- batches ---------- */
+  function renderBatches(rb) {
+    const recent = rb.slice(-8).reverse();
+    $('batches-sub').textContent = `Latest ${recent.length} of ${rb.length} in range`;
+    $('batches').replaceChildren(h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, 'Batch'), h('th', {}, 'Coffee'), h('th', {}, 'Roaster'), h('th', { class: 'num' }, 'Green'), h('th', { class: 'num' }, 'Roasted'), h('th', { class: 'num' }, 'Loss'))),
+      h('tbody', {}, recent.map((b) => {
+        const lv = LEVELS.find((l) => l.key === b.level);
+        const dot = h('span', { class: 'k' }); dot.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:var(${lv.varName})`;
+        return h('tr', {},
+          h('td', {}, '#' + fmt(b.id), h('div', { class: 'sub' }, `${short(b.date)}, ${String(b.hour).padStart(2, '0')}:00`)),
+          h('td', {}, b.product, h('div', { class: 'sub' }, dot, lv.label + ' roast')),
+          h('td', {}, b.roaster),
+          h('td', { class: 'num' }, fmt(b.green, 1) + ' kg'),
+          h('td', { class: 'num' }, fmt(b.out, 1) + ' kg'),
+          h('td', { class: 'num' }, fmt(b.loss * 100, 1) + '%'));
+      }))));
+  }
+
+  /* ---------- orders ---------- */
+  function renderOrders() {
+    const list = ORDERS.filter((o) => inRange(o.ordered));
+    const open = list.filter((o) => OPEN.has(o.status)).length;
+    $('orders-sub').textContent = `${list.length} placed in range · ${open} open`;
+    const view = list.slice(0, 8);
+    if (!view.length) { $('orders').replaceChildren(h('div', { class: 'empty' }, 'No orders placed in this range.')); return; }
+    $('orders').replaceChildren(h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, 'Order'), h('th', {}, 'Customer'), h('th', {}, 'Due'), h('th', { class: 'num' }, 'Value'), h('th', {}, 'Status'))),
+      h('tbody', {}, view.map((o) => {
+        const isOpen = OPEN.has(o.status);
+        const overdue = isOpen && o.due < TODAY;
+        const status = o.status === 'Delivered' ? badge('good', 'Delivered')
+          : o.status === 'Shipped' ? badge('neutral', 'Shipped')
+          : overdue ? badge('crit', o.status + ' · late')
+          : o.status === 'Ready to ship' ? badge('good', o.status)
+          : badge('neutral', o.status);
+        return h('tr', {},
+          h('td', {}, o.id, h('div', { class: 'sub' }, short(o.ordered))),
+          h('td', {}, o.cust, h('div', { class: 'sub' }, `${o.items}`)),
+          h('td', {}, short(o.due)),
+          h('td', { class: 'num' }, usd(o.value), h('div', { class: 'sub' }, o.kg + ' kg')),
+          h('td', {}, status));
+      }))));
+  }
+
+  /* ---------- render all ---------- */
+  let data = [];
+  function render() {
+    const rb = batches.filter((b) => inRange(b.date));
+    data = buckets(rb);
+    renderKpis(rb);
+    $('chart-sub').textContent = `Kilograms roasted per ${days > 31 ? 'week' : 'day'}, by roast level · ${rb.length} batches`;
+    $('legend').replaceChildren(...LEVELS.map((l) => { const i = h('i'); i.style.background = `var(${l.varName})`; return h('span', {}, i, l.label); }));
+    renderChart(data);
+    renderChartTable(data);
+    renderBatches(rb);
+    renderOrders();
+  }
+
+  /* ---------- wiring ---------- */
+  $('asof').textContent = 'Today · ' + TODAY.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  renderInventory();
+
+  $('range').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-days]');
+    if (!btn) return;
+    days = Number(btn.dataset.days);
+    $('range').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+    const main = $('main');
+    main.classList.add('refetch');           // hold the frame while "reloading"
+    hideTip();
+    setTimeout(() => { render(); main.classList.remove('refetch'); }, 120);
+  });
+
+  $('viewtoggle').addEventListener('click', () => {
+    tableView = !tableView;
+    $('viewtoggle').setAttribute('aria-pressed', String(tableView));
+    $('viewtoggle').textContent = tableView ? 'View as chart' : 'View as table';
+    $('chart').hidden = tableView;
+    $('charttable').hidden = !tableView;
+    hideTip();
+    if (!tableView) renderChart(data);
+  });
+
+  $('theme').addEventListener('click', () => {
+    const root = document.documentElement;
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+  });
+
+  let lastW = 0;
+  new ResizeObserver(() => {
+    const w = $('chart').clientWidth;
+    if (w && w !== lastW && !tableView) { lastW = w; renderChart(data); }
+  }).observe($('chart'));
+
+  render();
+})();
+</script>
+</body>
+</html>

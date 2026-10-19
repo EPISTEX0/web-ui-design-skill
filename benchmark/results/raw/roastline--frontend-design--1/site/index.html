@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roastline: Monday 19 October</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ECEEE6;
+  --panel:#F7F8F3;
+  --ink:#1E1712;
+  --muted:#645F54;
+  --line:#CFD3C6;
+  --bean:#587437;      /* green coffee */
+  --bean-soft:#DCE4CC;
+  --alert:#A93A25;
+  --alert-soft:#F2D9D1;
+  --console:#1F1510;   /* roaster console */
+  --console-line:#3A2C22;
+  --console-ink:#EADFCF;
+  --console-muted:#A6957F;
+  --amber:#F0B13A;
+  --display:'Bricolage Grotesque','IBM Plex Sans',system-ui,sans-serif;
+  --body:'IBM Plex Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--paper)}
+body{margin:0;font:400 15px/1.5 var(--body);color:var(--ink);background:var(--paper);font-variant-numeric:tabular-nums}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+
+/* rail */
+.rail{padding:28px 20px;border-right:1px solid var(--line);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:32px}
+.brand{display:flex;align-items:center;gap:10px;font:700 24px/1 var(--display);letter-spacing:-.02em;text-decoration:none}
+.brand svg{width:34px;height:22px}
+.nav{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;list-style:none}
+.nav a{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:3px;text-decoration:none;color:var(--muted);font-weight:500}
+.nav a:hover{background:var(--panel);color:var(--ink)}
+.nav a[aria-current=page]{background:var(--ink);color:var(--paper)}
+.nav .count{font-size:12px;background:var(--alert);color:#fff;border-radius:9px;padding:0 7px;line-height:18px}
+.rail-foot{margin-top:auto;font-size:13px;color:var(--muted);line-height:1.45}
+.rail-foot strong{display:block;color:var(--ink);font-weight:600}
+
+/* main */
+main{padding:32px 40px 56px;max-width:1360px;width:100%}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:28px}
+h1{font:700 clamp(32px,4vw,48px)/1 var(--display);letter-spacing:-.03em;margin:0 0 10px}
+.top p{margin:0;max-width:60ch;color:var(--muted);font-size:16px}
+.top p a{color:var(--ink);text-decoration-thickness:1px;text-underline-offset:3px}
+.btns{display:flex;gap:8px}
+.btn{font:600 14px/1 var(--body);padding:11px 16px;border-radius:3px;border:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}
+.btn:hover{background:var(--panel)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:#3a2d24}
+
+section{min-width:0}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-top:2px solid var(--ink);padding-top:10px;margin-bottom:14px}
+h2{font:700 19px/1.2 var(--display);letter-spacing:-.01em;margin:0}
+.sec-h .meta{font-size:13px;color:var(--muted)}
+
+.row{display:grid;gap:40px;margin-top:44px}
+.row.hero{grid-template-columns:minmax(0,1.9fr) minmax(280px,1fr);margin-top:0;gap:32px}
+.row.two{grid-template-columns:minmax(0,5fr) minmax(0,6fr)}
+.row.two-b{grid-template-columns:minmax(0,6fr) minmax(0,5fr)}
+
+/* roast console */
+.console{background:var(--console);color:var(--console-ink);border-radius:6px;padding:22px 22px 14px}
+.console-h{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.console h2{font-size:22px;color:#fff}
+.console .sub{margin:4px 0 0;color:var(--console-muted);font-size:13.5px}
+.live{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--amber);margin-bottom:6px}
+.live i{width:9px;height:9px;border-radius:50%;background:var(--amber);animation:pulse 1.6s ease-in-out infinite}
+.live.done{color:var(--console-muted)}
+.live.done i{animation:none;background:var(--console-muted);border-radius:1px}
+@keyframes pulse{50%{opacity:.25}}
+.reads{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:20px 0 6px;border-top:1px solid var(--console-line)}
+.reads div{padding:12px 14px 4px 0}
+.reads dt{font-size:12.5px;color:var(--console-muted)}
+.reads dd{margin:2px 0 0;font:700 30px/1.1 var(--display);color:#fff;letter-spacing:-.02em}
+.reads dd small{font:500 14px var(--body);color:var(--console-muted);margin-left:3px}
+.chart-wrap{position:relative}
+svg.curve{display:block;width:100%;height:auto;overflow:visible}
+svg.curve text{font:500 11.5px var(--body);fill:var(--console-muted)}
+svg.curve .lbl{fill:var(--console-ink);font-weight:600}
+.legend{display:flex;gap:18px;font-size:12.5px;color:var(--console-muted);padding:2px 0 8px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend svg{width:26px;height:6px}
+
+/* queue */
+.queue{list-style:none;margin:0;padding:0}
+.queue li{display:grid;grid-template-columns:48px 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.queue time{color:var(--muted);font-size:13px}
+.queue .nm{font-weight:600;line-height:1.3}
+.queue .dt{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.queue .st{font-size:13px;color:var(--muted);text-align:right}
+.queue li.now{background:var(--panel);margin:0 -10px;padding-left:10px;padding-right:10px;border-left:4px solid var(--amber);padding-left:6px;border-bottom-color:transparent}
+.queue li.now .st{color:var(--ink);font-weight:600}
+.queue li.done .nm{color:var(--muted);font-weight:500}
+.tick{display:inline-block;width:10px;height:10px;margin-right:5px;vertical-align:-1px}
+.queue-sum{margin:14px 0 0;font-size:13.5px;color:var(--muted)}
+.progress{height:6px;background:var(--line);border-radius:3px;margin-top:8px;overflow:hidden;display:flex;gap:2px}
+.progress b{display:block;height:100%;background:var(--ink)}
+.progress b+b{background:var(--amber)}
+
+/* inventory */
+.inv{list-style:none;margin:0;padding:0}
+.inv li{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr) 110px;gap:14px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.inv .nm{font-weight:600;line-height:1.3}
+.inv .nm small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.track{position:relative;height:12px}
+.track .bar{position:absolute;left:0;top:0;height:12px;background:var(--bean);border-radius:0 3px 3px 0}
+.low .track .bar{background:var(--alert)}
+.track .reorder{position:absolute;top:-4px;bottom:-4px;width:0;border-left:2px dashed var(--ink)}
+.inv .num{text-align:right;line-height:1.25}
+.inv .num b{display:block;font-weight:600}
+.inv .num span{font-size:12.5px;color:var(--muted)}
+.low .num span{color:var(--alert);font-weight:600}
+.key{display:flex;gap:16px;font-size:12.5px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
+.key span{display:inline-flex;align-items:center;gap:6px}
+.key i{display:inline-block;width:14px;height:8px;background:var(--bean);border-radius:0 2px 2px 0}
+.key i.r{background:var(--alert)}
+.key i.d{width:0;height:12px;background:none;border-left:2px dashed var(--ink);border-radius:0}
+
+/* orders */
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg button{font:500 13px/1 var(--body);padding:8px 12px;background:transparent;border:0;color:var(--ink);cursor:pointer}
+.seg button+button{border-left:1px solid var(--ink)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.seg button:focus-visible{outline-offset:-3px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-weight:500;color:var(--muted);text-align:left;font-size:13px;padding:6px 8px 6px 0;border-bottom:1px solid var(--ink)}
+td{padding:10px 8px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.r,th.r{text-align:right;padding-right:0}
+td .who{font-weight:600;display:block;line-height:1.3}
+td .id{color:var(--muted);font-size:12.5px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}
+.chip svg{width:12px;height:12px;flex:none}
+.chip.blocked{color:var(--alert);font-weight:600}
+.empty{padding:22px 0;color:var(--muted)}
+.tablewrap{overflow-x:auto}
+
+/* output chart */
+.bars{display:block;width:100%;height:auto;overflow:visible}
+.bars text{font:500 11.5px var(--body);fill:var(--muted)}
+.bars .val{fill:var(--ink);font-weight:600}
+.bars rect.hit{fill:transparent}
+.bars g.col:hover rect.m,.bars g.col:focus rect.m{fill:var(--ink)}
+.bars g.col:focus{outline:none}
+.bars g.col:focus-visible rect.hit{stroke:var(--amber);stroke-width:3}
+
+/* incoming */
+.ship{list-style:none;margin:0;padding:0}
+.ship li{display:grid;grid-template-columns:78px 1fr auto;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:baseline}
+.ship .when{font:700 16px/1.1 var(--display)}
+.ship .when small{display:block;font:400 12.5px var(--body);color:var(--muted);margin-top:3px}
+.ship .nm{font-weight:600;line-height:1.3}
+.ship .nm small{display:block;font-weight:400;color:var(--muted);font-size:13px}
+.ship .kg{font-weight:600}
+.note{margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+
+#tip{position:fixed;z-index:10;pointer-events:none;background:var(--ink);color:var(--paper);font-size:12.5px;line-height:1.45;padding:7px 10px;border-radius:3px;opacity:0;transform:translate(-50%,-100%);white-space:nowrap}
+#tip.on{opacity:1}
+#tip b{font-weight:600}
+
+@media (max-width:1100px){
+  .row.hero,.row.two,.row.two-b{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;height:auto;flex-direction:row;align-items:center;flex-wrap:wrap;padding:14px 20px;border-right:0;border-bottom:1px solid var(--line);gap:14px 24px}
+  .nav{flex-direction:row;flex-wrap:wrap}
+  .rail-foot{display:none}
+  main{padding:24px 20px 48px}
+  .reads{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .inv li{grid-template-columns:minmax(0,1fr) 110px}
+  .inv .track{grid-column:1 / -1;order:3}
+  .row{gap:36px}
+}
+@media (prefers-reduced-motion:reduce){.live i{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a class="brand" href="#">
+      <svg viewBox="0 0 34 22" fill="none" aria-hidden="true"><path d="M1 3 C5 18 9 20 15 15 C21 10 26 6 33 4" stroke="#1E1712" stroke-width="3" stroke-linecap="round"/><circle cx="25" cy="7.4" r="3" fill="#F0B13A" stroke="#1E1712" stroke-width="1.5"/></svg>
+      Roastline
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="#" aria-current="page">Dashboard</a></li>
+        <li><a href="#roast">Roast log</a></li>
+        <li><a href="#green">Green inventory <span class="count" aria-label="3 below reorder level">3</span></a></li>
+        <li><a href="#orders">Wholesale orders</a></li>
+        <li><a href="#">Customers</a></li>
+        <li><a href="#">Roast profiles</a></li>
+      </ul>
+    </nav>
+    <div class="rail-foot"><strong>Roaster: Probat P25</strong>Last gas service 2 Oct<br>Next chaff clean after batch R-2645</div>
+  </aside>
+
+  <main>
+    <header class="top">
+      <div>
+        <h1>Monday 19 October</h1>
+        <p>36 of 92 kg roasted so far. Two orders ship today. <a href="#green">Brazil Cerrado</a> is below reorder level and is holding up order W-1181.</p>
+      </div>
+      <div class="btns">
+        <button class="btn" type="button">Log green delivery</button>
+        <button class="btn primary" type="button">New wholesale order</button>
+      </div>
+    </header>
+
+    <div class="row hero" id="roast">
+      <section aria-labelledby="curve-h">
+        <div class="console">
+          <div class="console-h">
+            <div>
+              <div class="live" id="live"><i></i><span id="liveTxt">Roasting now</span></div>
+              <h2 id="curve-h">R-2641 Ethiopia Guji Natural</h2>
+              <p class="sub">12.0 kg green, light roast (Agtron 78), started 09:55</p>
+            </div>
+          </div>
+          <dl class="reads" aria-live="off">
+            <div><dt>Bean temperature</dt><dd id="rBT">–<small>°C</small></dd></div>
+            <div><dt>Rate of rise</dt><dd id="rRoR">–<small>°C/min</small></dd></div>
+            <div><dt>Time in drum</dt><dd id="rTime">–</dd></div>
+            <div><dt>Development</dt><dd id="rDev">–</dd></div>
+          </dl>
+          <div class="chart-wrap" id="chartWrap">
+            <svg class="curve" id="curve" viewBox="0 0 760 320" role="img" aria-label="Roast curve for batch R-2641: bean temperature against time, compared with the target profile. First crack is expected at 8:40 and drop at 10:20."></svg>
+          </div>
+          <div class="legend">
+            <span><svg viewBox="0 0 26 6"><line x1="0" y1="3" x2="26" y2="3" stroke="#F0B13A" stroke-width="3" stroke-linecap="round"/></svg>This batch</span>
+            <span><svg viewBox="0 0 26 6"><line x1="0" y1="3" x2="26" y2="3" stroke="#A6957F" stroke-width="2" stroke-dasharray="4 3"/></svg>Target profile, Guji light v4</span>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="queue-h">
+        <div class="sec-h"><h2 id="queue-h">Today's batches</h2><span class="meta">8 planned</span></div>
+        <ol class="queue" id="queue"></ol>
+        <div class="progress" role="img" aria-label="36 kg roasted, 12 kg roasting, 44 kg still to roast, of 92 kg planned"><b style="width:39%"></b><b style="width:13%"></b></div>
+        <p class="queue-sum">36 kg roasted, 12 kg in the drum, 44 kg to go. Average weight loss today: 14.6%.</p>
+      </section>
+    </div>
+
+    <div class="row two">
+      <section aria-labelledby="inv-h" id="green">
+        <div class="sec-h"><h2 id="inv-h">Green coffee in stock</h2><span class="meta">2,020 kg across 8 lots</span></div>
+        <ul class="inv" id="inv"></ul>
+        <div class="key">
+          <span><i></i>Weeks of cover at current use</span>
+          <span><i class="d"></i>Reorder at 4 weeks</span>
+          <span><i class="r"></i>Below reorder level</span>
+        </div>
+      </section>
+
+      <section aria-labelledby="ord-h" id="orders">
+        <div class="sec-h">
+          <h2 id="ord-h">Wholesale orders</h2>
+          <div class="seg" role="group" aria-label="Filter orders">
+            <button type="button" data-f="all" aria-pressed="true">All 7</button>
+            <button type="button" data-f="soon" aria-pressed="false">Due by tomorrow</button>
+            <button type="button" data-f="blocked" aria-pressed="false">Blocked</button>
+          </div>
+        </div>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th scope="col">Customer</th><th scope="col">Order</th><th scope="col">Due</th><th scope="col">Status</th><th scope="col" class="r">Roasted kg</th></tr></thead>
+            <tbody id="orderBody"></tbody>
+          </table>
+        </div>
+        <p class="empty" id="orderEmpty" hidden>No orders match this filter.</p>
+      </section>
+    </div>
+
+    <div class="row two-b">
+      <section aria-labelledby="out-h">
+        <div class="sec-h"><h2 id="out-h">Roasted per week</h2><span class="meta">Kilograms, last 8 weeks</span></div>
+        <svg class="bars" id="bars" viewBox="0 0 640 230" role="group" aria-label="Kilograms roasted per week"></svg>
+      </section>
+
+      <section aria-labelledby="in-h">
+        <div class="sec-h"><h2 id="in-h">Green coffee on the way</h2><span class="meta">3 shipments</span></div>
+        <ul class="ship">
+          <li><div class="when">22 Oct<small>Courier</small></div><div class="nm">Kenya Nyeri AA<small>Gathaithi washing station, 2 bags</small></div><div class="kg">138 kg</div></li>
+          <li><div class="when">28 Oct<small>Container</small></div><div class="nm">Brazil Cerrado Natural<small>Fazenda Santa Inês, cleared at Santos</small></div><div class="kg">600 kg</div></li>
+          <li><div class="when">4 Nov<small>Booked</small></div><div class="nm">Peru Cajamarca Organic<small>Cooperativa Pangoa, 5 bags</small></div><div class="kg">300 kg</div></li>
+        </ul>
+        <p class="note">Brazil Cerrado runs out on 6 Nov at current use. The container arrives 9 days earlier, with room to spare.</p>
+      </section>
+    </div>
+  </main>
+</div>
+<div id="tip" role="tooltip"></div>
+
+<script>
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e}
+  var tip=document.getElementById('tip');
+  function showTip(html,x,y){tip.innerHTML=html;tip.style.left=x+'px';tip.style.top=(y-10)+'px';tip.classList.add('on')}
+  function hideTip(){tip.classList.remove('on')}
+
+  /* ---------- batches ---------- */
+  var batches=[
+    {t:'07:40',n:'R-2638 Colombia Huila',d:'12 kg, medium',s:'done',x:'Done, 14.1% loss'},
+    {t:'08:25',n:'R-2639 Brazil Cerrado',d:'12 kg, medium-dark',s:'done',x:'Done, 15.2% loss'},
+    {t:'09:10',n:'R-2640 Guatemala Huehuetenango',d:'12 kg, medium',s:'done',x:'Done, 14.6% loss'},
+    {t:'09:55',n:'R-2641 Ethiopia Guji Natural',d:'12 kg, light',s:'now',x:'Roasting'},
+    {t:'10:40',n:'R-2642 Ethiopia Guji Natural',d:'12 kg, light',s:'next',x:'Next'},
+    {t:'11:25',n:'R-2643 Kenya Nyeri AA',d:'8 kg, light-medium',s:'next',x:'Queued'},
+    {t:'12:30',n:'R-2644 Peru Cajamarca Organic',d:'12 kg, medium',s:'next',x:'Queued'},
+    {t:'13:15',n:'R-2645 Brazil Cerrado',d:'12 kg, espresso blend base',s:'next',x:'Queued'}
+  ];
+  var q=document.getElementById('queue');
+  batches.forEach(function(b){
+    var li=document.createElement('li');li.className=b.s;
+    var mark=b.s==='done'?'<svg class="tick" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 5.5l2.5 2.5 4.5-6" fill="none" stroke="#587437" stroke-width="1.8"/></svg>':'';
+    li.innerHTML='<time>'+b.t+'</time><span class="nm">'+b.n+'<span class="dt">'+b.d+'</span></span><span class="st">'+mark+b.x+'</span>';
+    q.appendChild(li);
+  });
+
+  /* ---------- roast curve ---------- */
+  var P=[[0,200],[0.4,140],[1,102],[1.5,92],[3,125],[4.5,150],[6,172],[7.5,188],[8.67,197],[9.8,204],[10.33,206],[12,212]];
+  var slopes=P.map(function(p,i){
+    if(i===3)return 0;
+    var a=P[Math.max(0,i-1)],b=P[Math.min(P.length-1,i+1)];
+    return (b[1]-a[1])/(b[0]-a[0]);
+  });
+  function target(t){
+    t=Math.max(0,Math.min(12,t));
+    var i=0;while(i<P.length-2&&t>P[i+1][0])i++;
+    var p0=P[i],p1=P[i+1],h=p1[0]-p0[0],u=(t-p0[0])/h,u2=u*u,u3=u2*u;
+    return (2*u3-3*u2+1)*p0[1]+(u3-2*u2+u)*h*slopes[i]+(-2*u3+3*u2)*p1[1]+(u3-u2)*h*slopes[i+1];
+  }
+  function actual(t){return target(t)+2.1*Math.sin(t*1.3)*Math.min(1,t/3)+(t>5?0.8:0)}
+  var DROP=10.33*60,FC=8.67*60,DRY=4.5*60,TOTAL=12*60;
+  var W=760,H=320,pl=40,pr=62,pt=30,pb=34,iw=W-pl-pr,ih=H-pt-pb,Tmin=80,Tmax=240;
+  function X(m){return pl+m/12*iw}
+  function Y(T){return pt+(Tmax-T)/(Tmax-Tmin)*ih}
+  var svg=document.getElementById('curve');
+  var C={grid:'#3A2C22',tx:'#A6957F',amber:'#F0B13A'};
+  [80,120,160,200,240].forEach(function(T){
+    el('line',{x1:pl,x2:W-pr,y1:Y(T),y2:Y(T),stroke:C.grid,'stroke-width':1},svg);
+    var t=el('text',{x:pl-8,y:Y(T)+4,'text-anchor':'end'},svg);t.textContent=T+'°';
+  });
+  for(var m=0;m<=12;m+=2){
+    var t=el('text',{x:X(m),y:H-pb+20,'text-anchor':'middle'},svg);t.textContent=m+' min';
+  }
+  [[0,DRY/60,'Drying'],[DRY/60,FC/60,'Maillard'],[FC/60,DROP/60,'Development']].forEach(function(ph,i){
+    if(i>0)el('line',{x1:X(ph[0]),x2:X(ph[0]),y1:pt-6,y2:H-pb,stroke:'#5A4636','stroke-width':1,'stroke-dasharray':'2 4'},svg);
+    var t=el('text',{x:X((ph[0]+ph[1])/2),y:pt-12,'text-anchor':'middle'},svg);t.textContent=ph[2];
+  });
+  var tl=el('text',{x:X(DROP/60)+6,y:Y(206)-8,class:'lbl'},svg);tl.textContent='Drop 10:20';
+  el('line',{x1:X(DROP/60),x2:X(DROP/60),y1:pt-6,y2:H-pb,stroke:'#8A7762','stroke-width':1},svg);
+  el('line',{x1:X(FC/60),x2:X(FC/60),y1:Y(197),y2:H-pb,stroke:'#8A7762','stroke-width':1,'stroke-dasharray':'2 3'},svg);
+  var fcl=el('text',{x:X(FC/60)+6,y:H-pb-8,class:'lbl'},svg);fcl.textContent='First crack 8:40';
+
+  var d='';for(var s=0;s<=DROP;s+=5){d+=(s?'L':'M')+X(s/60).toFixed(1)+' '+Y(target(s/60)).toFixed(1)}
+  el('path',{d:d,fill:'none',stroke:'#A6957F','stroke-width':2,'stroke-dasharray':'5 4'},svg);
+  var line=el('path',{fill:'none',stroke:C.amber,'stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'},svg);
+  var cross=el('line',{y1:pt-6,y2:H-pb,stroke:'#EADFCF','stroke-width':1,opacity:0},svg);
+  var tdot=el('circle',{r:4,fill:'#1F1510',stroke:'#A6957F','stroke-width':2,opacity:0},svg);
+  var head=el('circle',{r:6,fill:C.amber,stroke:'#1F1510','stroke-width':2},svg);
+  var hit=el('rect',{x:pl,y:pt-6,width:iw,height:ih+6,fill:'transparent'},svg);
+
+  var START=Date.now()-(7*60+12)*1000;
+  var el$=function(id){return document.getElementById(id)};
+  function fmt(s){s=Math.floor(s);return Math.floor(s/60)+':'+('0'+s%60).slice(-2)}
+  var cur=0;
+  function tick(){
+    cur=Math.min((Date.now()-START)/1000,DROP);
+    var d='';for(var s=0;s<cur;s+=5){d+=(s?'L':'M')+X(s/60).toFixed(1)+' '+Y(actual(s/60)).toFixed(1)}
+    d+='L'+X(cur/60).toFixed(1)+' '+Y(actual(cur/60)).toFixed(1);
+    line.setAttribute('d',d);
+    head.setAttribute('cx',X(cur/60));head.setAttribute('cy',Y(actual(cur/60)));
+    var bt=actual(cur/60),ror=(bt-actual(Math.max(0,cur-30)/60))*2;
+    el$('rBT').innerHTML=bt.toFixed(1)+'<small>°C</small>';
+    el$('rRoR').innerHTML=ror.toFixed(1)+'<small>°C/min</small>';
+    el$('rTime').textContent=fmt(cur);
+    if(cur>=FC){var dev=cur-FC;el$('rDev').innerHTML=fmt(dev)+'<small>'+Math.round(dev/cur*100)+'%</small>'}
+    else el$('rDev').innerHTML='<small>first crack in '+fmt(FC-cur)+'</small>';
+    if(cur>=DROP){
+      el$('live').className='live done';el$('liveTxt').textContent='Dropped, cooling';
+      clearInterval(timer);
+    }
+  }
+  var timer=setInterval(tick,1000);tick();
+
+  var wrap=el$('chartWrap');
+  function move(e){
+    var r=svg.getBoundingClientRect(),k=W/r.width;
+    var m=((e.clientX-r.left)*k-pl)/iw*12;
+    if(m<0||m>DROP/60){hideTip();cross.setAttribute('opacity',0);tdot.setAttribute('opacity',0);return}
+    var live=m*60<=cur;
+    cross.setAttribute('x1',X(m));cross.setAttribute('x2',X(m));cross.setAttribute('opacity',.5);
+    tdot.setAttribute('cx',X(m));tdot.setAttribute('cy',Y(target(m)));tdot.setAttribute('opacity',1);
+    var h='<b>'+fmt(m*60)+'</b><br>Target '+target(m).toFixed(0)+'°C';
+    if(live)h+='<br>This batch '+actual(m).toFixed(0)+'°C';
+    showTip(h,e.clientX,e.clientY);
+  }
+  hit.addEventListener('mousemove',move);
+  hit.addEventListener('mouseleave',function(){hideTip();cross.setAttribute('opacity',0);tdot.setAttribute('opacity',0)});
+
+  /* ---------- green inventory ---------- */
+  var lots=[
+    {n:'Guatemala Huehuetenango',s:'Finca El Injerto, lot G-2410',kg:540,use:41},
+    {n:'Ethiopia Guji Natural',s:'Uraga co-op, lot E-2407',kg:420,use:38},
+    {n:'Colombia Huila Excelso',s:'Finca La Esperanza, lot C-2409',kg:310,use:64},
+    {n:'Sumatra Mandheling',s:'Wet-hulled, lot S-2406',kg:260,use:30},
+    {n:'Peru Cajamarca Organic',s:'Cooperativa Pangoa, lot P-2408',kg:150,use:48},
+    {n:'Brazil Cerrado Natural',s:'Fazenda Santa Inês, lot B-2404',kg:185,use:72},
+    {n:'Kenya Nyeri AA',s:'Gathaithi, lot K-2411',kg:95,use:22},
+    {n:'Decaf Colombia',s:'Sugarcane process, lot D-2410',kg:60,use:18}
+  ];
+  lots.forEach(function(l){l.w=l.kg/l.use});
+  lots.sort(function(a,b){return a.w-b.w});
+  var MAXW=14,inv=el$('inv');
+  lots.forEach(function(l){
+    var low=l.w<4,li=document.createElement('li');if(low)li.className='low';
+    var note=low?'Reorder':l.w.toFixed(1)+' wks';
+    li.innerHTML='<div class="nm">'+l.n+'<small>'+l.s+'</small></div>'+
+      '<div class="track" role="img" aria-label="'+l.w.toFixed(1)+' weeks of cover"><div class="bar" style="width:'+Math.min(l.w,MAXW)/MAXW*100+'%"></div><div class="reorder" style="left:'+4/MAXW*100+'%"></div></div>'+
+      '<div class="num"><b>'+l.kg+' kg</b><span>'+(low?l.w.toFixed(1)+' wks, reorder':note)+'</span></div>';
+    inv.appendChild(li);
+  });
+
+  /* ---------- orders ---------- */
+  var ST={
+    blocked:{t:'Needs green coffee',i:'<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1l5.5 10h-11z" fill="#A93A25"/></svg>',c:'blocked'},
+    sched:{t:'Scheduled',i:'<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="none" stroke="#645F54" stroke-width="1.6"/></svg>'},
+    roast:{t:'Roasting',i:'<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5" fill="#F0B13A" stroke="#1E1712" stroke-width="1"/></svg>'},
+    pack:{t:'Packing',i:'<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9" fill="#645F54"/></svg>'},
+    ready:{t:'Ready to ship',i:'<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="5.5" fill="#587437"/><path d="M3.3 6.2l2 2 3.4-4" fill="none" stroke="#fff" stroke-width="1.6"/></svg>'}
+  };
+  var orders=[
+    {id:'W-1182',who:'Tallow & Thread',what:'Filter blend, 15 kg',due:'Mon 19 Oct',soon:1,st:'ready',kg:'15 of 15'},
+    {id:'W-1186',who:'Halcyon Hotel Group',what:'House espresso, 45 kg',due:'Tue 20 Oct',soon:1,st:'pack',kg:'45 of 45'},
+    {id:'W-1187',who:'Larder & Vine',what:'House espresso, 20 kg',due:'Tue 20 Oct',soon:1,st:'roast',kg:'8 of 20'},
+    {id:'W-1185',who:'Pinecone Bakery',what:'Colombia Huila, 12 kg',due:'Wed 21 Oct',st:'sched',kg:'0 of 12'},
+    {id:'W-1184',who:'North Pier Café',what:'Guji + Huila, 30 kg',due:'Wed 21 Oct',st:'sched',kg:'0 of 30'},
+    {id:'W-1183',who:'Corner Study Co-op',what:'Peru Cajamarca, 8 kg',due:'Thu 22 Oct',st:'sched',kg:'0 of 8'},
+    {id:'W-1181',who:'Oakhaven University',what:'Espresso base, 60 kg',due:'Fri 23 Oct',st:'blocked',kg:'0 of 60'}
+  ];
+  var body=el$('orderBody');
+  function renderOrders(f){
+    body.innerHTML='';var n=0;
+    orders.forEach(function(o){
+      if(f==='soon'&&!o.soon)return;
+      if(f==='blocked'&&o.st!=='blocked')return;
+      n++;var s=ST[o.st],tr=document.createElement('tr');
+      tr.innerHTML='<td><span class="who">'+o.who+'</span><span class="id">'+o.id+'</span></td><td>'+o.what+'</td><td>'+o.due+'</td><td><span class="chip '+(s.c||'')+'">'+s.i+s.t+'</span></td><td class="r">'+o.kg+'</td>';
+      body.appendChild(tr);
+    });
+    el$('orderEmpty').hidden=n>0;
+  }
+  renderOrders('all');
+  Array.prototype.forEach.call(document.querySelectorAll('.seg button'),function(b){
+    b.addEventListener('click',function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.seg button'),function(x){x.setAttribute('aria-pressed',x===b)});
+      renderOrders(b.dataset.f);
+    });
+  });
+
+  /* ---------- weekly output ---------- */
+  var weeks=[['31 Aug',412],['7 Sep',438],['14 Sep',455],['21 Sep',421],['28 Sep',468],['5 Oct',489],['12 Oct',476],['19 Oct',36]];
+  var bs=el$('bars'),bw=640,bh=230,bl=34,bt2=24,bb=34,bih=bh-bt2-bb,bmax=600;
+  [0,200,400,600].forEach(function(v){
+    var y=bt2+bih-v/bmax*bih;
+    el('line',{x1:bl,x2:bw,y1:y,y2:y,stroke:'#CFD3C6','stroke-width':1},bs);
+    var t=el('text',{x:bl-8,y:y+4,'text-anchor':'end'},bs);t.textContent=v;
+  });
+  var slot=(bw-bl)/weeks.length,barw=Math.min(40,slot*.6);
+  weeks.forEach(function(w,i){
+    var cx=bl+slot*i+slot/2,h=w[1]/bmax*bih,y=bt2+bih-h,partial=i===weeks.length-1;
+    var g=el('g',{class:'col',tabindex:0,role:'img','aria-label':'Week of '+w[0]+': '+w[1]+' kg'+(partial?' so far':'')},bs);
+    el('rect',{class:'hit',x:cx-slot/2,y:bt2-10,width:slot,height:bih+10+bb},g);
+    el('rect',{class:'m',x:cx-barw/2,y:y,width:barw,height:h,rx:3,fill:partial?'#DCE4CC':'#587437',stroke:partial?'#587437':'none','stroke-width':partial?1.5:0,'stroke-dasharray':partial?'4 3':'none'},g);
+    var vt=el('text',{x:cx,y:y-6,'text-anchor':'middle',class:'val'},g);vt.textContent=w[1];
+    var lt=el('text',{x:cx,y:bh-12,'text-anchor':'middle'},g);lt.textContent=w[0];
+    function over(){var r=g.getBoundingClientRect();showTip('<b>Week of '+w[0]+'</b><br>'+w[1]+' kg'+(partial?' so far, Monday only':''),r.left+r.width/2,r.top+(y/ bh)*r.height)}
+    g.addEventListener('mouseenter',over);g.addEventListener('focus',over);
+    g.addEventListener('mouseleave',hideTip);g.addEventListener('blur',hideTip);
+  });
+})();
+</script>
+</body>
+</html>

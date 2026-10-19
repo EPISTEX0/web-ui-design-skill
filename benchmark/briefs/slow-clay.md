@@ -1,0 +1,1 @@
+I run a small pottery studio in Portland called Slow Clay. We sell a 6-week wheel-throwing course ($340, max 8 students, Tuesday or Saturday mornings) and open-studio memberships ($120/month, includes 25 lb of clay and firing). Build a landing page for the studio. Put it in this folder as index.html (plain HTML, CSS and JS, no build step).

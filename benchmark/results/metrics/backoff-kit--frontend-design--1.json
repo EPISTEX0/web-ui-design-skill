@@ -1,0 +1,26 @@
+{
+  "id": "backoff-kit--frontend-design--1",
+  "desktop": {
+    "fullH": 6665,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 14,
+      "moderate": 0,
+      "minor": 0,
+      "rules": [
+        "color-contrast:11",
+        "scrollable-region-focusable:3"
+      ]
+    }
+  },
+  "mobile": {
+    "fullH": 8213,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

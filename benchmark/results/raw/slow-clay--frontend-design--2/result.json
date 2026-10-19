@@ -1,0 +1,43 @@
+{
+  "brief": "slow-clay",
+  "arm": "frontend-design",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 63,
+  "is_error": false,
+  "num_turns": 4,
+  "total_cost_usd": 0.167682,
+  "usage": {
+    "input_tokens": 6,
+    "cache_creation_input_tokens": 18744,
+    "cache_read_input_tokens": 50057,
+    "output_tokens": 8755,
+    "output_tokens_details": {
+      "thinking_tokens": 1405
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 18744,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "global",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 599,
+        "cache_read_input_tokens": 21764,
+        "cache_creation_input_tokens": 8207,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 8207
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard",
+    "fallback_credit": null
+  }
+}

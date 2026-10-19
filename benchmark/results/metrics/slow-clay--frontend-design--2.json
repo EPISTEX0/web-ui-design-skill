@@ -1,0 +1,23 @@
+{
+  "id": "slow-clay--frontend-design--2",
+  "desktop": {
+    "fullH": 2712,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "rules": []
+    }
+  },
+  "mobile": {
+    "fullH": 3791,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

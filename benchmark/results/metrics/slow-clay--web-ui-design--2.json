@@ -1,0 +1,25 @@
+{
+  "id": "slow-clay--web-ui-design--2",
+  "desktop": {
+    "fullH": 2937,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 1,
+      "moderate": 0,
+      "minor": 0,
+      "rules": [
+        "color-contrast:1"
+      ]
+    }
+  },
+  "mobile": {
+    "fullH": 4016,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

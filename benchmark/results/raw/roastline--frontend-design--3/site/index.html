@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roastline – Today at the roastery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chalk:#E8EBE4;      /* page */
+  --paper:#F6F7F3;      /* panels */
+  --ink:#1D2A23;        /* text, deep green-black */
+  --ink-2:#4E5C54;      /* secondary text */
+  --ink-3:#6F7C74;      /* muted text */
+  --line:#D2D7CD;
+  --green-bean:#6F8F5E; /* roast scale: green → dark */
+  --chaff:#D9A93B;
+  --medium:#8A5A3B;
+  --dark:#3B2418;
+  --flame:#C8432B;      /* alerts / first crack */
+  --ok:#2F7A4B;
+  --warn:#9A6A00;
+  --crit:#B3341F;
+  --radius:10px;
+  --font:"Familjen Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--chalk)}
+body{margin:0;font-family:var(--font);color:var(--ink);font-size:15px;line-height:1.45;font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.app{display:grid;grid-template-columns:208px 1fr;min-height:100vh}
+
+/* sidebar */
+.side{background:var(--ink);color:#DCE3DC;padding:22px 14px;display:flex;flex-direction:column;gap:28px;position:sticky;top:0;height:100vh}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px;font-weight:700;font-size:20px;letter-spacing:-.01em;color:#fff}
+.brand svg{flex:none}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:7px;color:#B9C4BB;text-decoration:none}
+.nav a:hover{background:#2A3A31;color:#fff}
+.nav a[aria-current=page]{background:#E8EBE4;color:var(--ink);font-weight:600}
+.nav .count{font-size:12px;background:var(--flame);color:#fff;border-radius:99px;padding:0 7px;font-weight:600}
+.side .who{margin-top:auto;padding:10px;font-size:13px;color:#9FAEA3;border-top:1px solid #34463B}
+.side .who b{display:block;color:#fff;font-weight:600}
+
+/* main */
+main{padding:26px 32px 48px;max-width:1360px;width:100%}
+header.top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+h1{margin:0;font-size:30px;line-height:1.1;letter-spacing:-.02em;font-weight:700}
+.sub{color:var(--ink-2);margin-top:4px}
+.btns{display:flex;gap:8px}
+button,.btn{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--ink);background:transparent;color:var(--ink);padding:8px 14px;border-radius:8px;font-weight:600}
+.btn:hover{background:#DDE1D7}
+.btn.primary{background:var(--ink);color:#fff}
+.btn.primary:hover{background:#2C3F34}
+
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px}
+.panel h2{margin:0;font-size:17px;font-weight:700;letter-spacing:-.005em}
+.panel .hd{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.hint{color:var(--ink-3);font-size:13px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:0;padding:0;overflow:hidden;margin-bottom:16px}
+.hero .chart{padding:18px 20px 12px}
+.live{display:inline-flex;align-items:center;gap:7px;font-weight:600;font-size:13px;color:var(--flame)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--flame);animation:pulse 1.6s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(200,67,43,.5)}100%{box-shadow:0 0 0 9px rgba(200,67,43,0)}}
+.hero h2{font-size:22px;margin-top:2px}
+.legend{display:flex;gap:16px;font-size:13px;color:var(--ink-2);margin:8px 0 2px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend svg{width:22px;height:8px}
+#curve{width:100%;height:auto;display:block;touch-action:none}
+#curve text{font-family:var(--font);fill:var(--ink-3);font-size:11px}
+#curve .phase{fill:var(--ink-2);font-size:12px}
+.readout{background:var(--ink);color:#DCE3DC;padding:20px;display:flex;flex-direction:column;gap:14px}
+.readout .big{font-size:56px;line-height:1;font-weight:700;letter-spacing:-.03em;color:#fff}
+.readout .big small{font-size:22px;font-weight:500;color:#9FAEA3;margin-left:3px}
+.readout dl{margin:0;display:grid;grid-template-columns:1fr auto;gap:7px 10px;font-size:14px}
+.readout dt{color:#9FAEA3}
+.readout dd{margin:0;text-align:right;font-weight:600;color:#fff}
+.readout .next{margin-top:auto;padding-top:14px;border-top:1px solid #34463B;font-size:14px}
+.readout .next b{color:#F2C766}
+.bar{height:6px;border-radius:3px;background:#34463B;overflow:hidden}
+.bar i{display:block;height:100%;background:#F2C766}
+
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:#fff;font-size:13px;padding:7px 10px;border-radius:7px;z-index:10;opacity:0;transition:opacity .08s;max-width:240px;line-height:1.35}
+.tip b{display:block;font-weight:600}
+.tip.on{opacity:1}
+
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:16px}
+.stat{padding:14px 18px}
+.stat .v{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.stat .v small{font-size:15px;font-weight:500;color:var(--ink-3);margin-left:2px}
+.stat .l{color:var(--ink-2);font-size:14px}
+.stat .d{font-size:13px;margin-top:4px;color:var(--ink-3)}
+
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:16px;margin-bottom:16px}
+
+/* inventory */
+.inv{display:flex;flex-direction:column;gap:11px;margin:0;padding:0;list-style:none}
+.inv li{display:grid;grid-template-columns:150px 1fr 118px;gap:12px;align-items:center;font-size:14px;cursor:default}
+.inv .nm{line-height:1.2}
+.inv .nm small{display:block;color:var(--ink-3);font-size:12px}
+.track{position:relative;height:12px;background:#E1E5DB;border-radius:0}
+.track i{position:absolute;left:0;top:0;bottom:0;border-radius:0 4px 4px 0;background:var(--green-bean)}
+.track i.low{background:var(--chaff)}
+.track i.crit{background:var(--flame)}
+.track u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.inv .st{display:flex;align-items:center;gap:6px;justify-content:flex-end;font-size:13px;white-space:nowrap}
+.inv .st.ok{color:var(--ok)}.inv .st.low{color:var(--warn)}.inv .st.crit{color:var(--crit);font-weight:600}
+.axis-note{display:flex;justify-content:flex-end;font-size:12px;color:var(--ink-3);margin-top:10px;gap:6px;align-items:center}
+.axis-note u{display:inline-block;width:2px;height:12px;background:var(--ink)}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:500;color:var(--ink-3);font-size:13px;padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:9px 10px 9px 0;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;padding-right:22px}
+td:last-child,th:last-child{padding-right:0}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:13px;white-space:nowrap}
+.tag svg{flex:none}
+.sw{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:7px;border:1px solid rgba(0,0,0,.15)}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;border-radius:99px;padding:3px 11px;font-size:13px;color:var(--ink-2)}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.empty{padding:22px 0;color:var(--ink-2)}
+.tbl-wrap{overflow-x:auto}
+.s-ok{color:var(--ok)}.s-warn{color:var(--warn)}.s-crit{color:var(--crit)}.s-info{color:var(--ink-2)}
+
+@media (max-width:1100px){
+  .hero{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:1fr}
+}
+@media (max-width:760px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;align-items:center;flex-wrap:wrap;padding:12px 14px;gap:10px}
+  .nav{flex-direction:row;flex-wrap:wrap}
+  .side .who{display:none}
+  main{padding:18px 14px 40px}
+  .inv li{grid-template-columns:1fr 110px;row-gap:5px}
+  .inv .track{grid-column:1/-1;order:3}
+}
+@media (prefers-reduced-motion:reduce){.live i{animation:none}.tip{transition:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><ellipse cx="13" cy="13" rx="9" ry="11.5" fill="#D9A93B" transform="rotate(25 13 13)"/><path d="M7 5c5 4 3 8 5 10s3 4 7 6" fill="none" stroke="#1D2A23" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Roastline
+    </div>
+    <nav class="nav" aria-label="Main">
+      <a href="#" aria-current="page">Dashboard</a>
+      <a href="#">Roast batches</a>
+      <a href="#">Green inventory <span class="count" title="2 lots need reordering">2</span></a>
+      <a href="#">Wholesale orders</a>
+      <a href="#">Customers</a>
+      <a href="#">Suppliers</a>
+      <a href="#">Reports</a>
+    </nav>
+    <div class="who"><b>Mara Okafor</b>Head roaster · Bay Street</div>
+  </aside>
+
+  <main>
+    <header class="top">
+      <div>
+        <h1>Monday, 19 October</h1>
+        <div class="sub">6 batches planned today · 94 kg of green coffee on the schedule</div>
+      </div>
+      <div class="btns">
+        <button class="btn">Add green delivery</button>
+        <button class="btn primary">Start a batch</button>
+      </div>
+    </header>
+
+    <!-- Live roast -->
+    <section class="panel hero" aria-labelledby="live-h">
+      <div class="chart">
+        <div class="live"><i></i>Roasting now on Probat L12</div>
+        <h2 id="live-h">Batch R-2841 · Ethiopia Guji Natural</h2>
+        <div class="legend">
+          <span><svg viewBox="0 0 22 8"><line x1="0" y1="4" x2="22" y2="4" stroke="#8A5A3B" stroke-width="2.5"/></svg>Bean temperature</span>
+          <span><svg viewBox="0 0 22 8"><line x1="0" y1="4" x2="22" y2="4" stroke="#6F7C74" stroke-width="2" stroke-dasharray="4 3"/></svg>Reference profile (Guji, light-medium)</span>
+          <span><svg viewBox="0 0 8 8"><circle cx="4" cy="4" r="3.5" fill="#C8432B"/></svg>First crack</span>
+        </div>
+        <svg id="curve" viewBox="0 0 760 300" role="img" aria-label="Bean temperature against time for the current batch, tracking the reference profile closely"></svg>
+      </div>
+      <div class="readout">
+        <div>
+          <div class="hint" style="color:#9FAEA3">Bean temperature</div>
+          <div class="big" id="rd-bt">200<small>°C</small></div>
+        </div>
+        <dl>
+          <dt>Elapsed</dt><dd id="rd-time">9:12</dd>
+          <dt>Rate of rise</dt><dd id="rd-ror">7.4 °C/min</dd>
+          <dt>First crack</dt><dd>8:41 at 196°C</dd>
+          <dt>Development</dt><dd id="rd-dev">0:31 · 5.6%</dd>
+          <dt>Charge</dt><dd>12.0 kg · 201°C</dd>
+        </dl>
+        <div class="next">
+          <div style="margin-bottom:7px">Drop target <b>11:15 · 208°C</b></div>
+          <div class="bar" aria-hidden="true"><i id="rd-bar" style="width:82%"></i></div>
+          <div class="hint" style="color:#9FAEA3;margin-top:6px">Tracking the reference profile within 2°C. Hold the burner steady through development.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats" aria-label="This week at a glance">
+      <div class="panel stat"><div class="v">412<small>kg</small></div><div class="l">Roasted this week</div><div class="d">Target 520 kg · 79%</div></div>
+      <div class="panel stat"><div class="v">14.8<small>%</small></div><div class="l">Average weight loss</div><div class="d">Within the 13–16% range</div></div>
+      <div class="panel stat"><div class="v">9</div><div class="l">Open wholesale orders</div><div class="d s-crit">2 due before Wednesday</div></div>
+      <div class="panel stat"><div class="v">2</div><div class="l">Green lots to reorder</div><div class="d">Kenya AA has 9 days left</div></div>
+    </section>
+
+    <div class="grid">
+      <!-- Inventory -->
+      <section class="panel" aria-labelledby="inv-h">
+        <div class="hd"><h2 id="inv-h">Green coffee on hand</h2><span class="hint">Days left at current roasting pace</span></div>
+        <ul class="inv" id="inv"></ul>
+        <div class="axis-note"><u></u> Reorder point: 21 days (lead time is 3 weeks)</div>
+      </section>
+
+      <!-- Batches -->
+      <section class="panel" aria-labelledby="bt-h">
+        <div class="hd"><h2 id="bt-h">Today's roast schedule</h2><span class="hint">Roast colour in Agtron</span></div>
+        <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Batch</th><th>Coffee</th><th>Colour</th><th class="n">Green</th><th class="n">Loss</th><th>Status</th></tr></thead>
+          <tbody id="batches"></tbody>
+        </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- Orders -->
+    <section class="panel" aria-labelledby="or-h">
+      <div class="hd">
+        <h2 id="or-h">Wholesale orders</h2>
+        <div class="chips" id="chips" role="group" aria-label="Filter orders by status"></div>
+      </div>
+      <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Order</th><th>Customer</th><th>Coffees</th><th class="n">Roasted kg</th><th>Due</th><th>Status</th></tr></thead>
+        <tbody id="orders"></tbody>
+      </table>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="tip" id="tip" role="status"></div>
+
+<script>
+/* ---------- sample data ---------- */
+const NS = "http://www.w3.org/2000/svg";
+const REORDER_DAYS = 21;
+
+const green = [
+  {name:"Brazil Cerrado", origin:"Fazenda Santa Luzia", kg:880, weekly:120},
+  {name:"Colombia Huila", origin:"Finca La Esperanza", kg:610, weekly:95},
+  {name:"Ethiopia Guji Natural", origin:"Shakiso washing station", kg:420, weekly:85},
+  {name:"Sumatra Mandheling", origin:"Lake Tawar co-op", kg:340, weekly:42},
+  {name:"Costa Rica Tarrazú", origin:"Dota micro-mill", kg:260, weekly:38},
+  {name:"Guatemala Antigua", origin:"Finca El Pilar", kg:150, weekly:60},
+  {name:"Kenya AA Kiambu", origin:"Gatomboya factory", kg:135, weekly:105},
+  {name:"Peru Decaf (Swiss Water)", origin:"Cooperativa Pangoa", kg:75, weekly:22}
+];
+
+const batches = [
+  {id:"R-2838", time:"06:40", coffee:"Brazil Cerrado", level:"Medium-dark", agtron:48, green:12, loss:15.6, status:"done"},
+  {id:"R-2839", time:"07:25", coffee:"Colombia Huila", level:"Medium", agtron:58, green:12, loss:14.9, status:"done"},
+  {id:"R-2840", time:"08:10", coffee:"House blend", level:"Medium", agtron:56, green:15, loss:15.1, status:"done"},
+  {id:"R-2841", time:"09:05", coffee:"Ethiopia Guji Natural", level:"Light-medium", agtron:68, green:12, loss:null, status:"live"},
+  {id:"R-2842", time:"09:50", coffee:"Guatemala Antigua", level:"Medium", agtron:57, green:15, loss:null, status:"queued"},
+  {id:"R-2843", time:"10:40", coffee:"Espresso blend", level:"Dark", agtron:38, green:28, loss:null, status:"queued"}
+];
+const levelColor = a => a>=65 ? "#C79A4A" : a>=55 ? "#8A5A3B" : a>=45 ? "#5E3A27" : "#3B2418";
+
+const orders = [
+  {id:"W-1187", cust:"Harbour & Pine Café", items:"Espresso blend ×20, Brazil ×10", kg:30, due:"Tue 20 Oct", status:"roasting"},
+  {id:"W-1186", cust:"Linden Street Bakery", items:"House blend ×15", kg:15, due:"Tue 20 Oct", status:"packed"},
+  {id:"W-1185", cust:"Northfield Co-op", items:"Colombia ×25, Decaf ×5", kg:30, due:"Wed 21 Oct", status:"new"},
+  {id:"W-1184", cust:"The Gilded Spoon", items:"Guji ×10, Antigua ×10", kg:20, due:"Wed 21 Oct", status:"roasting"},
+  {id:"W-1183", cust:"Marlow Hotel Group", items:"Espresso blend ×60", kg:60, due:"Thu 22 Oct", status:"new"},
+  {id:"W-1182", cust:"Ferry Road Roll Co.", items:"Brazil ×20", kg:20, due:"Thu 22 Oct", status:"short"},
+  {id:"W-1181", cust:"Oak & Anchor Pub", items:"House blend ×10", kg:10, due:"Fri 23 Oct", status:"new"},
+  {id:"W-1180", cust:"Bellwether Books", items:"Kenya ×5, Guji ×5", kg:10, due:"Fri 23 Oct", status:"new"},
+  {id:"W-1179", cust:"Harbour & Pine Café", items:"House blend ×15", kg:15, due:"Mon 19 Oct", status:"shipped"}
+];
+const orderStatus = {
+  new:     {label:"New",               cls:"s-info", icon:"circle"},
+  roasting:{label:"Roasting",          cls:"s-warn", icon:"flame"},
+  packed:  {label:"Packed",            cls:"s-ok",   icon:"box"},
+  shipped: {label:"Shipped",           cls:"s-ok",   icon:"check"},
+  short:   {label:"Short on green",    cls:"s-crit", icon:"alert"}
+};
+const icons = {
+  circle:'<circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/>',
+  flame:'<path d="M7 1.5c.5 2.5 3.5 3.8 3.5 7a3.5 3.5 0 0 1-7 0c0-1.6.8-2.5 1.5-3.3.2 1 .6 1.5 1 1.8C6.2 5.5 6.3 3.4 7 1.5z" fill="currentColor"/>',
+  box:'<rect x="2" y="3.5" width="10" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2 6.5h10" stroke="currentColor" stroke-width="1.8"/>',
+  check:'<path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+  alert:'<path d="M7 1.8l5.8 10.2H1.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 5.8v3M7 10.3v.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'
+};
+const icon = n => `<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">${icons[n]}</svg>`;
+
+/* ---------- tooltip ---------- */
+const tip = document.getElementById("tip");
+function showTip(html, x, y){
+  tip.innerHTML = html; tip.classList.add("on");
+  const w = tip.offsetWidth, h = tip.offsetHeight;
+  tip.style.left = Math.min(x + 14, innerWidth - w - 8) + "px";
+  tip.style.top = Math.max(8, y - h - 12) + "px";
+}
+const hideTip = () => tip.classList.remove("on");
+
+/* ---------- roast curve ---------- */
+// Reference profile: [seconds, bean temp °C]
+const ref = [[0,201],[20,160],[45,119],[75,98],[100,94],[150,105],[210,121],[300,142],[420,163],[480,175],[540,189],[600,197],[660,203],[690,208]];
+const ELAPSED = 552, FC = 521; // 9:12 elapsed, first crack at 8:41
+function interp(pts, t){
+  for(let i=1;i<pts.length;i++){
+    if(t<=pts[i][0]){
+      const [t0,y0]=pts[i-1],[t1,y1]=pts[i], f=(t-t0)/(t1-t0);
+      // smoothstep keeps the curve from looking like a polyline
+      const s=f*f*(3-2*f);
+      return y0+(y1-y0)*(0.5*f+0.5*s);
+    }
+  }
+  return pts[pts.length-1][1];
+}
+// Actual runs a touch hot through drying, then slightly cool near the end
+const actual = t => interp(ref,t) + (t>120&&t<400 ? 2.2*Math.sin((t-120)/280*Math.PI) : 0) + (t>470 ? 0.7 : 0) + 0.35*Math.sin(t/9);
+const ror = t => (actual(t) - actual(Math.max(0,t-30))) * 2;
+
+const W=760,H=300,m={l:40,r:16,t:14,b:28}, X0=0,X1=720,Y0=80,Y1=230;
+const sx = t => m.l + (t-X0)/(X1-X0)*(W-m.l-m.r);
+const sy = v => H-m.b - (v-Y0)/(Y1-Y0)*(H-m.t-m.b);
+const el = (n,a={},p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+const fmt = s => Math.floor(s/60)+":"+String(Math.floor(s%60)).padStart(2,"0");
+
+(function drawCurve(){
+  const svg = document.getElementById("curve");
+  // phase bands (drying → Maillard → development)
+  const bands=[[0,300,"Drying"],[300,521,"Maillard"],[521,690,"Development"]];
+  bands.forEach(([a,b,l],i)=>{
+    el("rect",{x:sx(a),y:m.t,width:sx(b)-sx(a),height:H-m.t-m.b,fill:i==1?"#EDEFE8":"transparent"},svg);
+    const t=el("text",{x:sx(a)+8,y:m.t+14,class:"phase"},svg); t.textContent=l;
+  });
+  // grid + axes
+  for(let v=100;v<=220;v+=40){
+    el("line",{x1:m.l,x2:W-m.r,y1:sy(v),y2:sy(v),stroke:"#D2D7CD","stroke-width":1},svg);
+    const t=el("text",{x:m.l-8,y:sy(v)+4,"text-anchor":"end"},svg); t.textContent=v+"°";
+  }
+  for(let s=0;s<=720;s+=120){
+    const t=el("text",{x:sx(s),y:H-8,"text-anchor":s==0?"start":"middle"},svg); t.textContent=fmt(s);
+  }
+  el("line",{x1:m.l,x2:W-m.r,y1:H-m.b,y2:H-m.b,stroke:"#6F7C74"},svg);
+
+  const path = (fn,a,b,step=3)=>{let d="";for(let t=a;t<=b;t+=step)d+=(d?"L":"M")+sx(t).toFixed(1)+" "+sy(fn(t)).toFixed(1);return d};
+  el("path",{d:path(t=>interp(ref,t),0,690),fill:"none",stroke:"#6F7C74","stroke-width":2,"stroke-dasharray":"5 4"},svg);
+  el("path",{d:path(actual,0,ELAPSED,2),fill:"none",stroke:"#8A5A3B","stroke-width":3,"stroke-linecap":"round","stroke-linejoin":"round"},svg);
+
+  // first crack marker
+  const fx=sx(FC), fy=sy(actual(FC));
+  el("circle",{cx:fx,cy:fy,r:6,fill:"#C8432B",stroke:"#F6F7F3","stroke-width":2},svg);
+  const ft=el("text",{x:fx-10,y:fy-12,"text-anchor":"end"},svg); ft.textContent="First crack 8:41"; ft.style.fill="#1D2A23"; ft.style.fontWeight="600";
+  // current point
+  el("circle",{cx:sx(ELAPSED),cy:sy(actual(ELAPSED)),r:6,fill:"#8A5A3B",stroke:"#F6F7F3","stroke-width":2},svg);
+
+  // hover layer
+  const cross = el("line",{y1:m.t,y2:H-m.b,stroke:"#1D2A23","stroke-width":1,opacity:0},svg);
+  const dot = el("circle",{r:5,fill:"#8A5A3B",stroke:"#F6F7F3","stroke-width":2,opacity:0},svg);
+  const hit = el("rect",{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:"transparent",tabindex:0,"aria-label":"Roast curve. Use left and right arrow keys to read values."},svg);
+  let kt = ELAPSED;
+  function at(t, cx, cy){
+    t=Math.max(0,Math.min(690,t));
+    const done = t<=ELAPSED;
+    const r = interp(ref,t);
+    cross.setAttribute("x1",sx(t)); cross.setAttribute("x2",sx(t)); cross.setAttribute("opacity",.35);
+    dot.setAttribute("cx",sx(t)); dot.setAttribute("cy",sy(done?actual(t):r)); dot.setAttribute("opacity",1);
+    dot.setAttribute("fill",done?"#8A5A3B":"#6F7C74");
+    let html=`<b>${fmt(t)}</b>`;
+    if(done){
+      const d=actual(t)-r;
+      html+=`Bean ${actual(t).toFixed(0)}°C · ${ror(t).toFixed(1)} °C/min<br>Reference ${r.toFixed(0)}°C (${d>=0?"+":""}${d.toFixed(1)})`;
+    } else html+=`Reference ${r.toFixed(0)}°C<br>Not roasted yet`;
+    const b=svg.getBoundingClientRect();
+    showTip(html, cx ?? b.left+sx(t)/W*b.width, cy ?? b.top+sy(r)/H*b.height);
+  }
+  hit.addEventListener("pointermove",e=>{
+    const b=svg.getBoundingClientRect();
+    const t=((e.clientX-b.left)/b.width*W-m.l)/(W-m.l-m.r)*(X1-X0);
+    at(t,e.clientX,e.clientY);
+  });
+  hit.addEventListener("pointerleave",()=>{cross.setAttribute("opacity",0);dot.setAttribute("opacity",0);hideTip()});
+  hit.addEventListener("keydown",e=>{
+    if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();kt+=(e.key==="ArrowLeft"?-10:10);kt=Math.max(0,Math.min(690,kt));at(kt)}
+  });
+  hit.addEventListener("blur",()=>{cross.setAttribute("opacity",0);dot.setAttribute("opacity",0);hideTip()});
+})();
+
+// live readout, ticking once a second from the sample state
+(function live(){
+  let t=ELAPSED;
+  const bt=document.getElementById("rd-bt"), tm=document.getElementById("rd-time"),
+        rr=document.getElementById("rd-ror"), dv=document.getElementById("rd-dev"), bar=document.getElementById("rd-bar");
+  const paint=()=>{
+    bt.innerHTML=actual(t).toFixed(0)+"<small>°C</small>";
+    tm.textContent=fmt(t);
+    rr.textContent=ror(t).toFixed(1)+" °C/min";
+    const dev=t-FC; dv.textContent=fmt(dev)+" · "+(dev/t*100).toFixed(1)+"%";
+    bar.style.width=Math.min(100,t/675*100)+"%";
+  };
+  paint();
+  // static for reduced-motion users; the curve above stays a snapshot of 9:12
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  setInterval(()=>{ if(t<675){t++;paint()} },1000);
+})();
+
+/* ---------- inventory ---------- */
+(function inventory(){
+  const MAX=70; // axis max, days
+  const rows=green.map(g=>({...g,days:g.kg/g.weekly*7})).sort((a,b)=>a.days-b.days);
+  const ul=document.getElementById("inv");
+  rows.forEach(r=>{
+    const cls=r.days<14?"crit":r.days<REORDER_DAYS?"low":"ok";
+    const label={crit:"Reorder now",low:"Reorder soon",ok:"Enough"}[cls];
+    const ic={crit:"alert",low:"flame",ok:"check"}[cls];
+    const li=document.createElement("li");
+    li.innerHTML=`<div class="nm">${r.name}<small>${r.kg} kg</small></div>
+      <div class="track" aria-hidden="true"><i class="${cls==='ok'?'':cls}" style="width:${Math.min(100,r.days/MAX*100)}%"></i><u style="left:${REORDER_DAYS/MAX*100}%"></u></div>
+      <div class="st ${cls}">${icon(ic)}<span><b style="font-weight:600">${Math.round(r.days)}</b> days · ${label}</span></div>`;
+    li.addEventListener("pointermove",e=>showTip(`<b>${r.name}</b>${r.origin}<br>${r.kg} kg on hand · ${r.weekly} kg/week<br>${Math.round(r.days)} days left`,e.clientX,e.clientY));
+    li.addEventListener("pointerleave",hideTip);
+    ul.appendChild(li);
+  });
+})();
+
+/* ---------- batches ---------- */
+(function batchTable(){
+  const st={done:["Done","s-ok","check"],live:["Roasting","s-warn","flame"],queued:["Queued","s-info","circle"]};
+  document.getElementById("batches").innerHTML=batches.map(b=>{
+    const [l,c,i]=st[b.status];
+    return `<tr><td><b style="font-weight:600">${b.id}</b><div class="hint">${b.time}</div></td>
+      <td>${b.coffee}</td>
+      <td><span class="sw" style="background:${levelColor(b.agtron)}"></span>${b.level}<div class="hint" style="margin-left:19px">Agtron ${b.agtron}</div></td>
+      <td class="n">${b.green} kg</td>
+      <td class="n">${b.loss==null?"–":b.loss.toFixed(1)+"%"}</td>
+      <td><span class="tag ${c}">${icon(i)}${l}</span></td></tr>`}).join("");
+})();
+
+/* ---------- orders ---------- */
+(function orderTable(){
+  const tb=document.getElementById("orders"), chips=document.getElementById("chips");
+  const filters=[["all","All"],["new","New"],["roasting","Roasting"],["packed","Packed"],["short","Short on green"],["shipped","Shipped"]];
+  let cur="all";
+  const draw=()=>{
+    const list=orders.filter(o=>cur==="all"||o.status===cur);
+    tb.innerHTML=list.length?list.map(o=>{
+      const s=orderStatus[o.status];
+      return `<tr><td><b style="font-weight:600">${o.id}</b></td><td>${o.cust}</td><td>${o.items}</td>
+        <td class="n">${o.kg} kg</td><td>${o.due}</td><td><span class="tag ${s.cls}">${icon(s.icon)}${s.label}</span></td></tr>`}).join("")
+      :`<tr><td colspan="6" class="empty">No orders are ${orderStatus[cur].label.toLowerCase()} right now. Choose All to see every order.</td></tr>`;
+    chips.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.f===cur));
+  };
+  filters.forEach(([k,l])=>{
+    const n=k==="all"?orders.length:orders.filter(o=>o.status===k).length;
+    const b=document.createElement("button");b.className="chip";b.dataset.f=k;b.textContent=`${l} ${n}`;
+    b.addEventListener("click",()=>{cur=k;draw()});chips.appendChild(b);
+  });
+  draw();
+})();
+</script>
+</body>
+</html>

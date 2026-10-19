@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>backoff-kit — retry async calls with exponential backoff and jitter</title>
+<meta name="description" content="backoff-kit is a small TypeScript library for retrying async calls with exponential backoff and jitter.">
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #fbfbfa; --fg: #1d2127; --muted: #5d6673; --line: #e2e4e8;
+    --panel: #f2f3f5; --code-bg: #14171c; --code-fg: #e6e9ee;
+    --accent: #1f6feb; --accent-fg: #fff; --warn: #fff6e0; --warn-line: #e8c46a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101216; --fg: #e4e7ec; --muted: #9aa3b0; --line: #262b33;
+      --panel: #181b21; --code-bg: #0a0c0f; --code-fg: #e6e9ee;
+      --accent: #5aa2ff; --accent-fg: #0b0d10; --warn: #2a2312; --warn-line: #6b5a22;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 1rem; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  a { color: var(--accent); }
+  .layout { display: grid; grid-template-columns: 15rem minmax(0, 1fr); max-width: 72rem; margin: 0 auto; }
+  nav {
+    position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto;
+    padding: 2rem 1.25rem; border-right: 1px solid var(--line);
+  }
+  nav .brand { font-weight: 700; font-size: 1.1rem; display: block; margin-bottom: 1.25rem; color: var(--fg); text-decoration: none; }
+  nav h2 { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 1.25rem 0 .4rem; }
+  nav a { display: block; padding: .2rem 0; color: var(--muted); text-decoration: none; font-size: .93rem; }
+  nav a:hover, nav a.active { color: var(--accent); }
+  main { padding: 2.5rem 2rem 6rem; min-width: 0; max-width: 50rem; }
+  h1 { font-size: 2.2rem; line-height: 1.2; margin: 0 0 .5rem; }
+  h2.sec { font-size: 1.5rem; margin: 3.25rem 0 .75rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.1rem; margin: 2rem 0 .5rem; }
+  .lead { font-size: 1.15rem; color: var(--muted); margin-top: 0; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .88em; }
+  :not(pre) > code { background: var(--panel); border: 1px solid var(--line); padding: .08em .35em; border-radius: 4px; }
+  .code { position: relative; margin: 1rem 0; }
+  pre {
+    margin: 0; padding: 1rem 1.1rem; overflow-x: auto; border-radius: 8px;
+    background: var(--code-bg); color: var(--code-fg); line-height: 1.55;
+  }
+  .copy {
+    position: absolute; top: .5rem; right: .5rem; font: inherit; font-size: .75rem;
+    background: #2a2f38; color: #cfd5de; border: 0; border-radius: 4px; padding: .2rem .55rem; cursor: pointer;
+    opacity: 0; transition: opacity .15s;
+  }
+  .code:hover .copy, .copy:focus-visible { opacity: 1; }
+  .tok-k { color: #ff9b7a; } .tok-s { color: #9ed49a; } .tok-c { color: #7d8794; font-style: italic; } .tok-n { color: #e6c07b; }
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .93rem; }
+  th, td { text-align: left; vertical-align: top; padding: .6rem .7rem; border-bottom: 1px solid var(--line); }
+  th { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .table-wrap { overflow-x: auto; }
+  .note { background: var(--warn); border: 1px solid var(--warn-line); border-radius: 8px; padding: .75rem 1rem; margin: 1.25rem 0; }
+  .tabs [role=tablist] { display: flex; gap: .25rem; margin-bottom: -1px; position: relative; }
+  .tabs [role=tab] {
+    font: inherit; font-size: .85rem; padding: .35rem .8rem; cursor: pointer; color: var(--muted);
+    background: transparent; border: 1px solid transparent; border-bottom: 0; border-radius: 6px 6px 0 0;
+  }
+  .tabs [role=tab][aria-selected=true] { color: var(--fg); background: var(--panel); border-color: var(--line); }
+  .tabs .code { margin-top: 0; }
+  .tabs .code pre { border-top-left-radius: 0; }
+  .tabs [hidden] { display: none; }
+  .calc { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1rem 1.1rem; margin: 1.25rem 0; }
+  .calc .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: .75rem; }
+  .calc label { display: block; font-size: .78rem; color: var(--muted); }
+  .calc input, .calc select {
+    width: 100%; margin-top: .2rem; font: inherit; padding: .35rem .5rem; color: var(--fg);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 6px;
+  }
+  .bars { margin-top: 1rem; display: grid; gap: .35rem; }
+  .bar { display: grid; grid-template-columns: 4.5rem 1fr 5.5rem; gap: .6rem; align-items: center; font-size: .82rem; }
+  .bar .track { height: .8rem; background: var(--bg); border-radius: 4px; position: relative; overflow: hidden; border: 1px solid var(--line); }
+  .bar .range { position: absolute; top: 0; bottom: 0; background: var(--accent); opacity: .35; }
+  .bar .cap { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--accent); }
+  .bar span:last-child { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+  footer { margin-top: 4rem; color: var(--muted); font-size: .88rem; }
+  @media (max-width: 760px) {
+    .layout { display: block; }
+    nav { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 1rem; }
+    nav .group { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
+    nav h2 { display: none; }
+    main { padding: 1.5rem 1rem 4rem; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav aria-label="Documentation">
+    <a class="brand" href="#top">backoff-kit</a>
+    <div class="group">
+      <h2>Start</h2>
+      <a href="#install">Install</a>
+      <a href="#quick-start">Quick start</a>
+      <h2>Reference</h2>
+      <a href="#api">retry(fn, options)</a>
+      <a href="#options">Options</a>
+      <a href="#delays">How delays work</a>
+      <a href="#errors">Errors</a>
+      <h2>Recipes</h2>
+      <a href="#recipe-429">HTTP 429 handling</a>
+      <a href="#recipe-abort">Aborting with AbortSignal</a>
+      <a href="#recipe-predicate">Custom retry predicates</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <h1>backoff-kit</h1>
+    <p class="lead">A small TypeScript library for retrying async calls with exponential backoff and jitter. Zero dependencies, works in Node 18+, Deno, Bun and browsers.</p>
+
+    <h2 class="sec" id="install">Install</h2>
+    <div class="tabs" data-tabs>
+      <div role="tablist" aria-label="Package manager">
+        <button role="tab" aria-selected="true">npm</button>
+        <button role="tab" aria-selected="false">pnpm</button>
+        <button role="tab" aria-selected="false">yarn</button>
+        <button role="tab" aria-selected="false">bun</button>
+      </div>
+      <div role="tabpanel"><div class="code"><pre>npm install backoff-kit</pre></div></div>
+      <div role="tabpanel" hidden><div class="code"><pre>pnpm add backoff-kit</pre></div></div>
+      <div role="tabpanel" hidden><div class="code"><pre>yarn add backoff-kit</pre></div></div>
+      <div role="tabpanel" hidden><div class="code"><pre>bun add backoff-kit</pre></div></div>
+    </div>
+    <p>The package ships ESM and CommonJS builds with bundled type declarations.</p>
+
+    <h2 class="sec" id="quick-start">Quick start</h2>
+    <div class="code"><pre data-lang="ts">import { retry } from "backoff-kit";
+
+const user = await retry(async () =&gt; {
+  const res = await fetch("https://api.example.com/users/42");
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+});</pre></div>
+    <p>With no options, <code>retry</code> calls your function up to 6 times (the first attempt plus 5 retries). It waits between attempts with exponential backoff and full jitter, and resolves with the first successful result. If every attempt fails, it rejects with the last error.</p>
+    <p>Pass options as the second argument:</p>
+    <div class="code"><pre data-lang="ts">const data = await retry(() =&gt; loadReport(), {
+  retries: 3,
+  minDelay: 200,
+  maxDelay: 5_000,
+  onRetry: ({ attempt, delay, error }) =&gt;
+    console.warn(`attempt ${attempt} failed, retrying in ${delay}ms`, error),
+});</pre></div>
+
+    <h2 class="sec" id="api">retry(fn, options)</h2>
+    <div class="code"><pre data-lang="ts">function retry&lt;T&gt;(
+  fn: (ctx: AttemptContext) =&gt; Promise&lt;T&gt; | T,
+  options?: RetryOptions,
+): Promise&lt;T&gt;;
+
+interface AttemptContext {
+  attempt: number;      // 1 for the first call, 2 for the first retry, ...
+  signal?: AbortSignal; // the signal you passed in options, if any
+}</pre></div>
+    <p><code>fn</code> may be sync or async. It receives an <code>AttemptContext</code>, which you can ignore or use to forward the abort signal into <code>fetch</code>. Any thrown error or rejected promise counts as a failed attempt.</p>
+
+    <h3 id="options">Options</h3>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>retries</code></td><td><code>number</code></td><td><code>5</code></td><td>Maximum number of retries after the first attempt. <code>0</code> calls <code>fn</code> once with no retry.</td></tr>
+        <tr><td><code>minDelay</code></td><td><code>number</code> (ms)</td><td><code>100</code></td><td>Delay before the first retry, before jitter.</td></tr>
+        <tr><td><code>maxDelay</code></td><td><code>number</code> (ms)</td><td><code>30000</code></td><td>Upper bound for any single delay.</td></tr>
+        <tr><td><code>factor</code></td><td><code>number</code></td><td><code>2</code></td><td>Multiplier applied to the delay after each retry.</td></tr>
+        <tr><td><code>jitter</code></td><td><code>"full" | "equal" | "none" | (delay: number) =&gt; number</code></td><td><code>"full"</code></td><td>How randomness is applied to each delay. See <a href="#delays">How delays work</a>. A function receives the capped delay and returns the final one.</td></tr>
+        <tr><td><code>shouldRetry</code></td><td><code>(error: unknown, attempt: number) =&gt; boolean | number | Promise&lt;boolean | number&gt;</code></td><td>retry every error</td><td>Decides whether a failure is retried. Return <code>false</code> to stop and reject with that error. Return a number to retry after exactly that many ms, skipping the computed delay (useful for <code>Retry-After</code>).</td></tr>
+        <tr><td><code>onRetry</code></td><td><code>(info: { error: unknown; attempt: number; delay: number }) =&gt; void</code></td><td>none</td><td>Called before each wait. <code>attempt</code> is the attempt that just failed. Use it for logging or metrics.</td></tr>
+        <tr><td><code>signal</code></td><td><code>AbortSignal</code></td><td>none</td><td>Cancels the operation, including any wait in progress. See <a href="#recipe-abort">Aborting</a>.</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 id="delays">How delays work</h3>
+    <p>Before retry <em>n</em> (starting at 1), the capped delay is:</p>
+    <div class="code"><pre data-lang="text">capped = min(maxDelay, minDelay * factor ^ (n - 1))</pre></div>
+    <p>Jitter then spreads that value so many clients that failed together don't all retry together:</p>
+    <ul>
+      <li><code>"full"</code>: random value in <code>[0, capped]</code>. Best at spreading load.</li>
+      <li><code>"equal"</code>: <code>capped / 2</code> plus a random value in <code>[0, capped / 2]</code>. Keeps a guaranteed minimum wait.</li>
+      <li><code>"none"</code>: exactly <code>capped</code>. Predictable, handy in tests.</li>
+    </ul>
+    <p>Try it. Each bar shows the range a delay can fall in, with the cap marked.</p>
+
+    <div class="calc" id="calc">
+      <div class="row">
+        <label>retries<input type="number" id="c-retries" value="5" min="1" max="12"></label>
+        <label>minDelay (ms)<input type="number" id="c-min" value="100" min="1"></label>
+        <label>maxDelay (ms)<input type="number" id="c-max" value="30000" min="1"></label>
+        <label>factor<input type="number" id="c-factor" value="2" min="1" step="0.1"></label>
+        <label>jitter
+          <select id="c-jitter"><option>full</option><option>equal</option><option>none</option></select>
+        </label>
+      </div>
+      <div class="bars" id="c-bars" aria-live="polite"></div>
+    </div>
+
+    <h3 id="errors">Errors</h3>
+    <ul>
+      <li>When retries are exhausted, <code>retry</code> rejects with the error from the last attempt, unchanged.</li>
+      <li>When <code>shouldRetry</code> returns <code>false</code>, <code>retry</code> rejects immediately with that error.</li>
+      <li>When <code>signal</code> aborts, <code>retry</code> rejects with <code>signal.reason</code> (a <code>DOMException</code> named <code>AbortError</code> by default).</li>
+    </ul>
+
+    <h2 class="sec" id="recipe-429">Recipe: HTTP 429 handling</h2>
+    <p>Retry rate-limit and transient server errors, and respect the server's <code>Retry-After</code> header when present. Returning a number from <code>shouldRetry</code> overrides the computed delay.</p>
+    <div class="code"><pre data-lang="ts">import { retry } from "backoff-kit";
+
+class HttpError extends Error {
+  constructor(readonly status: number, readonly retryAfter?: string | null) {
+    super(`HTTP ${status}`);
+  }
+}
+
+function retryAfterMs(value?: string | null): number | undefined {
+  if (!value) return undefined;
+  const seconds = Number(value);
+  if (!Number.isNaN(seconds)) return seconds * 1000;
+  const date = Date.parse(value);
+  return Number.isNaN(date) ? undefined : Math.max(0, date - Date.now());
+}
+
+const res = await retry(
+  async () =&gt; {
+    const r = await fetch("https://api.example.com/items");
+    if (!r.ok) throw new HttpError(r.status, r.headers.get("retry-after"));
+    return r;
+  },
+  {
+    retries: 6,
+    shouldRetry: (err) =&gt; {
+      if (!(err instanceof HttpError)) return true;          // network error
+      if (err.status === 429) return retryAfterMs(err.retryAfter) ?? true;
+      return err.status &gt;= 500;                              // 5xx only
+    },
+  },
+);</pre></div>
+    <div class="note">Cap server-provided waits yourself if you don't trust them, for example <code>Math.min(ms, 60_000)</code>. A numeric return value is used as-is.</div>
+
+    <h2 class="sec" id="recipe-abort">Recipe: aborting with AbortSignal</h2>
+    <p>Pass a <code>signal</code> to cancel from outside. Aborting stops the current wait immediately and no further attempts start. Forward the same signal into <code>fetch</code> so an in-flight request is cancelled too.</p>
+    <div class="code"><pre data-lang="ts">const controller = new AbortController();
+cancelButton.onclick = () =&gt; controller.abort();
+
+try {
+  const data = await retry(
+    ({ signal }) =&gt; fetch("/api/search?q=backoff", { signal }).then((r) =&gt; r.json()),
+    { signal: controller.signal },
+  );
+} catch (err) {
+  if (err instanceof DOMException &amp;&amp; err.name === "AbortError") {
+    // user cancelled
+  } else {
+    throw err;
+  }
+}</pre></div>
+    <p>For an overall deadline, use <code>AbortSignal.timeout</code>:</p>
+    <div class="code"><pre data-lang="ts">await retry(() =&gt; syncJob(), { signal: AbortSignal.timeout(30_000) });</pre></div>
+
+    <h2 class="sec" id="recipe-predicate">Recipe: custom retry predicates</h2>
+    <p>By default every error is retried. Use <code>shouldRetry</code> to give up early on errors that will never succeed, such as validation failures, and to cap by attempt.</p>
+    <div class="code"><pre data-lang="ts">import { retry } from "backoff-kit";
+
+const NON_RETRYABLE = new Set(["EINVAL", "EACCES", "ENOENT"]);
+
+await retry(() =&gt; writeSnapshot(), {
+  shouldRetry: (err, attempt) =&gt; {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code &amp;&amp; NON_RETRYABLE.has(code)) return false;
+    return attempt &lt; 4; // stop after 4 failed attempts even though retries allows more
+  },
+});</pre></div>
+    <p>The predicate may be async, for example to refresh a token before deciding:</p>
+    <div class="code"><pre data-lang="ts">await retry(() =&gt; callApi(token), {
+  shouldRetry: async (err) =&gt; {
+    if (err instanceof HttpError &amp;&amp; err.status === 401) {
+      token = await refreshToken();
+      return true;
+    }
+    return false;
+  },
+});</pre></div>
+
+    <footer>backoff-kit is open source. Report issues and contribute on the project repository.</footer>
+  </main>
+</div>
+
+<script>
+(() => {
+  // Minimal syntax highlighting for ts/text blocks.
+  const KW = /\b(import|from|const|let|await|async|return|if|new|class|extends|constructor|readonly|function|interface|try|catch|throw|instanceof|else)\b/g;
+  document.querySelectorAll("pre[data-lang]").forEach((pre) => {
+    if (pre.dataset.lang === "text") return;
+    const parts = [];
+    const stash = (cls, s) => (parts.push(`<span class="${cls}">${s}</span>`), `\u0000${parts.length - 1}\u0000`);
+    let h = pre.innerHTML;
+    h = h.replace(/(\/\/[^\n]*)/g, (m) => stash("tok-c", m));
+    h = h.replace(/(`[^`]*`|"[^"\n]*")/g, (m) => stash("tok-s", m));
+    h = h.replace(KW, '<span class="tok-k">$1</span>');
+    h = h.replace(/\b(\d[\d_]*)\b/g, '<span class="tok-n">$1</span>');
+    h = h.replace(/\u0000(\d+)\u0000/g, (_, i) => parts[i]);
+    pre.innerHTML = h;
+  });
+
+  // Copy buttons.
+  document.querySelectorAll(".code").forEach((box) => {
+    const btn = document.createElement("button");
+    btn.className = "copy"; btn.type = "button"; btn.textContent = "Copy";
+    btn.onclick = async () => {
+      try { await navigator.clipboard.writeText(box.querySelector("pre").textContent); btn.textContent = "Copied"; }
+      catch { btn.textContent = "Press Ctrl+C"; }
+      setTimeout(() => (btn.textContent = "Copy"), 1500);
+    };
+    box.appendChild(btn);
+  });
+
+  // Install tabs.
+  document.querySelectorAll("[data-tabs]").forEach((root) => {
+    const tabs = [...root.querySelectorAll("[role=tab]")];
+    const panels = [...root.querySelectorAll("[role=tabpanel]")];
+    const select = (i) => tabs.forEach((t, j) => {
+      t.setAttribute("aria-selected", i === j);
+      panels[j].hidden = i !== j;
+    });
+    tabs.forEach((t, i) => {
+      t.onclick = () => select(i);
+      t.onkeydown = (e) => {
+        if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+        const n = (i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+        select(n); tabs[n].focus();
+      };
+    });
+  });
+
+  // Delay calculator.
+  const $ = (id) => document.getElementById(id);
+  const fmt = (ms) => (ms >= 1000 ? (ms / 1000).toFixed(ms >= 10000 ? 0 : 1) + " s" : Math.round(ms) + " ms");
+  function renderCalc() {
+    const n = Math.min(12, Math.max(1, +$("c-retries").value || 1));
+    const min = Math.max(1, +$("c-min").value || 1);
+    const max = Math.max(min, +$("c-max").value || min);
+    const factor = Math.max(1, +$("c-factor").value || 1);
+    const mode = $("c-jitter").value;
+    const rows = [];
+    for (let i = 1; i <= n; i++) rows.push({ i, cap: Math.min(max, min * factor ** (i - 1)) });
+    const top = Math.max(...rows.map((r) => r.cap));
+    $("c-bars").innerHTML = rows.map(({ i, cap }) => {
+      const lo = mode === "full" ? 0 : mode === "equal" ? cap / 2 : cap;
+      const left = (lo / top) * 100, width = ((cap - lo) / top) * 100;
+      const label = lo === cap ? fmt(cap) : `${fmt(lo)}–${fmt(cap)}`;
+      return `<div class="bar"><span>retry ${i}</span><span class="track">` +
+        (width > 0 ? `<span class="range" style="left:${left}%;width:${width}%"></span>` : "") +
+        `<span class="cap" style="left:calc(${(cap / top) * 100}% - 2px)"></span></span><span>${label}</span></div>`;
+    }).join("");
+  }
+  document.querySelectorAll("#calc input, #calc select").forEach((el) => el.addEventListener("input", renderCalc));
+  renderCalc();
+
+  // Highlight current section in the nav.
+  const links = [...document.querySelectorAll("nav a[href^='#']")].filter((a) => a.hash !== "#top");
+  const map = new Map(links.map((a) => [a.hash.slice(1), a]));
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      links.forEach((a) => a.classList.remove("active"));
+      map.get(e.target.id)?.classList.add("active");
+    });
+  }, { rootMargin: "0px 0px -70% 0px" });
+  map.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+})();
+</script>
+</body>
+</html>

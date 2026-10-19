@@ -1,0 +1,28 @@
+{
+  "id": "roastline--none--1",
+  "desktop": {
+    "fullH": 1538,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 10,
+      "moderate": 7,
+      "minor": 0,
+      "rules": [
+        "color-contrast:9",
+        "label-content-name-mismatch:1",
+        "landmark-one-main:1",
+        "region:6"
+      ]
+    }
+  },
+  "mobile": {
+    "fullH": 3661,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

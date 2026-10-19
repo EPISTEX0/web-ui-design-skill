@@ -1,0 +1,25 @@
+{
+  "id": "roastline--frontend-design--1",
+  "desktop": {
+    "fullH": 1728,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 1,
+      "moderate": 0,
+      "minor": 0,
+      "rules": [
+        "aria-tooltip-name:1"
+      ]
+    }
+  },
+  "mobile": {
+    "fullH": 3663,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

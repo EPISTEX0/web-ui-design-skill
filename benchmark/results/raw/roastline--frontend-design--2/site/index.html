@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roastline · Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#E6EAE0;      /* chaff-grey green */
+  --panel:#F3F5EE;
+  --ink:#241A15;        /* dark roast */
+  --ink2:#51463E;
+  --ink3:#7C7168;
+  --rule:#C9CFC0;
+  --bean:#4F7A3A;       /* green bean */
+  --flame:#C4491C;      /* burner */
+  --warn:#B07A00;
+  --crit:#B3261E;
+  --ok:#3B7A4B;
+  --r1:#D9B26F; --r2:#A8743A; --r3:#6B4223; --r4:#35200F; /* roast ladder, light → dark */
+  --sans:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 15px/1.45 var(--sans);font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0;font-weight:600}
+:focus-visible{outline:2px solid var(--flame);outline-offset:2px}
+button{font:inherit;color:inherit}
+
+/* top bar */
+.bar{display:flex;align-items:center;gap:28px;padding:14px 32px;background:var(--ink);color:#EDE8DF}
+.brand{font-weight:800;font-size:20px;letter-spacing:-.02em}
+.brand i{font-style:normal;color:var(--flame)}
+.bar nav{display:flex;gap:4px;flex:1}
+.bar nav a{color:#B9AFA3;text-decoration:none;padding:6px 12px;border-radius:6px}
+.bar nav a[aria-current]{background:#3A2E27;color:#fff}
+.bar nav a:hover{color:#fff}
+.who{font-size:13px;color:#B9AFA3}
+
+main{max-width:1320px;margin:0 auto;padding:28px 32px 56px}
+.head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.head h1{font-size:30px;letter-spacing:-.02em}
+.head p{margin:2px 0 0;color:var(--ink2)}
+.btn{background:var(--ink);color:#fff;border:0;padding:9px 16px;border-radius:6px;font-weight:600;cursor:pointer}
+.btn:hover{background:#3A2E27}
+
+/* summary strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);border-block:1.5px solid var(--ink);margin-bottom:26px}
+.strip div{padding:14px 20px 14px 0}
+.strip div+div{padding-left:20px;border-left:1px solid var(--rule)}
+.strip b{display:block;font-size:28px;font-weight:600;letter-spacing:-.02em}
+.strip b small{font-size:15px;color:var(--ink2);font-weight:500;margin-left:3px}
+.strip span{color:var(--ink2);font-size:13px}
+.strip em{font-style:normal;font-size:13px;font-weight:600}
+.up{color:var(--ok)} .down{color:var(--crit)}
+
+/* panels */
+.panel{background:var(--panel);border-radius:10px;padding:22px 24px}
+.panel h2{font-size:17px}
+.panel .sub{color:var(--ink2);font-size:13px;margin:2px 0 14px}
+.grid{display:grid;gap:20px}
+.top{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);margin-bottom:20px}
+.bot{grid-template-columns:minmax(0,1fr) minmax(0,1.35fr)}
+
+/* roast curve — the memorable piece */
+.curve-wrap{position:relative}
+#curve{width:100%;height:auto;display:block;touch-action:none}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;font-size:12.5px;padding:7px 10px;border-radius:6px;white-space:nowrap;transform:translate(-50%,-110%);opacity:0}
+.legend{display:flex;gap:18px;font-size:13px;color:var(--ink2);margin-top:6px;flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:18px;height:0;border-top:3px solid var(--flame);vertical-align:middle;margin-right:7px}
+.legend .tgt::before{border-top:2px dashed var(--ink3)}
+.legend .fc::before{border:0;width:9px;height:9px;background:var(--ink);border-radius:50%}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
+.facts dt{font-size:12.5px;color:var(--ink2)}
+.facts dd{margin:0;font-size:19px;font-weight:600}
+
+/* batch list */
+.batches{list-style:none;margin:0;padding:0}
+.batches li button{width:100%;display:grid;grid-template-columns:14px 1fr auto;gap:12px;align-items:center;text-align:left;background:none;border:0;border-top:1px solid var(--rule);padding:11px 8px;cursor:pointer;border-radius:0}
+.batches li:first-child button{border-top:0}
+.batches li button:hover{background:#E9EDE2}
+.batches li button[aria-pressed=true]{background:#E0E6D6;box-shadow:inset 3px 0 0 var(--flame)}
+.swatch{width:14px;height:14px;border-radius:50%}
+.batches strong{display:block;font-weight:600}
+.batches small{color:var(--ink2)}
+.batches .num{text-align:right;font-weight:600}
+.batches .num small{display:block;font-weight:400}
+
+/* inventory */
+.lot{display:grid;grid-template-columns:minmax(0,170px) 1fr 76px;gap:14px;align-items:center;padding:9px 0;border-top:1px solid var(--rule)}
+.lot:first-of-type{border-top:0}
+.lot b{font-weight:600;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lot small{color:var(--ink2)}
+.track{position:relative;height:16px;background:#E2E7D9;border-radius:3px}
+.fill{position:absolute;inset:0 auto 0 0;background:var(--bean);border-radius:3px 4px 4px 3px}
+.lot.low .fill{background:var(--crit)}
+.lot.mid .fill{background:var(--warn)}
+.mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.cover{text-align:right;font-weight:600}
+.cover small{display:block;font-weight:400}
+.key{font-size:12.5px;color:var(--ink2);margin-top:10px;display:flex;gap:16px;flex-wrap:wrap}
+.key i{display:inline-block;width:2px;height:12px;background:var(--ink);vertical-align:middle;margin-right:6px}
+
+/* orders */
+.tools{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.chip{background:transparent;border:1px solid var(--rule);border-radius:99px;padding:4px 12px;font-size:13px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-weight:600;font-size:13px;color:var(--ink2);text-align:left;padding:6px 10px 8px 0;border-bottom:1.5px solid var(--ink);white-space:nowrap}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+td small{display:block;color:var(--ink2)}
+th.r,td.r{text-align:right;padding-right:0}
+.st{display:inline-flex;align-items:center;gap:6px;font-weight:600;white-space:nowrap}
+.st svg{width:14px;height:14px}
+.st.ship{color:var(--ok)} .st.roast{color:var(--flame)} .st.pack{color:var(--ink2)} .st.wait{color:var(--crit)}
+.empty{padding:20px 0;color:var(--ink2)}
+
+@media (max-width:1000px){
+  .top,.bot{grid-template-columns:1fr}
+  .strip{grid-template-columns:1fr 1fr}
+  .strip div:nth-child(3){padding-left:0;border-left:0}
+  .strip div:nth-child(n+3){border-top:1px solid var(--rule)}
+}
+@media (max-width:600px){
+  .bar{padding:12px 16px;gap:12px}.bar nav,.who{display:none}
+  main{padding:20px 16px 40px}
+  .facts{grid-template-columns:1fr 1fr}
+  .lot{grid-template-columns:1fr 70px}.lot .track{grid-column:1/-1;order:3}
+}
+@media (prefers-reduced-motion:no-preference){
+  .fill{animation:grow .9s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes grow{from{width:0!important}}
+  #curve .live{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 1.8s ease-out forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="brand">Roast<i>line</i></div>
+  <nav aria-label="Main">
+    <a href="#" aria-current="page">Dashboard</a><a href="#">Green beans</a><a href="#">Roast batches</a><a href="#">Wholesale orders</a><a href="#">Customers</a>
+  </nav>
+  <div class="who">Roast floor · Dani Okafor</div>
+</header>
+
+<main>
+  <div class="head">
+    <div>
+      <h1>Monday 19 October</h1>
+      <p>5 batches roasted today, 2 more scheduled. Kenya Nyeri AA will run out before Thursday's orders.</p>
+    </div>
+    <button class="btn" type="button">Schedule a roast</button>
+  </div>
+
+  <section class="strip" aria-label="Summary">
+    <div><b>2,055<small>kg</small></b><span>Green beans on hand across 7 lots</span></div>
+    <div><b>71.4<small>kg</small></b><span>Roasted today <em class="up">+8% vs last Monday</em></span></div>
+    <div><b>9<small>orders</small></b><span>Due by Friday, 3 not yet packed</span></div>
+    <div><b>14.6<small>%</small></b><span>Average weight loss today <em class="down">0.4 pts above target</em></span></div>
+  </section>
+
+  <div class="grid top">
+    <section class="panel" aria-labelledby="curve-h">
+      <h2 id="curve-h">Roast curve · <span id="curve-title"></span></h2>
+      <p class="sub" id="curve-sub"></p>
+      <div class="curve-wrap">
+        <svg id="curve" viewBox="0 0 760 330" role="img" aria-labelledby="curve-h curve-sub"></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="legend"><span>This batch, bean temperature</span><span class="tgt">Profile target</span><span class="fc">First crack</span></div>
+      <dl class="facts" id="facts"></dl>
+    </section>
+
+    <section class="panel" aria-labelledby="b-h">
+      <h2 id="b-h">Today's batches</h2>
+      <p class="sub">Select a batch to see its curve.</p>
+      <ul class="batches" id="batches"></ul>
+    </section>
+  </div>
+
+  <div class="grid bot">
+    <section class="panel" aria-labelledby="inv-h">
+      <h2 id="inv-h">Green bean stock</h2>
+      <p class="sub">Days of cover at this month's roasting pace. Bars are scaled to 60 days.</p>
+      <div id="inv"></div>
+      <div class="key"><span><i></i>Reorder point (21 days)</span></div>
+    </section>
+
+    <section class="panel" aria-labelledby="ord-h">
+      <h2 id="ord-h">Wholesale orders</h2>
+      <p class="sub">Open orders, soonest due first.</p>
+      <div class="tools" id="filters" role="group" aria-label="Filter by status"></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Customer</th><th>Order</th><th>Due</th><th>Status</th><th class="r">Value</th></tr></thead>
+        <tbody id="orders"></tbody>
+      </table></div>
+    </section>
+  </div>
+</main>
+
+<script>
+/* ---------- sample data ---------- */
+const ROAST = {light:'#D9B26F', medium:'#A8743A', dark:'#6B4223', espresso:'#35200F'};
+
+const batches = [
+  {id:'R-2418', lot:'Ethiopia Guji Hambela', level:'light',    time:'06:40', green:12.0, out:10.3, charge:202, fc:'08:52', drop:'10:14', dropT:198, seed:1},
+  {id:'R-2419', lot:'Colombia Huila Pitalito',level:'medium',  time:'07:35', green:15.0, out:12.8, charge:205, fc:'09:20', drop:'11:08', dropT:208, seed:2},
+  {id:'R-2420', lot:'Brazil Cerrado Fazenda', level:'dark',     time:'08:30', green:15.0, out:12.6, charge:208, fc:'09:05', drop:'12:02', dropT:218, seed:3},
+  {id:'R-2421', lot:'Brazil Cerrado Fazenda', level:'espresso', time:'09:35', green:15.0, out:12.5, charge:208, fc:'09:12', drop:'12:40', dropT:224, seed:4},
+  {id:'R-2422', lot:'Guatemala Huehuetenango',level:'medium',  time:'10:40', green:12.0, out:10.2, charge:205, fc:'09:30', drop:'11:14', dropT:207, seed:5},
+];
+const levelName = {light:'Light', medium:'Medium', dark:'Dark', espresso:'Espresso'};
+
+const lots = [
+  {name:'Brazil Cerrado Fazenda', origin:'Fazenda Rainha · natural', kg:640, perDay:21},
+  {name:'Ethiopia Guji Hambela', origin:'Hambela washing station · natural', kg:420, perDay:11},
+  {name:'Colombia Huila Pitalito', origin:'Cooperativa del Sur · washed', kg:310, perDay:12},
+  {name:'Sumatra Mandheling', origin:'Gayo highlands · wet-hulled', kg:260, perDay:5},
+  {name:'Guatemala Huehuetenango', origin:'Finca La Esperanza · washed', kg:180, perDay:9},
+  {name:'Costa Rica Tarrazú', origin:'Coopedota · honey', kg:150, perDay:4},
+  {name:'Kenya Nyeri AA', origin:'Gatomboya · washed', kg:95, perDay:14},
+].map(l=>({...l, days:Math.round(l.kg/l.perDay)}));
+
+const orders = [
+  {c:'Fernside Café', loc:'Leeds', item:'24 × 1 kg Colombia Huila, medium', due:'Tue 20 Oct', s:'pack', v:552},
+  {c:'Marlow & Pike', loc:'Bristol', item:'10 × 2 kg Kenya Nyeri AA, light', due:'Wed 21 Oct', s:'wait', v:640, note:'Short by 40 kg of green'},
+  {c:'The Daily Grind Co-op', loc:'Manchester', item:'30 × 1 kg Brazil espresso blend', due:'Wed 21 Oct', s:'roast', v:600},
+  {c:'Hollis Bakehouse', loc:'Bath', item:'6 × 1 kg Guatemala, medium', due:'Thu 22 Oct', s:'roast', v:156},
+  {c:'North Quay Hotel', loc:'Newcastle', item:'12 × 2 kg Ethiopia Guji, light', due:'Thu 22 Oct', s:'pack', v:456},
+  {c:'Tern Street Coffee', loc:'Norwich', item:'18 × 1 kg Brazil, dark', due:'Fri 23 Oct', s:'roast', v:360},
+  {c:'Oatley Deli', loc:'York', item:'8 × 1 kg Costa Rica honey', due:'Fri 23 Oct', s:'pack', v:224},
+  {c:'Salt & Ember', loc:'Brighton', item:'15 × 1 kg Brazil espresso blend', due:'Fri 23 Oct', s:'roast', v:300},
+  {c:'Brindle Books', loc:'Hay-on-Wye', item:'4 × 1 kg Sumatra, dark', due:'Mon 19 Oct', s:'ship', v:104},
+];
+const statusMeta = {
+  wait: {label:'Waiting on beans', icon:'<path d="M8 1.5 15 14H1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 6v4M8 11.7v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'},
+  roast:{label:'Roasting', icon:'<path d="M8 1.5c1 3 4 4 4 8a4 4 0 0 1-8 0c0-2 1-3 1.5-4 .5 1 1 1.5 1.5 1.5C7 5.5 7 3.5 8 1.5z" fill="currentColor"/>'},
+  pack: {label:'Packing', icon:'<path d="M2 4.5 8 2l6 2.5v7L8 14l-6-2.5zM2 4.5 8 7l6-2.5M8 7v7" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>'},
+  ship: {label:'Shipped', icon:'<path d="m3 8.5 3.2 3.2L13 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'},
+};
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const mmss = s => `${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,'0')}`;
+const toSec = t => { const [m,s]=t.split(':').map(Number); return m*60+s; };
+const gbp = n => '£'+n.toLocaleString('en-GB');
+
+/* ---------- batches list ---------- */
+let current = batches[0];
+function renderBatches(){
+  $('batches').innerHTML = batches.map(b=>{
+    const loss = ((1-b.out/b.green)*100).toFixed(1);
+    return `<li><button type="button" data-id="${b.id}" aria-pressed="${b===current}">
+      <span class="swatch" style="background:${ROAST[b.level]}" title="${levelName[b.level]} roast"></span>
+      <span><strong>${b.lot}</strong><small>${b.id} · ${levelName[b.level]} · started ${b.time}</small></span>
+      <span class="num">${b.out.toFixed(1)} kg<small>${loss}% loss</small></span>
+    </button></li>`;
+  }).join('');
+}
+$('batches').addEventListener('click',e=>{
+  const btn = e.target.closest('button'); if(!btn) return;
+  current = batches.find(b=>b.id===btn.dataset.id);
+  renderBatches(); drawCurve(true);
+  $('batches').querySelector('[aria-pressed=true]').focus();
+});
+
+/* ---------- roast curve ---------- */
+/* Curve built from control points (seconds, °C) with smooth interpolation. */
+function curvePoints(b, target){
+  const dropS = toSec(b.drop), fcS = toSec(b.fc);
+  const wob = target ? 0 : ((b.seed*37)%11-5)*0.35;
+  const turn = 95 + (target?0:wob);
+  const pts = [[0,b.charge],[75,turn],[180,128+wob],[300,150+wob*0.5],
+    [fcS*0.6,172],[fcS,196+wob*0.3],[dropS,b.dropT]];
+  const out = [];
+  for(let t=0;t<=dropS;t+=4){
+    let i=0; while(i<pts.length-2 && t>pts[i+1][0]) i++;
+    const [t0,y0]=pts[i],[t1,y1]=pts[i+1];
+    const u=Math.min(1,Math.max(0,(t-t0)/(t1-t0)));
+    const k=(1-Math.cos(u*Math.PI))/2*0.35+u*0.65; // gentle ease
+    out.push([t,y0+(y1-y0)*k]);
+  }
+  return out;
+}
+const M = {l:48,r:20,t:14,b:36}, W=760, H=330;
+function drawCurve(animate){
+  const b = current, svg = $('curve');
+  const actual = curvePoints(b,false);
+  const target = curvePoints({...b, fc:b.fc, drop:b.drop, dropT:b.dropT, charge:b.charge},true);
+  const maxT = 13*60, x = t=>M.l+(t/maxT)*(W-M.l-M.r);
+  const y = v=>M.t+(1-(v-60)/(240-60))*(H-M.t-M.b);
+  const path = pts=>pts.map((p,i)=>(i?'L':'M')+x(p[0]).toFixed(1)+' '+y(p[1]).toFixed(1)).join('');
+  let g = '';
+  for(let v=60;v<=240;v+=45) g += `<line x1="${M.l}" x2="${W-M.r}" y1="${y(v)}" y2="${y(v)}" stroke="#C9CFC0" stroke-width="1"/><text x="${M.l-8}" y="${y(v)+4}" text-anchor="end" font-size="12" fill="#51463E">${v}°</text>`;
+  for(let m=0;m<=12;m+=2) g += `<text x="${x(m*60)}" y="${H-12}" text-anchor="middle" font-size="12" fill="#51463E">${m}:00</text>`;
+  const fcS = toSec(b.fc), dropS = toSec(b.drop);
+  const fcY = actual.find(p=>p[0]>=fcS)[1];
+  const len = Math.ceil(actual.length*14);
+  svg.innerHTML = `${g}
+    <path d="${path(target)}" fill="none" stroke="#7C7168" stroke-width="2" stroke-dasharray="6 5"/>
+    <path class="live" d="${path(actual)}" fill="none" stroke="#C4491C" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" style="--len:${len*3}"/>
+    <line x1="${x(fcS)}" x2="${x(fcS)}" y1="${y(fcY)+8}" y2="${H-M.b}" stroke="#241A15" stroke-width="1" stroke-dasharray="2 3"/>
+    <circle cx="${x(fcS)}" cy="${y(fcY)}" r="5.5" fill="#241A15" stroke="#F3F5EE" stroke-width="2"/>
+    <text x="${x(fcS)-10}" y="${y(fcY)-10}" text-anchor="end" font-size="12.5" font-weight="600" fill="#241A15">First crack ${b.fc}</text>
+    <line id="xh" y1="${M.t}" y2="${H-M.b}" stroke="#241A15" stroke-width="1" opacity="0"/>
+    <circle id="dot" r="5" fill="#C4491C" stroke="#F3F5EE" stroke-width="2" opacity="0"/>
+    <rect id="hit" x="${M.l}" y="${M.t}" width="${W-M.l-M.r}" height="${H-M.t-M.b}" fill="transparent"/>`;
+  svg.style.setProperty('--len', len*3);
+
+  const loss = ((1-b.out/b.green)*100).toFixed(1);
+  const devPct = ((dropS-fcS)/dropS*100).toFixed(0);
+  $('curve-title').textContent = `${b.id} ${b.lot}`;
+  $('curve-sub').textContent = `${levelName[b.level]} roast, started ${b.time}. Bean temperature in °C against time since charge.`;
+  $('facts').innerHTML = [
+    ['Charge', b.charge+'°C'],['Drop', `${b.dropT}°C at ${mmss(dropS)}`],
+    ['Development', `${devPct}% after first crack`],['Weight loss', loss+'%']
+  ].map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('');
+
+  const hit=$('hit'), tip=$('tip'), xh=$('xh'), dot=$('dot');
+  const move = ev=>{
+    const r = svg.getBoundingClientRect(), sx = W/r.width;
+    const px = (ev.clientX-r.left)*sx;
+    const t = Math.max(0,Math.min(dropS,((px-M.l)/(W-M.l-M.r))*maxT));
+    const p = actual.reduce((a,c)=>Math.abs(c[0]-t)<Math.abs(a[0]-t)?c:a);
+    const q = target.reduce((a,c)=>Math.abs(c[0]-p[0])<Math.abs(a[0]-p[0])?c:a);
+    xh.setAttribute('x1',x(p[0]));xh.setAttribute('x2',x(p[0]));xh.setAttribute('opacity',.5);
+    dot.setAttribute('cx',x(p[0]));dot.setAttribute('cy',y(p[1]));dot.setAttribute('opacity',1);
+    const d = p[1]-q[1];
+    tip.innerHTML = `${mmss(p[0])} · <b>${p[1].toFixed(0)}°C</b> (${d>=0?'+':''}${d.toFixed(0)}° vs target)`;
+    tip.style.left = (x(p[0])/sx)+'px'; tip.style.top = (y(p[1])/sx)+'px'; tip.style.opacity=1;
+  };
+  hit.addEventListener('pointermove',move);
+  hit.addEventListener('pointerleave',()=>{tip.style.opacity=0;xh.setAttribute('opacity',0);dot.setAttribute('opacity',0)});
+}
+
+/* ---------- inventory ---------- */
+function renderInv(){
+  const max=60, reorder=21;
+  $('inv').innerHTML = lots.slice().sort((a,b)=>a.days-b.days).map(l=>{
+    const cls = l.days<14?'low':l.days<=reorder?'mid':'';
+    const note = l.days<14?'Reorder now':l.days<=reorder?'Reorder soon':'Healthy';
+    return `<div class="lot ${cls}">
+      <div><b title="${l.name}">${l.name}</b><small>${l.origin}</small></div>
+      <div class="track" role="img" aria-label="${l.days} days of cover, ${note}">
+        <div class="fill" style="width:${Math.min(100,l.days/max*100)}%"></div>
+        <div class="mark" style="left:${reorder/max*100}%"></div>
+      </div>
+      <div class="cover">${l.days} days<small>${l.kg} kg · ${note}</small></div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- orders ---------- */
+let filter='all';
+function renderFilters(){
+  const counts = k=>k==='all'?orders.length:orders.filter(o=>o.s===k).length;
+  const opts=[['all','All']].concat(Object.entries(statusMeta).map(([k,v])=>[k,v.label]));
+  $('filters').innerHTML = opts.map(([k,l])=>`<button class="chip" type="button" data-f="${k}" aria-pressed="${filter===k}">${l} ${counts(k)}</button>`).join('');
+}
+function renderOrders(){
+  const dayOrder = d=>parseInt(d.split(' ')[1]);
+  const rows = orders.filter(o=>filter==='all'||o.s===filter).sort((a,b)=>dayOrder(a.due)-dayOrder(b.due));
+  $('orders').innerHTML = rows.length ? rows.map(o=>{
+    const m=statusMeta[o.s];
+    return `<tr><td><b>${o.c}</b><small>${o.loc}</small></td>
+      <td>${o.item}${o.note?`<small style="color:var(--crit)">${o.note}</small>`:''}</td>
+      <td>${o.due}</td>
+      <td><span class="st ${o.s}"><svg viewBox="0 0 16 16" aria-hidden="true">${m.icon}</svg>${m.label}</span></td>
+      <td class="r">${gbp(o.v)}</td></tr>`;
+  }).join('') : `<tr><td colspan="5" class="empty">No orders with this status. Choose another filter to see more.</td></tr>`;
+}
+$('filters').addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  filter=b.dataset.f; renderFilters(); renderOrders();
+  $('filters').querySelector('[aria-pressed=true]').focus();
+});
+
+renderBatches(); drawCurve(); renderInv(); renderFilters(); renderOrders();
+</script>
+</body>
+</html>

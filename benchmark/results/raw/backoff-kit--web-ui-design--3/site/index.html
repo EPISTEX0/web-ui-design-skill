@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>backoff-kit — retry async calls with exponential backoff and jitter</title>
+<meta name="description" content="backoff-kit is a small TypeScript library for retrying async calls with exponential backoff and jitter.">
+<style>
+  :root {
+    --bg: #fbfaf7; --panel: #f2efe8; --text: #1f2328; --muted: #5d6570;
+    --line: #dedad0; --accent: #b4410f; --accent-ink: #fff;
+    --code-bg: #1d2126; --code-text: #e8e6e1; --code-muted: #8d949c;
+    --k: #f0a070; --s: #9fd18b; --c: #7d858d; --f: #8ec1e8;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181b; --panel: #1e2125; --text: #e6e4df; --muted: #9aa1a9;
+      --line: #2e3237; --accent: #f08a54; --accent-ink: #1a1a1a;
+      --code-bg: #0f1113;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 var(--sans); }
+  a { color: var(--accent); }
+  code, pre { font-family: var(--mono); }
+  :not(pre) > code { font-size: .88em; background: var(--panel); border: 1px solid var(--line); padding: .08em .35em; border-radius: 4px; }
+
+  .layout { display: grid; grid-template-columns: 240px minmax(0, 1fr); max-width: 1100px; margin: 0 auto; }
+  nav.side { position: sticky; top: 0; align-self: start; height: 100vh; overflow-y: auto; padding: 2rem 1.25rem; border-right: 1px solid var(--line); }
+  .brand { font: 700 1.15rem var(--mono); letter-spacing: -.02em; color: var(--text); text-decoration: none; display: block; margin-bottom: 1.5rem; }
+  .brand span { color: var(--accent); }
+  nav.side h4 { margin: 1.4rem 0 .4rem; font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+  nav.side a { display: block; padding: .22rem .6rem; margin-left: -.6rem; color: var(--muted); text-decoration: none; font-size: .93rem; border-radius: 5px; }
+  nav.side a:hover { color: var(--text); }
+  nav.side a.active { color: var(--accent); background: var(--panel); }
+
+  main { padding: 3rem 2.5rem 6rem; max-width: 760px; }
+  h1 { font-size: 2.4rem; line-height: 1.15; letter-spacing: -.03em; margin: 0 0 .6rem; }
+  .lede { font-size: 1.15rem; color: var(--muted); margin: 0 0 1.5rem; }
+  h2 { font-size: 1.5rem; letter-spacing: -.02em; margin: 3.5rem 0 .8rem; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.1rem; margin: 2rem 0 .5rem; }
+  p { margin: .7rem 0; }
+  ul { padding-left: 1.2rem; }
+  li { margin: .25rem 0; }
+
+  .badges { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .badge { font: .78rem var(--mono); padding: .2rem .6rem; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); }
+
+  .code { position: relative; margin: 1rem 0; }
+  pre { margin: 0; background: var(--code-bg); color: var(--code-text); padding: 1rem 1.1rem; border-radius: 8px; overflow-x: auto; font-size: .86rem; line-height: 1.6; }
+  .code .lang { position: absolute; left: 1rem; top: -.65rem; font: .68rem var(--mono); background: var(--panel); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 .4rem; }
+  .copy { position: absolute; top: .5rem; right: .5rem; font: .72rem var(--sans); background: transparent; color: var(--code-muted); border: 1px solid #3a3f45; border-radius: 5px; padding: .2rem .55rem; cursor: pointer; }
+  .copy:hover, .copy:focus-visible { color: #fff; border-color: #6b727a; }
+  .k { color: var(--k); } .s { color: var(--s); } .c { color: var(--c); font-style: italic; } .f { color: var(--f); }
+
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .92rem; }
+  th, td { text-align: left; padding: .6rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: .74rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+  td:first-child { white-space: nowrap; }
+
+  .opt { margin: 1.4rem 0; padding: 1rem 1.2rem; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; }
+  .opt h3 { margin: 0 0 .3rem; font: 600 1rem var(--mono); }
+  .opt .meta { font: .8rem var(--mono); color: var(--muted); margin-bottom: .4rem; }
+  .opt p { margin: .4rem 0 0; }
+
+  .note { border-left: 3px solid var(--accent); background: var(--panel); padding: .7rem 1rem; border-radius: 0 6px 6px 0; margin: 1rem 0; font-size: .95rem; }
+
+  .playground { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 1.1rem 1.2rem; margin: 1rem 0; }
+  .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .8rem; }
+  .controls label { display: flex; flex-direction: column; font-size: .76rem; color: var(--muted); gap: .2rem; }
+  .controls input, .controls select { font: .9rem var(--mono); padding: .35rem .5rem; border: 1px solid var(--line); border-radius: 5px; background: var(--bg); color: var(--text); }
+  .bars { margin-top: 1rem; display: grid; gap: .35rem; }
+  .bar { display: grid; grid-template-columns: 4.5rem 1fr 5rem; align-items: center; gap: .6rem; font: .78rem var(--mono); color: var(--muted); }
+  .bar .track { height: 14px; background: var(--bg); border-radius: 3px; position: relative; overflow: hidden; }
+  .bar .cap { position: absolute; inset: 0 auto 0 0; background: var(--line); }
+  .bar .fill { position: absolute; inset: 0 auto 0 0; background: var(--accent); }
+  .bar .val { text-align: right; color: var(--text); }
+  .hint { font-size: .8rem; color: var(--muted); margin: .7rem 0 0; }
+  button.reroll { margin-top: .8rem; font: .82rem var(--sans); background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 5px; padding: .35rem .8rem; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  footer { margin-top: 4rem; color: var(--muted); font-size: .88rem; }
+
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.side { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 1rem 1.25rem; }
+    nav.side .links { display: flex; flex-wrap: wrap; gap: .2rem .9rem; }
+    nav.side h4 { display: none; }
+    nav.side a { margin: 0; padding: .1rem 0; }
+    main { padding: 2rem 1.25rem 4rem; }
+    h1 { font-size: 1.9rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="side" aria-label="Documentation">
+    <a class="brand" href="#top">backoff<span>-</span>kit</a>
+    <div class="links">
+      <h4>Start</h4>
+      <a href="#install">Install</a>
+      <a href="#quick-start">Quick start</a>
+      <h4>Reference</h4>
+      <a href="#how-it-works">How delays work</a>
+      <a href="#api">retry(fn, options)</a>
+      <a href="#options">Options</a>
+      <a href="#errors">Errors</a>
+      <h4>Recipes</h4>
+      <a href="#recipe-429">HTTP 429 handling</a>
+      <a href="#recipe-abort">Aborting</a>
+      <a href="#recipe-predicate">Custom predicates</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <h1>backoff-kit</h1>
+    <p class="lede">Retry async calls with exponential backoff and jitter. Small, dependency-free, written in TypeScript.</p>
+    <div class="badges">
+      <span class="badge">TypeScript</span>
+      <span class="badge">zero dependencies</span>
+      <span class="badge">AbortSignal support</span>
+    </div>
+
+    <h2 id="install">Install</h2>
+    <div class="code"><span class="lang">shell</span><button class="copy">Copy</button>
+<pre><code>npm install backoff-kit</code></pre></div>
+    <p>Also works with <code>pnpm add backoff-kit</code> and <code>yarn add backoff-kit</code>. Types ship with the package.</p>
+
+    <h2 id="quick-start">Quick start</h2>
+    <p>Wrap any function that returns a promise. If it rejects, <code>retry</code> waits and calls it again, with a longer wait each time.</p>
+    <div class="code"><span class="lang">ts</span><button class="copy">Copy</button>
+<pre><code><span class="k">import</span> { retry } <span class="k">from</span> <span class="s">"backoff-kit"</span>;
+
+<span class="k">const</span> user = <span class="k">await</span> <span class="f">retry</span>(
+  () =&gt; <span class="f">fetchUser</span>(<span class="s">"42"</span>),
+  { retries: <span class="s">5</span>, minDelay: <span class="s">200</span> }
+);</code></pre></div>
+    <p>This makes one initial attempt and up to 5 retries. If every attempt fails, the promise rejects with the last error.</p>
+
+    <h2 id="how-it-works">How delays work</h2>
+    <p>Before retry number <em>n</em> (starting at 0), the base delay is
+      <code>min(maxDelay, minDelay × factor<sup>n</sup>)</code>. Jitter then randomizes that value so many clients don't retry in lockstep. Try the numbers below.</p>
+
+    <div class="playground" id="pg">
+      <div class="controls">
+        <label>minDelay (ms)<input type="number" id="pg-min" value="200" min="1"></label>
+        <label>factor<input type="number" id="pg-factor" value="2" min="1" step="0.5"></label>
+        <label>maxDelay (ms)<input type="number" id="pg-max" value="5000" min="1"></label>
+        <label>retries<input type="number" id="pg-retries" value="7" min="1" max="12"></label>
+        <label>jitter
+          <select id="pg-jitter">
+            <option value="full" selected>full</option>
+            <option value="equal">equal</option>
+            <option value="none">none</option>
+          </select>
+        </label>
+      </div>
+      <div class="bars" id="pg-bars" aria-live="polite"></div>
+      <p class="hint">Grey = base delay before jitter. Orange = a sample delay after jitter.</p>
+      <button class="reroll" id="pg-reroll" type="button">Re-roll jitter</button>
+    </div>
+
+    <h2 id="api">retry(fn, options)</h2>
+    <div class="code"><span class="lang">ts</span><button class="copy">Copy</button>
+<pre><code><span class="k">function</span> <span class="f">retry</span>&lt;T&gt;(
+  fn: (attempt: <span class="f">number</span>) =&gt; Promise&lt;T&gt; | T,
+  options?: RetryOptions
+): Promise&lt;T&gt;;</code></pre></div>
+    <table>
+      <tr><th>Parameter</th><th>Description</th></tr>
+      <tr><td><code>fn</code></td><td>The work to attempt. Receives the zero-based attempt number (<code>0</code> for the first call). May be sync or async.</td></tr>
+      <tr><td><code>options</code></td><td>Optional. See <a href="#options">Options</a>. Every field has a default.</td></tr>
+    </table>
+    <p>Resolves with the value from the first successful attempt. Rejects when retries run out, when <code>shouldRetry</code> returns <code>false</code>, or when <code>signal</code> aborts.</p>
+
+    <h2 id="options">Options</h2>
+    <table>
+      <tr><th>Option</th><th>Type</th><th>Default</th></tr>
+      <tr><td><code>retries</code></td><td><code>number</code></td><td><code>3</code></td></tr>
+      <tr><td><code>minDelay</code></td><td><code>number</code> (ms)</td><td><code>100</code></td></tr>
+      <tr><td><code>maxDelay</code></td><td><code>number</code> (ms)</td><td><code>10000</code></td></tr>
+      <tr><td><code>factor</code></td><td><code>number</code></td><td><code>2</code></td></tr>
+      <tr><td><code>jitter</code></td><td><code>"full" | "equal" | "none"</code></td><td><code>"full"</code></td></tr>
+      <tr><td><code>shouldRetry</code></td><td><code>(error, attempt) =&gt; boolean | number | Promise&lt;…&gt;</code></td><td>retry every error</td></tr>
+      <tr><td><code>onRetry</code></td><td><code>(error, attempt, delay) =&gt; void</code></td><td>none</td></tr>
+      <tr><td><code>signal</code></td><td><code>AbortSignal</code></td><td>none</td></tr>
+    </table>
+
+    <div class="opt"><h3>retries</h3><div class="meta">number · default 3</div>
+      <p>Maximum number of retries after the first attempt. <code>retries: 0</code> runs <code>fn</code> once with no retry.</p></div>
+    <div class="opt"><h3>minDelay</h3><div class="meta">number, ms · default 100</div>
+      <p>Base delay before the first retry. Later delays grow from this value.</p></div>
+    <div class="opt"><h3>maxDelay</h3><div class="meta">number, ms · default 10000</div>
+      <p>Upper bound on the base delay. Without a cap, exponential growth gets very large after a few attempts.</p></div>
+    <div class="opt"><h3>factor</h3><div class="meta">number · default 2</div>
+      <p>Multiplier applied per retry. <code>2</code> doubles the delay each time; <code>1</code> gives a constant delay.</p></div>
+    <div class="opt"><h3>jitter</h3><div class="meta">"full" | "equal" | "none" · default "full"</div>
+      <p><code>"full"</code> picks a random delay between 0 and the base delay. <code>"equal"</code> keeps half the base delay and randomizes the other half. <code>"none"</code> uses the base delay as is, which is useful in tests.</p></div>
+    <div class="opt"><h3>shouldRetry</h3><div class="meta">(error, attempt) =&gt; boolean | Promise&lt;boolean&gt; · default: always retry</div>
+      <p>Called after each failure. Return <code>false</code> to stop and reject with that error immediately. Use it to avoid retrying errors that can never succeed, such as a 400 or 404.</p></div>
+    <div class="opt"><h3>onRetry</h3><div class="meta">(error, attempt, delay) =&gt; void · default none</div>
+      <p>Called just before waiting, once per scheduled retry. <code>delay</code> is the final wait in ms, after jitter. Good for logging and metrics.</p></div>
+    <div class="opt"><h3>signal</h3><div class="meta">AbortSignal · default none</div>
+      <p>Cancels pending waits and prevents further attempts. See <a href="#recipe-abort">Aborting</a>.</p></div>
+
+    <h2 id="errors">Errors</h2>
+    <ul>
+      <li><strong>Retries exhausted:</strong> rejects with the error from the last attempt, unchanged.</li>
+      <li><strong><code>shouldRetry</code> returned false:</strong> rejects with the error that attempt threw.</li>
+      <li><strong>Aborted:</strong> rejects with <code>signal.reason</code> (a <code>DOMException</code> named <code>AbortError</code> by default).</li>
+    </ul>
+
+    <h2 id="recipe-429">Recipe: HTTP 429 handling</h2>
+    <p>Retry rate limits and transient server errors, but fail fast on client errors. Honor the server's <code>Retry-After</code> header when present by waiting before the call is retried.</p>
+    <div class="code"><span class="lang">ts</span><button class="copy">Copy</button>
+<pre><code><span class="k">import</span> { retry } <span class="k">from</span> <span class="s">"backoff-kit"</span>;
+
+<span class="k">class</span> HttpError <span class="k">extends</span> Error {
+  <span class="k">constructor</span>(<span class="k">public</span> status: <span class="f">number</span>, <span class="k">public</span> retryAfterMs?: <span class="f">number</span>) {
+    <span class="k">super</span>(<span class="s">`HTTP ${status}`</span>);
+  }
+}
+
+<span class="k">async function</span> <span class="f">getJson</span>(url: <span class="f">string</span>) {
+  <span class="k">const</span> res = <span class="k">await</span> <span class="f">fetch</span>(url);
+  <span class="k">if</span> (!res.ok) {
+    <span class="k">const</span> header = res.headers.<span class="f">get</span>(<span class="s">"retry-after"</span>);
+    <span class="k">throw new</span> <span class="f">HttpError</span>(res.status, header ? <span class="f">Number</span>(header) * <span class="s">1000</span> : <span class="k">undefined</span>);
+  }
+  <span class="k">return</span> res.<span class="f">json</span>();
+}
+
+<span class="k">const</span> data = <span class="k">await</span> <span class="f">retry</span>(() =&gt; <span class="f">getJson</span>(<span class="s">"https://api.example.com/items"</span>), {
+  retries: <span class="s">6</span>,
+  minDelay: <span class="s">500</span>,
+  shouldRetry: <span class="k">async</span> (err) =&gt; {
+    <span class="k">if</span> (!(err <span class="k">instanceof</span> HttpError)) <span class="k">return true</span>;   <span class="c">// network failure</span>
+    <span class="k">if</span> (err.retryAfterMs) <span class="k">await</span> <span class="f">sleep</span>(err.retryAfterMs);  <span class="c">// honor Retry-After</span>
+    <span class="k">return</span> err.status === <span class="s">429</span> || err.status &gt;= <span class="s">500</span>;
+  },
+  onRetry: (err, attempt, delay) =&gt;
+    console.<span class="f">warn</span>(<span class="s">`retry #${attempt + 1} in ${Math.round(delay)}ms`</span>),
+});
+
+<span class="k">const</span> sleep = (ms: <span class="f">number</span>) =&gt; <span class="k">new</span> <span class="f">Promise</span>((r) =&gt; <span class="f">setTimeout</span>(r, ms));</code></pre></div>
+    <div class="note">Because the <code>Retry-After</code> wait happens inside <code>shouldRetry</code>, the normal backoff delay is added on top of it. That's safe for rate limits: you never retry earlier than the server asked.</div>
+
+    <h2 id="recipe-abort">Recipe: aborting with AbortSignal</h2>
+    <p>Pass a <code>signal</code> to cancel from outside, for example on a timeout or when a user navigates away. Abort also interrupts a delay that is already in progress.</p>
+    <div class="code"><span class="lang">ts</span><button class="copy">Copy</button>
+<pre><code><span class="k">const</span> controller = <span class="k">new</span> <span class="f">AbortController</span>();
+<span class="f">setTimeout</span>(() =&gt; controller.<span class="f">abort</span>(), <span class="s">8000</span>);   <span class="c">// give up after 8s</span>
+
+<span class="k">try</span> {
+  <span class="k">await</span> <span class="f">retry</span>(() =&gt; <span class="f">ping</span>(), { retries: <span class="s">20</span>, signal: controller.signal });
+} <span class="k">catch</span> (err) {
+  <span class="k">if</span> ((err <span class="k">as</span> Error).name === <span class="s">"AbortError"</span>) console.<span class="f">log</span>(<span class="s">"cancelled"</span>);
+  <span class="k">else throw</span> err;
+}
+
+<span class="c">// Or use the built-in timeout helper:</span>
+<span class="k">await</span> <span class="f">retry</span>(() =&gt; <span class="f">ping</span>(), { signal: AbortSignal.<span class="f">timeout</span>(<span class="s">8000</span>) });</code></pre></div>
+    <p>To cancel the in-flight request too, forward the signal into your own call. <code>fn</code> doesn't receive it automatically, so close over the same signal: <code>retry(() =&gt; fetch(url, { signal }), { signal })</code>.</p>
+
+    <h2 id="recipe-predicate">Recipe: custom retry predicates</h2>
+    <p>Decide per error whether another attempt is worthwhile. Stop on permanent failures, retry on transient ones, and cap by attempt number if you want a stricter rule than <code>retries</code>.</p>
+    <div class="code"><span class="lang">ts</span><button class="copy">Copy</button>
+<pre><code><span class="k">const</span> TRANSIENT = <span class="k">new</span> <span class="f">Set</span>([<span class="s">"ECONNRESET"</span>, <span class="s">"ETIMEDOUT"</span>, <span class="s">"EAI_AGAIN"</span>]);
+
+<span class="k">await</span> <span class="f">retry</span>(() =&gt; db.<span class="f">query</span>(sql), {
+  retries: <span class="s">10</span>,
+  shouldRetry: (err: any, attempt) =&gt; {
+    <span class="k">if</span> (err?.code <span class="k">&amp;&amp;</span> !TRANSIENT.<span class="f">has</span>(err.code)) <span class="k">return false</span>;  <span class="c">// permanent</span>
+    <span class="k">if</span> (err?.name === <span class="s">"ValidationError"</span>)     <span class="k">return false</span>;  <span class="c">// bad input</span>
+    <span class="k">return</span> attempt &lt; <span class="s">4</span>;                                   <span class="c">// stricter cap</span>
+  },
+});</code></pre></div>
+
+    <footer>backoff-kit is open source. Found a mistake in these docs? Open an issue or a pull request.</footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  // Copy buttons
+  document.querySelectorAll('.code').forEach(function (box) {
+    var btn = box.querySelector('.copy');
+    btn.addEventListener('click', function () {
+      var text = box.querySelector('pre').innerText;
+      var done = function (ok) {
+        btn.textContent = ok ? 'Copied' : 'Press Ctrl+C';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      else done(false);
+    });
+  });
+
+  // Delay playground (same formula as the "How delays work" section)
+  var $ = function (id) { return document.getElementById(id); };
+  function render() {
+    var min = Math.max(1, +$('pg-min').value || 1);
+    var factor = Math.max(1, +$('pg-factor').value || 1);
+    var max = Math.max(1, +$('pg-max').value || 1);
+    var n = Math.min(12, Math.max(1, Math.floor(+$('pg-retries').value || 1)));
+    var mode = $('pg-jitter').value;
+    var rows = [], top = 0;
+    for (var i = 0; i < n; i++) {
+      var base = Math.min(max, min * Math.pow(factor, i));
+      var d = mode === 'full' ? Math.random() * base
+            : mode === 'equal' ? base / 2 + Math.random() * base / 2
+            : base;
+      rows.push([base, d]); top = Math.max(top, base);
+    }
+    $('pg-bars').innerHTML = rows.map(function (r, i) {
+      return '<div class="bar"><span>retry ' + (i + 1) + '</span><div class="track">' +
+        '<div class="cap" style="width:' + (r[0] / top * 100) + '%"></div>' +
+        '<div class="fill" style="width:' + (r[1] / top * 100) + '%"></div></div>' +
+        '<span class="val">' + Math.round(r[1]) + ' ms</span></div>';
+    }).join('');
+  }
+  ['pg-min', 'pg-factor', 'pg-max', 'pg-retries', 'pg-jitter'].forEach(function (id) {
+    $(id).addEventListener('input', render);
+  });
+  $('pg-reroll').addEventListener('click', render);
+  render();
+
+  // Highlight current section in the sidebar
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.side a[href^="#"]')).filter(function (a) { return a.hash !== '#top'; });
+  var map = links.map(function (a) { return [a, document.querySelector(a.hash)]; });
+  function spy() {
+    var cur = null;
+    map.forEach(function (m) { if (m[1].getBoundingClientRect().top < 140) cur = m[0]; });
+    links.forEach(function (a) { a.classList.toggle('active', a === cur); });
+  }
+  window.addEventListener('scroll', spy, { passive: true });
+  spy();
+})();
+</script>
+</body>
+</html>

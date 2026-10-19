@@ -2,7 +2,21 @@
 
 A skill that makes coding agents design web UI that looks deliberate, not generated.
 
-We read 34 design skills for Claude Code, Cursor and Codex, and every public benchmark of them we could find. No study shows any design skill beating an agent with no skill at all. What the sources do agree on is a process: real references, a written design contract, a render-and-critique loop, and a stress test. This skill is that process, plus the rules three or more skills agree on, in about 200 lines.
+We read 34 design skills for Claude Code, Cursor and Codex, and every public benchmark of them we could find. The public studies found little or no gain over an agent with no skill. What the sources do agree on is a process: real references, a written design contract, a render-and-critique loop, and a stress test. This skill is that process, plus the rules three or more skills agree on, in about 200 lines.
+
+Then we tested it. In a blind A/B of 27 builds scored by GPT, Gemini and Claude judges, it beat Claude Code's defaults by 1.7 points out of 10 and tied Anthropic's `frontend-design`.
+
+## Benchmark
+
+| Arm | Panel score, 1 to 10 | Win rate vs defaults | Mobile score | Checked its own render |
+| --- | --- | --- | --- | --- |
+| Claude Code defaults | 5.30 | n/a | 5.44 | 3/9 |
+| Anthropic `frontend-design` | 7.04 | 0.89 (p = 0.02) | 5.85 | 2/9 |
+| `web-ui-design` | 7.04 | 0.83 (p = 0.02) | 6.41 | 7/9 |
+
+Sonnet 5.5 built a landing page, a dashboard and a docs page 3 times per arm, in isolated sessions. Three judges from three model families scored screenshots under random labels. The two skills are statistically tied. `web-ui-design` costs about a third more per build ($0.32 against $0.24).
+
+The method, every score, the limits, and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the [blind gallery](benchmark/results/gallery/index.html).
 
 ## Install
 
@@ -75,7 +89,9 @@ Every line can be overridden by your `DESIGN.md` or your brief.
 
 ## Status
 
-Version 0.1. The skill is not yet A/B tested. If you run it against no skill or another design skill on your own briefs, open an issue with the screenshots. Results either way are welcome and will shape the next version.
+Version 0.1, benchmarked on 2026-10-19. The benchmark found two gaps for the next version. No build wrote a `DESIGN.md`, and no build measured contrast, so 5 or 6 builds in every arm shipped contrast failures.
+
+If you run the skill against another design skill or no skill on your own briefs, open an issue with the screenshots. Results either way are welcome and will shape the next version.
 
 ## Credits
 
