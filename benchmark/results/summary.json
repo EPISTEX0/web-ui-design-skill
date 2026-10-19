@@ -1,6 +1,6 @@
 {
   "summary": {
-    "builds": 27,
+    "builds": 36,
     "judges": [
       "gemini-4-argon",
       "gpt-6-1-sol",
@@ -16,41 +16,43 @@
         "armSkillUsed": 0,
         "builtinDesignUsed": 0,
         "rendered": 3,
+        "checker": 0,
+        "contrastFailBuilds": 5,
         "designMd": 0,
-        "axeSeriousCritical": 5.111111111111111,
+        "axeSeriousCritical": 3,
         "mobileOverflow": 1,
         "judges": {
           "gemini-4-argon": {
-            "craft": 5.222222222222222,
-            "fit": 5.555555555555555,
-            "hierarchy": 6,
-            "mobile": 5.111111111111111,
-            "overall": 4.888888888888889,
-            "rankPct": 0.19444444444444445
+            "craft": 5.111111111111111,
+            "fit": 5.111111111111111,
+            "hierarchy": 5.888888888888889,
+            "mobile": 4.666666666666667,
+            "overall": 4.777777777777778,
+            "rankPct": 0.1515151515151515
           },
           "gpt-6-1-sol": {
-            "craft": 6.111111111111111,
-            "fit": 6.444444444444445,
-            "hierarchy": 7.333333333333333,
-            "mobile": 5.888888888888889,
-            "overall": 6,
-            "rankPct": 0.3055555555555556
+            "craft": 6.444444444444445,
+            "fit": 6.333333333333333,
+            "hierarchy": 7.222222222222222,
+            "mobile": 5.555555555555555,
+            "overall": 5.888888888888889,
+            "rankPct": 0.1717171717171717
           },
           "opus-5-5": {
-            "craft": 5.555555555555555,
-            "fit": 4.888888888888889,
-            "hierarchy": 6.444444444444445,
-            "mobile": 5.333333333333333,
-            "overall": 5,
-            "rankPct": 0.2361111111111111
+            "craft": 5.777777777777778,
+            "fit": 5,
+            "hierarchy": 6.222222222222222,
+            "mobile": 5.222222222222222,
+            "overall": 5.111111111111111,
+            "rankPct": 0.16161616161616157
           },
           "panel": {
-            "craft": 5.62962962962963,
-            "fit": 5.62962962962963,
-            "hierarchy": 6.5925925925925934,
-            "mobile": 5.444444444444444,
-            "overall": 5.296296296296297,
-            "rankPct": 0.24537037037037038
+            "craft": 5.777777777777777,
+            "fit": 5.481481481481482,
+            "hierarchy": 6.444444444444444,
+            "mobile": 5.148148148148149,
+            "overall": 5.259259259259259,
+            "rankPct": 0.16161616161616157
           }
         }
       },
@@ -62,41 +64,43 @@
         "armSkillUsed": 6,
         "builtinDesignUsed": 0,
         "rendered": 2,
+        "checker": 0,
+        "contrastFailBuilds": 5,
         "designMd": 0,
-        "axeSeriousCritical": 8.555555555555555,
+        "axeSeriousCritical": 1,
         "mobileOverflow": 3,
         "judges": {
           "gemini-4-argon": {
-            "craft": 7.222222222222222,
-            "fit": 8,
-            "hierarchy": 7.777777777777778,
-            "mobile": 5.777777777777778,
-            "overall": 6.888888888888889,
-            "rankPct": 0.5972222222222222
+            "craft": 6.777777777777778,
+            "fit": 7.444444444444445,
+            "hierarchy": 7.111111111111111,
+            "mobile": 5,
+            "overall": 6.444444444444445,
+            "rankPct": 0.5151515151515151
           },
           "gpt-6-1-sol": {
-            "craft": 8.11111111111111,
-            "fit": 8.555555555555555,
+            "craft": 7.888888888888889,
+            "fit": 8.222222222222221,
             "hierarchy": 8.11111111111111,
-            "mobile": 6.333333333333333,
-            "overall": 7.555555555555555,
-            "rankPct": 0.6944444444444444
+            "mobile": 5.888888888888889,
+            "overall": 7.222222222222222,
+            "rankPct": 0.5353535353535352
           },
           "opus-5-5": {
-            "craft": 7.222222222222222,
+            "craft": 7.333333333333333,
             "fit": 7.666666666666667,
-            "hierarchy": 7.777777777777778,
-            "mobile": 5.444444444444445,
-            "overall": 6.666666666666667,
-            "rankPct": 0.625
+            "hierarchy": 7.888888888888889,
+            "mobile": 5.666666666666667,
+            "overall": 7,
+            "rankPct": 0.5959595959595959
           },
           "panel": {
-            "craft": 7.518518518518517,
-            "fit": 8.074074074074074,
-            "hierarchy": 7.888888888888889,
-            "mobile": 5.851851851851851,
-            "overall": 7.037037037037036,
-            "rankPct": 0.6388888888888888
+            "craft": 7.333333333333333,
+            "fit": 7.777777777777778,
+            "hierarchy": 7.703703703703705,
+            "mobile": 5.518518518518519,
+            "overall": 6.888888888888889,
+            "rankPct": 0.5488215488215488
           }
         }
       },
@@ -108,41 +112,91 @@
         "armSkillUsed": 8,
         "builtinDesignUsed": 0,
         "rendered": 7,
+        "checker": 0,
+        "contrastFailBuilds": 6,
         "designMd": 0,
-        "axeSeriousCritical": 11.444444444444445,
+        "axeSeriousCritical": 2,
         "mobileOverflow": 1,
         "judges": {
           "gemini-4-argon": {
-            "craft": 7.777777777777778,
-            "fit": 8.11111111111111,
-            "hierarchy": 8.11111111111111,
-            "mobile": 6.888888888888889,
-            "overall": 7.333333333333333,
-            "rankPct": 0.7083333333333334
+            "craft": 7.222222222222222,
+            "fit": 7.555555555555555,
+            "hierarchy": 7.666666666666667,
+            "mobile": 6.333333333333333,
+            "overall": 6.888888888888889,
+            "rankPct": 0.6666666666666666
           },
           "gpt-6-1-sol": {
-            "craft": 7.444444444444445,
-            "fit": 8,
+            "craft": 7.777777777777778,
+            "fit": 8.222222222222221,
             "hierarchy": 7.888888888888889,
-            "mobile": 6.111111111111111,
-            "overall": 6.888888888888889,
-            "rankPct": 0.5
+            "mobile": 6.666666666666667,
+            "overall": 7.111111111111111,
+            "rankPct": 0.6060606060606061
           },
           "opus-5-5": {
-            "craft": 7.222222222222222,
+            "craft": 7.333333333333333,
             "fit": 7.111111111111111,
-            "hierarchy": 7.666666666666667,
+            "hierarchy": 7.444444444444445,
             "mobile": 6.222222222222222,
             "overall": 6.888888888888889,
-            "rankPct": 0.6388888888888888
+            "rankPct": 0.585858585858586
           },
           "panel": {
-            "craft": 7.481481481481483,
-            "fit": 7.740740740740741,
-            "hierarchy": 7.888888888888889,
-            "mobile": 6.407407407407408,
-            "overall": 7.037037037037036,
-            "rankPct": 0.6157407407407407
+            "craft": 7.444444444444445,
+            "fit": 7.62962962962963,
+            "hierarchy": 7.666666666666667,
+            "mobile": 6.407407407407407,
+            "overall": 6.962962962962964,
+            "rankPct": 0.6195286195286196
+          }
+        }
+      },
+      "web-ui-design-0.2": {
+        "n": 9,
+        "cost": 0.3435190888888889,
+        "wall_s": 103,
+        "errors": 0,
+        "armSkillUsed": 9,
+        "builtinDesignUsed": 0,
+        "rendered": 9,
+        "checker": 9,
+        "contrastFailBuilds": 0,
+        "designMd": 7,
+        "axeSeriousCritical": 0,
+        "mobileOverflow": 0,
+        "judges": {
+          "gemini-4-argon": {
+            "craft": 7.222222222222222,
+            "fit": 7.333333333333333,
+            "hierarchy": 7.555555555555555,
+            "mobile": 6.555555555555555,
+            "overall": 6.888888888888889,
+            "rankPct": 0.6666666666666666
+          },
+          "gpt-6-1-sol": {
+            "craft": 7.888888888888889,
+            "fit": 8.222222222222221,
+            "hierarchy": 8.333333333333334,
+            "mobile": 7.111111111111111,
+            "overall": 7.666666666666667,
+            "rankPct": 0.6868686868686869
+          },
+          "opus-5-5": {
+            "craft": 7.333333333333333,
+            "fit": 7.444444444444445,
+            "hierarchy": 7.555555555555555,
+            "mobile": 6.444444444444445,
+            "overall": 7.111111111111111,
+            "rankPct": 0.6565656565656567
+          },
+          "panel": {
+            "craft": 7.481481481481481,
+            "fit": 7.666666666666667,
+            "hierarchy": 7.814814814814814,
+            "mobile": 6.703703703703704,
+            "overall": 7.222222222222222,
+            "rankPct": 0.67003367003367
           }
         }
       }
@@ -150,159 +204,243 @@
     "pairwise": {
       "gemini-4-argon": {
         "web-ui-design vs none": {
-          "winRate": 0.8888888888888888,
-          "u": 70.5,
-          "z": 2.6490647141300876,
-          "p": 0.008071570319573285
+          "winRate": 0.8518518518518519,
+          "u": 71.5,
+          "z": 2.7373668712677572,
+          "p": 0.006193425358847371
         },
         "web-ui-design vs frontend-design": {
+          "winRate": 0.6481481481481481,
+          "u": 51,
+          "z": 0.9271726499455306,
+          "p": 0.3538367810160554
+        },
+        "frontend-design vs none": {
+          "winRate": 0.8888888888888888,
+          "u": 70,
+          "z": 2.6049136355612528,
+          "p": 0.009189810315415992
+        },
+        "web-ui-design-0.2 vs none": {
+          "winRate": 0.9444444444444444,
+          "u": 73.5,
+          "z": 2.9139711855430965,
+          "p": 0.0035687628950311634
+        },
+        "web-ui-design-0.2 vs frontend-design": {
           "winRate": 0.6296296296296297,
           "u": 49,
           "z": 0.7505683356701914,
           "p": 0.4529122372489256
         },
-        "frontend-design vs none": {
-          "winRate": 0.8703703703703703,
-          "u": 67.5,
-          "z": 2.3841582427170787,
-          "p": 0.017118216546200937
+        "web-ui-design-0.2 vs web-ui-design": {
+          "winRate": 0.42592592592592593,
+          "u": 38,
+          "z": -0.22075539284417398,
+          "p": 0.8252827432451377
         }
       },
       "gpt-6-1-sol": {
         "web-ui-design vs none": {
-          "winRate": 0.7222222222222222,
-          "u": 56,
-          "z": 1.3686834356338786,
-          "p": 0.17109833579949751
-        },
-        "web-ui-design vs frontend-design": {
-          "winRate": 0.3148148148148148,
-          "u": 28,
-          "z": -1.10377696422087,
-          "p": 0.26968993107478756
-        },
-        "frontend-design vs none": {
-          "winRate": 0.7592592592592593,
+          "winRate": 0.7962962962962963,
           "u": 64,
           "z": 2.0751006927352353,
           "p": 0.03797706723757943
-        }
-      },
-      "opus-5-5": {
-        "web-ui-design vs none": {
-          "winRate": 0.8518518518518519,
-          "u": 70,
-          "z": 2.6049136355612528,
-          "p": 0.009189810315415992
         },
         "web-ui-design vs frontend-design": {
+          "winRate": 0.5370370370370371,
+          "u": 41,
+          "z": 0.044151078568834795,
+          "p": 0.9647835633702433
+        },
+        "frontend-design vs none": {
+          "winRate": 0.8333333333333334,
+          "u": 63.5,
+          "z": 2.0309496141664005,
+          "p": 0.0422599628350564
+        },
+        "web-ui-design-0.2 vs none": {
+          "winRate": 0.9444444444444444,
+          "u": 76.5,
+          "z": 3.178877656956105,
+          "p": 0.001478594952455392
+        },
+        "web-ui-design-0.2 vs frontend-design": {
           "winRate": 0.5740740740740741,
           "u": 46.5,
           "z": 0.5298129428260175,
           "p": 0.5962414415569706
         },
+        "web-ui-design-0.2 vs web-ui-design": {
+          "winRate": 0.5370370370370371,
+          "u": 43.5,
+          "z": 0.26490647141300877,
+          "p": 0.7910814135082598
+        }
+      },
+      "opus-5-5": {
+        "web-ui-design vs none": {
+          "winRate": 0.8518518518518519,
+          "u": 69.5,
+          "z": 2.560762556992418,
+          "p": 0.010444323135665234
+        },
+        "web-ui-design vs frontend-design": {
+          "winRate": 0.5370370370370371,
+          "u": 38,
+          "z": -0.22075539284417398,
+          "p": 0.8252827432451377
+        },
         "frontend-design vs none": {
-          "winRate": 0.8703703703703703,
-          "u": 68,
-          "z": 2.4283093212859135,
-          "p": 0.015169396022260528
+          "winRate": 0.9074074074074074,
+          "u": 71.5,
+          "z": 2.7373668712677572,
+          "p": 0.006193425358847371
+        },
+        "web-ui-design-0.2 vs none": {
+          "winRate": 0.9259259259259259,
+          "u": 75.5,
+          "z": 3.0905754998184354,
+          "p": 0.0019978264309126192
+        },
+        "web-ui-design-0.2 vs frontend-design": {
+          "winRate": 0.46296296296296297,
+          "u": 40.5,
+          "z": 0,
+          "p": 0.99999970019902
+        },
+        "web-ui-design-0.2 vs web-ui-design": {
+          "winRate": 0.5555555555555556,
+          "u": 44,
+          "z": 0.30905754998184354,
+          "p": 0.7572776782750266
         }
       },
       "panel": {
         "web-ui-design vs none": {
-          "winRate": 0.8333333333333334,
-          "u": 67,
-          "z": 2.340007164148244,
-          "p": 0.01928332703674429
+          "winRate": 0.8888888888888888,
+          "u": 70,
+          "z": 2.6049136355612528,
+          "p": 0.009189810315415992
         },
         "web-ui-design vs frontend-design": {
-          "winRate": 0.5185185185185185,
-          "u": 42.5,
-          "z": 0.17660431427533918,
-          "p": 0.8598189712680995
+          "winRate": 0.6296296296296297,
+          "u": 45,
+          "z": 0.39735970711951313,
+          "p": 0.6911021382894948
         },
         "frontend-design vs none": {
-          "winRate": 0.8888888888888888,
-          "u": 66.5,
-          "z": 2.295856085579409,
-          "p": 0.02168404903639698
+          "winRate": 0.9259259259259259,
+          "u": 69,
+          "z": 2.516611478423583,
+          "p": 0.011848975458170097
+        },
+        "web-ui-design-0.2 vs none": {
+          "winRate": 0.9629629629629629,
+          "u": 78,
+          "z": 3.3113308926626095,
+          "p": 0.0009286486611443934
+        },
+        "web-ui-design-0.2 vs frontend-design": {
+          "winRate": 0.6481481481481481,
+          "u": 50,
+          "z": 0.8388704928078611,
+          "p": 0.4015417922623261
+        },
+        "web-ui-design-0.2 vs web-ui-design": {
+          "winRate": 0.48148148148148145,
+          "u": 40.5,
+          "z": 0,
+          "p": 0.99999970019902
         }
       }
     },
     "perBrief": {
       "gemini-4-argon": {
         "backoff-kit": {
-          "none": 6,
-          "frontend-design": 7,
-          "web-ui-design": 7.333333333333333
+          "none": 5.333333333333333,
+          "frontend-design": 6.333333333333333,
+          "web-ui-design": 6.333333333333333,
+          "web-ui-design-0.2": 7.666666666666667
         },
         "roastline": {
           "none": 4.333333333333333,
-          "frontend-design": 7.333333333333333,
-          "web-ui-design": 6.666666666666667
+          "frontend-design": 7,
+          "web-ui-design": 6.666666666666667,
+          "web-ui-design-0.2": 6.333333333333333
         },
         "slow-clay": {
-          "none": 4.333333333333333,
-          "frontend-design": 6.333333333333333,
-          "web-ui-design": 8
+          "none": 4.666666666666667,
+          "frontend-design": 6,
+          "web-ui-design": 7.666666666666667,
+          "web-ui-design-0.2": 6.666666666666667
         }
       },
       "gpt-6-1-sol": {
         "backoff-kit": {
-          "none": 6,
-          "frontend-design": 6.666666666666667,
-          "web-ui-design": 6
+          "none": 5.666666666666667,
+          "frontend-design": 7,
+          "web-ui-design": 6.666666666666667,
+          "web-ui-design-0.2": 7.666666666666667
         },
         "roastline": {
-          "none": 6.666666666666667,
+          "none": 6.333333333333333,
           "frontend-design": 7.333333333333333,
-          "web-ui-design": 7
+          "web-ui-design": 6.666666666666667,
+          "web-ui-design-0.2": 7.666666666666667
         },
         "slow-clay": {
-          "none": 5.333333333333333,
-          "frontend-design": 8.666666666666666,
-          "web-ui-design": 7.666666666666667
+          "none": 5.666666666666667,
+          "frontend-design": 7.333333333333333,
+          "web-ui-design": 8,
+          "web-ui-design-0.2": 7.666666666666667
         }
       },
       "opus-5-5": {
         "backoff-kit": {
           "none": 5.333333333333333,
-          "frontend-design": 6,
-          "web-ui-design": 5.666666666666667
+          "frontend-design": 7,
+          "web-ui-design": 6.333333333333333,
+          "web-ui-design-0.2": 7
         },
         "roastline": {
           "none": 5,
           "frontend-design": 7,
-          "web-ui-design": 7.666666666666667
+          "web-ui-design": 6.666666666666667,
+          "web-ui-design-0.2": 7.666666666666667
         },
         "slow-clay": {
-          "none": 4.666666666666667,
+          "none": 5,
           "frontend-design": 7,
-          "web-ui-design": 7.333333333333333
+          "web-ui-design": 7.666666666666667,
+          "web-ui-design-0.2": 6.666666666666667
         }
       },
       "panel": {
         "backoff-kit": {
-          "none": 5.777777777777779,
-          "frontend-design": 6.5555555555555545,
-          "web-ui-design": 6.333333333333333
+          "none": 5.444444444444444,
+          "frontend-design": 6.777777777777779,
+          "web-ui-design": 6.4444444444444455,
+          "web-ui-design-0.2": 7.4444444444444455
         },
         "roastline": {
-          "none": 5.333333333333333,
-          "frontend-design": 7.222222222222222,
-          "web-ui-design": 7.111111111111112
+          "none": 5.222222222222222,
+          "frontend-design": 7.111111111111112,
+          "web-ui-design": 6.666666666666667,
+          "web-ui-design-0.2": 7.222222222222221
         },
         "slow-clay": {
-          "none": 4.777777777777778,
-          "frontend-design": 7.333333333333333,
-          "web-ui-design": 7.666666666666667
+          "none": 5.111111111111111,
+          "frontend-design": 6.777777777777779,
+          "web-ui-design": 7.777777777777778,
+          "web-ui-design-0.2": 7
         }
       }
     },
     "judgeAgreementSpearman": {
-      "gemini-4-argon ~ gpt-6-1-sol": 0.6501035319497662,
-      "gemini-4-argon ~ opus-5-5": 0.7626710303993552,
-      "gpt-6-1-sol ~ opus-5-5": 0.801899743715544
+      "gemini-4-argon ~ gpt-6-1-sol": 0.7386882167911212,
+      "gemini-4-argon ~ opus-5-5": 0.7142020503912987,
+      "gpt-6-1-sol ~ opus-5-5": 0.6974342876817541
     }
   },
   "builds": [
@@ -318,54 +456,62 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 14,
+      "contrastNodes": 11,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 7,
-          "fit": 8,
-          "hierarchy": 8,
-          "mobile": 7,
-          "overall": 7,
-          "defects": [
-            "Long inline comments in the interface RetryOptions code block are clipped at the right edge even at 1440px desktop width.",
-            "Long code lines clip at the right edge of code containers on 390px mobile."
-          ],
-          "note": "Warm, well-paced library documentation with a clear interactive delay visualizer, held back by clipped desktop code comments and a loose mobile nav list.",
-          "rankPct": 0.5
-        },
-        "gpt-6-1-sol": {
           "craft": 8,
           "fit": 8,
           "hierarchy": 8,
-          "mobile": 8,
-          "overall": 8,
-          "defects": [],
-          "note": "Careful warm typography, coherent syntax highlighting and a well-contained mobile layout give the technical reference a confident, product-appropriate finish.",
-          "rankPct": 0.875
-        },
-        "opus-5-5": {
-          "craft": 7,
-          "fit": 7,
-          "hierarchy": 8,
-          "mobile": 7,
+          "mobile": 6,
           "overall": 7,
           "defects": [
-            "RetryOptions interface block lines run past the code box edge on desktop and mobile",
-            "No scannable options table; defaults only appear in code comments and per-option meta lines"
+            "Left sidebar background and border stop abruptly after the first ~900px viewport on desktop-full.jpg",
+            "Options section duplicates the full RetryOptions TypeScript interface and the prose option list (and adds an unrequested retryAfter option), pushing the third recipe's code block past the 6000px desktop cut",
+            "Mobile top navigation renders all 9 links as an open wrapped list rather than a compact menu",
+            "Long lines inside mobile code blocks clip horizontally at the right edge"
           ],
-          "note": "Warm, well-written docs with a usable mobile chip nav and a clear delay visualizer; reads well but relies on a cramped interface block for the options overview.",
-          "rankPct": 0.75
+          "note": "Warm, high-contrast code blocks and a polished interactive delay widget make a strong impression, though the truncated desktop sidebar and duplicated options hurt completeness.",
+          "rankPct": 0.7272727272727273
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 9,
+          "hierarchy": 8,
+          "mobile": 7,
+          "overall": 8,
+          "defects": [
+            "The mobile navigation wraps into several dense rows before the documentation begins.",
+            "Muted comments in dark code panels have weak contrast.",
+            "Long code lines are clipped within mobile panels."
+          ],
+          "note": "Thoughtful API organization and a contextual delay schedule feel tailored to the library, but mobile navigation and code readability need refinement.",
+          "rankPct": 0.6363636363636364
+        },
+        "opus-5-5": {
+          "craft": 8,
+          "fit": 7,
+          "hierarchy": 8,
+          "mobile": 8,
+          "overall": 8,
+          "defects": [
+            "RetryOptions interface comments clip off-screen on mobile",
+            "Tiny default badges are hard to read"
+          ],
+          "note": "Nearly identical quality to S6, using a typed interface block for options and a cap-versus-sample delay chart; solid and coherent.",
+          "rankPct": 0.8181818181818181
         },
         "panel": {
-          "craft": 7.333333333333333,
-          "fit": 7.666666666666667,
+          "craft": 8,
+          "fit": 8,
           "hierarchy": 8,
-          "mobile": 7.333333333333333,
-          "overall": 7.333333333333333,
-          "rankPct": 0.7083333333333334
+          "mobile": 7,
+          "overall": 7.666666666666667,
+          "rankPct": 0.7272727272727272
         }
       }
     },
@@ -381,54 +527,61 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 9,
+      "contrastNodes": 9,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
+          "craft": 7,
+          "fit": 8,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "Splits the interactive delay widget ('Try the delay schedule' after Quick start) from the formula ('How delays work' after Errors), contradicting the sidebar navigation order",
+            "Duplicates all 8 options in both a 3-column summary table and a vertical prose list, causing desktop-full.jpg to cut off at 6000px before the third recipe",
+            "Quick start caption says 'With no options...' immediately below a code snippet that passes explicit options",
+            "Mobile 3-column Options table squeezes function signature types into narrow multi-line columns and code blocks clip horizontally"
+          ],
+          "note": "Warm rust accents and a clean mobile header work well, but splitting the delay calculator from its formula and duplicating the options list hurt structure and pacing.",
+          "rankPct": 0.6363636363636364
+        },
+        "gpt-6-1-sol": {
           "craft": 9,
           "fit": 9,
           "hierarchy": 9,
           "mobile": 8,
           "overall": 9,
           "defects": [
-            "Long lines inside dark code blocks clip at the right edge on 390px mobile.",
-            "Presenting Options as both a summary table and detailed cards pushes the third recipe past the 6000px desktop cut."
+            "Long callback types produce tall, dense cells in the mobile reference table.",
+            "Subdued code comments have weak contrast, and long example lines extend beyond the visible mobile panels."
           ],
-          "note": "Polished, high-craft docs page that pairs an early interactive delay scheduler with both a responsive summary table and per-option reference cards.",
-          "rankPct": 0.875
-        },
-        "gpt-6-1-sol": {
-          "craft": 8,
-          "fit": 9,
-          "hierarchy": 8,
-          "mobile": 8,
-          "overall": 8,
-          "defects": [],
-          "note": "An early retry-delay visualizer, disciplined desktop navigation and a properly reflowed mobile layout make the library's core behavior especially tangible.",
+          "note": "The most complete visual system combines product-specific explanation, clear navigation and a considered mobile header without losing documentation clarity.",
           "rankPct": 1
         },
         "opus-5-5": {
-          "craft": 7,
-          "fit": 7,
+          "craft": 8,
+          "fit": 8,
           "hierarchy": 8,
-          "mobile": 7,
-          "overall": 7,
+          "mobile": 8,
+          "overall": 8,
           "defects": [
-            "Long code lines clipped at the right edge on mobile (scroll only)",
-            "Inline widget controls are tight on mobile"
+            "Code lines clip at block edge on mobile (scroll required)",
+            "Options summary table wraps the type column awkwardly at 390 px"
           ],
-          "note": "Warm, tidy docs with highlighted code, a compact delay-schedule demo right under the quick start, and a clear options table; a good, slightly safe result.",
-          "rankPct": 1
+          "note": "Clean warm-paper docs with package-manager tabs, a summary table plus detailed entries and a live delay-schedule demo; ship-ready.",
+          "rankPct": 0.9090909090909091
         },
         "panel": {
           "craft": 8,
           "fit": 8.333333333333334,
-          "hierarchy": 8.333333333333334,
+          "hierarchy": 8,
           "mobile": 7.666666666666667,
           "overall": 8,
-          "rankPct": 0.9583333333333334
+          "rankPct": 0.8484848484848485
         }
       }
     },
@@ -444,58 +597,61 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 1,
+      "contrastNodes": 0,
       "mobileOverflow": true,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 6,
-          "fit": 8,
-          "hierarchy": 7,
-          "mobile": 2,
+          "fit": 7,
+          "hierarchy": 6,
+          "mobile": 3,
           "overall": 5,
           "defects": [
-            "Severe page-level horizontal overflow on 390px mobile cuts off the right side of all headings, body text, tables, widgets, and code blocks.",
-            "Long lines in the HTTP 429 recipe code block clip at the right edge on 1440px desktop."
+            "Severe full-page horizontal overflow on mobile clips the right side of the entire layout (top navigation, hero, prose paragraphs, Options table Default column, delay widget controls, and code blocks) at 390px",
+            "Duplicates all 8 options in both a 3-column table and a full prose list, causing the third recipe's code block to be cut off at 6000px on desktop",
+            "Install section lacks package manager tabs, relegating pnpm and yarn to inline prose"
           ],
-          "note": "Capable desktop documentation layout ruined on mobile by unconstrained page-level horizontal overflow that clips every section.",
-          "rankPct": 0.25
+          "note": "Despite warm desktop styling and helpful recipe callouts, an unconstrained layout width causes catastrophic horizontal clipping across the entire 390px mobile viewport.",
+          "rankPct": 0.09090909090909094
         },
         "gpt-6-1-sol": {
-          "craft": 6,
-          "fit": 7,
-          "hierarchy": 7,
+          "craft": 7,
+          "fit": 8,
+          "hierarchy": 8,
           "mobile": 2,
           "overall": 4,
           "defects": [
-            "Mobile body text and code panels extend off the right edge instead of fitting the viewport.",
-            "The mobile navigation is horizontally clipped, leaving several section links only partially visible."
+            "The mobile main column is wider than the viewport, cutting off ordinary body sentences.",
+            "Navigation, code panels, option-table columns and the delay diagram also extend offscreen to the right."
           ],
-          "note": "The restrained warm styling and retry visualization are appropriate, but pervasive mobile overflow makes the page difficult to use.",
-          "rankPct": 0.125
+          "note": "A distinctive, organized desktop design needs a fundamental responsive-layout fix before it can ship.",
+          "rankPct": 0.18181818181818177
         },
         "opus-5-5": {
           "craft": 7,
-          "fit": 8,
+          "fit": 7,
           "hierarchy": 7,
-          "mobile": 2,
-          "overall": 4,
+          "mobile": 3,
+          "overall": 5,
           "defects": [
-            "Mobile layout overflows horizontally: body text, tables and the widget are cut off at the right edge",
-            "Mobile option table and code blocks extend past the viewport",
-            "Small 'ts' language tags sit awkwardly on the code block's top border"
+            "Mobile layout overflows horizontally: paragraphs, headings, tags and code are clipped at the right edge",
+            "Delay demo controls and bars cut off on mobile",
+            "Title rendered as an orange code chip looks like a stray token"
           ],
-          "note": "The most characterful desktop design (mono wordmark title, warm palette, cap-marked delay chart, callouts), but the broken 390 px layout makes it unshippable as is.",
-          "rankPct": 0.25
+          "note": "Desktop is warm and well organized, but the 390 px layout is wider than the viewport and text is cut off throughout.",
+          "rankPct": 0.18181818181818177
         },
         "panel": {
-          "craft": 6.333333333333333,
-          "fit": 7.666666666666667,
+          "craft": 6.666666666666667,
+          "fit": 7.333333333333333,
           "hierarchy": 7,
-          "mobile": 2,
-          "overall": 4.333333333333333,
-          "rankPct": 0.20833333333333334
+          "mobile": 2.6666666666666665,
+          "overall": 4.666666666666667,
+          "rankPct": 0.1515151515151515
         }
       }
     },
@@ -511,56 +667,61 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 3,
+      "contrastNodes": 3,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 3,
           "fit": 6,
-          "hierarchy": 7,
+          "hierarchy": 6,
           "mobile": 4,
           "overall": 3,
           "defects": [
-            "Corrupted syntax-highlighting tokenizer replaces string literals and comments across every TypeScript code block with bare index numbers (such as 'import { retry } from 1;' and 'throw new Error(2);').",
-            "The DESCRIPTION column of the Options table overflows off the right edge of the 390px mobile viewport and is completely cut off."
+            "Broken syntax highlighter replaces string literals and comments across all code blocks with bare numbers (e.g., `import { retry } from 1;`, `fetch(\"https:0`, `throw new Error(2);`)",
+            "Left sidebar background and right border terminate abruptly around 900px on desktop-full.jpg instead of spanning the full page height",
+            "Mobile 4-column Options table clips the Description column off-screen horizontally and crushes the Type column into a narrow multi-line strip",
+            "Mobile navigation dumps all 9 links inline at the top and long code lines clip horizontally",
+            "Desktop full-page capture cuts off at 6000px inside the second recipe, omitting the custom retry predicates recipe"
           ],
-          "note": "Otherwise clean documentation layout rendered unusable by a broken syntax highlighter that replaces code strings and comments with raw numbers.",
+          "note": "A broken tokenizer mangles string literals into bare numbers across every code example, and both the desktop sidebar and mobile options table break visually.",
           "rankPct": 0
         },
         "gpt-6-1-sol": {
-          "craft": 4,
+          "craft": 6,
           "fit": 5,
           "hierarchy": 7,
           "mobile": 3,
           "overall": 3,
           "defects": [
-            "Code examples visibly contain stray numeric fragments in place of expected string content and other tokens.",
-            "The mobile options table extends beyond the viewport, hiding descriptions and leaving awkwardly tall, sparsely filled rows."
+            "Several code examples visibly contain stray numeric tokens in place of readable string content.",
+            "The mobile options table pushes descriptions offscreen and leaves large, apparently empty row areas."
           ],
-          "note": "An otherwise recognizable documentation structure is undermined by visibly corrupted examples and a poorly adapted mobile reference table.",
+          "note": "A tidy desktop shell cannot compensate for visibly corrupted examples and an unusable mobile reference table.",
           "rankPct": 0
         },
         "opus-5-5": {
           "craft": 4,
-          "fit": 6,
-          "hierarchy": 7,
-          "mobile": 4,
+          "fit": 5,
+          "hierarchy": 6,
+          "mobile": 3,
           "overall": 3,
           "defects": [
-            "String literals in code examples are replaced by numbers (e.g. `from 1;`, `fetch(\"https:0`, `Error(2)`, `super(4)`), so every example is broken",
-            "Mobile options table squeezes the type column into very tall rows with large empty gaps and drops the description column",
-            "Delay chart bars are faint and hard to read"
+            "Syntax highlighter replaced string literals and comments with numbers (e.g. import { retry } from 1; fetch(\"https:0; Error(2); console.warn(0, error))",
+            "Mobile options table: description column overflows off-screen leaving huge empty rows",
+            "Every code sample is unusable as written"
           ],
-          "note": "Layout and structure are reasonable, but corrupted code samples make a docs page actively misleading and not shippable.",
+          "note": "Layout is clean, but corrupted code samples make the docs wrong to copy from, and the mobile options table is broken.",
           "rankPct": 0
         },
         "panel": {
-          "craft": 3.6666666666666665,
-          "fit": 5.666666666666667,
-          "hierarchy": 7,
-          "mobile": 3.6666666666666665,
+          "craft": 4.333333333333333,
+          "fit": 5.333333333333333,
+          "hierarchy": 6.333333333333333,
+          "mobile": 3.3333333333333335,
           "overall": 3,
           "rankPct": 0
         }
@@ -578,56 +739,63 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 0,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
+          "craft": 6,
+          "fit": 7,
+          "hierarchy": 6,
+          "mobile": 5,
+          "overall": 6,
+          "defects": [
+            "Options section triple-lists every option (TypeScript interface + 3-column summary table + 9 gray cards, plus an unrequested retryAfter option), bloating page length so desktop-full.jpg cuts off in the first recipe",
+            "Section order mismatches the sidebar by placing 'Try the delay schedule' before the API section while 'How delays are computed' sits after Options",
+            "Mobile layout dumps all 11 navigation links inline at the top and crushes the 3-column Options table into narrow multi-line columns",
+            "Long lines in mobile code blocks clip horizontally"
+          ],
+          "note": "Triple-listing the API options as an interface, a table, and cards severely bloats the page and crowds out the recipes.",
+          "rankPct": 0.2727272727272727
+        },
+        "gpt-6-1-sol": {
           "craft": 7,
           "fit": 8,
           "hierarchy": 8,
           "mobile": 7,
           "overall": 7,
           "defects": [
-            "Long inline comments in the interface RetryOptions code block clip at the right edge on 1440px desktop.",
-            "Triple-presenting Options as an interface, a table, and cards bloats page height so recipes are cut off at 6000px.",
-            "Long code lines clip at the right edge of code blocks on 390px mobile."
+            "The mobile header turns the full navigation into a dense cluster of small links.",
+            "Wrapped callback types make the mobile options table disproportionately tall.",
+            "Long example lines extend beyond the visible dark code panels."
           ],
-          "note": "Clean blue-accented docs design that over-duplicates the Options reference three times and clips its TypeScript interface block on desktop.",
-          "rankPct": 0.375
-        },
-        "gpt-6-1-sol": {
-          "craft": 7,
-          "fit": 7,
-          "hierarchy": 8,
-          "mobile": 7,
-          "overall": 7,
-          "defects": [],
-          "note": "A clear light documentation layout and useful delay visualization serve the brief reliably, although the overall styling is relatively generic.",
-          "rankPct": 0.5
+          "note": "Install tabs, a contextual simulator and clear option cards are useful, but the generic presentation and crowded mobile reference lack the strongest entries' polish.",
+          "rankPct": 0.2727272727272727
         },
         "opus-5-5": {
           "craft": 6,
-          "fit": 6,
-          "hierarchy": 8,
-          "mobile": 6,
+          "fit": 5,
+          "hierarchy": 6,
+          "mobile": 7,
           "overall": 6,
           "defects": [
-            "Code blocks have no syntax highlighting, so long examples read as flat grey text",
-            "Mobile nav is a loose wrap of inline links at the top with weak grouping",
-            "Long code lines clipped at the right edge on mobile (scroll only)"
+            "Code blocks have no syntax highlighting",
+            "Options are repeated three times (interface, table, cards), making the section redundant",
+            "Interface lines clip on mobile"
           ],
-          "note": "Clean, complete and well-ordered docs with a live delay widget, but visually plain and indistinguishable from a stock docs template.",
-          "rankPct": 0.375
+          "note": "Functional but generic blue docs template; unhighlighted code and redundant option listings dilute it.",
+          "rankPct": 0.2727272727272727
         },
         "panel": {
-          "craft": 6.666666666666667,
-          "fit": 7,
-          "hierarchy": 8,
-          "mobile": 6.666666666666667,
-          "overall": 6.666666666666667,
-          "rankPct": 0.4166666666666667
+          "craft": 6.333333333333333,
+          "fit": 6.666666666666667,
+          "hierarchy": 6.666666666666667,
+          "mobile": 6.333333333333333,
+          "overall": 6.333333333333333,
+          "rankPct": 0.2727272727272727
         }
       }
     },
@@ -643,54 +811,61 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 0,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 8,
-          "fit": 9,
-          "hierarchy": 9,
-          "mobile": 8,
-          "overall": 8,
-          "defects": [
-            "Long lines inside dark code blocks clip at the right edge on 390px mobile.",
-            "Repeating every option in both a full table and large cards pushes the later recipes below the 6000px desktop crop."
-          ],
-          "note": "Crisp cobalt-accented technical documentation with strong navigation hierarchy, anchor-linked option tables, and a clean mobile menu.",
-          "rankPct": 0.625
-        },
-        "gpt-6-1-sol": {
-          "craft": 8,
-          "fit": 8,
-          "hierarchy": 8,
-          "mobile": 8,
-          "overall": 8,
-          "defects": [],
-          "note": "Polished code treatment, clear section hierarchy and a compact mobile header make this a strong, readily shippable documentation design.",
-          "rankPct": 0.75
-        },
-        "opus-5-5": {
           "craft": 7,
           "fit": 7,
+          "hierarchy": 7,
+          "mobile": 6,
+          "overall": 7,
+          "defects": [
+            "Duplicates all 8 options in a 3-column summary table followed immediately by 8 full cards, bloating height so desktop-full.jpg cuts off at 6000px after only the first recipe",
+            "Quick start explanatory text says 'With no options...' right below a code block that passes `{ retries: 4, minDelay: 200 }`",
+            "Mobile 3-column Options table cramps long function types and mobile-full.jpg cuts off at 6000px inside the delay widget before Recipes even starts",
+            "Long lines in mobile code blocks clip horizontally"
+          ],
+          "note": "A clean blue-and-slate developer doc whose duplicated options table and cards push two of the three required recipes past the 6000px cutoff.",
+          "rankPct": 0.5454545454545454
+        },
+        "gpt-6-1-sol": {
+          "craft": 7,
+          "fit": 8,
           "hierarchy": 8,
           "mobile": 7,
           "overall": 7,
           "defects": [
-            "Long code lines clipped at the right edge on mobile (scroll only)",
-            "Options table type column wraps into tall cramped cells at 390 px"
+            "Long code and function signatures are clipped within mobile panels.",
+            "Callback types wrap into dense, tall cells in the mobile options table."
           ],
-          "note": "Solid, complete docs with syntax highlighting, an options table plus per-option cards and a delay simulator; competent but generic in look.",
-          "rankPct": 0.875
+          "note": "Clear white-and-blue documentation handles the essentials well, but dense reference tables and conventional styling keep it below the strongest entries.",
+          "rankPct": 0.36363636363636365
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 6,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "Code lines clip at block edge on mobile",
+            "Wordmark in sidebar is very small and low-weight"
+          ],
+          "note": "Thorough, tidy docs with a parameter table, option cards and an interactive demo, though the blue-gray styling reads as a stock docs template.",
+          "rankPct": 0.5454545454545454
         },
         "panel": {
-          "craft": 7.666666666666667,
-          "fit": 8,
-          "hierarchy": 8.333333333333334,
-          "mobile": 7.666666666666667,
-          "overall": 7.666666666666667,
-          "rankPct": 0.75
+          "craft": 7,
+          "fit": 7,
+          "hierarchy": 7.333333333333333,
+          "mobile": 6.666666666666667,
+          "overall": 7,
+          "rankPct": 0.48484848484848486
         }
       }
     },
@@ -708,54 +883,60 @@
         "web-ui-design"
       ],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 2,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 9,
+          "craft": 8,
           "fit": 9,
           "hierarchy": 9,
-          "mobile": 9,
-          "overall": 9,
+          "mobile": 8,
+          "overall": 8,
           "defects": [
-            "Long lines inside dark code blocks clip at the right edge on 390px mobile."
+            "Install section stacks two separate dark code blocks for npm and pnpm/yarn instead of using compact tabs",
+            "Long lines in mobile code blocks (Quick start, API signature, HTTP 429 handling) clip horizontally at the container edge",
+            "Mobile full-page capture reaches the 6000px cut right after the Aborting with AbortSignal heading"
           ],
-          "note": "Best-in-class developer documentation with deep sidebar option links, labeled copyable code blocks, an intuitive delay visualizer, and complete brief coverage without redundant bloat.",
-          "rankPct": 1
+          "note": "Editorial warmth, crisp hierarchy, a full-height deep-linked sidebar, and tight pacing allow every required section and recipe to land cleanly on desktop and mobile.",
+          "rankPct": 0.9090909090909091
         },
         "gpt-6-1-sol": {
           "craft": 8,
-          "fit": 8,
+          "fit": 9,
           "hierarchy": 8,
           "mobile": 8,
           "overall": 8,
-          "defects": [],
-          "note": "Consistent typography, a cohesive warm palette and well-organized reference material make this a convincing small-library documentation page.",
-          "rankPct": 0.625
+          "defects": [
+            "Muted code comments and Copy controls have low contrast against the dark panels.",
+            "Long code and type signatures extend beyond the visible mobile code-panel width."
+          ],
+          "note": "Restrained editorial styling, option-level navigation and readable mobile option rows make this especially well suited to a focused developer tool.",
+          "rankPct": 0.7272727272727273
         },
         "opus-5-5": {
-          "craft": 7,
-          "fit": 7,
-          "hierarchy": 7,
-          "mobile": 7,
-          "overall": 7,
-          "defects": [
-            "Long recipe code lines clipped at the right edge on desktop and mobile",
-            "Install shown as two stacked code blocks rather than one clear choice",
-            "No summary options table; options only as stacked entries"
-          ],
-          "note": "Warm, readable docs whose sidebar links every option by name; solid and shippable, though the fold spends a lot of space on duplicated install blocks.",
-          "rankPct": 0.625
-        },
-        "panel": {
           "craft": 8,
           "fit": 8,
           "hierarchy": 8,
           "mobile": 8,
           "overall": 8,
-          "rankPct": 0.75
+          "defects": [
+            "Long code lines clip at the block edge on mobile (scroll required)",
+            "Empty right gutter on desktop beside a narrow content column"
+          ],
+          "note": "Warm, restrained docs with per-option sidebar links, copy buttons, a clear delay-range visualizer and well-written option entries; the most complete and polished page.",
+          "rankPct": 1
+        },
+        "panel": {
+          "craft": 8,
+          "fit": 8.666666666666666,
+          "hierarchy": 8.333333333333334,
+          "mobile": 8,
+          "overall": 8,
+          "rankPct": 0.8787878787878788
         }
       }
     },
@@ -773,55 +954,62 @@
         "web-ui-design"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 13,
+      "contrastNodes": 13,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 8,
-          "fit": 9,
-          "hierarchy": 8,
-          "mobile": 9,
-          "overall": 8,
+          "craft": 6,
+          "fit": 7,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 6,
           "defects": [
-            "Code blocks lack syntax highlighting, rendering all code and comments in a single monochrome shade.",
-            "Long lines inside code blocks clip at the right edge on 390px mobile."
+            "Code blocks have no syntax highlighting, rendering all TypeScript and shell snippets as flat monochrome text",
+            "Left sidebar background and right border stop abruptly after the first ~900px viewport on desktop-full.jpg",
+            "Extra code blocks in Quick start and Errors push the page past 6000px on desktop, cutting off the third recipe (Custom retry predicates)",
+            "Long code lines clip horizontally at the right edge of code containers on mobile"
           ],
-          "note": "Thoughtfully structured teal-accented documentation with titled code blocks, a well-labeled delay calculator, and a clean mobile layout, missing only syntax highlighting.",
-          "rankPct": 0.75
+          "note": "Clean typography and a well-structured options list are held back by unhighlighted monochrome code blocks and a desktop sidebar that stops mid-page.",
+          "rankPct": 0.36363636363636365
         },
         "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 8,
+          "overall": 8,
+          "defects": [
+            "Long code lines extend beyond the visible mobile panel width.",
+            "Monochrome code offers little visual distinction between comments, strings and executable code."
+          ],
+          "note": "Consistent spacing, readable option explanations and sensibly stacked mobile controls make this dependable documentation rather than a distinctive identity.",
+          "rankPct": 0.5454545454545454
+        },
+        "opus-5-5": {
           "craft": 6,
           "fit": 6,
           "hierarchy": 7,
           "mobile": 7,
           "overall": 6,
-          "defects": [],
-          "note": "Clear, restrained documentation is easy to follow, but its conventional presentation feels less specifically designed for backoff-kit than the leading entries.",
-          "rankPct": 0.375
-        },
-        "opus-5-5": {
-          "craft": 6,
-          "fit": 7,
-          "hierarchy": 8,
-          "mobile": 7,
-          "overall": 6,
           "defects": [
-            "Sidebar background panel stops after the first viewport, leaving a hard edge partway down the full page",
-            "Light grey code blocks without syntax highlighting have low contrast and feel washed out",
-            "Install tabs and filename bars use slightly mismatched styling"
+            "Code samples have no syntax highlighting",
+            "Sidebar background stops at the fold in the full-page view",
+            "Mobile delay chart puts range labels on a separate line under each bar, making it long"
           ],
-          "note": "Good copy (the flaky-network intro) and a clear range-based delay chart, but the pale code treatment and sidebar artifact make it feel less finished.",
-          "rankPct": 0.5
+          "note": "Clear content and a good delay model, but grey unhighlighted code blocks make it feel unfinished.",
+          "rankPct": 0.36363636363636365
         },
         "panel": {
           "craft": 6.666666666666667,
-          "fit": 7.333333333333333,
-          "hierarchy": 7.666666666666667,
-          "mobile": 7.666666666666667,
+          "fit": 7,
+          "hierarchy": 7.333333333333333,
+          "mobile": 7.333333333333333,
           "overall": 6.666666666666667,
-          "rankPct": 0.5416666666666666
+          "rankPct": 0.42424242424242425
         }
       }
     },
@@ -837,24 +1025,25 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 7,
+      "contrastNodes": 7,
       "mobileOverflow": true,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 6,
-          "fit": 8,
+          "fit": 7,
           "hierarchy": 7,
-          "mobile": 2,
+          "mobile": 3,
           "overall": 5,
           "defects": [
-            "Severe page-level horizontal overflow on 390px mobile cuts off the right side of all headings, paragraphs, tables, widgets, and code blocks.",
-            "Left sidebar navigation lacks an active-section indicator on desktop.",
-            "Long code lines in the HTTP 429 recipe clip at the right edge on 1440px desktop."
+            "Severe full-page horizontal overflow on mobile slices off the right side of the entire page (headings, body text, delay widget controls, the Default column of the Options table, option cards, and code blocks) at 390px",
+            "Options section duplicates all 8 options in both a 3-column summary table and 8 full cards immediately below, pushing the third recipe past the 6000px desktop cut"
           ],
-          "note": "Solid desktop documentation aesthetic broken on mobile by full-page horizontal overflow that slices off the right edge of all content.",
-          "rankPct": 0.125
+          "note": "An attractive desktop presentation with badged dark code blocks breaks badly on mobile due to full-page horizontal overflow that clips every section on the right edge.",
+          "rankPct": 0.18181818181818177
         },
         "gpt-6-1-sol": {
           "craft": 7,
@@ -863,32 +1052,243 @@
           "mobile": 2,
           "overall": 4,
           "defects": [
-            "The mobile layout retains an oversized content column, cutting off paragraphs, code panels, tables and controls at the right edge."
+            "The mobile main column extends beyond the viewport, cutting off prose and code on the right.",
+            "Wide reference content does not adapt to the mobile viewport."
           ],
-          "note": "The warm desktop design and backoff visualization suit the product well, but severe mobile clipping prevents shipping it as shown.",
-          "rankPct": 0.25
+          "note": "A coherent desktop documentation page is undermined by a mobile layout that leaves essential content offscreen.",
+          "rankPct": 0.09090909090909094
         },
         "opus-5-5": {
           "craft": 7,
           "fit": 7,
-          "hierarchy": 6,
-          "mobile": 2,
-          "overall": 4,
+          "hierarchy": 7,
+          "mobile": 3,
+          "overall": 5,
           "defects": [
-            "Mobile layout overflows horizontally: paragraphs, tables, widget and code are cut off at the right edge",
-            "'How delays work' placed before the API reference, so the order of the docs is odd",
-            "Small language tags overlap the top border of code blocks"
+            "Mobile layout overflows horizontally: body text, tags and option cards are clipped at the right edge",
+            "Mobile delay bars for later retries run past the panel",
+            "Options table type column cut off on mobile"
           ],
-          "note": "Nicely styled warm desktop docs with a strong delay chart, undone by a broken 390 px layout and odd section ordering.",
-          "rankPct": 0.125
+          "note": "Good desktop docs with a delay demo and option cards, but the mobile page is broken by horizontal overflow.",
+          "rankPct": 0.09090909090909094
         },
         "panel": {
           "craft": 6.666666666666667,
-          "fit": 7.666666666666667,
+          "fit": 7.333333333333333,
+          "hierarchy": 7.333333333333333,
+          "mobile": 2.6666666666666665,
+          "overall": 4.666666666666667,
+          "rankPct": 0.12121212121212122
+        }
+      }
+    },
+    {
+      "id": "backoff-kit--web-ui-design-0.2--1",
+      "brief": "backoff-kit",
+      "arm": "web-ui-design-0.2",
+      "rep": "1",
+      "cost": 0.3627441,
+      "wall_s": 104,
+      "turns": 24,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": true,
+      "axeSeriousCritical": 1,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 9,
+          "fit": 9,
+          "hierarchy": 9,
+          "mobile": 8,
+          "overall": 9,
+          "defects": [
+            "Install section uses two stacked code cards instead of tabs",
+            "A few long lines inside mobile code blocks clip horizontally at the card edge, and mobile-full.jpg reaches the 6000px cut inside the second recipe"
+          ],
+          "note": "The strongest page in the set: cohesive warm-stone styling, an SVG delay curve with jitter band, zero-redundancy pacing that fits the entire brief and footer on desktop, and a mobile options table that responsively transforms into stacked cards.",
+          "rankPct": 1
+        },
+        "gpt-6-1-sol": {
+          "craft": 9,
+          "fit": 8,
+          "hierarchy": 9,
+          "mobile": 8,
+          "overall": 8,
+          "defects": [
+            "Long example lines are cut off at the right edge of the mobile code panels."
+          ],
+          "note": "A disciplined warm palette, strong section structure and responsive option cards give the documentation a notably finished feel.",
+          "rankPct": 0.9090909090909091
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 8,
           "hierarchy": 7,
-          "mobile": 2,
-          "overall": 4.333333333333333,
-          "rankPct": 0.16666666666666666
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "Light code blocks on cream background have weak contrast against the page",
+            "Mobile option cards stack Type/Default/Description labels, making the options section very long"
+          ],
+          "note": "Distinctive delay-curve line chart with sliders and a full options table with descriptions; light code styling is slightly washed out.",
+          "rankPct": 0.7272727272727273
+        },
+        "panel": {
+          "craft": 8.333333333333334,
+          "fit": 8.333333333333334,
+          "hierarchy": 8.333333333333334,
+          "mobile": 7.666666666666667,
+          "overall": 8,
+          "rankPct": 0.8787878787878789
+        }
+      }
+    },
+    {
+      "id": "backoff-kit--web-ui-design-0.2--2",
+      "brief": "backoff-kit",
+      "arm": "web-ui-design-0.2",
+      "rep": "2",
+      "cost": 0.39530030000000005,
+      "wall_s": 135,
+      "turns": 13,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": true,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 8,
+          "overall": 8,
+          "defects": [
+            "Redundant standalone import code block in Install and two code blocks in Quick start add enough height that desktop-full.jpg cuts the bottom of the third recipe at 6000px and mobile-full.jpg cuts off in the first recipe",
+            "Long lines in several mobile code blocks clip horizontally at the container edge",
+            "Adds an unrequested retryAfter option alongside shouldRetry"
+          ],
+          "note": "A cohesive mint-and-teal design with a full-height sidebar, a polished Schedule explorer widget, and a clean single-pass options list that reads well on both desktop and mobile.",
+          "rankPct": 0.8181818181818181
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 9,
+          "mobile": 8,
+          "overall": 8,
+          "defects": [
+            "Generous vertical gaps reduce the useful documentation visible in the desktop first fold.",
+            "Some long code lines exceed the visible mobile panel width."
+          ],
+          "note": "Calm teal styling, clear navigation and a well-adapted mobile reference make this a convincing small-library docs page.",
+          "rankPct": 0.8181818181818181
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 7,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "Mobile nav renders as a large grid of bordered chips that pushes content down",
+            "Sidebar background ends at the fold in the full-page view"
+          ],
+          "note": "Calm teal docs with a good schedule explorer and clear option rows; competent but a little plain.",
+          "rankPct": 0.6363636363636364
+        },
+        "panel": {
+          "craft": 7.666666666666667,
+          "fit": 7.666666666666667,
+          "hierarchy": 8,
+          "mobile": 7.666666666666667,
+          "overall": 7.666666666666667,
+          "rankPct": 0.7575757575757575
+        }
+      }
+    },
+    {
+      "id": "backoff-kit--web-ui-design-0.2--3",
+      "brief": "backoff-kit",
+      "arm": "web-ui-design-0.2",
+      "rep": "3",
+      "cost": 0.5592486000000001,
+      "wall_s": 209,
+      "turns": 18,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": true,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 6,
+          "fit": 7,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 6,
+          "defects": [
+            "Sidebar sub-links for options are styled as bordered pill tags stacked vertically, creating visual clutter",
+            "Redundant 'Then import it' and 'These are the defaults, written out' code blocks bloat vertical length so desktop-full.jpg cuts off at 6000px inside the first recipe",
+            "Mobile code blocks clip long lines horizontally and mobile-full.jpg cuts off at 6000px before any recipe content appears"
+          ],
+          "note": "A solid interactive delay calculator and clean mobile drawer are undermined by cluttered pill-tag sidebar links and redundant code blocks that push two recipes past the 6000px cut.",
+          "rankPct": 0.4545454545454546
+        },
+        "gpt-6-1-sol": {
+          "craft": 7,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 8,
+          "overall": 7,
+          "defects": [
+            "Long code lines extend beyond the visible width of the mobile code panels."
+          ],
+          "note": "Readable, orderly documentation and a useful delay visualization serve the library well, although the visual treatment remains conventional.",
+          "rankPct": 0.4545454545454546
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 6,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "Large unused gap between sidebar and content column on desktop",
+            "Formula block line clips on mobile"
+          ],
+          "note": "Competent GitHub-style docs with copy-able light code blocks and a clear delay range chart; generic look.",
+          "rankPct": 0.4545454545454546
+        },
+        "panel": {
+          "craft": 6.666666666666667,
+          "fit": 7,
+          "hierarchy": 7.333333333333333,
+          "mobile": 7.333333333333333,
+          "overall": 6.666666666666667,
+          "rankPct": 0.4545454545454546
         }
       }
     },
@@ -907,35 +1307,37 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 1,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 9,
-          "fit": 10,
+          "craft": 8,
+          "fit": 9,
           "hierarchy": 9,
-          "mobile": 8,
-          "overall": 9,
+          "mobile": 6,
+          "overall": 8,
           "defects": [
-            "On mobile (390px), the rightmost 'Roasted kg' column in the 'Wholesale orders' table is clipped at the right edge.",
-            "On mobile (390px), the internal text annotations inside the scaled-down SVG roast curve become very small.",
-            "In desktop-full, the sidebar's bottom machine-maintenance note sits around the 900px fold line with empty sidebar space below it."
+            "Mobile wholesale orders table overflows horizontally and clips the rightmost 'Roasted kg' column",
+            "Inline SVG charts (live roast curve and weekly roasted bar chart) scale down proportionally on mobile, making their internal text labels microscopic",
+            "Desktop sidebar footer metadata sits at the 900px fold rather than anchoring to the bottom of the full page"
           ],
-          "note": "Exceptional editorial craft and deep roastery domain fit that pairs live drum telemetry and today's batch queue with stock cover and order fulfillment across both desktop and mobile.",
+          "note": "Standout roastery control screen with an immediate operational summary, high-contrast live roast telemetry, and clear cross-linking between low green stock, blocked orders, and inbound shipments.",
           "rankPct": 1
         },
         "gpt-6-1-sol": {
           "craft": 9,
           "fit": 9,
           "hierarchy": 9,
-          "mobile": 8,
+          "mobile": 7,
           "overall": 9,
           "defects": [
-            "The mobile wholesale-orders table has very narrow columns, wrapping customer names and dates across many lines."
+            "The mobile wholesale table squeezes customer and coffee names into narrow cells with excessive line wrapping."
           ],
-          "note": "The most cohesive and purpose-built result combines confident editorial typography, live roasting context and a largely intact mobile operational overview.",
+          "note": "Distinctive olive editorial styling, an unmistakable live-roast focal point, and thoughtful mobile stacking make this the most convincing Roastline product.",
           "rankPct": 1
         },
         "opus-5-5": {
@@ -945,21 +1347,21 @@
           "mobile": 6,
           "overall": 8,
           "defects": [
-            "Sidebar ends at 900 px on the full desktop page",
-            "Large empty gap below the live roast panel before the next row",
-            "Active batch row highlight extends past the right column edge",
-            "Mobile roast curve axis and annotation labels are illegibly small",
-            "Mobile wholesale orders table is cramped and the Roasted kg column is clipped"
+            "Development KPI ('first crack in 1:26') is set much smaller than the other KPIs, so the row looks uneven",
+            "Sidebar divider stops at 900px on the full page",
+            "Empty gap below the live roast panel before the next section",
+            "Mobile: live roast chart labels become unreadable",
+            "Mobile: wholesale orders table is cramped and the Roasted kg column is clipped"
           ],
-          "note": "The live roast curve, plain-language summary sentence and incoming green shipments make this unmistakably a roaster's daily tool, with strong editorial typography; mobile tables need work.",
+          "note": "The most distinctive and opinionated page: the headline sentence states what matters, a dark live-roast panel sits beside the batch queue, and incoming green coffee is tied to reorder risk.",
           "rankPct": 1
         },
         "panel": {
-          "craft": 8.666666666666666,
-          "fit": 9.333333333333334,
+          "craft": 8.333333333333334,
+          "fit": 9,
           "hierarchy": 9,
-          "mobile": 7.333333333333333,
-          "overall": 8.666666666666666,
+          "mobile": 6.333333333333333,
+          "overall": 8.333333333333334,
           "rankPct": 1
         }
       }
@@ -979,38 +1381,42 @@
         "dataviz"
       ],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 5,
+      "contrastNodes": 5,
       "mobileOverflow": true,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 7,
-          "fit": 8,
+          "craft": 6,
+          "fit": 7,
           "hierarchy": 7,
           "mobile": 4,
           "overall": 6,
           "defects": [
-            "On mobile (390px), 'Green bean stock' and 'Wholesale orders' overflow past the right viewport edge, cutting off the days-of-cover numbers, filter pills, and the entire 'Value' column.",
-            "On mobile (390px), all top navigation links disappear with no menu button provided.",
-            "On desktop, the SVG roast curve has an unnatural sharp kink at minute 5 and its '-- Profile target' dashed line is barely visible.",
-            "The page subtitle states '5 batches roasted today, 2 more scheduled', but the 'Today's batches' list only shows the 5 completed batches."
+            "Roast curve has an unrealistic sharp upward kink at 5:00 and the dashed profile target line shown in the legend is missing or invisible on the chart",
+            "Green bean stock truncates 'Guatemala Huehuetenango' with an ellipsis even on desktop",
+            "All top navigation links disappear completely on mobile with no menu button or replacement navigation",
+            "Mobile green bean stock list and wholesale orders table overflow horizontally, clipping stock numbers, filter pills, and the order value column",
+            "Mobile roast curve SVG text labels shrink to near-unreadable size"
           ],
-          "note": "Tasteful sage-and-espresso editorial styling on desktop, but severely compromised on mobile by missing navigation and right-edge overflow on the bottom cards.",
-          "rankPct": 0.5
+          "note": "Warm editorial palette and clear top-level summary, held back by a flawed roast curve graphic, missing mobile navigation, and clipped mobile tables.",
+          "rankPct": 0.36363636363636365
         },
         "gpt-6-1-sol": {
           "craft": 8,
-          "fit": 9,
+          "fit": 8,
           "hierarchy": 8,
-          "mobile": 4,
+          "mobile": 5,
           "overall": 7,
           "defects": [
-            "Mobile green-stock coverage figures extend beyond the right edge.",
-            "The mobile schedule and wholesale tables cut off rightmost columns rather than presenting all their data within the screen."
+            "Mobile inventory quantities and status text run beyond the visible panel.",
+            "The mobile wholesale table crops rightmost order information.",
+            "The desktop navigation disappears on mobile without a visible replacement menu."
           ],
-          "note": "The warm palette, live roast curve and detailed production data feel genuinely roastery-specific, but mobile overflow prevents a confident release.",
-          "rankPct": 0.5
+          "note": "A cohesive sage-and-brown system and explicit stock-risk summary make a strong desktop dashboard, but mobile data visibility is compromised.",
+          "rankPct": 0.4545454545454546
         },
         "opus-5-5": {
           "craft": 6,
@@ -1019,23 +1425,24 @@
           "mobile": 4,
           "overall": 6,
           "defects": [
-            "Stray spaces before commas, periods and colons throughout ('today , 2 more scheduled .', '06 : 40')",
-            "Roast curve has an implausible sudden step near 5:00 and the profile-target line in the legend is not visible",
-            "Empty lower half of the Today's batches card",
-            "Mobile green bean stock rows overflow, cutting off the days and kg values",
-            "Mobile order filter chips and status column overflow the right edge",
-            "Mobile roast curve is too small to read"
+            "Stray spaces before commas, periods and colons throughout ('today , 2 more scheduled .', '08 : 52')",
+            "Roast curve has an unrealistic step jump around 5:00",
+            "Legend lists a 'Profile target' line that is not drawn",
+            "Today's batches card has a large empty area",
+            "Mobile: green bean stock days and labels overflow off the right edge",
+            "Mobile: orders table and filter chips are clipped",
+            "Mobile: nav is missing"
           ],
-          "note": "Good roastery-specific concept with roast curve and days-of-cover bars, undermined by a visible punctuation spacing glitch, an odd curve and a mobile layout that overflows.",
-          "rankPct": 0.25
+          "note": "Good roastery-specific concept with selectable batch curves, undermined by a punctuation-spacing bug, a broken-looking curve and mobile overflow.",
+          "rankPct": 0.18181818181818177
         },
         "panel": {
-          "craft": 7,
-          "fit": 8.333333333333334,
+          "craft": 6.666666666666667,
+          "fit": 7.666666666666667,
           "hierarchy": 7.333333333333333,
-          "mobile": 4,
+          "mobile": 4.333333333333333,
           "overall": 6.333333333333333,
-          "rankPct": 0.4166666666666667
+          "rankPct": 0.3333333333333333
         }
       }
     },
@@ -1054,8 +1461,10 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 46,
+      "contrastNodes": 45,
       "mobileOverflow": true,
       "jsErrors": 0,
       "scores": {
@@ -1063,27 +1472,29 @@
           "craft": 8,
           "fit": 9,
           "hierarchy": 8,
-          "mobile": 4,
+          "mobile": 3,
           "overall": 7,
           "defects": [
-            "Severe horizontal overflow on mobile (390px) clips the header subtitle, the right side of the roast curve and dark telemetry values, the right-column KPI cards, green inventory status labels, and the rightmost columns of both tables.",
-            "In desktop-full, the sidebar user footer ('Mara Okafor') is positioned at the 900px viewport height rather than the bottom of the full-height sidebar, leaving a large empty dark-green region below it."
+            "Severe horizontal overflow across almost every section on mobile (header subtitle, roast curve, telemetry panel, 2-column KPI grid, green coffee status text, and both tables are clipped on the right)",
+            "Mobile roast curve SVG scales down as a fixed graphic, making phase and temperature labels tiny",
+            "Desktop full-page dark green sidebar ends abruptly at 900px viewport height, leaving empty off-white background underneath"
           ],
-          "note": "Rich, domain-authentic desktop roastery command center with an expressive live roast curve and Agtron swatches, but held back by widespread horizontal clipping at 390px.",
-          "rankPct": 0.625
+          "note": "Rich, domain-authentic desktop design anchored by an expressive live roast curve and Agtron schedule, but severely undermined by widespread mobile horizontal clipping.",
+          "rankPct": 0.6363636363636364
         },
         "gpt-6-1-sol": {
           "craft": 8,
           "fit": 9,
-          "hierarchy": 7,
+          "hierarchy": 8,
           "mobile": 3,
           "overall": 6,
           "defects": [
-            "The mobile layout exceeds the viewport width, cropping the roast chart, telemetry values, stock-coverage labels and table columns.",
-            "The mobile wholesale table compresses customer names and coffee descriptions into narrow, heavily wrapped columns."
+            "The mobile live-roast chart extends beyond the viewport and loses its right-hand portion.",
+            "Mobile telemetry values and inventory status text are clipped at the right edge.",
+            "Mobile roast-schedule and wholesale columns extend outside the visible layout."
           ],
-          "note": "An attractive, deeply roastery-specific live-roast view loses release readiness because its desktop-sized content is broadly cropped on mobile.",
-          "rankPct": 0.25
+          "note": "Distinctive forest styling and roast-specific measurements excel on desktop, but extensive mobile horizontal overflow prevents a complete usable presentation.",
+          "rankPct": 0.2727272727272727
         },
         "opus-5-5": {
           "craft": 8,
@@ -1092,22 +1503,21 @@
           "mobile": 3,
           "overall": 7,
           "defects": [
-            "Sidebar ends at 900 px on the full desktop page",
-            "Empty band in the middle of the dark bean temperature panel",
-            "Mobile has page-level horizontal overflow: subtitle, chart legend, stat values, KPI cards and status columns are cut off at the right edge",
-            "Mobile roast curve labels are too small to read",
-            "Mobile tables wrap batch IDs and dates into many short lines"
+            "Sidebar background stops at 900px on the full page",
+            "Mobile: horizontal overflow across the page; the subtitle, KPI cards, dark live-roast panel values and inventory labels are cut off at the right",
+            "Mobile: roast chart becomes illegible",
+            "Mobile: schedule and orders tables are clipped and cramped"
           ],
-          "note": "The most polished desktop composition, with a live roast curve and stat panel that feel made for a roastery, but the 390 px layout overflows horizontally and is not shippable as is.",
-          "rankPct": 0.625
+          "note": "Excellent desktop, with a live roast hero, a dark readout panel and a clear schedule, but the mobile layout overflows horizontally and would not ship.",
+          "rankPct": 0.5454545454545454
         },
         "panel": {
           "craft": 8,
           "fit": 9,
-          "hierarchy": 7.666666666666667,
-          "mobile": 3.3333333333333335,
+          "hierarchy": 8,
+          "mobile": 3,
           "overall": 6.666666666666667,
-          "rankPct": 0.5
+          "rankPct": 0.48484848484848486
         }
       }
     },
@@ -1125,8 +1535,10 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 10,
+      "contrastNodes": 9,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
@@ -1137,48 +1549,51 @@
           "mobile": 5,
           "overall": 5,
           "defects": [
-            "On desktop, the 'Roasted output, last 30 days' card has a large empty whitespace gap below the chart due to the taller adjacent 'Green bean stock' card.",
-            "On mobile (390px), top navigation links disappear completely with no menu toggle.",
-            "On mobile (390px), both bottom tables squeeze all columns into 390px, causing awkward narrow text wrapping ('B-\\n4821') and clipping the rightmost 'Status' column ('QC p', '✓ Ready to sh')."
+            "Top navigation links vanish completely on mobile with no menu trigger",
+            "Mobile recent roast batches and wholesale orders tables clip the right edge of their status labels ('QC p', 'QC h', 'Ready to sh')",
+            "Desktop 30-day bar chart card and wholesale orders card have large empty whitespace at the bottom",
+            "Lacks primary action buttons and prints 'sample data' in the footer"
           ],
-          "note": "A competent but generic royal-blue SaaS template that lacks coffee-specific character, interactive workflow controls, and responsive mobile table handling.",
-          "rankPct": 0.25
+          "note": "Clean but generic blue-and-white SaaS dashboard template that lacks coffee roastery identity, primary workflow actions, and mobile navigation.",
+          "rankPct": 0.18181818181818177
         },
         "gpt-6-1-sol": {
-          "craft": 7,
-          "fit": 8,
-          "hierarchy": 8,
-          "mobile": 8,
-          "overall": 7,
+          "craft": 6,
+          "fit": 6,
+          "hierarchy": 6,
+          "mobile": 5,
+          "overall": 6,
           "defects": [
-            "The desktop sidebar navigation disappears on mobile without a visible menu replacement."
+            "The desktop navigation disappears on mobile without a visible replacement menu.",
+            "Mobile operational tables compress names and labels into heavily wrapped narrow columns."
           ],
-          "note": "A practical, legible operational dashboard with a comparatively successful mobile layout, though its visual treatment remains conventional.",
-          "rankPct": 0.625
+          "note": "Competent blue-and-white analytics and realistic coffee data cover the brief, but the presentation feels generic and weak on next actions.",
+          "rankPct": 0.09090909090909094
         },
         "opus-5-5": {
           "craft": 6,
           "fit": 4,
-          "hierarchy": 6,
-          "mobile": 5,
+          "hierarchy": 5,
+          "mobile": 4,
           "overall": 5,
           "defects": [
-            "Large empty area below the roasted output chart",
-            "Theme button shows a stray glyph",
-            "Default saturated blue throughout feels unbranded",
-            "Mobile main nav hidden",
-            "Mobile tables wrap weights and IDs onto multiple lines and clip status labels"
+            "Generic bright-blue palette with no coffee character",
+            "Output chart card has a large empty area below the chart",
+            "The sparkline in the Roasted KPI card is unlabeled and visually loose",
+            "No needs-attention or alert area; urgent items are only implied by the subtitle",
+            "Mobile: nav links disappear",
+            "Mobile: batch and order Status columns are clipped"
           ],
-          "note": "Tidy but generic blue-on-gray template; the content is right for the brief but nothing in the design feels made for a coffee roastery.",
-          "rankPct": 0.125
+          "note": "A tidy but generic analytics template; it works for the data but feels neither made for a roastery nor clear about today's priorities.",
+          "rankPct": 0.09090909090909094
         },
         "panel": {
-          "craft": 6.333333333333333,
-          "fit": 5.333333333333333,
-          "hierarchy": 6.666666666666667,
-          "mobile": 6,
-          "overall": 5.666666666666667,
-          "rankPct": 0.3333333333333333
+          "craft": 6,
+          "fit": 4.666666666666667,
+          "hierarchy": 5.666666666666667,
+          "mobile": 4.666666666666667,
+          "overall": 5.333333333333333,
+          "rankPct": 0.12121212121212122
         }
       }
     },
@@ -1196,62 +1611,65 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 0,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 5,
-          "fit": 5,
-          "hierarchy": 5,
-          "mobile": 4,
+          "fit": 4,
+          "hierarchy": 6,
+          "mobile": 3,
           "overall": 4,
           "defects": [
-            "On mobile (390px), the stock gauge bars in 'Green bean inventory' are crushed into unreadable ~15px wide slivers.",
-            "On mobile (390px), 'Wholesale orders' cuts off the 'Due' and 'Status' columns, and 'Recent roast batches' cuts off 'Green kg', 'Roasted kg', 'Loss', 'Roaster', and 'Cupping'.",
-            "On mobile (390px), top navigation links disappear completely with no menu button.",
-            "On desktop, 'Recent roast batches' is pushed entirely below the 900px fold, and the 'Wholesale orders' card has a large blank gap at the bottom."
+            "Top navigation links vanish completely on mobile with no hamburger menu or replacement navigation",
+            "Mobile green bean inventory crushes the progress bars into ~15px-wide slivers that cannot be read",
+            "Mobile wholesale orders and recent roast batches tables overflow horizontally, cutting off key columns (Due, Status, Green kg, Roasted kg, Loss, Roaster, Cupping)",
+            "Lacks primary action buttons and leaves a large empty white gap at the bottom of the desktop wholesale orders card"
           ],
-          "note": "Generic SaaS card template with jarring primary blue/orange/green roast-level colors, poor above-the-fold balance, and crushed gauges and clipped tables on mobile.",
-          "rankPct": 0.125
+          "note": "Generic SaaS card template with bright primary chart colors, no roastery character, vanished mobile navigation, and crushed or clipped mobile data views.",
+          "rankPct": 0.09090909090909094
         },
         "gpt-6-1-sol": {
           "craft": 7,
           "fit": 7,
-          "hierarchy": 8,
-          "mobile": 6,
-          "overall": 7,
+          "hierarchy": 7,
+          "mobile": 4,
+          "overall": 6,
           "defects": [
-            "Mobile tables retain cramped desktop-style columns, with rightmost inventory and order details cut off.",
-            "The desktop section navigation disappears on mobile without a visible replacement."
+            "Mobile inventory bars collapse into tiny slivers between wrapped labels and quantities.",
+            "Mobile wholesale and recent-batch tables clip right-hand columns.",
+            "The desktop navigation disappears on mobile without a visible replacement menu."
           ],
-          "note": "Strong exception-first organization makes the workday understandable, but the restrained visual identity and incomplete mobile tables limit readiness.",
-          "rankPct": 0.375
+          "note": "Clear desktop analytics and useful attention items are undermined by visibly broken mobile inventory proportions and cropped tables.",
+          "rankPct": 0.18181818181818177
         },
         "opus-5-5": {
           "craft": 7,
           "fit": 5,
-          "hierarchy": 7,
+          "hierarchy": 8,
           "mobile": 5,
           "overall": 6,
           "defects": [
-            "Default blue/orange/green chart colors feel generic",
-            "Empty space at the bottom of the Needs attention card",
-            "Mobile hides the main nav links, leaving only a Theme button",
-            "Mobile inventory bars shrink to tiny stubs",
-            "Mobile orders and batches tables clip the status, due, loss and cupping columns"
+            "Generic blue/orange/green chart palette feels unrelated to coffee",
+            "A bare 'Theme' button sits in the header",
+            "Mobile: nav links disappear and there is no menu",
+            "Mobile: inventory bars shrink to tiny stubs",
+            "Mobile: orders table loses the Due and Status columns, and the roast batches table is clipped on the right"
           ],
-          "note": "Clean and sensible with a helpful Needs attention list and cupping column, but its stock styling reads as a generic template and mobile tables lose key columns.",
-          "rankPct": 0.375
+          "note": "Solid, clear generic dashboard with a good Needs attention panel, but it reads as a template and the mobile tables are clipped.",
+          "rankPct": 0.2727272727272727
         },
         "panel": {
           "craft": 6.333333333333333,
-          "fit": 5.666666666666667,
-          "hierarchy": 6.666666666666667,
-          "mobile": 5,
-          "overall": 5.666666666666667,
-          "rankPct": 0.2916666666666667
+          "fit": 5.333333333333333,
+          "hierarchy": 7,
+          "mobile": 4,
+          "overall": 5.333333333333333,
+          "rankPct": 0.1818181818181818
         }
       }
     },
@@ -1269,61 +1687,64 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 21,
+      "contrastNodes": 0,
       "mobileOverflow": true,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 5,
           "fit": 4,
+          "hierarchy": 5,
+          "mobile": 2,
+          "overall": 4,
+          "defects": [
+            "No primary navigation or action buttons anywhere on the page",
+            "Large empty vertical gap inside the desktop roasted output chart card and overly narrow (~60px) stock bars in the green bean inventory table",
+            "Every card below the KPI row on mobile (roasted output chart, green bean inventory, recent roast batches, and wholesale orders) overflows horizontally and clips the right side of the content"
+          ],
+          "note": "Generic SaaS analytics template with default primary chart colors, no navigation, and broken horizontal overflow across every chart and table on mobile.",
+          "rankPct": 0
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 5,
+          "overall": 7,
+          "defects": [
+            "Mobile inventory names wrap into narrow, tall cells.",
+            "Mobile roast-batch and wholesale tables clip right-hand columns."
+          ],
+          "note": "A cohesive, warm operational dashboard with clear desktop priorities, held back by cramped mobile inventory and tables.",
+          "rankPct": 0.36363636363636365
+        },
+        "opus-5-5": {
+          "craft": 5,
+          "fit": 4,
           "hierarchy": 4,
           "mobile": 3,
           "overall": 4,
           "defects": [
-            "On mobile (390px), every card below the KPIs ('Roasted output' chart, 'Green bean inventory', 'Recent roast batches', and 'Wholesale orders') overflows horizontally off the right edge of the viewport.",
-            "On desktop, the 'Roasted output' card has a large empty whitespace gap beneath the chart, and both 'Recent roast batches' and 'Wholesale orders' sit almost entirely below the 900px fold.",
-            "Missing application navigation on both desktop and mobile (only a 'Toggle theme' button and date-range tabs are shown)."
+            "No app navigation, only a 'Toggle theme' button",
+            "Batch IDs show a thousands separator ('#4,812')",
+            "Busy stacked chart in generic blue/orange/green with noisy, random-looking data",
+            "Empty space below the chart",
+            "Mobile: chart bars overflow the card on the right",
+            "Mobile: inventory status, batch and order columns are clipped"
           ],
-          "note": "Reads like a generic 30-day BI report rather than a live roastery tool, lacks app navigation, and suffers from horizontal overflow across every major section on mobile.",
-          "rankPct": 0
-        },
-        "gpt-6-1-sol": {
-          "craft": 6,
-          "fit": 7,
-          "hierarchy": 7,
-          "mobile": 4,
-          "overall": 6,
-          "defects": [
-            "Mobile chart and table panels extend beyond the available width, clipping chart content and right-hand data columns.",
-            "The stacked mobile metric cards consume substantial space before the operational queues appear."
-          ],
-          "note": "A clear but fairly generic dashboard whose desktop organization does not translate reliably to the narrow screen.",
-          "rankPct": 0.125
-        },
-        "opus-5-5": {
-          "craft": 6,
-          "fit": 4,
-          "hierarchy": 5,
-          "mobile": 4,
-          "overall": 4,
-          "defects": [
-            "No app navigation; a prominent 'Toggle theme' button takes its place",
-            "Default blue/orange/green chart palette feels off-brand",
-            "Large empty area below the roasted output chart",
-            "Mobile chart overflows its card and is clipped on the right",
-            "Mobile tables clip status, green, roasted and value columns"
-          ],
-          "note": "Competent but generic analytics template with stock chart colors and no navigation, offering little that says roastery or points to today's work.",
+          "note": "Generic data-dump template with no navigation or clear priority, and mobile overflow.",
           "rankPct": 0
         },
         "panel": {
-          "craft": 5.666666666666667,
-          "fit": 5,
-          "hierarchy": 5.333333333333333,
-          "mobile": 3.6666666666666665,
-          "overall": 4.666666666666667,
-          "rankPct": 0.041666666666666664
+          "craft": 6,
+          "fit": 5.333333333333333,
+          "hierarchy": 5.666666666666667,
+          "mobile": 3.3333333333333335,
+          "overall": 5,
+          "rankPct": 0.12121212121212122
         }
       }
     },
@@ -1342,8 +1763,10 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 2,
+      "contrastNodes": 2,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
@@ -1351,51 +1774,53 @@
           "craft": 8,
           "fit": 8,
           "hierarchy": 8,
-          "mobile": 9,
+          "mobile": 8,
           "overall": 8,
           "defects": [
-            "On desktop, the 'Roasted output' 14-day bar chart stretches vertically to match the tall 'Green coffee' card beside it, leaving overly elongated bars.",
-            "In desktop-full, the white sidebar background and footer stop at 900px, leaving an empty gray column beneath the sidebar.",
-            "Includes a fourth-wall-breaking disclaimer footer ('Sample data for layout review. Figures are not live.')."
+            "Desktop 14-day roasted output bar chart stretches vertically to match the adjacent green coffee card height, distorting bar proportions",
+            "Desktop wholesale orders table truncates several customer and coffee names with ellipses despite available horizontal space",
+            "Desktop full-page sidebar white background stops at 900px viewport height instead of extending to the bottom of the page",
+            "Mobile top navigation bar clips the rightmost navigation items"
           ],
-          "note": "Clean, practical roastery operations dashboard with well-structured inventory cover and the best mobile table adaptation in the set.",
-          "rankPct": 0.875
+          "note": "Clean, grounded roastery dashboard with strong operational hierarchy and the only mobile layout that properly reflows the wholesale orders table into cards.",
+          "rankPct": 0.9090909090909091
         },
         "gpt-6-1-sol": {
-          "craft": 8,
+          "craft": 7,
           "fit": 8,
-          "hierarchy": 7,
+          "hierarchy": 6,
           "mobile": 8,
-          "overall": 8,
+          "overall": 7,
           "defects": [
-            "The mobile top navigation extends beyond the right edge, leaving later section links out of view.",
-            "The oversized desktop production chart pushes the roast schedule and wholesale queues below the initial viewport."
+            "The oversized desktop output chart pushes roast schedules and wholesale orders below the first viewport.",
+            "The mobile navigation extends beyond the viewport."
           ],
-          "note": "Polished green-accented execution and mobile record cards make this a strong all-round dashboard despite a chart-heavy desktop hierarchy.",
-          "rankPct": 0.875
+          "note": "Risk-sorted inventory and genuinely reflowed mobile order rows are thoughtful, though the desktop hierarchy overemphasizes a very tall output chart.",
+          "rankPct": 0.5454545454545454
         },
         "opus-5-5": {
-          "craft": 8,
-          "fit": 7,
-          "hierarchy": 8,
-          "mobile": 8,
-          "overall": 8,
+          "craft": 7,
+          "fit": 6,
+          "hierarchy": 6,
+          "mobile": 7,
+          "overall": 6,
           "defects": [
-            "Sidebar background stops at 900 px on the full desktop page, leaving a bare strip below",
-            "Customer and coffee names truncated with ellipses in the desktop orders table",
-            "Mobile top nav tabs cut off at the right edge",
-            "Coffee names truncated in mobile Today's roasts list"
+            "The pale green output chart dominates the fold for low-priority information",
+            "Customer and coffee names are truncated with ellipses in the orders table",
+            "Today's roasts card has empty space at the bottom",
+            "Sidebar background stops at 900px",
+            "Mobile: nav is cut off at the right"
           ],
-          "note": "Calm, well-structured operations dashboard with a disciplined green palette and the best-behaved mobile layout in the set, though visually a little plain for a roastery.",
-          "rankPct": 0.75
+          "note": "Competent and its mobile order cards work well, but the sage-green palette feels generic for coffee and the big history chart outranks today's operations.",
+          "rankPct": 0.36363636363636365
         },
         "panel": {
-          "craft": 8,
-          "fit": 7.666666666666667,
-          "hierarchy": 7.666666666666667,
-          "mobile": 8.333333333333334,
-          "overall": 8,
-          "rankPct": 0.8333333333333334
+          "craft": 7.333333333333333,
+          "fit": 7.333333333333333,
+          "hierarchy": 6.666666666666667,
+          "mobile": 7.666666666666667,
+          "overall": 7,
+          "rankPct": 0.6060606060606061
         }
       }
     },
@@ -1414,8 +1839,10 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 16,
+      "contrastNodes": 1,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
@@ -1423,53 +1850,52 @@
           "craft": 8,
           "fit": 8,
           "hierarchy": 8,
-          "mobile": 6,
+          "mobile": 5,
           "overall": 7,
           "defects": [
-            "On mobile (390px), the 'Today's roast schedule' table overflows horizontally inside its card, clipping 'Green' and cutting off the 'Roasted', 'Loss', and 'Status' columns.",
-            "On mobile (390px), the 'Wholesale orders' table overflows horizontally inside its card, clipping 'Contents' and cutting off the 'Weight', 'Due', 'Status', and 'Value' columns.",
-            "On mobile (390px), the top navigation bar clips items from 'Green inventory' onward.",
-            "In desktop-full, the sidebar user profile ('Mara Okonkwo') sits at 900px with empty sidebar space below it."
+            "Mobile top navigation bar clips on the right edge",
+            "Mobile today's roast schedule and wholesale orders tables overflow horizontally, cutting off the rightmost 3 to 4 columns of each table",
+            "Desktop full-page sidebar background stops at 900px viewport height, leaving a mismatched background tone below it"
           ],
-          "note": "Warm, cohesive roastery dashboard with strong hierarchy and actionable alerts on desktop, though its wide data tables clip heavily on mobile.",
-          "rankPct": 0.75
+          "note": "Warm, well-crafted roastery aesthetic with clear inventory cover bars and actionable alerts on desktop, but multi-column tables clip heavily on mobile.",
+          "rankPct": 0.7272727272727273
         },
         "gpt-6-1-sol": {
-          "craft": 8,
-          "fit": 9,
-          "hierarchy": 9,
-          "mobile": 5,
-          "overall": 8,
-          "defects": [
-            "Mobile roast-schedule and wholesale-order tables extend past their panels, clipping later columns.",
-            "The mobile section navigation is cut off on the right."
-          ],
-          "note": "Distinctive coffee-toned typography and an excellent stock-to-production-to-orders hierarchy make the desktop compelling, but mobile tables need reworking.",
-          "rankPct": 0.75
-        },
-        "opus-5-5": {
-          "craft": 8,
+          "craft": 9,
           "fit": 8,
           "hierarchy": 8,
           "mobile": 6,
           "overall": 8,
           "defects": [
-            "Sidebar ends partway down the full desktop page",
-            "Empty region below the Needs attention list on desktop",
-            "Mobile roast schedule and wholesale orders tables clip columns off the right edge",
-            "Mobile 'Receive green coffee' button wraps to two lines and filter tabs wrap awkwardly",
-            "Mobile top nav cut off at the right edge"
+            "Mobile roast-batch and wholesale tables retain desktop-width columns, clipping information on the right."
           ],
-          "note": "Warm roastery palette, serif greeting, clear inventory cover bars and a useful Needs attention panel make it feel purpose-built, held back by clipped tables on mobile.",
-          "rankPct": 0.875
+          "note": "Polished warm typography, clear stock indicators, and well-separated attention items give this dashboard a strong product identity.",
+          "rankPct": 0.8181818181818181
+        },
+        "opus-5-5": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 7,
+          "mobile": 5,
+          "overall": 7,
+          "defects": [
+            "Needs attention panel sits below the fold, and only its empty top shows in the first viewport",
+            "Sidebar background stops early on the full page",
+            "Needs attention card has a large empty area below its items",
+            "Mobile: 'Receive green coffee' button text wraps onto two lines",
+            "Mobile: roast schedule and orders tables are clipped on the right, and the filter tabs wrap unevenly",
+            "Mobile: nav is cut off"
+          ],
+          "note": "Polished, warm serif-led dashboard with good inventory cover bars and a live roast progress table, but urgent items are buried and mobile tables clip.",
+          "rankPct": 0.6363636363636364
         },
         "panel": {
-          "craft": 8,
-          "fit": 8.333333333333334,
-          "hierarchy": 8.333333333333334,
-          "mobile": 5.666666666666667,
-          "overall": 7.666666666666667,
-          "rankPct": 0.7916666666666666
+          "craft": 8.333333333333334,
+          "fit": 8,
+          "hierarchy": 7.666666666666667,
+          "mobile": 5.333333333333333,
+          "overall": 7.333333333333333,
+          "rankPct": 0.7272727272727272
         }
       }
     },
@@ -1488,62 +1914,290 @@
         "dataviz"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 62,
+      "contrastNodes": 60,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
+          "craft": 6,
+          "fit": 7,
+          "hierarchy": 7,
+          "mobile": 3,
+          "overall": 5,
+          "defects": [
+            "Mobile bottom section fails to stack 'Today's roast batches' and 'Wholesale orders', squeezing both tables side-by-side into ~175px columns that clip half their data",
+            "Mobile green bean inventory table overflows horizontally and cuts off the Status column, and top nav clips on the right",
+            "Desktop 14-day bar chart stretches too tall vertically to match the adjacent inventory table",
+            "Includes literal 'All figures are sample data for design review' footer text and mid-page floating sidebar footer on full scroll"
+          ],
+          "note": "Competent warm desktop layout with a helpful low-stock banner, but the mobile layout fails to stack its bottom two-column grid and severely clips all three tables.",
+          "rankPct": 0.2727272727272727
+        },
+        "gpt-6-1-sol": {
           "craft": 7,
           "fit": 7,
           "hierarchy": 7,
           "mobile": 3,
           "overall": 5,
           "defects": [
-            "On mobile (390px), the bottom two-column grid ('Today's roast batches' and 'Wholesale orders') fails to stack into a single column, crushing each table into a narrow ~175px column and clipping most of their data.",
-            "On mobile (390px), the 'Green bean inventory' table overflows its card and clips the entire 'Status' column on the right.",
-            "On mobile (390px), the top horizontal navigation bar clips links past 'Green beans'.",
-            "In desktop-full, the sidebar user block ('Mira Kovac') floats mid-sidebar at 900px with blank space beneath it."
+            "The mobile batch and wholesale panels remain side by side, leaving their tables extremely narrow and difficult to read.",
+            "Mobile green-inventory columns extend beyond the visible panel.",
+            "The mobile navigation extends beyond the viewport."
           ],
-          "note": "Warm, well-organized desktop dashboard with a clear reorder warning banner, but the uncollapsed two-column bottom grid makes the mobile layout unusable.",
-          "rankPct": 0.375
-        },
-        "gpt-6-1-sol": {
-          "craft": 7,
-          "fit": 8,
-          "hierarchy": 8,
-          "mobile": 2,
-          "overall": 5,
-          "defects": [
-            "The mobile batch and wholesale panels remain side by side at roughly half-screen widths, leaving most table columns out of view.",
-            "The mobile inventory table clips its right-hand level and status information.",
-            "The mobile navigation extends beyond the right edge."
-          ],
-          "note": "A competent, business-specific desktop dashboard is undermined by a severely compressed and clipped mobile layout.",
+          "note": "The tidy desktop layout communicates stock risk well, but the unadapted mobile columns prevent it from feeling shippable.",
           "rankPct": 0
         },
         "opus-5-5": {
-          "craft": 7,
+          "craft": 8,
           "fit": 7,
           "hierarchy": 8,
           "mobile": 4,
           "overall": 7,
           "defects": [
-            "Sidebar ends at 900 px on the full desktop page",
-            "Mobile places roast batches and wholesale orders side by side, clipping most columns including status",
-            "Mobile inventory table drops the status column and wraps origin names into four lines",
-            "Mobile top nav cut off at the right edge"
+            "Sidebar background stops at 900px and leaves a bare strip below it on the full page",
+            "Mobile: inventory table clips the Status column",
+            "Mobile: roast batches and wholesale orders sit side by side in two narrow columns, so the coffee and quantity columns are cut off",
+            "Mobile: top nav is cut off at the right edge"
           ],
-          "note": "Solid, clear desktop dashboard with a useful reorder alert banner and well-labeled inventory table, but the mobile layout collapses into unreadable squeezed columns.",
-          "rankPct": 0.5
+          "note": "Clean, warm, well-organised desktop with a useful reorder alert banner, but the mobile layout breaks down into clipped side-by-side tables.",
+          "rankPct": 0.4545454545454546
         },
         "panel": {
           "craft": 7,
-          "fit": 7.333333333333333,
-          "hierarchy": 7.666666666666667,
-          "mobile": 3,
+          "fit": 7,
+          "hierarchy": 7.333333333333333,
+          "mobile": 3.3333333333333335,
           "overall": 5.666666666666667,
-          "rankPct": 0.2916666666666667
+          "rankPct": 0.24242424242424243
+        }
+      }
+    },
+    {
+      "id": "roastline--web-ui-design-0.2--1",
+      "brief": "roastline",
+      "arm": "web-ui-design-0.2",
+      "rep": "1",
+      "cost": 0.2934477,
+      "wall_s": 102,
+      "turns": 11,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design",
+        "dataviz"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": false,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 7,
+          "fit": 8,
+          "hierarchy": 7,
+          "mobile": 4,
+          "overall": 6,
+          "defects": [
+            "Lacks any primary action buttons (such as logging a roast batch or green delivery) on the dashboard",
+            "Includes literal 'sample data' text in the header subtitle and page footer",
+            "Mobile top navigation clips on the right, and all three full-width tables overflow horizontally, cutting off 2 to 3 columns each",
+            "Mobile roast curve SVG internal text labels shrink to very small size, and desktop sidebar user profile floats mid-page on full scroll"
+          ],
+          "note": "Rich coffee-toned palette and informative dual-axis roast curve paired with clear alerts, but missing primary action triggers and wide tables clip badly on mobile.",
+          "rankPct": 0.4545454545454546
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 9,
+          "hierarchy": 8,
+          "mobile": 5,
+          "overall": 7,
+          "defects": [
+            "Mobile inventory, batch, and wholesale tables crop right-hand columns.",
+            "The mobile navigation extends beyond the viewport."
+          ],
+          "note": "Compact editorial styling and detailed roast instrumentation feel purpose-built, although mobile table adaptation is incomplete.",
+          "rankPct": 0.6363636363636364
+        },
+        "opus-5-5": {
+          "craft": 8,
+          "fit": 9,
+          "hierarchy": 8,
+          "mobile": 5,
+          "overall": 8,
+          "defects": [
+            "Sidebar background stops at 900px on the full page",
+            "Monospace KPI figures with a floating '7 · $4,806' separator look slightly awkward",
+            "Mobile: roast curve chart becomes tiny and its labels are unreadable",
+            "Mobile: inventory, batches and orders tables are clipped on the right",
+            "Mobile: top nav is cut off"
+          ],
+          "note": "Feels made for a roastery (live roast curve with phases, cover in weeks, a strong attention list), let down by clipped tables on mobile.",
+          "rankPct": 0.8181818181818181
+        },
+        "panel": {
+          "craft": 7.666666666666667,
+          "fit": 8.666666666666666,
+          "hierarchy": 7.666666666666667,
+          "mobile": 4.666666666666667,
+          "overall": 7,
+          "rankPct": 0.6363636363636364
+        }
+      }
+    },
+    {
+      "id": "roastline--web-ui-design-0.2--2",
+      "brief": "roastline",
+      "arm": "web-ui-design-0.2",
+      "rep": "2",
+      "cost": 0.29828730000000003,
+      "wall_s": 103,
+      "turns": 14,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design",
+        "dataviz"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": true,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "Includes literal 'Sample data' meta-text in the page subtitle and 'All figures are sample data for design review' in the footer",
+            "Mobile wholesale orders table overflows horizontally, clipping the rightmost Status column",
+            "Desktop sidebar footer metadata floats mid-page around 900px viewport height on full scroll"
+          ],
+          "note": "Well-structured warm roastery workspace that balances inventory, orders, and live drum status effectively, with only minor mobile table clipping and literal sample-data labels.",
+          "rankPct": 0.8181818181818181
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 9,
+          "hierarchy": 8,
+          "mobile": 6,
+          "overall": 8,
+          "defects": [
+            "The mobile wholesale table clips right-hand columns, so its full order information is not visible."
+          ],
+          "note": "A well-composed roastery workspace combines inventory, live roasting, and actionable operational details with strong domain specificity.",
+          "rankPct": 0.7272727272727273
+        },
+        "opus-5-5": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 7,
+          "mobile": 6,
+          "overall": 7,
+          "defects": [
+            "Needs attention panel sits at the bottom right, far below the fold",
+            "Large empty region in the left column below Wholesale orders",
+            "Sidebar background stops at 900px",
+            "Pale 'Roasting' and 'On drum' status dots are barely visible",
+            "Mobile: orders table Status column is clipped, and the inventory table drops the Cover column"
+          ],
+          "note": "Calm, well-crafted roastery dashboard with an on-the-drum curve and cover-in-weeks inventory, but alerts are buried at the bottom.",
+          "rankPct": 0.7272727272727273
+        },
+        "panel": {
+          "craft": 8,
+          "fit": 8.333333333333334,
+          "hierarchy": 7.666666666666667,
+          "mobile": 6.333333333333333,
+          "overall": 7.333333333333333,
+          "rankPct": 0.7575757575757575
+        }
+      }
+    },
+    {
+      "id": "roastline--web-ui-design-0.2--3",
+      "brief": "roastline",
+      "arm": "web-ui-design-0.2",
+      "rep": "3",
+      "cost": 0.3439257,
+      "wall_s": 123,
+      "turns": 12,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design",
+        "dataviz"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": false,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 7,
+          "fit": 8,
+          "hierarchy": 7,
+          "mobile": 5,
+          "overall": 6,
+          "defects": [
+            "Includes literal 'sample data' meta-text in the header subtitle and page footer",
+            "Desktop 'Roasted per day' card has awkward empty space below the caption and green inventory bullet bars are cramped",
+            "Mobile top navigation clips 'Customers' on the right edge, and the live roast SVG labels shrink to tiny text",
+            "Mobile green bean inventory and wholesale orders tables overflow horizontally, cutting off the Status column in both"
+          ],
+          "note": "Capable roastery dashboard featuring a detailed live roast curve and daily output goal, tempered by cramped inventory bars and clipped mobile tables.",
+          "rankPct": 0.5454545454545454
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 9,
+          "hierarchy": 9,
+          "mobile": 6,
+          "overall": 8,
+          "defects": [
+            "The mobile inventory table clips its rightmost stock-status information.",
+            "The mobile wholesale table clips right-hand order columns."
+          ],
+          "note": "An unusually convincing live-roast chart and telemetry establish immediate roastery relevance and a strong operational hierarchy.",
+          "rankPct": 0.9090909090909091
+        },
+        "opus-5-5": {
+          "craft": 8,
+          "fit": 9,
+          "hierarchy": 8,
+          "mobile": 5,
+          "overall": 8,
+          "defects": [
+            "The '118' bar label collides with the dashed goal line",
+            "Today's roasts card leaves empty space at the bottom",
+            "Mobile: live roast chart shrinks so far that the axis and annotations are unreadable",
+            "Mobile: inventory and orders tables are clipped on the right (Cover and Ship by columns)",
+            "Mobile: nav is cut off"
+          ],
+          "note": "Strong, credible roastery tool: a live roast against a reference profile, coherent warm palette and clear status badges; mobile tables and chart need work.",
+          "rankPct": 0.9090909090909091
+        },
+        "panel": {
+          "craft": 7.666666666666667,
+          "fit": 8.666666666666666,
+          "hierarchy": 8,
+          "mobile": 5.333333333333333,
+          "overall": 7.333333333333333,
+          "rankPct": 0.787878787878788
         }
       }
     },
@@ -1561,60 +2215,59 @@
         "frontend-design"
       ],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 1,
+      "contrastNodes": 1,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 6,
           "fit": 6,
-          "hierarchy": 7,
-          "mobile": 6,
+          "hierarchy": 6,
+          "mobile": 5,
           "overall": 6,
           "defects": [
-            "Two-column split offering card has uneven content height, leaving blank space and unaligned CTA buttons in the right column on desktop",
-            "Section heading 'Two ways to work with clay' wraps 'clay' as a single orphan word on desktop",
-            "Mobile header wraps both the brand name ('Slow / Clay') and the last nav link ('Get in / touch')",
-            "Mobile select input truncates 'Wheel-throwing course - Tuesday mornings' mid-word"
+            "On mobile, navbar brand 'Slow Clay' and link 'Get in touch' both wrap awkwardly onto two lines",
+            "On mobile, the 'I'm interested in' select option text is truncated ('Tuesday morni')",
+            "In the desktop split pricing card, the right-side CTA button floats higher than the left-side CTA button",
+            "At the 1440x900 desktop fold, the 'Two ways to work with clay' heading is sliced horizontally mid-line"
           ],
-          "note": "The interactive pot illustration and split-color offering card are promising, but uneven card alignment, mobile header wrapping, and truncated select text hurt execution.",
-          "rankPct": 0.5
+          "note": "Nice editorial serif pairing and arch-framed ribbed vessel, but marred by mobile header wrapping, select text truncation, and unaligned card buttons.",
+          "rankPct": 0.36363636363636365
         },
         "gpt-6-1-sol": {
           "craft": 8,
-          "fit": 8,
-          "hierarchy": 9,
-          "mobile": 7,
+          "fit": 7,
+          "hierarchy": 8,
+          "mobile": 8,
           "overall": 8,
-          "defects": [
-            "The mobile header wraps both the wordmark and the contact button onto two lines, making the navigation cramped."
-          ],
-          "note": "Confident navy-and-orange art direction and clear offer differentiation make this persuasive, although the mobile header needs refinement.",
-          "rankPct": 0.625
+          "defects": [],
+          "note": "Clean spacing, clear offers and a coherent blue illustration system make this easy to use, though the visual identity feels more digital than tactile.",
+          "rankPct": 0.5454545454545454
         },
         "opus-5-5": {
           "craft": 7,
-          "fit": 6,
+          "fit": 7,
           "hierarchy": 8,
           "mobile": 6,
-          "overall": 6,
+          "overall": 7,
           "defects": [
-            "Mobile nav wraps 'Slow Clay' and 'Get in touch' onto two lines",
+            "Mobile nav: 'Slow Clay' and 'Get in touch' both wrap to two lines",
             "Mobile select text is truncated ('Tuesday morni')",
-            "Stray light crack line across the pot looks like a rendering artifact",
-            "Heavy compressed grotesk and cobalt feel loud for a 'slow' studio"
+            "Large empty left area under the desktop contact heading"
           ],
-          "note": "A bold headline, an interactive pot and a strong split offer block give it energy, but the tone fights the brand's slowness and mobile has rough edges.",
-          "rankPct": 0.375
+          "note": "Distinctive heavy type and a draggable glazed pot give it personality, but the content is thin and the mobile header is cramped.",
+          "rankPct": 0.36363636363636365
         },
         "panel": {
           "craft": 7,
           "fit": 6.666666666666667,
-          "hierarchy": 8,
+          "hierarchy": 7.333333333333333,
           "mobile": 6.333333333333333,
-          "overall": 6.666666666666667,
-          "rankPct": 0.5
+          "overall": 7,
+          "rankPct": 0.42424242424242425
         }
       }
     },
@@ -1632,57 +2285,57 @@
         "frontend-design"
       ],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 0,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
+          "craft": 6,
+          "fit": 6,
+          "hierarchy": 6,
+          "mobile": 5,
+          "overall": 6,
+          "defects": [
+            "Desktop hero headline wraps awkwardly across five short lines in a narrow left column",
+            "On mobile, the 'Course' navigation link disappears while 'Open studio' and 'Sign up' remain visible",
+            "Mobile hero CTA buttons stack with mismatched widths"
+          ],
+          "note": "Features nice pill toggles in the contact form and an arch-framed interactive pot, but suffers from a cramped five-line desktop headline and inconsistent mobile nav links.",
+          "rankPct": 0.2727272727272727
+        },
+        "gpt-6-1-sol": {
+          "craft": 7,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [],
+          "note": "The oversized headline and blue vessel create a confident identity, with clear prices and course structure, although the heavy typography feels less relaxed.",
+          "rankPct": 0.4545454545454546
+        },
+        "opus-5-5": {
           "craft": 7,
           "fit": 7,
           "hierarchy": 8,
           "mobile": 7,
           "overall": 7,
           "defects": [
-            "Section heading 'Six weeks at the wheel' introduces both the 6-week course and the monthly open-studio membership",
-            "Large empty vertical gap above the bottom-aligned button in the desktop Open-studio membership card",
-            "Mobile navigation bar omits the Course link while keeping Open studio and Sign up",
-            "8 student-cap dots in the mobile course card force '8 students max' to wrap onto two cramped lines"
+            "Course section is titled 'Six weeks at the wheel' but also holds the membership card",
+            "Empty column under the contact heading on desktop"
           ],
-          "note": "Expressive typography and a clever interactive vessel slider give this page personality, though the cool cobalt-and-sage palette and minor card and mobile alignment issues hold it slightly back.",
-          "rankPct": 0.75
-        },
-        "gpt-6-1-sol": {
-          "craft": 9,
-          "fit": 9,
-          "hierarchy": 8,
-          "mobile": 9,
-          "overall": 9,
-          "defects": [],
-          "note": "Distinctive mint-and-cobalt art direction, expressive typography, a pottery-shaping control, and carefully adapted mobile layouts make this the strongest overall execution.",
-          "rankPct": 1
-        },
-        "opus-5-5": {
-          "craft": 8,
-          "fit": 8,
-          "hierarchy": 8,
-          "mobile": 8,
-          "overall": 8,
-          "defects": [
-            "The 'Six weeks at the wheel' heading sits over both cards, so it mislabels the membership card",
-            "Mobile nav drops the Course link",
-            "Electric cobalt pot reads more as a tech accent than glazed clay"
-          ],
-          "note": "A confident serif headline, an arched interactive pot with a bowl-to-vase slider, eight seat dots for class size and a chip-based form give it real character and clear calls to action.",
-          "rankPct": 0.875
+          "note": "Characterful serif, an interactive pot, seat circles and chip pickers give it warmth and clear actions.",
+          "rankPct": 0.8181818181818181
         },
         "panel": {
-          "craft": 8,
-          "fit": 8,
-          "hierarchy": 8,
-          "mobile": 8,
-          "overall": 8,
-          "rankPct": 0.875
+          "craft": 6.666666666666667,
+          "fit": 7,
+          "hierarchy": 7.333333333333333,
+          "mobile": 6.333333333333333,
+          "overall": 6.666666666666667,
+          "rankPct": 0.5151515151515151
         }
       }
     },
@@ -1700,8 +2353,10 @@
         "frontend-design"
       ],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 0,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
@@ -1712,47 +2367,46 @@
           "mobile": 6,
           "overall": 6,
           "defects": [
-            "Desktop 'Save a spot' contact form occupies only the left ~40% of its full-width section, leaving the right ~60% completely blank",
-            "Contact form uses tiny unstyled native browser radio buttons",
-            "Mobile header wraps awkwardly on both sides ('Slow / Clay' on the left and 'Sign / up' on the right)"
+            "On mobile, navbar brand 'Slow Clay' and link 'Sign up' both wrap onto two lines",
+            "On desktop, the 'Save a spot' contact section is left-aligned in a narrow column, leaving the right half of the band empty",
+            "Unstyled browser-default radio buttons in the contact form"
           ],
-          "note": "Strong full-width editorial bands for the course and membership are undermined by a lopsided desktop contact section and wrapped mobile header links.",
-          "rankPct": 0.375
+          "note": "Warm celadon-and-espresso palette with characterful serif typography and full-width offering bands, let down by a half-empty desktop form section and mobile nav wrapping.",
+          "rankPct": 0.5454545454545454
         },
         "gpt-6-1-sol": {
-          "craft": 9,
-          "fit": 9,
-          "hierarchy": 9,
-          "mobile": 8,
-          "overall": 9,
-          "defects": [
-            "The mobile wordmark and 'Sign up' navigation item each wrap onto two lines."
-          ],
-          "note": "Expressive typography, a tactile pottery motif, and strongly differentiated offers make this one of the most memorable and client-specific designs.",
-          "rankPct": 0.875
-        },
-        "opus-5-5": {
           "craft": 7,
           "fit": 7,
           "hierarchy": 7,
           "mobile": 6,
           "overall": 7,
           "defects": [
-            "Mobile nav wraps 'Slow Clay' and 'Sign up' onto two lines each",
-            "Desktop sign-up form uses only the left half, leaving a large empty region",
-            "Course price repeats in the heading and the spec table",
-            "Saturated blue pot is an odd match for a clay studio"
+            "The brand name and top-right call to action wrap awkwardly across multiple lines in the mobile header.",
+            "The desktop contact form occupies a narrow left column with a large unused area to its right."
           ],
-          "note": "Distinctive serif type, a drag-to-shape pot and clean spec tables give it personality, but the half-empty form section and cramped mobile nav reduce polish.",
-          "rankPct": 0.5
+          "note": "The restrained green palette and bold vessel graphic establish a direction, but awkward mobile header wrapping and uneven composition weaken the execution.",
+          "rankPct": 0.2727272727272727
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 7,
+          "hierarchy": 8,
+          "mobile": 6,
+          "overall": 7,
+          "defects": [
+            "Mobile nav wraps: logo splits over two lines and 'Sign up' breaks",
+            "Desktop form fills only the left half, leaving a large empty right side"
+          ],
+          "note": "Bold serif and alternating full-bleed offer bands give strong presence, but the mobile header and the form layout are rough.",
+          "rankPct": 0.5454545454545454
         },
         "panel": {
-          "craft": 7.333333333333333,
-          "fit": 7.666666666666667,
-          "hierarchy": 7.666666666666667,
-          "mobile": 6.666666666666667,
-          "overall": 7.333333333333333,
-          "rankPct": 0.5833333333333334
+          "craft": 6.666666666666667,
+          "fit": 7,
+          "hierarchy": 7.333333333333333,
+          "mobile": 6,
+          "overall": 6.666666666666667,
+          "rankPct": 0.45454545454545453
         }
       }
     },
@@ -1768,59 +2422,59 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 3,
+      "contrastNodes": 3,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 5,
           "fit": 5,
-          "hierarchy": 5,
+          "hierarchy": 6,
           "mobile": 6,
           "overall": 5,
           "defects": [
-            "No imagery or illustrations anywhere on the page",
-            "Key pricing and class-size details sit below the initial desktop fold with only the top edges of the cards peeking through",
-            "Uses default browser disclosure triangles and an unstyled native select input"
+            "No imagery, illustration, or bespoke visual craft anywhere on the page",
+            "At the 1440x900 desktop fold, only the blank top edges of the two offering cards peek into view"
           ],
-          "note": "A clean but generic centered template that uses warm earthy colors yet lacks any visual assets or bespoke layout craft.",
-          "rankPct": 0.25
+          "note": "A competent, defect-free generic centered template with warm terracotta colors but zero imagery or studio-specific visual craft.",
+          "rankPct": 0.09090909090909094
         },
         "gpt-6-1-sol": {
-          "craft": 5,
+          "craft": 6,
+          "fit": 5,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 6,
+          "defects": [
+            "Desktop supporting copy and navigation are noticeably small relative to the surrounding space."
+          ],
+          "note": "A straightforward warm-toned layout presents the offers clearly and stacks sensibly on mobile, but lacks a distinctive visual connection to the studio.",
+          "rankPct": 0.18181818181818177
+        },
+        "opus-5-5": {
+          "craft": 6,
           "fit": 5,
           "hierarchy": 7,
           "mobile": 6,
           "overall": 5,
           "defects": [
-            "Large empty bands around the desktop offerings and questions headings weaken the page's visual continuity."
+            "No imagery anywhere; the hero is an empty gradient",
+            "Mobile nav shows only 'Contact'",
+            "FAQ shows collapsed questions only"
           ],
-          "note": "The essential studio information and actions are easy to find, but the generic serif-and-card treatment provides little sense of a particular pottery studio.",
-          "rankPct": 0.125
-        },
-        "opus-5-5": {
-          "craft": 5,
-          "fit": 4,
-          "hierarchy": 6,
-          "mobile": 6,
-          "overall": 5,
-          "defects": [
-            "No imagery anywhere; the hero is just text on a gradient",
-            "Headings use a default Times-style fallback serif",
-            "Mobile nav shows only Contact",
-            "FAQ items are bare default disclosure triangles"
-          ],
-          "note": "A competent but generic terracotta template with cards, a how-it-works strip and an FAQ, but nothing that makes it feel like this particular studio.",
-          "rankPct": 0.25
+          "note": "Clean but generic centered template that could be any warm-toned business.",
+          "rankPct": 0.09090909090909094
         },
         "panel": {
-          "craft": 5,
-          "fit": 4.666666666666667,
-          "hierarchy": 6,
-          "mobile": 6,
-          "overall": 5,
-          "rankPct": 0.20833333333333334
+          "craft": 5.666666666666667,
+          "fit": 5,
+          "hierarchy": 6.666666666666667,
+          "mobile": 6.333333333333333,
+          "overall": 5.333333333333333,
+          "rankPct": 0.12121212121212122
         }
       }
     },
@@ -1836,60 +2490,60 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 5,
+      "contrastNodes": 5,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 4,
+          "craft": 5,
           "fit": 5,
-          "hierarchy": 5,
-          "mobile": 5,
-          "overall": 4,
+          "hierarchy": 6,
+          "mobile": 6,
+          "overall": 5,
           "defects": [
-            "Full-width pill buttons ('Reserve a spot' and 'Become a member') have left-aligned text instead of centered labels on both desktop and mobile",
-            "Large empty gap above the button in the desktop Open-Studio Membership card",
-            "Desktop 'Get in touch' section places the form on the left and leaves the entire right half of the dark band empty",
-            "Oversized terracotta block in the middle section contains a tiny, placeholder-like vase silhouette"
+            "On desktop, the dark 'Get in touch' section places all content in the left half, leaving the entire right half of the band empty",
+            "The studio visual is a tiny vase icon floating inside a large solid terracotta square that reads like a placeholder"
           ],
-          "note": "Left-aligned text inside full-width pill buttons, an unbalanced half-empty desktop contact section, and a placeholder-like icon block make this page feel unfinished.",
-          "rankPct": 0.125
+          "note": "A warm-toned generic template weakened by a placeholder-like icon block and a half-empty desktop contact section.",
+          "rankPct": 0.18181818181818177
         },
         "gpt-6-1-sol": {
           "craft": 6,
-          "fit": 6,
+          "fit": 5,
           "hierarchy": 7,
           "mobile": 6,
           "overall": 6,
           "defects": [
-            "Muted placeholder text has weak contrast against the dark contact-form fields."
+            "The desktop contact section leaves a large unused area beside the narrow form.",
+            "The mobile header navigation is very small."
           ],
-          "note": "A calm, readable presentation covers the brief, but the hazy gradient hero and conventional card layout feel more generic than crafted for Slow Clay.",
-          "rankPct": 0.25
+          "note": "Warm colors and straightforward offer cards communicate the brief, but the generic centered hero and conventional styling provide little studio-specific character.",
+          "rankPct": 0.09090909090909094
         },
         "opus-5-5": {
-          "craft": 5,
-          "fit": 4,
-          "hierarchy": 6,
-          "mobile": 6,
-          "overall": 5,
+          "craft": 6,
+          "fit": 6,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 6,
           "defects": [
-            "Studio section image is a flat placeholder vase icon on a terracotta block",
-            "Default Times-style serif headings mixed with a sans body",
-            "Membership card has an empty gap above its button",
-            "Desktop contact form fills only the left half of a dark section"
+            "Studio image is a placeholder vase silhouette on a flat tile",
+            "Contact form takes the left half only, leaving the dark right side empty",
+            "Body text mixes fallback serif and sans fonts"
           ],
-          "note": "A tidy, warm generic template with a placeholder illustration and fallback type; usable, but it reads as a stock theme.",
-          "rankPct": 0.125
+          "note": "Warm, pleasant template with a nice italic accent but placeholder-level imagery.",
+          "rankPct": 0.18181818181818177
         },
         "panel": {
-          "craft": 5,
-          "fit": 5,
-          "hierarchy": 6,
-          "mobile": 5.666666666666667,
-          "overall": 5,
-          "rankPct": 0.16666666666666666
+          "craft": 5.666666666666667,
+          "fit": 5.333333333333333,
+          "hierarchy": 6.666666666666667,
+          "mobile": 6.333333333333333,
+          "overall": 5.666666666666667,
+          "rankPct": 0.1515151515151515
         }
       }
     },
@@ -1905,8 +2559,10 @@
       "armSkillUsed": false,
       "skillsUsed": [],
       "rendered": false,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 4,
+      "contrastNodes": 4,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
@@ -1914,50 +2570,50 @@
           "craft": 4,
           "fit": 4,
           "hierarchy": 5,
-          "mobile": 4,
+          "mobile": 5,
           "overall": 4,
           "defects": [
-            "Mobile header crams 'Slow Clay' and all four navigation links onto one line with almost no separation",
-            "Display heading 'Why \"slow\"?' uses straight ASCII quotation marks instead of typographic quotes",
-            "No imagery, illustration, or visual anchor anywhere on the page",
-            "Unstyled native select control and default browser disclosure triangles"
+            "On mobile (390px), the navbar crams the brand name and all four nav links onto a single crowded line",
+            "No illustrations or visual elements anywhere on the page",
+            "In the 'Why slow?' section, step descriptions are tiny and stack awkwardly on mobile",
+            "Both offering cards use identical filled primary CTA buttons with no visual differentiation"
           ],
-          "note": "A barebones centered template with heavy card shadows, straight quotes in a display heading, a cramped mobile header, and no visual craft.",
+          "note": "A bare-bones centered template with no visuals, crowded mobile navigation, tiny process labels, and undifferentiated card CTAs.",
           "rankPct": 0
         },
         "gpt-6-1-sol": {
           "craft": 5,
           "fit": 5,
-          "hierarchy": 6,
-          "mobile": 5,
+          "hierarchy": 7,
+          "mobile": 6,
           "overall": 5,
           "defects": [
-            "Mobile navigation labels are very small and tightly packed beside the wordmark.",
-            "The mobile process section stretches four short labels across a disproportionately tall, mostly empty band."
+            "A large, nearly empty band beneath the desktop hero buttons separates the introduction from the offers.",
+            "The mobile navigation is very small and crowded."
           ],
-          "note": "The basic information is present and readable, but default-looking typography, excessive spacing, and a weak mobile header make this feel like an unfinished template.",
+          "note": "The essential offer is understandable, but default-looking typography, plain cards and an empty hero treatment feel like a competent generic template.",
           "rankPct": 0
         },
         "opus-5-5": {
-          "craft": 4,
-          "fit": 4,
-          "hierarchy": 5,
+          "craft": 5,
+          "fit": 5,
+          "hierarchy": 6,
           "mobile": 5,
           "overall": 4,
           "defects": [
-            "Mobile nav jams the logo against four links with no spacing",
-            "'Why slow?' steps are large numerals with tiny unreadable captions",
-            "No imagery; the hero is a large, mostly empty gradient band",
-            "Default fallback serif throughout and unstyled FAQ disclosure triangles"
+            "Mobile header crams logo and four links into one tight row",
+            "Default Times-style body font looks unstyled",
+            "'Why slow' steps are tiny numbered labels with little content",
+            "No imagery"
           ],
-          "note": "The most template-like page, with weak typography, thin step content and a cramped mobile header.",
+          "note": "Generic template with a weak hero and default-looking typography.",
           "rankPct": 0
         },
         "panel": {
-          "craft": 4.333333333333333,
-          "fit": 4.333333333333333,
-          "hierarchy": 5.333333333333333,
-          "mobile": 4.666666666666667,
+          "craft": 4.666666666666667,
+          "fit": 4.666666666666667,
+          "hierarchy": 6,
+          "mobile": 5.333333333333333,
           "overall": 4.333333333333333,
           "rankPct": 0
         }
@@ -1977,54 +2633,55 @@
         "web-ui-design"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 0,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
-          "craft": 9,
-          "fit": 9,
-          "hierarchy": 9,
-          "mobile": 9,
-          "overall": 9,
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 8,
+          "overall": 8,
           "defects": [
-            "Hero vessel shelf illustration is bottom-aligned with the text column on desktop, leaving open space in the upper-right quadrant"
+            "On desktop, the three-vessel shelf illustration sits low in the right hero column, leaving open space above it"
           ],
-          "note": "Warm stoneware and terracotta tones, editorial typography, a composed three-vessel still life, equal-height spec cards, and a thoughtful comparison band make this feel custom-built for Slow Clay.",
+          "note": "The strongest page in the set, combining a warm ceramic glaze-and-clay palette, refined editorial typography, structured offering spec tables, and a flawless mobile layout.",
           "rankPct": 1
         },
         "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 9,
+          "hierarchy": 8,
+          "mobile": 8,
+          "overall": 8,
+          "defects": [],
+          "note": "Warm editorial typography, earthy colors and pottery illustrations give the studio a convincing identity while keeping both offers understandable.",
+          "rankPct": 0.9090909090909091
+        },
+        "opus-5-5": {
           "craft": 7,
           "fit": 8,
           "hierarchy": 8,
           "mobile": 7,
-          "overall": 7,
-          "defects": [],
-          "note": "The illustrated shelf, earthy palette, and helpful course-versus-membership comparison suit the business, though the typography and composition are less refined than the leaders.",
-          "rankPct": 0.375
-        },
-        "opus-5-5": {
-          "craft": 6,
-          "fit": 7,
-          "hierarchy": 8,
-          "mobile": 7,
-          "overall": 7,
+          "overall": 8,
           "defects": [
-            "Headings render in a fallback Times-style serif and body in a default sans, so the type looks unstyled",
-            "Hero illustration sits low with empty space above it, misaligned with the headline",
-            "Hero bullet list wraps unevenly"
+            "Hero illustration is pinned to the bottom of its column, leaving an empty block top-right on desktop",
+            "Large empty area under the contact intro on desktop"
           ],
-          "note": "A warm palette, a fitting shelf-of-pots illustration, clear offer cards and a helpful 'which one is you' section, held back by default-looking fonts.",
-          "rankPct": 0.625
+          "note": "Earthy palette, a shelf-of-pots illustration and a 'which one is you' section fit the brief closely and read clearly.",
+          "rankPct": 0.9090909090909091
         },
         "panel": {
-          "craft": 7.333333333333333,
-          "fit": 8,
-          "hierarchy": 8.333333333333334,
+          "craft": 7.666666666666667,
+          "fit": 8.333333333333334,
+          "hierarchy": 8,
           "mobile": 7.666666666666667,
-          "overall": 7.666666666666667,
-          "rankPct": 0.6666666666666666
+          "overall": 8,
+          "rankPct": 0.9393939393939394
         }
       }
     },
@@ -2042,34 +2699,34 @@
         "web-ui-design"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 1,
+      "contrastNodes": 1,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 8,
-          "fit": 9,
-          "hierarchy": 9,
-          "mobile": 8,
+          "fit": 8,
+          "hierarchy": 8,
+          "mobile": 7,
           "overall": 8,
           "defects": [
-            "Desktop 'TWO WAYS IN' section heading is constrained to a narrow column that wraps onto four short lines with empty space beside it",
-            "Side-by-side course and membership cards on desktop have slightly unequal heights so their bottom edges do not align",
-            "Hero vessel illustration on mobile is left-aligned rather than centered above the headline"
+            "On mobile, the hero pot SVG sits above the headline and is left-aligned rather than centered in the column"
           ],
-          "note": "Rich terracotta-and-sand editorial direction, an above-the-fold key-facts strip, and segmented form controls make this a standout studio page with only minor alignment flaws.",
-          "rankPct": 0.875
+          "note": "Warm terracotta-and-linen editorial design with an immediately scannable four-stat bar above the fold and polished segmented form toggles.",
+          "rankPct": 0.9090909090909091
         },
         "gpt-6-1-sol": {
           "craft": 8,
           "fit": 9,
-          "hierarchy": 8,
+          "hierarchy": 9,
           "mobile": 8,
           "overall": 8,
           "defects": [],
-          "note": "Warm editorial typography, a restrained pottery illustration, and well-organized offers give the studio a convincing, quietly distinctive identity.",
-          "rankPct": 0.75
+          "note": "Elegant serif typography, a terracotta vessel and concise offer cards form the most cohesive expression of a small, unhurried pottery studio.",
+          "rankPct": 1
         },
         "opus-5-5": {
           "craft": 8,
@@ -2078,19 +2735,18 @@
           "mobile": 8,
           "overall": 8,
           "defects": [
-            "Prices do not appear above the desktop fold, though the fact strip covers the key details",
-            "Section headline 'Start with a course, or just bring your hands.' wraps into a narrow four-line column, leaving the right side empty"
+            "'Start with a course' heading wraps into a narrow four-line column on desktop, leaving the right half empty"
           ],
-          "note": "Refined serif type, a warm terracotta vase, a useful fact strip and clear contrasting offer cards make a page that feels made for a calm craft studio.",
+          "note": "Refined editorial serif, a terracotta pot, a fact strip and warm copy make it feel like a real craft studio, and it holds up well on mobile.",
           "rankPct": 1
         },
         "panel": {
           "craft": 8,
-          "fit": 8.666666666666666,
+          "fit": 8.333333333333334,
           "hierarchy": 8.333333333333334,
-          "mobile": 8,
+          "mobile": 7.666666666666667,
           "overall": 8,
-          "rankPct": 0.875
+          "rankPct": 0.9696969696969697
         }
       }
     },
@@ -2108,24 +2764,91 @@
         "web-ui-design"
       ],
       "rendered": true,
+      "checker": false,
       "designMd": false,
       "axeSeriousCritical": 0,
+      "contrastNodes": 0,
       "mobileOverflow": false,
       "jsErrors": 0,
       "scores": {
         "gemini-4-argon": {
           "craft": 7,
           "fit": 6,
+          "hierarchy": 7,
+          "mobile": 8,
+          "overall": 7,
+          "defects": [
+            "Flat geometric vector vase and cold ice-blue palette feel sterile for a tactile ceramics studio"
+          ],
+          "note": "Clean grid discipline, bottom-aligned card CTAs, and a clear week-by-week schedule table, though the flat blue vector pot and icy palette lack warmth.",
+          "rankPct": 0.7272727272727273
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 9,
+          "mobile": 9,
+          "overall": 8,
+          "defects": [],
+          "note": "Expressive typography, an unmistakable pottery graphic and highly legible offer cards deliver a strong hierarchy that translates especially well to mobile.",
+          "rankPct": 0.8181818181818181
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 6,
           "hierarchy": 8,
           "mobile": 7,
           "overall": 7,
           "defects": [
-            "Large empty vertical gap between the bullet list and the bottom button inside the dark Open-studio membership card on desktop",
-            "Cool white, ice-blue-gray, and royal-blue palette with heavy grotesque sans-serif feels more like a tech product than a tactile pottery studio",
-            "Mobile hero and course card pill tags stack left-aligned at uneven widths"
+            "Membership card has a large empty middle",
+            "Cool blue-gray palette feels more tech than ceramics"
           ],
-          "note": "Well-organized information architecture and a helpful six-week curriculum breakdown are paired with a cold corporate blue palette that misses the warmth of a clay studio.",
-          "rankPct": 0.625
+          "note": "Well organized, with a curriculum, a studio summary and day chips, but the look is closer to a generic startup than a pottery studio.",
+          "rankPct": 0.4545454545454546
+        },
+        "panel": {
+          "craft": 7.333333333333333,
+          "fit": 6.666666666666667,
+          "hierarchy": 8,
+          "mobile": 8,
+          "overall": 7.333333333333333,
+          "rankPct": 0.6666666666666666
+        }
+      }
+    },
+    {
+      "id": "slow-clay--web-ui-design-0.2--1",
+      "brief": "slow-clay",
+      "arm": "web-ui-design-0.2",
+      "rep": "1",
+      "cost": 0.24975179999999997,
+      "wall_s": 86,
+      "turns": 10,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": true,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 6,
+          "fit": 6,
+          "hierarchy": 7,
+          "mobile": 6,
+          "overall": 6,
+          "defects": [
+            "Large empty vertical gap inside the desktop 'Open-studio membership' card between the short bullet list and bottom CTA button",
+            "Mobile hero CTA buttons stack at uneven intrinsic widths"
+          ],
+          "note": "Clear asymmetric offering split and interactive pot concept, but the rudimentary vector illustration and cold mint-and-cobalt palette feel generic.",
+          "rankPct": 0.4545454545454546
         },
         "gpt-6-1-sol": {
           "craft": 8,
@@ -2134,30 +2857,167 @@
           "mobile": 8,
           "overall": 8,
           "defects": [],
-          "note": "An airy editorial layout, illustrated pottery, and legible course and membership cards create a polished, appropriately unhurried landing page.",
-          "rankPct": 0.5
+          "note": "Consistent blue accents, a recognizable pottery illustration and well-organized offer sections make this a credible and responsive studio page.",
+          "rankPct": 0.6363636363636364
         },
         "opus-5-5": {
-          "craft": 8,
+          "craft": 7,
           "fit": 6,
+          "hierarchy": 8,
+          "mobile": 7,
+          "overall": 6,
+          "defects": [
+            "Pot render is blobby, like a sack on a dark disc",
+            "Square blue buttons and sliders read as a software UI"
+          ],
+          "note": "Clear and competent, but the slider widget and corporate blue make it feel like a product page rather than a studio.",
+          "rankPct": 0.2727272727272727
+        },
+        "panel": {
+          "craft": 7,
+          "fit": 6.666666666666667,
+          "hierarchy": 7.666666666666667,
+          "mobile": 7,
+          "overall": 6.666666666666667,
+          "rankPct": 0.45454545454545453
+        }
+      }
+    },
+    {
+      "id": "slow-clay--web-ui-design-0.2--2",
+      "brief": "slow-clay",
+      "arm": "web-ui-design-0.2",
+      "rep": "2",
+      "cost": 0.27837629999999997,
+      "wall_s": 101,
+      "turns": 12,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": true,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 7,
+          "fit": 6,
+          "hierarchy": 7,
+          "mobile": 6,
+          "overall": 7,
+          "defects": [
+            "Hero illustration of concentric circles with an orbiting blue dot looks like a solar-system diagram rather than a pottery wheel",
+            "On mobile, the abstract concentric-circle graphic appears above the headline before any context is given",
+            "Mobile hero CTA buttons stack with uneven widths"
+          ],
+          "note": "Clever interactive 6-week clay stage switcher and strong editorial section variety, but the planetary-orbit hero diagram confuses the pottery theme.",
+          "rankPct": 0.6363636363636364
+        },
+        "gpt-6-1-sol": {
+          "craft": 7,
+          "fit": 7,
+          "hierarchy": 7,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "The large circular illustration comes before the headline on mobile, pushing the explanation and primary actions down the page."
+          ],
+          "note": "Strong typography and clear course details work well, but the abstract hero graphic is less immediately expressive of a small pottery studio.",
+          "rankPct": 0.36363636363636365
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 7,
           "hierarchy": 8,
           "mobile": 7,
           "overall": 7,
           "defects": [
-            "Membership card has a large empty region above its button",
-            "Cool gray-blue palette feels like a SaaS template rather than a pottery studio",
-            "Mobile hero vase is small and floats under the CTAs"
+            "Hero rings graphic is abstract and reads as a target more than a wheel",
+            "Week-stepper pot is a flat beige dome",
+            "Mobile hero puts the graphic above the headline, pushing the offer down"
           ],
-          "note": "Tight grotesk type and the most useful content (week-by-week arc, seat dots, day chips) are well executed, but the cold palette weakens the sense of a clay studio.",
-          "rankPct": 0.75
+          "note": "Thoughtful content (fact strip, week-by-week stepper, chooser) in a tidy grotesk layout, but the visuals are abstract and cool-toned.",
+          "rankPct": 0.6363636363636364
         },
         "panel": {
-          "craft": 7.666666666666667,
+          "craft": 7,
           "fit": 6.666666666666667,
+          "hierarchy": 7.333333333333333,
+          "mobile": 6.666666666666667,
+          "overall": 7,
+          "rankPct": 0.5454545454545454
+        }
+      }
+    },
+    {
+      "id": "slow-clay--web-ui-design-0.2--3",
+      "brief": "slow-clay",
+      "arm": "web-ui-design-0.2",
+      "rep": "3",
+      "cost": 0.31059000000000003,
+      "wall_s": 96,
+      "turns": 12,
+      "error": false,
+      "armSkillUsed": true,
+      "skillsUsed": [
+        "web-ui-design"
+      ],
+      "rendered": true,
+      "checker": true,
+      "designMd": true,
+      "axeSeriousCritical": 0,
+      "contrastNodes": 0,
+      "mobileOverflow": false,
+      "jsErrors": 0,
+      "scores": {
+        "gemini-4-argon": {
+          "craft": 7,
+          "fit": 6,
           "hierarchy": 8,
-          "mobile": 7.333333333333333,
+          "mobile": 8,
+          "overall": 7,
+          "defects": [
+            "In the desktop two-card pricing row, the 'Ask about membership' button floats mid-card instead of aligning with 'Reserve a seat' at the bottom",
+            "Cold mint-grey and bright SaaS cobalt-blue palette with native range inputs feels clinical for a pottery studio"
+          ],
+          "note": "Well-structured layout with a strong 6-week curriculum breakdown and touch-friendly enrollment form, held back by a cold tech-blue color scheme.",
+          "rankPct": 0.8181818181818181
+        },
+        "gpt-6-1-sol": {
+          "craft": 8,
+          "fit": 8,
+          "hierarchy": 9,
+          "mobile": 8,
+          "overall": 8,
+          "defects": [],
+          "note": "A clear proposition, distinctive vessel illustration and strongly differentiated offer cards produce a polished, easy-to-follow landing page.",
+          "rankPct": 0.7272727272727273
+        },
+        "opus-5-5": {
+          "craft": 7,
+          "fit": 7,
+          "hierarchy": 8,
+          "mobile": 7,
+          "overall": 7,
+          "defects": [
+            "Nav label 'Six weeks' is vague",
+            "Square cobalt buttons feel more SaaS than studio"
+          ],
+          "note": "Clear and complete, with a shapeable pot, a seat counter, a six-week curriculum and a priced choice form, though the styling leans corporate.",
+          "rankPct": 0.7272727272727273
+        },
+        "panel": {
+          "craft": 7.333333333333333,
+          "fit": 7,
+          "hierarchy": 8.333333333333334,
+          "mobile": 7.666666666666667,
           "overall": 7.333333333333333,
-          "rankPct": 0.625
+          "rankPct": 0.7575757575757575
         }
       }
     }

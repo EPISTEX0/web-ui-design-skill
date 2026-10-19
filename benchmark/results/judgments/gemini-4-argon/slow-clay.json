@@ -1,96 +1,16 @@
 {
 	"scores": {
-		"A3": {
-			"craft": 7,
-			"fit": 7,
-			"hierarchy": 8,
-			"mobile": 7,
-			"overall": 7,
-			"defects": [
-				"Section heading 'Six weeks at the wheel' introduces both the 6-week course and the monthly open-studio membership",
-				"Large empty vertical gap above the bottom-aligned button in the desktop Open-studio membership card",
-				"Mobile navigation bar omits the Course link while keeping Open studio and Sign up",
-				"8 student-cap dots in the mobile course card force '8 students max' to wrap onto two cramped lines"
-			],
-			"note": "Expressive typography and a clever interactive vessel slider give this page personality, though the cool cobalt-and-sage palette and minor card and mobile alignment issues hold it slightly back."
-		},
-		"H6": {
-			"craft": 4,
-			"fit": 4,
-			"hierarchy": 5,
-			"mobile": 4,
-			"overall": 4,
-			"defects": [
-				"Mobile header crams 'Slow Clay' and all four navigation links onto one line with almost no separation",
-				"Display heading 'Why \"slow\"?' uses straight ASCII quotation marks instead of typographic quotes",
-				"No imagery, illustration, or visual anchor anywhere on the page",
-				"Unstyled native select control and default browser disclosure triangles"
-			],
-			"note": "A barebones centered template with heavy card shadows, straight quotes in a display heading, a cramped mobile header, and no visual craft."
-		},
-		"X2": {
-			"craft": 9,
-			"fit": 9,
-			"hierarchy": 9,
-			"mobile": 9,
-			"overall": 9,
-			"defects": [
-				"Hero vessel shelf illustration is bottom-aligned with the text column on desktop, leaving open space in the upper-right quadrant"
-			],
-			"note": "Warm stoneware and terracotta tones, editorial typography, a composed three-vessel still life, equal-height spec cards, and a thoughtful comparison band make this feel custom-built for Slow Clay."
-		},
-		"S7": {
-			"craft": 4,
-			"fit": 5,
-			"hierarchy": 5,
-			"mobile": 5,
-			"overall": 4,
-			"defects": [
-				"Full-width pill buttons ('Reserve a spot' and 'Become a member') have left-aligned text instead of centered labels on both desktop and mobile",
-				"Large empty gap above the button in the desktop Open-Studio Membership card",
-				"Desktop 'Get in touch' section places the form on the left and leaves the entire right half of the dark band empty",
-				"Oversized terracotta block in the middle section contains a tiny, placeholder-like vase silhouette"
-			],
-			"note": "Left-aligned text inside full-width pill buttons, an unbalanced half-empty desktop contact section, and a placeholder-like icon block make this page feel unfinished."
-		},
-		"J8": {
-			"craft": 6,
-			"fit": 7,
-			"hierarchy": 7,
-			"mobile": 6,
-			"overall": 6,
-			"defects": [
-				"Desktop 'Save a spot' contact form occupies only the left ~40% of its full-width section, leaving the right ~60% completely blank",
-				"Contact form uses tiny unstyled native browser radio buttons",
-				"Mobile header wraps awkwardly on both sides ('Slow / Clay' on the left and 'Sign / up' on the right)"
-			],
-			"note": "Strong full-width editorial bands for the course and membership are undermined by a lopsided desktop contact section and wrapped mobile header links."
-		},
-		"G2": {
+		"C7": {
 			"craft": 7,
 			"fit": 6,
 			"hierarchy": 8,
-			"mobile": 7,
+			"mobile": 8,
 			"overall": 7,
 			"defects": [
-				"Large empty vertical gap between the bullet list and the bottom button inside the dark Open-studio membership card on desktop",
-				"Cool white, ice-blue-gray, and royal-blue palette with heavy grotesque sans-serif feels more like a tech product than a tactile pottery studio",
-				"Mobile hero and course card pill tags stack left-aligned at uneven widths"
+				"In the desktop two-card pricing row, the 'Ask about membership' button floats mid-card instead of aligning with 'Reserve a seat' at the bottom",
+				"Cold mint-grey and bright SaaS cobalt-blue palette with native range inputs feels clinical for a pottery studio"
 			],
-			"note": "Well-organized information architecture and a helpful six-week curriculum breakdown are paired with a cold corporate blue palette that misses the warmth of a clay studio."
-		},
-		"K3": {
-			"craft": 5,
-			"fit": 5,
-			"hierarchy": 5,
-			"mobile": 6,
-			"overall": 5,
-			"defects": [
-				"No imagery or illustrations anywhere on the page",
-				"Key pricing and class-size details sit below the initial desktop fold with only the top edges of the cards peeking through",
-				"Uses default browser disclosure triangles and an unstyled native select input"
-			],
-			"note": "A clean but generic centered template that uses warm earthy colors yet lacks any visual assets or bespoke layout craft."
+			"note": "Well-structured layout with a strong 6-week curriculum breakdown and touch-friendly enrollment form, held back by a cold tech-blue color scheme."
 		},
 		"H7": {
 			"craft": 6,
@@ -99,26 +19,135 @@
 			"mobile": 6,
 			"overall": 6,
 			"defects": [
-				"Two-column split offering card has uneven content height, leaving blank space and unaligned CTA buttons in the right column on desktop",
-				"Section heading 'Two ways to work with clay' wraps 'clay' as a single orphan word on desktop",
-				"Mobile header wraps both the brand name ('Slow / Clay') and the last nav link ('Get in / touch')",
-				"Mobile select input truncates 'Wheel-throwing course - Tuesday mornings' mid-word"
+				"Large empty vertical gap inside the desktop 'Open-studio membership' card between the short bullet list and bottom CTA button",
+				"Mobile hero CTA buttons stack at uneven intrinsic widths"
 			],
-			"note": "The interactive pot illustration and split-color offering card are promising, but uneven card alignment, mobile header wrapping, and truncated select text hurt execution."
+			"note": "Clear asymmetric offering split and interactive pot concept, but the rudimentary vector illustration and cold mint-and-cobalt palette feel generic."
 		},
-		"D3": {
+		"R6": {
+			"craft": 6,
+			"fit": 6,
+			"hierarchy": 6,
+			"mobile": 5,
+			"overall": 6,
+			"defects": [
+				"On mobile, navbar brand 'Slow Clay' and link 'Get in touch' both wrap awkwardly onto two lines",
+				"On mobile, the 'I'm interested in' select option text is truncated ('Tuesday morni')",
+				"In the desktop split pricing card, the right-side CTA button floats higher than the left-side CTA button",
+				"At the 1440x900 desktop fold, the 'Two ways to work with clay' heading is sliced horizontally mid-line"
+			],
+			"note": "Nice editorial serif pairing and arch-framed ribbed vessel, but marred by mobile header wrapping, select text truncation, and unaligned card buttons."
+		},
+		"X5": {
+			"craft": 5,
+			"fit": 5,
+			"hierarchy": 6,
+			"mobile": 6,
+			"overall": 5,
+			"defects": [
+				"No imagery, illustration, or bespoke visual craft anywhere on the page",
+				"At the 1440x900 desktop fold, only the blank top edges of the two offering cards peek into view"
+			],
+			"note": "A competent, defect-free generic centered template with warm terracotta colors but zero imagery or studio-specific visual craft."
+		},
+		"K9": {
+			"craft": 7,
+			"fit": 6,
+			"hierarchy": 7,
+			"mobile": 8,
+			"overall": 7,
+			"defects": [
+				"Flat geometric vector vase and cold ice-blue palette feel sterile for a tactile ceramics studio"
+			],
+			"note": "Clean grid discipline, bottom-aligned card CTAs, and a clear week-by-week schedule table, though the flat blue vector pot and icy palette lack warmth."
+		},
+		"Z4": {
 			"craft": 8,
-			"fit": 9,
-			"hierarchy": 9,
+			"fit": 8,
+			"hierarchy": 8,
+			"mobile": 7,
+			"overall": 8,
+			"defects": [
+				"On mobile, the hero pot SVG sits above the headline and is left-aligned rather than centered in the column"
+			],
+			"note": "Warm terracotta-and-linen editorial design with an immediately scannable four-stat bar above the fold and polished segmented form toggles."
+		},
+		"Z2": {
+			"craft": 6,
+			"fit": 6,
+			"hierarchy": 6,
+			"mobile": 5,
+			"overall": 6,
+			"defects": [
+				"Desktop hero headline wraps awkwardly across five short lines in a narrow left column",
+				"On mobile, the 'Course' navigation link disappears while 'Open studio' and 'Sign up' remain visible",
+				"Mobile hero CTA buttons stack with mismatched widths"
+			],
+			"note": "Features nice pill toggles in the contact form and an arch-framed interactive pot, but suffers from a cramped five-line desktop headline and inconsistent mobile nav links."
+		},
+		"B8": {
+			"craft": 8,
+			"fit": 8,
+			"hierarchy": 8,
 			"mobile": 8,
 			"overall": 8,
 			"defects": [
-				"Desktop 'TWO WAYS IN' section heading is constrained to a narrow column that wraps onto four short lines with empty space beside it",
-				"Side-by-side course and membership cards on desktop have slightly unequal heights so their bottom edges do not align",
-				"Hero vessel illustration on mobile is left-aligned rather than centered above the headline"
+				"On desktop, the three-vessel shelf illustration sits low in the right hero column, leaving open space above it"
 			],
-			"note": "Rich terracotta-and-sand editorial direction, an above-the-fold key-facts strip, and segmented form controls make this a standout studio page with only minor alignment flaws."
+			"note": "The strongest page in the set, combining a warm ceramic glaze-and-clay palette, refined editorial typography, structured offering spec tables, and a flawless mobile layout."
+		},
+		"U4": {
+			"craft": 4,
+			"fit": 4,
+			"hierarchy": 5,
+			"mobile": 5,
+			"overall": 4,
+			"defects": [
+				"On mobile (390px), the navbar crams the brand name and all four nav links onto a single crowded line",
+				"No illustrations or visual elements anywhere on the page",
+				"In the 'Why slow?' section, step descriptions are tiny and stack awkwardly on mobile",
+				"Both offering cards use identical filled primary CTA buttons with no visual differentiation"
+			],
+			"note": "A bare-bones centered template with no visuals, crowded mobile navigation, tiny process labels, and undifferentiated card CTAs."
+		},
+		"Y2": {
+			"craft": 5,
+			"fit": 5,
+			"hierarchy": 6,
+			"mobile": 6,
+			"overall": 5,
+			"defects": [
+				"On desktop, the dark 'Get in touch' section places all content in the left half, leaving the entire right half of the band empty",
+				"The studio visual is a tiny vase icon floating inside a large solid terracotta square that reads like a placeholder"
+			],
+			"note": "A warm-toned generic template weakened by a placeholder-like icon block and a half-empty desktop contact section."
+		},
+		"H2": {
+			"craft": 7,
+			"fit": 6,
+			"hierarchy": 7,
+			"mobile": 6,
+			"overall": 7,
+			"defects": [
+				"Hero illustration of concentric circles with an orbiting blue dot looks like a solar-system diagram rather than a pottery wheel",
+				"On mobile, the abstract concentric-circle graphic appears above the headline before any context is given",
+				"Mobile hero CTA buttons stack with uneven widths"
+			],
+			"note": "Clever interactive 6-week clay stage switcher and strong editorial section variety, but the planetary-orbit hero diagram confuses the pottery theme."
+		},
+		"C6": {
+			"craft": 6,
+			"fit": 7,
+			"hierarchy": 7,
+			"mobile": 6,
+			"overall": 6,
+			"defects": [
+				"On mobile, navbar brand 'Slow Clay' and link 'Sign up' both wrap onto two lines",
+				"On desktop, the 'Save a spot' contact section is left-aligned in a narrow column, leaving the right half of the band empty",
+				"Unstyled browser-default radio buttons in the contact form"
+			],
+			"note": "Warm celadon-and-espresso palette with characterful serif typography and full-width offering bands, let down by a half-empty desktop form section and mobile nav wrapping."
 		}
 	},
-	"ranking": ["X2", "D3", "A3", "G2", "H7", "J8", "K3", "S7", "H6"]
+	"ranking": ["B8", "Z4", "C7", "K9", "H2", "C6", "H7", "R6", "Z2", "Y2", "X5", "U4"]
 }

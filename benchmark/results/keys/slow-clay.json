@@ -1,24 +1,30 @@
 {
   "order": [
-    "D3",
+    "C6",
+    "C7",
+    "R6",
+    "H2",
+    "Y2",
+    "B8",
     "H7",
-    "K3",
-    "G2",
-    "J8",
-    "S7",
-    "X2",
-    "H6",
-    "A3"
+    "U4",
+    "K9",
+    "Z2",
+    "X5",
+    "Z4"
   ],
   "key": {
-    "D3": "slow-clay--web-ui-design--2",
-    "H7": "slow-clay--frontend-design--1",
-    "K3": "slow-clay--none--1",
-    "G2": "slow-clay--web-ui-design--3",
-    "J8": "slow-clay--frontend-design--3",
-    "S7": "slow-clay--none--2",
-    "X2": "slow-clay--web-ui-design--1",
-    "H6": "slow-clay--none--3",
-    "A3": "slow-clay--frontend-design--2"
+    "C6": "slow-clay--frontend-design--3",
+    "C7": "slow-clay--web-ui-design-0.2--3",
+    "R6": "slow-clay--frontend-design--1",
+    "H2": "slow-clay--web-ui-design-0.2--2",
+    "Y2": "slow-clay--none--2",
+    "B8": "slow-clay--web-ui-design--1",
+    "H7": "slow-clay--web-ui-design-0.2--1",
+    "U4": "slow-clay--none--3",
+    "K9": "slow-clay--web-ui-design--3",
+    "Z2": "slow-clay--frontend-design--2",
+    "X5": "slow-clay--none--1",
+    "Z4": "slow-clay--web-ui-design--2"
   }
 }

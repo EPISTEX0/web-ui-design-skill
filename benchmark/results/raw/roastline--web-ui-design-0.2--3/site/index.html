@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roastline · Dashboard</title>
+<style>
+:root{
+  --bg:#f5f0e8; --surface:#fffdf9; --ink:#2b2119; --ink-2:#5a4d41; --ink-3:#6f6154;
+  --line:#e3dacb; --line-2:#efe8dc;
+  --accent:#a8441f; --accent-ink:#8c3615; --accent-soft:#f4e0d4;
+  --ok:#2c6a3c; --ok-soft:#e1efe3; --warn:#85560a; --warn-soft:#f6e8c8; --crit:#a02828; --crit-soft:#f6dcd9;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r-1:4px; --r-2:8px; --r-3:12px;
+  --ease:cubic-bezier(.2,.7,.2,1); --t-fast:120ms; --t-base:200ms;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+button,select,input{font:inherit;color:inherit}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--r-1)}
+
+/* top bar */
+.top{background:var(--ink);color:#f5f0e8}
+.top-in{max-width:1320px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;gap:28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:650;letter-spacing:.01em;font-size:15px}
+.brand svg{display:block}
+.nav{display:flex;gap:2px;height:100%;overflow-x:auto;scrollbar-width:none}
+.nav a{display:flex;align-items:center;padding:0 12px;color:#cfc4b5;text-decoration:none;font-size:13px;border-bottom:2px solid transparent;white-space:nowrap;transition:color var(--t-fast)}
+.nav a:hover{color:#fff}
+.nav a[aria-current]{color:#fff;border-bottom-color:#e08a5f}
+.who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:#cfc4b5;white-space:nowrap}
+.avatar{width:28px;height:28px;border-radius:50%;background:#e8d9c4;color:var(--ink);display:grid;place-items:center;font-size:11px;font-weight:650}
+
+main{max-width:1320px;margin:0 auto;padding:24px 24px 56px}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.head h1{font-size:22px;font-weight:650;letter-spacing:-.01em}
+.head p{color:var(--ink-3);margin-top:2px}
+.btns{display:flex;gap:8px}
+.btn{height:34px;padding:0 14px;border-radius:var(--r-2);border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:550;transition:background var(--t-fast),border-color var(--t-fast)}
+.btn:hover{border-color:#cdbfa9;background:#fbf7ef}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:var(--accent-ink)}
+
+/* kpis */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-3);padding:16px 18px}
+.kpi dt{color:var(--ink-3);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.kpi dd{margin:6px 0 0;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.kpi .v{font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.kpi .u{color:var(--ink-3);font-size:13px}
+.kpi .d{width:100%;color:var(--ink-2);font-size:12.5px;margin-top:2px}
+.kpi .d b{font-weight:600}
+.kpi.alert{border-color:#e4b7ac}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-3);min-width:0}
+.card>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px 0;flex-wrap:wrap}
+.card h2{font-size:14px;font-weight:650}
+.card .sub{color:var(--ink-3);font-size:12.5px}
+.body{padding:12px 18px 16px}
+.c-8{grid-column:span 8}.c-4{grid-column:span 4}.c-7{grid-column:span 7}.c-5{grid-column:span 5}.c-12{grid-column:span 12}
+
+.live{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--accent-ink);background:var(--accent-soft);padding:2px 9px 2px 8px;border-radius:99px}
+.live i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s var(--ease) infinite}
+@keyframes pulse{50%{opacity:.3}}
+@media (prefers-reduced-motion:reduce){.live i{animation:none}}
+
+/* roast profile */
+.roast-stats{display:flex;gap:28px;flex-wrap:wrap;padding:12px 18px 0}
+.rs span{display:block;color:var(--ink-3);font-size:12px}
+.rs b{font-size:20px;font-weight:600}
+.rs b small{font-size:12px;color:var(--ink-3);font-weight:500;margin-left:2px}
+.chart{position:relative;padding:0 8px 4px 8px}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;gap:16px;flex-wrap:wrap;color:var(--ink-2);font-size:12.5px;padding:0 18px 4px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--accent)}
+.legend i.ref{border-top:2px dashed var(--ink-3)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:#f5f0e8;font-size:12px;padding:7px 10px;border-radius:var(--r-2);white-space:nowrap;opacity:0;transform:translate(-50%,-110%);transition:opacity var(--t-fast);z-index:2}
+.tip .num{color:#fff}
+.tip.on{opacity:1}
+.linkbtn{background:none;border:0;color:var(--accent-ink);cursor:pointer;font-size:12.5px;font-weight:550;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
+.tbl-wrap{overflow-x:auto}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* tables */
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--line-2);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr{transition:background var(--t-fast)}
+tbody tr:hover{background:#faf5ec}
+th.r,td.r{text-align:right}
+.tbl-wrap th:first-child,.tbl-wrap td:first-child{padding-left:18px}
+.tbl-wrap th:last-child,.tbl-wrap td:last-child{padding-right:18px}
+.lot{font-weight:600}
+.lot small{display:block;font-weight:400;color:var(--ink-3);font-size:12px}
+.cell-bar{display:flex;align-items:center;gap:10px;min-width:150px}
+.cell-bar .num{min-width:52px;text-align:right}
+.track{position:relative;flex:1;height:6px;background:var(--line-2);border-radius:3px}
+.track b{position:absolute;inset:0 auto 0 0;border-radius:3px;background:var(--ink-3)}
+.track b.low{background:var(--crit)}
+.track b.mid{background:#b9852a}
+.track u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55;text-decoration:none}
+
+.pill{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px 0 7px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill svg{flex:none}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.crit{background:var(--crit-soft);color:var(--crit)}
+.pill.info{background:var(--accent-soft);color:var(--accent-ink)}
+.pill.idle{background:var(--line-2);color:var(--ink-2)}
+
+/* filters */
+.seg{display:inline-flex;flex-wrap:wrap;max-width:100%;border:1px solid var(--line);border-radius:var(--r-2);overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:none;padding:5px 11px;font-size:12.5px;cursor:pointer;color:var(--ink-2);border-right:1px solid var(--line);transition:background var(--t-fast)}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:#faf5ec}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff}
+
+/* weekly bars */
+.bars{display:flex;align-items:flex-end;gap:10px;height:290px;padding:0 4px;margin-top:8px;border-bottom:1px solid var(--line)}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:5px;position:relative;cursor:default}
+.bar .val{font-size:11.5px;color:var(--ink-2)}
+.bar .col{width:100%;max-width:38px;background:var(--ink-3);border-radius:4px 4px 0 0;min-height:2px;transition:filter var(--t-fast)}
+.bar:hover .col{filter:brightness(1.2)}
+.bar.today .col{background:var(--accent)}
+.bar .goal{position:absolute;left:-3px;right:-3px;border-top:2px dashed var(--ink);opacity:.5}
+.days{display:flex;gap:10px;padding:6px 4px 0;color:var(--ink-3);font-size:12px}
+.days span{flex:1;text-align:center}
+.days .today{color:var(--accent-ink);font-weight:650}
+.note{margin-top:10px;color:var(--ink-2);font-size:12.5px}
+
+.empty{padding:28px 18px;text-align:center;color:var(--ink-3)}
+.foot{margin-top:20px;color:var(--ink-3);font-size:12px}
+
+@media (max-width:1100px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .c-8,.c-4,.c-7,.c-5{grid-column:span 12}
+}
+@media (max-width:640px){
+  .top-in{padding:0 14px;gap:14px;flex-wrap:wrap;height:auto}.brand{height:48px}.who{height:48px}.who span{display:none}.nav{order:3;width:100%;height:40px;border-top:1px solid #4a3d33}
+  main{padding:18px 14px 40px}
+  .kpi .v{font-size:25px}
+  .kpis{gap:8px}.kpi{padding:13px 14px}
+}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="top-in">
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><ellipse cx="11" cy="11" rx="8" ry="10" transform="rotate(30 11 11)" fill="#e08a5f"/><path d="M6 17C11 13 11 9 16 5" stroke="#2b2119" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+    Roastline
+  </div>
+  <nav class="nav" aria-label="Main">
+    <a href="#" aria-current="page">Dashboard</a><a href="#">Green stock</a><a href="#">Roasts</a><a href="#">Orders</a><a href="#">Customers</a>
+  </nav>
+  <div class="who"><span>Hollis Street roastery</span><div class="avatar" aria-label="Signed in as Marta Reyes">MR</div></div>
+</div></div>
+
+<main>
+  <div class="head">
+    <div>
+      <h1>Monday, 19 October</h1>
+      <p>6 roasts scheduled today · 3 orders ship by Wednesday · sample data</p>
+    </div>
+    <div class="btns"><button class="btn">Receive green coffee</button><button class="btn primary">Schedule roast</button></div>
+  </div>
+
+  <dl class="kpis" id="kpis"></dl>
+
+  <div class="grid">
+    <section class="card c-8" aria-labelledby="rp-h">
+      <header>
+        <div><h2 id="rp-h">Live roast · R-2610-04</h2><p class="sub">Guji Hambela natural · 18.0 kg charge · Drum 2 (Probat L12)</p></div>
+        <span class="live"><i></i>Roasting · 08:42</span>
+      </header>
+      <div class="roast-stats" id="rstats"></div>
+      <div class="legend"><span><i></i>Bean temp, this roast</span><span><i class="ref"></i>Reference profile “Guji-Light v3”</span></div>
+      <div class="chart" id="chart">
+        <svg id="rp" viewBox="0 0 760 300" role="img" aria-label="Bean temperature against time for the live roast, tracking 3 to 4 degrees above the reference profile. First crack began at 8 minutes 10 seconds."></svg>
+        <div class="tip" id="tip"></div>
+      </div>
+      <div class="body" style="padding-top:0"><button class="linkbtn" id="tog" aria-expanded="false" aria-controls="tbl">Show data table</button>
+        <div class="tbl-wrap" id="tbl" hidden></div></div>
+    </section>
+
+    <section class="card c-4" aria-labelledby="wk-h">
+      <header><div><h2 id="wk-h">Roasted per day</h2><p class="sub">kg, last 7 days · goal 110</p></div></header>
+      <div class="body">
+        <div class="bars" id="bars"></div>
+        <div class="days" id="days"></div>
+        <p class="note"><b class="num">536 kg</b> in 7 days. Saturday ran a single wholesale top-up; Sunday is off.</p>
+      </div>
+    </section>
+
+    <section class="card c-7" aria-labelledby="gi-h">
+      <header>
+        <div><h2 id="gi-h">Green bean inventory</h2><p class="sub">Tick marks show reorder point</p></div>
+        <div class="seg" role="group" aria-label="Filter lots" id="gi-f">
+          <button aria-pressed="true" data-f="all">All</button><button aria-pressed="false" data-f="low">Needs attention</button>
+        </div>
+      </header>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Lot</th><th>On hand</th><th class="r">Cover</th><th>Status</th></tr></thead>
+        <tbody id="gi"></tbody>
+      </table></div>
+    </section>
+
+    <section class="card c-5" aria-labelledby="rb-h">
+      <header><div><h2 id="rb-h">Today’s roasts</h2><p class="sub">Drum 2 · 06:30 – 14:00</p></div></header>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Batch</th><th class="r">Charge</th><th class="r">Loss</th><th>Status</th></tr></thead>
+        <tbody id="rb"></tbody>
+      </table></div>
+    </section>
+
+    <section class="card c-12" aria-labelledby="wo-h">
+      <header>
+        <div><h2 id="wo-h">Wholesale orders</h2><p class="sub">Roasted-to-order, shipped Tuesday and Thursday</p></div>
+        <div class="seg" role="group" aria-label="Filter orders" id="wo-f">
+          <button aria-pressed="true" data-f="all">All</button><button aria-pressed="false" data-f="Roasting">Roasting</button><button aria-pressed="false" data-f="Packing">Packing</button><button aria-pressed="false" data-f="Waiting on green">Blocked</button><button aria-pressed="false" data-f="Confirmed">Confirmed</button>
+        </div>
+      </header>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th class="r">Weight</th><th>Ship by</th><th>Status</th></tr></thead>
+        <tbody id="wo"></tbody>
+      </table></div>
+    </section>
+  </div>
+  <p class="foot">All figures are sample data for design review.</p>
+</main>
+
+<script>
+const TODAY = 'Mon 19 Oct';
+const ICON = {
+  ok:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 6.3l2.4 2.4 4.6-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  warn:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.5l5 9H1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M6 5v2.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  crit:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M4.2 4.2l3.6 3.6M7.8 4.2L4.2 7.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+  info:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6.5 1L3 6.6h2.6L5 11l4-5.8H6.4z" fill="currentColor"/></svg>',
+  idle:'<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>'
+};
+const pill = (cls,txt)=>`<span class="pill ${cls}">${ICON[cls]}${txt}</span>`;
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- data (sample) ---------- */
+const lots = [
+  {id:'ET-GJ-0425', name:'Ethiopia Guji Hambela', proc:'Natural · 2025 crop', kg:414, par:300, week:92},
+  {id:'CO-HU-0725', name:'Colombia Huila, Pitalito', proc:'Washed · 2025 crop', kg:690, par:350, week:118},
+  {id:'BR-SI-0325', name:'Brazil Fazenda Santa Inês', proc:'Natural · 2025 crop', kg:1035, par:500, week:160},
+  {id:'GT-HH-0825', name:'Guatemala Huehuetenango', proc:'Washed · 2025 crop', kg:207, par:250, week:54},
+  {id:'KE-NY-0525', name:'Kenya Nyeri AA', proc:'Washed · 2025 crop', kg:69, par:150, week:38},
+  {id:'SU-GA-0225', name:'Sumatra Gayo', proc:'Wet-hulled · 2025 crop', kg:276, par:200, week:30},
+  {id:'CR-TA-0625', name:'Costa Rica Tarrazú', proc:'Honey · 2025 crop', kg:138, par:150, week:26},
+];
+const batches = [
+  {id:'R-2610-01', bean:'Brazil Santa Inês', kg:18, loss:'13.1%', st:'done', t:'06:42'},
+  {id:'R-2610-02', bean:'Colombia Huila', kg:18, loss:'13.8%', st:'done', t:'07:25'},
+  {id:'R-2610-03', bean:'Brazil Santa Inês', kg:18, loss:'12.9%', st:'done', t:'08:04'},
+  {id:'R-2610-04', bean:'Ethiopia Guji', kg:18, loss:'—', st:'live', t:'08:33'},
+  {id:'R-2610-05', bean:'Guatemala Huehu.', kg:15, loss:'—', st:'queued', t:'09:15'},
+  {id:'R-2610-06', bean:'Colombia Huila', kg:18, loss:'—', st:'queued', t:'10:00'},
+];
+const orders = [
+  {id:'WO-3187', cust:'Fernhill Café', items:'Espresso Blend ×6, Guji ×2', kg:20, ship:'Tue 20 Oct', st:'Roasting'},
+  {id:'WO-3186', cust:'Orchard & Oak Bakery', items:'House Filter ×4', kg:10, ship:'Tue 20 Oct', st:'Packing'},
+  {id:'WO-3184', cust:'Northside Coworking', items:'Huila ×3, Decaf ×1', kg:10, ship:'Tue 20 Oct', st:'Packing'},
+  {id:'WO-3183', cust:'The Little Pantry', items:'Kenya AA ×2', kg:5, ship:'Thu 22 Oct', st:'Waiting on green'},
+  {id:'WO-3182', cust:'Harbour Hotel Group', items:'Espresso Blend ×12', kg:30, ship:'Thu 22 Oct', st:'Confirmed'},
+  {id:'WO-3180', cust:'Bell & Anchor Pub', items:'Espresso Blend ×4', kg:10, ship:'Thu 22 Oct', st:'Confirmed'},
+];
+const week = [
+  {d:'Tue',kg:96},{d:'Wed',kg:118},{d:'Thu',kg:104},{d:'Fri',kg:126},{d:'Sat',kg:38},{d:'Sun',kg:0},{d:'Mon',kg:54,today:true}
+];
+
+/* ---------- derived ---------- */
+const cover = l=>Math.round(l.kg/(l.week/7));
+const lotState = l=> l.kg<l.par*.6 ? 'crit' : l.kg<l.par ? 'warn' : 'ok';
+const totalKg = lots.reduce((a,l)=>a+l.kg,0);
+const low = lots.filter(l=>lotState(l)!=='ok');
+const openOrders = orders.length, openKg = orders.reduce((a,o)=>a+o.kg,0);
+const weekKg = week.reduce((a,w)=>a+w.kg,0);
+
+/* ---------- KPIs ---------- */
+document.getElementById('kpis').innerHTML = [
+  ['Green coffee on hand', totalKg.toLocaleString('en-US'), 'kg', `<b>${lots.length}</b> lots · about ${Math.round(totalKg/(lots.reduce((a,l)=>a+l.week,0)/7))} days of cover`],
+  ['Roasted this week', weekKg, 'kg', `<b>54 kg</b> today, 56 kg still to roast`],
+  ['Open wholesale orders', openOrders, `orders · ${openKg} kg`, `<b>3</b> ship Tuesday, 1 blocked on green`],
+  ['Lots below reorder', low.length, 'lots', low.map(l=>l.name.split(' ').slice(0,2).join(' ')).join(', ')],
+].map((k,i)=>`<div class="kpi${i===3?' alert':''}"><dt>${k[0]}</dt><dd><span class="v num">${k[1]}</span><span class="u">${k[2]}</span><span class="d">${k[3]}</span></dd></div>`).join('');
+
+/* ---------- inventory ---------- */
+const giMap = {crit:['crit','Reorder now'],warn:['warn','Below reorder'],ok:['ok','OK']};
+function renderInv(f){
+  const rows = lots.filter(l=>f==='all'||lotState(l)!=='ok');
+  document.getElementById('gi').innerHTML = rows.length ? rows.map(l=>{
+    const s=lotState(l), max=Math.max(...lots.map(x=>x.kg),1100), pct=l.kg/max*100;
+    return `<tr><td><div class="lot">${esc(l.name)}<small>${esc(l.id)} · ${esc(l.proc)}</small></div></td>
+    <td><div class="cell-bar"><span class="num">${l.kg} kg</span><span class="track" aria-hidden="true"><b class="${s==='crit'?'low':s==='warn'?'mid':''}" style="width:${pct}%"></b><u style="left:${l.par/max*100}%"></u></span></div></td>
+    <td class="r num">${cover(l)} d</td><td>${pill(giMap[s][0],giMap[s][1])}</td></tr>`}).join('')
+    : '<tr><td colspan="4" class="empty">Nothing needs attention.</td></tr>';
+}
+renderInv('all');
+
+/* ---------- today's roasts ---------- */
+const stMap={done:['ok','Done'],live:['info','Roasting'],queued:['idle','Queued']};
+document.getElementById('rb').innerHTML = batches.map(b=>`<tr>
+  <td><div class="lot num" style="font-size:13px">${b.id}<small style="font-family:var(--sans)">${esc(b.bean)} · ${b.t}</small></div></td>
+  <td class="r num">${b.kg} kg</td><td class="r num">${b.loss}</td><td>${pill(stMap[b.st][0],stMap[b.st][1])}</td></tr>`).join('');
+
+/* ---------- orders ---------- */
+const woMap={'Roasting':'info','Packing':'ok','Waiting on green':'crit','Confirmed':'idle'};
+function renderOrders(f){
+  const rows=orders.filter(o=>f==='all'||o.st===f);
+  document.getElementById('wo').innerHTML = rows.length ? rows.map(o=>`<tr>
+    <td class="num">${o.id}</td><td class="lot">${esc(o.cust)}</td><td>${esc(o.items)}</td>
+    <td class="r num">${o.kg} kg</td><td>${o.ship}</td><td>${pill(woMap[o.st],o.st)}</td></tr>`).join('')
+    : '<tr><td colspan="6" class="empty">No orders with this status.</td></tr>';
+}
+renderOrders('all');
+function seg(id,fn){
+  const el=document.getElementById(id);
+  el.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+    fn(b.dataset.f);
+  });
+}
+seg('gi-f',renderInv); seg('wo-f',renderOrders);
+
+/* ---------- weekly bars ---------- */
+const GOAL=110, BMAX=140, BH=240;
+document.getElementById('bars').innerHTML = week.map(w=>`<div class="bar${w.today?' today':''}" title="${w.d}: ${w.kg} kg${w.today?' so far':''}">
+  <span class="val num">${w.kg}</span><div class="col" style="height:${w.kg/BMAX*BH}px"></div></div>`).join('')
+  + `<div class="goal" style="left:0;right:0;bottom:${GOAL/BMAX*BH+5+17}px;position:absolute;border-top:2px dashed var(--ink);opacity:.4"></div>`;
+document.getElementById('bars').style.position='relative';
+document.getElementById('days').innerHTML = week.map(w=>`<span class="${w.today?'today':''}">${w.d}</span>`).join('');
+
+/* ---------- roast profile ---------- */
+const W=760,H=300,M={l:44,r:16,t:12,b:30}, TMAX=12, YMIN=60, YMAX=240, NOW=8.7;
+const x=t=>M.l+t/TMAX*(W-M.l-M.r), y=v=>M.t+(1-(v-YMIN)/(YMAX-YMIN))*(H-M.t-M.b);
+function bt(t,shift=0,tau=5.5){
+  const v = t<1.4 ? 90+110*Math.pow((1.4-t)/1.4,2) : 90+(235-90)*(1-Math.exp(-(t-1.4)/tau));
+  return v+shift;
+}
+const step=0.1;
+const ref=[],cur=[];
+for(let t=0;t<=TMAX+1e-9;t+=step){ ref.push([+t.toFixed(1),bt(t,0,5.5)]); }
+for(let t=0;t<=NOW+1e-9;t+=step){ const n=Math.sin(t*7.3)*0.5+Math.sin(t*3.1)*0.4; cur.push([+t.toFixed(1),bt(t,t<1.4?0:3.5,5.4)+(t>1.4?n:0)]); }
+const path=pts=>pts.map((p,i)=>(i?'L':'M')+x(p[0]).toFixed(1)+' '+y(p[1]).toFixed(1)).join('');
+const mmss=t=>{const s=Math.round(t*60);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')};
+const last=cur[cur.length-1];
+const near=(arr,t)=>arr.reduce((a,p)=>Math.abs(p[0]-t)<Math.abs(a[0]-t)?p:a);
+const dry=near(cur,4.5), fc=near(cur,8.17);
+
+let g='';
+for(let v=60;v<=240;v+=30) g+=`<line x1="${M.l}" x2="${W-M.r}" y1="${y(v)}" y2="${y(v)}" stroke="#e3dacb" stroke-width="1"/><text x="${M.l-8}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="#6f6154" font-family="ui-monospace,monospace">${v}°</text>`;
+for(let t=0;t<=TMAX;t+=2) g+=`<text x="${x(t)}" y="${H-10}" text-anchor="middle" font-size="11" fill="#6f6154" font-family="ui-monospace,monospace">${t}:00</text>`;
+// phase bands: drying, maillard, development
+g+=`<rect x="${x(fc[0])}" y="${M.t}" width="${x(TMAX)-x(fc[0])}" height="${H-M.t-M.b}" fill="#a8441f" opacity=".06"/>`;
+g+=`<text x="${x(fc[0])+6}" y="${M.t+14}" font-size="11" fill="#8c3615" font-weight="600">Development</text>`;
+const mark=(p,label,dx)=>`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="4.5" fill="#fffdf9" stroke="#2b2119" stroke-width="2"/><text x="${x(p[0])+dx}" y="${y(p[1])+(dx<0?-10:16)}" text-anchor="${dx<0?'end':'start'}" font-size="11.5" fill="#2b2119" font-weight="600">${label} ${mmss(p[0])}</text>`;
+document.getElementById('rp').innerHTML = g
+  + `<path d="${path(ref)}" fill="none" stroke="#6f6154" stroke-width="2" stroke-dasharray="5 4"/>`
+  + `<path d="${path(cur)}" fill="none" stroke="#a8441f" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`
+  + mark(dry,'Dry end',-10) + mark(fc,'First crack',-10)
+  + `<circle cx="${x(last[0])}" cy="${y(last[1])}" r="5" fill="#a8441f" stroke="#fffdf9" stroke-width="2"/>`
+  + `<line id="cx" y1="${M.t}" y2="${H-M.b}" stroke="#2b2119" stroke-width="1" opacity="0"/><circle id="cd" r="4.5" fill="#a8441f" stroke="#fffdf9" stroke-width="2" opacity="0"/>`
+  + `<rect id="hit" x="${M.l}" y="${M.t}" width="${x(NOW)-M.l+12}" height="${H-M.t-M.b}" fill="transparent"/>`;
+
+const refNow=bt(NOW,0,5.5), delta=last[1]-refNow;
+// rate of rise over last 60s
+const prev=near(cur,NOW-1), ror=(last[1]-prev[1]);
+document.getElementById('rstats').innerHTML = [
+  ['Bean temp',`${last[1].toFixed(1)}<small>°C</small>`],
+  ['Rate of rise',`${ror.toFixed(1)}<small>°C/min</small>`],
+  ['vs reference',`${delta>=0?'+':''}${delta.toFixed(1)}<small>°C</small>`],
+  ['Development',`${Math.round((NOW-fc[0])/NOW*100)}<small>% · ${mmss(NOW-fc[0])}</small>`],
+  ['Target drop',`205<small>°C · ~10:30</small>`],
+].map(s=>`<div class="rs"><span>${s[0]}</span><b class="num">${s[1]}</b></div>`).join('');
+
+// hover
+const svg=document.getElementById('rp'), tip=document.getElementById('tip'), chart=document.getElementById('chart');
+const cx=document.getElementById('cx'), cd=document.getElementById('cd');
+function hover(e){
+  const r=svg.getBoundingClientRect(), k=W/r.width;
+  let t=((e.clientX-r.left)*k-M.l)/(W-M.l-M.r)*TMAX; t=Math.max(0,Math.min(NOW,t));
+  const p=near(cur,t), q=near(ref,t), px=x(p[0]), py=y(p[1]);
+  cx.setAttribute('x1',px);cx.setAttribute('x2',px);cx.setAttribute('opacity',.3);
+  cd.setAttribute('cx',px);cd.setAttribute('cy',py);cd.setAttribute('opacity',1);
+  const d=p[1]-q[1];
+  tip.innerHTML=`<span class="num">${mmss(p[0])}</span> · <span class="num">${p[1].toFixed(1)}°C</span><br>Reference ${q[1].toFixed(1)}° (${d>=0?'+':''}${d.toFixed(1)})`;
+  const cr=chart.getBoundingClientRect();
+  tip.style.left=Math.min(Math.max(px/k+(r.left-cr.left),70),cr.width-70)+'px'; tip.style.top=(py/k+(r.top-cr.top))+'px';
+  tip.classList.add('on');
+}
+document.getElementById('hit').addEventListener('pointermove',hover);
+document.getElementById('hit').addEventListener('pointerleave',()=>{tip.classList.remove('on');cx.setAttribute('opacity',0);cd.setAttribute('opacity',0)});
+
+// table view
+const tbl=document.getElementById('tbl'), tog=document.getElementById('tog');
+let rows='';
+for(let m=0;m<=8;m++){const p=near(cur,m),q=near(ref,m);rows+=`<tr><td class="num">${mmss(m)}</td><td class="r num">${p[1].toFixed(1)}</td><td class="r num">${q[1].toFixed(1)}</td><td class="r num">${(p[1]-q[1]>=0?'+':'')+(p[1]-q[1]).toFixed(1)}</td></tr>`}
+tbl.innerHTML=`<table><thead><tr><th>Time</th><th class="r">Bean temp °C</th><th class="r">Reference °C</th><th class="r">Δ</th></tr></thead><tbody>${rows}</tbody></table>`;
+tog.addEventListener('click',()=>{const open=tbl.hidden;tbl.hidden=!open;tog.setAttribute('aria-expanded',open);tog.textContent=open?'Hide data table':'Show data table'});
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Usage: build.sh <brief> <arm> <rep>
-# arm: none | frontend-design | web-ui-design
+# arm: none | frontend-design | web-ui-design (v0.1, frozen) | web-ui-design-0.2 (this repo's skill)
 # Runs one clean headless Claude Code session on the brief and saves the site and the transcript.
 set -euo pipefail
 brief=$1 arm=$2 rep=$3
@@ -25,7 +25,8 @@ trap 'rm -f "$cfg/.credentials.json"' EXIT
 case $arm in
 	none) ;;
 	frontend-design) mkdir -p "$cfg/skills" && cp -r "$here/arms/frontend-design" "$cfg/skills/" ;;
-	web-ui-design) mkdir -p "$cfg/skills" && cp -r "$here/../skills/web-ui-design" "$cfg/skills/" ;;
+	web-ui-design) mkdir -p "$cfg/skills" && cp -r "$here/arms/web-ui-design-0.1" "$cfg/skills/web-ui-design" ;;
+	web-ui-design-0.2) mkdir -p "$cfg/skills" && cp -r "$here/../skills/web-ui-design" "$cfg/skills/web-ui-design" ;;
 	*) echo "unknown arm $arm" >&2; exit 2 ;;
 esac
 

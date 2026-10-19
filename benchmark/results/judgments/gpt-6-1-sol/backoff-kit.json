@@ -1,94 +1,162 @@
 {
   "scores": {
-    "E4": {
-      "craft": 6,
-      "fit": 6,
-      "hierarchy": 7,
-      "mobile": 7,
-      "overall": 6,
-      "defects": [],
-      "note": "Clear, restrained documentation is easy to follow, but its conventional presentation feels less specifically designed for backoff-kit than the leading entries."
+    "J3": {
+      "craft": 7,
+      "fit": 8,
+      "hierarchy": 8,
+      "mobile": 2,
+      "overall": 4,
+      "defects": [
+        "The mobile main column extends beyond the viewport, cutting off prose and code on the right.",
+        "Wide reference content does not adapt to the mobile viewport."
+      ],
+      "note": "A coherent desktop documentation page is undermined by a mobile layout that leaves essential content offscreen."
     },
-    "U7": {
-      "craft": 8,
+    "Q5": {
+      "craft": 7,
       "fit": 8,
       "hierarchy": 8,
       "mobile": 8,
-      "overall": 8,
-      "defects": [],
-      "note": "Consistent typography, a cohesive warm palette and well-organized reference material make this a convincing small-library documentation page."
+      "overall": 7,
+      "defects": [
+        "Long code lines extend beyond the visible width of the mobile code panels."
+      ],
+      "note": "Readable, orderly documentation and a useful delay visualization serve the library well, although the visual treatment remains conventional."
     },
-    "R9": {
-      "craft": 4,
+    "K9": {
+      "craft": 6,
       "fit": 5,
       "hierarchy": 7,
       "mobile": 3,
       "overall": 3,
       "defects": [
-        "Code examples visibly contain stray numeric fragments in place of expected string content and other tokens.",
-        "The mobile options table extends beyond the viewport, hiding descriptions and leaving awkwardly tall, sparsely filled rows."
+        "Several code examples visibly contain stray numeric tokens in place of readable string content.",
+        "The mobile options table pushes descriptions offscreen and leaves large, apparently empty row areas."
       ],
-      "note": "An otherwise recognizable documentation structure is undermined by visibly corrupted examples and a poorly adapted mobile reference table."
+      "note": "A tidy desktop shell cannot compensate for visibly corrupted examples and an unusable mobile reference table."
     },
-    "J2": {
+    "C3": {
+      "craft": 8,
+      "fit": 8,
+      "hierarchy": 9,
+      "mobile": 8,
+      "overall": 8,
+      "defects": [
+        "Generous vertical gaps reduce the useful documentation visible in the desktop first fold.",
+        "Some long code lines exceed the visible mobile panel width."
+      ],
+      "note": "Calm teal styling, clear navigation and a well-adapted mobile reference make this a convincing small-library docs page."
+    },
+    "E2": {
+      "craft": 9,
+      "fit": 8,
+      "hierarchy": 9,
+      "mobile": 8,
+      "overall": 8,
+      "defects": [
+        "Long example lines are cut off at the right edge of the mobile code panels."
+      ],
+      "note": "A disciplined warm palette, strong section structure and responsive option cards give the documentation a notably finished feel."
+    },
+    "K6": {
+      "craft": 8,
+      "fit": 9,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 8,
+      "defects": [
+        "The mobile navigation wraps into several dense rows before the documentation begins.",
+        "Muted comments in dark code panels have weak contrast.",
+        "Long code lines are clipped within mobile panels."
+      ],
+      "note": "Thoughtful API organization and a contextual delay schedule feel tailored to the library, but mobile navigation and code readability need refinement."
+    },
+    "S6": {
+      "craft": 9,
+      "fit": 9,
+      "hierarchy": 9,
+      "mobile": 8,
+      "overall": 9,
+      "defects": [
+        "Long callback types produce tall, dense cells in the mobile reference table.",
+        "Subdued code comments have weak contrast, and long example lines extend beyond the visible mobile panels."
+      ],
+      "note": "The most complete visual system combines product-specific explanation, clear navigation and a considered mobile header without losing documentation clarity."
+    },
+    "E3": {
       "craft": 7,
       "fit": 8,
       "hierarchy": 8,
       "mobile": 2,
       "overall": 4,
       "defects": [
-        "The mobile layout retains an oversized content column, cutting off paragraphs, code panels, tables and controls at the right edge."
+        "The mobile main column is wider than the viewport, cutting off ordinary body sentences.",
+        "Navigation, code panels, option-table columns and the delay diagram also extend offscreen to the right."
       ],
-      "note": "The warm desktop design and backoff visualization suit the product well, but severe mobile clipping prevents shipping it as shown."
+      "note": "A distinctive, organized desktop design needs a fundamental responsive-layout fix before it can ship."
     },
-    "K9": {
-      "craft": 7,
-      "fit": 7,
-      "hierarchy": 8,
-      "mobile": 7,
-      "overall": 7,
-      "defects": [],
-      "note": "A clear light documentation layout and useful delay visualization serve the brief reliably, although the overall styling is relatively generic."
-    },
-    "J9": {
+    "F6": {
       "craft": 8,
       "fit": 8,
       "hierarchy": 8,
       "mobile": 8,
       "overall": 8,
-      "defects": [],
-      "note": "Polished code treatment, clear section hierarchy and a compact mobile header make this a strong, readily shippable documentation design."
-    },
-    "T6": {
-      "craft": 6,
-      "fit": 7,
-      "hierarchy": 7,
-      "mobile": 2,
-      "overall": 4,
       "defects": [
-        "Mobile body text and code panels extend off the right edge instead of fitting the viewport.",
-        "The mobile navigation is horizontally clipped, leaving several section links only partially visible."
+        "Long code lines extend beyond the visible mobile panel width.",
+        "Monochrome code offers little visual distinction between comments, strings and executable code."
       ],
-      "note": "The restrained warm styling and retry visualization are appropriate, but pervasive mobile overflow makes the page difficult to use."
+      "note": "Consistent spacing, readable option explanations and sensibly stacked mobile controls make this dependable documentation rather than a distinctive identity."
     },
-    "N7": {
+    "K2": {
+      "craft": 7,
+      "fit": 8,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 7,
+      "defects": [
+        "Long code and function signatures are clipped within mobile panels.",
+        "Callback types wrap into dense, tall cells in the mobile options table."
+      ],
+      "note": "Clear white-and-blue documentation handles the essentials well, but dense reference tables and conventional styling keep it below the strongest entries."
+    },
+    "M3": {
       "craft": 8,
       "fit": 9,
       "hierarchy": 8,
       "mobile": 8,
       "overall": 8,
-      "defects": [],
-      "note": "An early retry-delay visualizer, disciplined desktop navigation and a properly reflowed mobile layout make the library's core behavior especially tangible."
+      "defects": [
+        "Muted code comments and Copy controls have low contrast against the dark panels.",
+        "Long code and type signatures extend beyond the visible mobile code-panel width."
+      ],
+      "note": "Restrained editorial styling, option-level navigation and readable mobile option rows make this especially well suited to a focused developer tool."
     },
-    "N5": {
-      "craft": 8,
+    "Y3": {
+      "craft": 7,
       "fit": 8,
       "hierarchy": 8,
-      "mobile": 8,
-      "overall": 8,
-      "defects": [],
-      "note": "Careful warm typography, coherent syntax highlighting and a well-contained mobile layout give the technical reference a confident, product-appropriate finish."
+      "mobile": 7,
+      "overall": 7,
+      "defects": [
+        "The mobile header turns the full navigation into a dense cluster of small links.",
+        "Wrapped callback types make the mobile options table disproportionately tall.",
+        "Long example lines extend beyond the visible dark code panels."
+      ],
+      "note": "Install tabs, a contextual simulator and clear option cards are useful, but the generic presentation and crowded mobile reference lack the strongest entries' polish."
     }
   },
-  "ranking": ["N7", "N5", "J9", "U7", "K9", "E4", "J2", "T6", "R9"]
+  "ranking": [
+    "S6",
+    "E2",
+    "C3",
+    "M3",
+    "K6",
+    "F6",
+    "Q5",
+    "K2",
+    "Y3",
+    "E3",
+    "J3",
+    "K9"
+  ]
 }

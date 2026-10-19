@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>backoff-kit — retry async calls with exponential backoff and jitter</title>
+<meta name="description" content="backoff-kit is a small TypeScript library for retrying async calls with exponential backoff and jitter.">
+<style>
+:root{
+  --paper:#f6f3ec; --surface:#fffdf8; --ink:#1d1b17; --muted:#5f5a4f; --line:#ddd6c6; --accent:#b4410a;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px;
+  --r1:4px; --r2:8px;
+  --ease:cubic-bezier(.2,.7,.2,1); --dur:150ms;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:var(--s5)}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 var(--sans)}
+a{color:var(--accent);text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:var(--r1)}
+code,pre{font-family:var(--mono)}
+code{font-size:.875em;background:var(--surface);border:1px solid var(--line);border-radius:var(--r1);padding:1px 5px}
+
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);max-width:1120px;margin:0 auto}
+nav{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:var(--s6) var(--s5);border-right:1px solid var(--line)}
+.brand{font:600 17px var(--mono);color:var(--ink);text-decoration:none;display:block;margin-bottom:var(--s5)}
+.brand span{color:var(--accent)}
+nav ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s1)}
+nav a{display:block;padding:var(--s1) var(--s3);margin-left:calc(var(--s3) * -1);border-left:2px solid transparent;color:var(--muted);text-decoration:none;font-size:15px;transition:color var(--dur) var(--ease)}
+nav a:hover{color:var(--ink)}
+nav a[aria-current="true"]{color:var(--accent);border-left-color:var(--accent);font-weight:600}
+nav .sub a{padding-left:var(--s5);font-size:14px;margin-left:calc(var(--s3) * -1)}
+
+main{padding:var(--s7) var(--s6) var(--s8);max-width:820px;min-width:0}
+h1{font-size:32px;line-height:1.2;margin:0 0 var(--s3);letter-spacing:-.01em}
+h2{font-size:22px;line-height:1.3;margin:var(--s8) 0 var(--s3);padding-top:var(--s5);border-top:1px solid var(--line)}
+h3{font-size:17px;margin:var(--s6) 0 var(--s2)}
+p,ul.plain,ol{max-width:70ch}
+.lede{font-size:17px;color:var(--muted);max-width:60ch;margin:0 0 var(--s5)}
+.badges{display:flex;flex-wrap:wrap;gap:var(--s2);margin:0 0 var(--s5);padding:0;list-style:none}
+.badges li{font:13px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:var(--r1);padding:2px var(--s2)}
+
+.code{position:relative;margin:var(--s4) 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r2)}
+.code .label{display:block;font:12px var(--mono);color:var(--muted);padding:var(--s2) var(--s4);border-bottom:1px solid var(--line)}
+pre code{background:none;border:0;padding:0;font-size:inherit}
+pre{margin:0;padding:var(--s4);overflow-x:auto;font-size:13.5px;line-height:1.6;tab-size:2}
+.copy{position:absolute;top:var(--s1);right:var(--s2);font:12px var(--sans);color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:var(--r1);padding:2px var(--s2);cursor:pointer;transition:color var(--dur) var(--ease),border-color var(--dur) var(--ease)}
+.copy:hover{color:var(--accent);border-color:var(--accent)}
+.k{color:#8a2f06}.s{color:#2f6b3a}.c{color:#6f6a5e;font-style:italic}.t{color:#2c5a8a}
+
+.tablewrap{overflow-x:auto;margin:var(--s4) 0;border:1px solid var(--line);border-radius:var(--r2);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:var(--s3) var(--s4);border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+th{font-size:13px;color:var(--muted);font-weight:600;background:var(--paper)}
+td:first-child{white-space:nowrap}
+
+.note{border-left:3px solid var(--accent);background:var(--surface);padding:var(--s3) var(--s4);margin:var(--s4) 0;border-radius:0 var(--r1) var(--r1) 0;max-width:70ch}
+.note p{margin:0}
+
+/* signature: delay curve */
+.lab{border:1px solid var(--line);border-radius:var(--r2);background:var(--surface);padding:var(--s4);margin:var(--s5) 0}
+.lab h3{margin:0 0 var(--s1)}
+.lab .hint{margin:0 0 var(--s4);color:var(--muted);font-size:15px}
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--s4);margin-bottom:var(--s4)}
+.controls label{display:grid;gap:var(--s1);font:13px var(--mono);color:var(--muted)}
+.controls output{color:var(--ink)}
+.controls input[type=range]{width:100%;accent-color:var(--accent)}
+.controls select{font:14px var(--mono);padding:var(--s1) var(--s2);background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:var(--r1)}
+.plot{width:100%;height:auto;display:block}
+.plot text{font:11px var(--mono);fill:var(--muted)}
+.plot .grid{stroke:var(--line);stroke-width:1}
+.plot .ceil{fill:none;stroke:var(--accent);stroke-width:2}
+.plot .band{fill:var(--accent);fill-opacity:.14}
+.plot .dot{fill:var(--accent)}
+.total{font:13px var(--mono);color:var(--muted);margin:var(--s2) 0 0}
+.total strong{color:var(--ink)}
+
+footer{margin-top:var(--s8);padding-top:var(--s5);border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+
+@media (max-width:820px){
+  .layout{display:block}
+  nav{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:var(--s4)}
+  nav ul{grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;gap:var(--s4);padding-bottom:var(--s1)}
+  nav .sub{display:none}
+  nav a{border-left:0;padding:var(--s1) 0;margin-left:0}
+  nav a[aria-current="true"]{border-bottom:2px solid var(--accent)}
+  .brand{margin-bottom:var(--s3)}
+  main{padding:var(--s6) var(--s4) var(--s7)}
+  h1{font-size:26px}
+  .plot text{font-size:18px}
+  /* options table becomes stacked cards */
+  .tablewrap{border:0;background:none;overflow:visible}
+  table,tbody,tr,td{display:block;min-width:0;width:100%}
+  thead{position:absolute;left:-9999px}
+  tr{background:var(--surface);border:1px solid var(--line);border-radius:var(--r2);margin-bottom:var(--s3);padding:var(--s2) 0}
+  td{border:0;padding:var(--s1) var(--s4)}
+  td::before{content:attr(data-label);display:block;font-size:12px;color:var(--muted)}
+  td:first-child{white-space:normal}
+  td:first-child::before{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav aria-label="Documentation">
+  <a class="brand" href="#top">backoff<span>-</span>kit</a>
+  <ul id="toc">
+    <li><a href="#install">Install</a></li>
+    <li><a href="#quick-start">Quick start</a></li>
+    <li><a href="#api">API: retry()</a></li>
+    <li class="sub"><ul>
+      <li><a href="#options">Options</a></li>
+      <li><a href="#curve">Delay curve</a></li>
+      <li><a href="#errors">Errors &amp; return value</a></li>
+    </ul></li>
+    <li><a href="#recipes">Recipes</a></li>
+    <li class="sub"><ul>
+      <li><a href="#r-429">HTTP 429</a></li>
+      <li><a href="#r-abort">Abort with AbortSignal</a></li>
+      <li><a href="#r-predicate">Custom predicates</a></li>
+    </ul></li>
+  </ul>
+</nav>
+
+<main id="top">
+  <h1>backoff-kit</h1>
+  <p class="lede">Retry async calls with exponential backoff and jitter. One function, zero dependencies, written in TypeScript.</p>
+  <ul class="badges" aria-label="Package facts">
+    <li>TypeScript types included</li><li>ESM + CJS</li><li>No dependencies</li><li>Node 18+ and browsers</li>
+  </ul>
+
+  <h2 id="install">Install</h2>
+  <div class="code"><span class="label">npm</span><button class="copy" type="button">Copy</button><pre><code>npm install backoff-kit</code></pre></div>
+  <div class="code"><span class="label">pnpm / yarn / bun</span><button class="copy" type="button">Copy</button><pre><code>pnpm add backoff-kit
+yarn add backoff-kit
+bun add backoff-kit</code></pre></div>
+
+  <h2 id="quick-start">Quick start</h2>
+  <p>Wrap the call you want retried in a function and pass it to <code>retry</code>. The function runs again whenever it throws or rejects, after a growing, randomised delay.</p>
+  <div class="code"><span class="label">TypeScript</span><button class="copy" type="button">Copy</button><pre><code><span class="k">import</span> { retry } <span class="k">from</span> <span class="s">"backoff-kit"</span>;
+
+<span class="k">const</span> user = <span class="k">await</span> retry(
+  () =&gt; fetch(<span class="s">"https://api.example.com/users/42"</span>).then((r) =&gt; r.json()),
+  { retries: <span class="t">5</span>, minDelay: <span class="t">200</span> }
+);</code></pre></div>
+  <p>With these settings, a failing call is retried up to 5 times. The waits grow from about 200&nbsp;ms and roughly double each time.</p>
+
+  <h2 id="api">API: <code>retry(fn, options?)</code></h2>
+  <div class="code"><span class="label">Signature</span><button class="copy" type="button">Copy</button><pre><code><span class="k">function</span> retry&lt;<span class="t">T</span>&gt;(
+  fn: (attempt: <span class="t">number</span>) =&gt; <span class="t">Promise</span>&lt;<span class="t">T</span>&gt; | <span class="t">T</span>,
+  options?: <span class="t">RetryOptions</span>
+): <span class="t">Promise</span>&lt;<span class="t">T</span>&gt;;</code></pre></div>
+  <p><code>fn</code> receives the attempt number, starting at <code>0</code> for the first try. <code>retry</code> resolves with the first successful result of <code>fn</code>. If every attempt fails, or retrying is stopped, it rejects.</p>
+
+  <h3 id="options">Options</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Option</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td data-label="Option"><code>retries</code></td><td data-label="Type"><code>number</code></td><td data-label="Default"><code>3</code></td><td data-label="Description">Retries after the first attempt. <code>retries: 3</code> means up to 4 calls in total.</td></tr>
+      <tr><td data-label="Option"><code>minDelay</code></td><td data-label="Type"><code>number</code> (ms)</td><td data-label="Default"><code>100</code></td><td data-label="Description">Base delay before the first retry.</td></tr>
+      <tr><td data-label="Option"><code>maxDelay</code></td><td data-label="Type"><code>number</code> (ms)</td><td data-label="Default"><code>30000</code></td><td data-label="Description">Upper bound for any single delay, applied before jitter.</td></tr>
+      <tr><td data-label="Option"><code>factor</code></td><td data-label="Type"><code>number</code></td><td data-label="Default"><code>2</code></td><td data-label="Description">Multiplier per attempt. The delay ceiling for retry <em>n</em> is <code>min(maxDelay, minDelay × factor<sup>n</sup>)</code>.</td></tr>
+      <tr><td data-label="Option"><code>jitter</code></td><td data-label="Type"><code>"full" | "equal" | "none"</code></td><td data-label="Default"><code>"full"</code></td><td data-label="Description"><code>full</code> picks uniformly from 0 to the ceiling. <code>equal</code> picks from half the ceiling to the ceiling. <code>none</code> waits exactly the ceiling.</td></tr>
+      <tr><td data-label="Option"><code>shouldRetry</code></td><td data-label="Type"><code>(error, attempt) =&gt; boolean | Promise&lt;boolean&gt;</code></td><td data-label="Default">retry every error</td><td data-label="Description">Return <code>false</code> to stop at once and reject with that error.</td></tr>
+      <tr><td data-label="Option"><code>onRetry</code></td><td data-label="Type"><code>(error, attempt, delay) =&gt; void</code></td><td data-label="Default">none</td><td data-label="Description">Called before each wait. Use it for logging or metrics.</td></tr>
+      <tr><td data-label="Option"><code>signal</code></td><td data-label="Type"><code>AbortSignal</code></td><td data-label="Default">none</td><td data-label="Description">Aborting cancels any pending wait and rejects with the signal's reason.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="lab" id="curve">
+    <h3>Delay curve</h3>
+    <p class="hint">Change the options to see the wait before each retry. The line is the ceiling and the shaded band is where jitter can land.</p>
+    <div class="controls">
+      <label>retries <output id="o-retries"></output><input id="in-retries" type="range" min="1" max="10" value="6"></label>
+      <label>minDelay <output id="o-min"></output><input id="in-min" type="range" min="50" max="1000" step="50" value="200"></label>
+      <label>maxDelay <output id="o-max"></output><input id="in-max" type="range" min="1000" max="60000" step="1000" value="10000"></label>
+      <label>factor <output id="o-factor"></output><input id="in-factor" type="range" min="1" max="4" step="0.5" value="2"></label>
+      <label>jitter
+        <select id="in-jitter"><option value="full">full</option><option value="equal">equal</option><option value="none">none</option></select>
+      </label>
+    </div>
+    <svg id="plot" class="plot" viewBox="0 0 640 260" role="img" aria-labelledby="plot-title">
+      <title id="plot-title">Delay before each retry for the chosen options</title>
+    </svg>
+    <p class="total" id="total" aria-live="polite"></p>
+  </div>
+
+  <h3 id="errors">Errors and return value</h3>
+  <p>When attempts run out, <code>retry</code> rejects with the error from the last attempt, unchanged. Nothing is wrapped, so <code>instanceof</code> checks and custom error fields keep working.</p>
+
+  <h2 id="recipes">Recipes</h2>
+
+  <h3 id="r-429">Handle HTTP 429 and honour Retry-After</h3>
+  <p>Retry rate-limited and transient server responses, and give up on other 4xx errors. When the server sends <code>Retry-After</code>, wait at least that long before the next attempt.</p>
+  <div class="code"><span class="label">TypeScript</span><button class="copy" type="button">Copy</button><pre><code><span class="k">import</span> { retry } <span class="k">from</span> <span class="s">"backoff-kit"</span>;
+
+<span class="k">class</span> <span class="t">HttpError</span> <span class="k">extends</span> <span class="t">Error</span> {
+  <span class="k">constructor</span>(<span class="k">public</span> status: <span class="t">number</span>, <span class="k">public</span> retryAfterMs?: <span class="t">number</span>) {
+    <span class="k">super</span>(<span class="s">`HTTP ${status}`</span>);
+  }
+}
+
+<span class="k">async function</span> getJson(url: <span class="t">string</span>) {
+  <span class="k">return</span> retry(
+    <span class="k">async</span> () =&gt; {
+      <span class="k">const</span> res = <span class="k">await</span> fetch(url);
+      <span class="k">if</span> (!res.ok) {
+        <span class="k">const</span> secs = <span class="t">Number</span>(res.headers.get(<span class="s">"retry-after"</span>));
+        <span class="k">throw new</span> <span class="t">HttpError</span>(res.status, secs &gt; <span class="t">0</span> ? secs * <span class="t">1000</span> : <span class="k">undefined</span>);
+      }
+      <span class="k">return</span> res.json();
+    },
+    {
+      retries: <span class="t">5</span>,
+      shouldRetry: async (err) =&gt; {
+        <span class="k">if</span> (!(err <span class="k">instanceof</span> <span class="t">HttpError</span>)) <span class="k">return true</span>;      <span class="c">// network error</span>
+        <span class="k">if</span> (err.retryAfterMs) <span class="k">await</span> sleep(err.retryAfterMs); <span class="c">// honour the server</span>
+        <span class="k">return</span> err.status === <span class="t">429</span> || err.status &gt;= <span class="t">500</span>;
+      },
+    }
+  );
+}
+
+<span class="k">const</span> sleep = (ms: <span class="t">number</span>) =&gt; <span class="k">new</span> <span class="t">Promise</span>((r) =&gt; setTimeout(r, ms));</code></pre></div>
+  <div class="note"><p><code>shouldRetry</code> may be async, so waiting inside it delays the next attempt. The backoff delay still applies after it, which keeps retries spaced out.</p></div>
+
+  <h3 id="r-abort">Abort with AbortSignal</h3>
+  <p>Pass a <code>signal</code> to stop retrying when the user navigates away, a request times out or the process shuts down. A pending wait ends right away.</p>
+  <div class="code"><span class="label">TypeScript</span><button class="copy" type="button">Copy</button><pre><code><span class="k">const</span> controller = <span class="k">new</span> <span class="t">AbortController</span>();
+
+<span class="c">// Give up after 10 seconds, whatever the attempt count.</span>
+<span class="k">const</span> timeout = <span class="t">AbortSignal</span>.timeout(<span class="t">10_000</span>);
+<span class="k">const</span> signal = <span class="t">AbortSignal</span>.any([controller.signal, timeout]);
+
+<span class="k">try</span> {
+  <span class="k">await</span> retry(() =&gt; syncOrders({ signal }), { retries: <span class="t">8</span>, signal });
+} <span class="k">catch</span> (err) {
+  <span class="k">if</span> (signal.aborted) {
+    console.log(<span class="s">"stopped:"</span>, signal.reason);
+  } <span class="k">else</span> {
+    <span class="k">throw</span> err;
+  }
+}
+
+<span class="c">// Elsewhere, e.g. on component unmount:</span>
+controller.abort();</code></pre></div>
+  <p>Pass the same <code>signal</code> to the work inside <code>fn</code> as well, so an in-flight request is cancelled and not only the waiting.</p>
+
+  <h3 id="r-predicate">Custom retry predicates</h3>
+  <p>Use <code>shouldRetry</code> to separate errors worth retrying from those that never will succeed, such as validation failures or auth errors. Use <code>onRetry</code> to see what is happening.</p>
+  <div class="code"><span class="label">TypeScript</span><button class="copy" type="button">Copy</button><pre><code><span class="k">const</span> TRANSIENT = <span class="k">new</span> <span class="t">Set</span>([<span class="s">"ECONNRESET"</span>, <span class="s">"ETIMEDOUT"</span>, <span class="s">"EAI_AGAIN"</span>]);
+
+<span class="k">await</span> retry(() =&gt; db.query(sql), {
+  retries: <span class="t">4</span>,
+  minDelay: <span class="t">250</span>,
+  jitter: <span class="s">"equal"</span>,
+  shouldRetry: (err, attempt) =&gt; {
+    <span class="k">if</span> (attempt &gt;= <span class="t">2</span> &amp;&amp; err <span class="k">instanceof</span> <span class="t">SlowQueryError</span>) <span class="k">return false</span>;
+    <span class="k">return</span> TRANSIENT.has((err <span class="k">as</span> NodeJS.<span class="t">ErrnoException</span>).code ?? <span class="s">""</span>);
+  },
+  onRetry: (err, attempt, delay) =&gt;
+    console.warn(<span class="s">`attempt ${attempt} failed (${err.message}); retrying in ${delay}ms`</span>),
+});</code></pre></div>
+
+  <footer>backoff-kit is open source. Report issues and read the source in the project repository.</footer>
+</main>
+</div>
+
+<script>
+(function () {
+  // Copy buttons
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = btn.parentElement.querySelector('pre').innerText;
+      var done = function (msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
+      if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { done('Copied'); }, function () { done('Failed'); });
+      else done('Failed');
+    });
+  });
+
+  // Active nav link
+  var links = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
+  var targets = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  function setActive() {
+    var cur = 0;
+    targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top < 120) cur = i; });
+    links.forEach(function (a, i) { if (i === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+  }
+  addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  // Delay curve
+  var $ = function (id) { return document.getElementById(id); };
+  var svg = $('plot'), NS = 'http://www.w3.org/2000/svg';
+  var W = 640, H = 260, L = 52, R = 16, T = 12, B = 32;
+  function el(name, attrs, text) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function fmt(ms) { return ms >= 1000 ? (ms / 1000).toFixed(ms % 1000 ? 1 : 0) + 's' : ms + 'ms'; }
+  function draw() {
+    var n = +$('in-retries').value, min = +$('in-min').value, max = +$('in-max').value,
+        f = +$('in-factor').value, j = $('in-jitter').value;
+    $('o-retries').textContent = n; $('o-min').textContent = fmt(min); $('o-max').textContent = fmt(max);
+    $('o-factor').textContent = f;
+    var ceil = [], lo = [];
+    for (var i = 0; i < n; i++) {
+      var c = Math.min(max, min * Math.pow(f, i));
+      ceil.push(c);
+      lo.push(j === 'full' ? 0 : j === 'equal' ? c / 2 : c);
+    }
+    var top = Math.max.apply(null, ceil) * 1.1 || 1;
+    var x = function (i) { return n === 1 ? (L + W - R) / 2 : L + (W - L - R) * i / (n - 1); };
+    var y = function (v) { return H - B - (H - B - T) * v / top; };
+    while (svg.childNodes.length > 1) svg.removeChild(svg.lastChild);
+    for (var g = 0; g <= 4; g++) {
+      var v = top * g / 4;
+      svg.appendChild(el('line', { class: 'grid', x1: L, x2: W - R, y1: y(v), y2: y(v) }));
+      svg.appendChild(el('text', { x: L - 8, y: y(v) + 4, 'text-anchor': 'end' }, fmt(Math.round(v / 10) * 10)));
+    }
+    for (var i2 = 0; i2 < n; i2++) svg.appendChild(el('text', { x: x(i2), y: H - 10, 'text-anchor': 'middle' }, '#' + (i2 + 1)));
+    var band = ceil.map(function (c, i) { return x(i) + ',' + y(c); })
+      .concat(lo.map(function (c, i) { return x(i) + ',' + y(c); }).reverse()).join(' ');
+    if (j !== 'none' && n > 1) svg.appendChild(el('polygon', { class: 'band', points: band }));
+    if (j !== 'none' && n === 1) svg.appendChild(el('line', { class: 'ceil', x1: x(0), x2: x(0), y1: y(ceil[0]), y2: y(lo[0]), 'stroke-opacity': .4 }));
+    svg.appendChild(el('polyline', { class: 'ceil', points: ceil.map(function (c, i) { return x(i) + ',' + y(c); }).join(' ') }));
+    ceil.forEach(function (c, i) { svg.appendChild(el('circle', { class: 'dot', cx: x(i), cy: y(c), r: 3.5 })); });
+    var worst = ceil.reduce(function (a, b) { return a + b; }, 0);
+    var best = lo.reduce(function (a, b) { return a + b; }, 0);
+    $('total').innerHTML = 'Total time spent waiting: <strong>' + fmt(Math.round(best)) + '</strong> to <strong>' + fmt(Math.round(worst)) + '</strong> across ' + n + ' retries.';
+  }
+  ['in-retries', 'in-min', 'in-max', 'in-factor', 'in-jitter'].forEach(function (id) { $(id).addEventListener('input', draw); });
+  draw();
+})();
+</script>
+</body>
+</html>

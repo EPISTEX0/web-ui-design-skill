@@ -6,7 +6,8 @@ import { gunzipSync } from 'node:zlib'
 
 const here = import.meta.dirname
 const R = join(here, 'results')
-const ARMS = ['none', 'frontend-design', 'web-ui-design']
+const ARMS = ['none', 'frontend-design', 'web-ui-design', 'web-ui-design-0.2']
+const skillOf = (arm) => arm.replace(/-\d+\.\d+$/, '')
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'))
 const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : NaN)
 const median = (xs) => {
@@ -17,7 +18,7 @@ const f = (x, d = 2) => (Number.isFinite(x) ? x.toFixed(d) : 'n/a')
 
 function transcriptSignals(id) {
 	const p = join(R, 'raw', id, 'transcript.jsonl')
-	const out = { skills: [], rendered: false, tools: 0 }
+	const out = { skills: [], rendered: false, checker: false, tools: 0 }
 	const text = existsSync(p) ? readFileSync(p, 'utf8') : existsSync(`${p}.gz`) ? gunzipSync(readFileSync(`${p}.gz`)).toString('utf8') : ''
 	for (const line of text.split('\n')) {
 		if (!line.trim()) continue
@@ -32,7 +33,8 @@ function transcriptSignals(id) {
 			if (c.type !== 'tool_use') continue
 			out.tools++
 			if (c.name === 'Skill') out.skills.push(c.input?.skill)
-			if (c.name === 'Bash' && /chromium|screenshot|playwright/i.test(c.input?.command ?? '')) out.rendered = true
+			if (c.name === 'Bash' && /chromium|screenshot|playwright|check\.mjs/i.test(c.input?.command ?? '')) out.rendered = true
+			if (c.name === 'Bash' && /check\.mjs/.test(c.input?.command ?? '')) out.checker = true
 		}
 	}
 	return out
@@ -55,11 +57,13 @@ const builds = readdirSync(join(R, 'raw'))
 			wall_s: result.wall_s,
 			turns: result.num_turns,
 			error: result.is_error ?? true,
-			armSkillUsed: arm !== 'none' && sig.skills.includes(arm),
+			armSkillUsed: arm !== 'none' && sig.skills.includes(skillOf(arm)),
 			skillsUsed: sig.skills,
 			rendered: sig.rendered,
+			checker: sig.checker,
 			designMd: existsSync(join(R, 'raw', id, 'site/DESIGN.md')),
 			axeSeriousCritical: metrics.desktop?.axe ? metrics.desktop.axe.serious + metrics.desktop.axe.critical : null,
+			contrastNodes: Number(metrics.desktop?.axe?.rules?.find((r) => r.startsWith('color-contrast:'))?.split(':')[1] ?? 0),
 			mobileOverflow: metrics.mobile?.overflowX > 1,
 			jsErrors: (metrics.desktop?.errors ?? 0) + (metrics.mobile?.errors ?? 0),
 			scores: {},
@@ -147,8 +151,10 @@ for (const arm of ARMS) {
 		armSkillUsed: xs.filter((b) => b.armSkillUsed).length,
 		builtinDesignUsed: xs.filter((b) => b.skillsUsed.includes('design')).length,
 		rendered: xs.filter((b) => b.rendered).length,
+		checker: xs.filter((b) => b.checker).length,
+		contrastFailBuilds: xs.filter((b) => b.contrastNodes > 0).length,
 		designMd: xs.filter((b) => b.designMd).length,
-		axeSeriousCritical: mean(xs.map((b) => b.axeSeriousCritical ?? 0)),
+		axeSeriousCritical: median(xs.map((b) => b.axeSeriousCritical ?? 0)),
 		mobileOverflow: xs.filter((b) => b.mobileOverflow).length,
 		judges: {},
 	}
@@ -164,6 +170,9 @@ for (const judge of judges) {
 		['web-ui-design', 'none'],
 		['web-ui-design', 'frontend-design'],
 		['frontend-design', 'none'],
+		['web-ui-design-0.2', 'none'],
+		['web-ui-design-0.2', 'frontend-design'],
+		['web-ui-design-0.2', 'web-ui-design'],
 	]) {
 		const A = builds.filter((x) => x.arm === a && x.scores[judge]).map((x) => x.scores[judge].overall)
 		const B = builds.filter((x) => x.arm === b && x.scores[judge]).map((x) => x.scores[judge].overall)
@@ -202,11 +211,11 @@ for (let x = 0; x < realJudges.length; x++)
 writeFileSync(join(R, 'summary.json'), JSON.stringify({ summary, builds }, null, 2))
 
 const lines = [`# Results`, ``, `${builds.length} builds, judges: ${judges.join(', ') || 'none yet'}.`, ``]
-lines.push(`| Arm | n | Mean cost | Median time | Arm skill used | Rendered itself | Axe serious+critical | Mobile overflow |`)
-lines.push(`| --- | --- | --- | --- | --- | --- | --- | --- |`)
+lines.push(`| Arm | n | Mean cost | Median time | Arm skill used | Rendered itself | Ran check.mjs | DESIGN.md | Axe serious+critical, median | Builds with contrast failures | Mobile overflow |`)
+lines.push(`| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |`)
 for (const arm of ARMS) {
 	const s = summary.arms[arm]
-	lines.push(`| ${arm} | ${s.n} | $${f(s.cost)} | ${f(s.wall_s, 0)}s | ${arm === 'none' ? 'n/a' : `${s.armSkillUsed}/${s.n}`} | ${s.rendered}/${s.n} | ${f(s.axeSeriousCritical, 1)} | ${s.mobileOverflow}/${s.n} |`)
+	lines.push(`| ${arm} | ${s.n} | $${f(s.cost)} | ${f(s.wall_s, 0)}s | ${arm === 'none' ? 'n/a' : `${s.armSkillUsed}/${s.n}`} | ${s.rendered}/${s.n} | ${s.checker}/${s.n} | ${s.designMd}/${s.n} | ${f(s.axeSeriousCritical, 1)} | ${s.contrastFailBuilds}/${s.n} | ${s.mobileOverflow}/${s.n} |`)
 }
 for (const judge of judges) {
 	lines.push(``, `## Judge: ${judge}`, ``, `| Arm | ${criteria.join(' | ')} | rank percentile |`, `| --- |${' --- |'.repeat(criteria.length + 1)}`)

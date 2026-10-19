@@ -29,7 +29,7 @@ motion:
 # <Product> design
 
 ## Direction
-One paragraph: subject, audience, the feeling, and the one memorable element.
+One paragraph: subject, audience, the feeling, and the signature element.
 
 ## References
 - <product>: <the specific thing taken from it>

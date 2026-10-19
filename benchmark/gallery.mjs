@@ -51,12 +51,13 @@ writeFileSync(
 	body.revealed .arm { visibility: visible; }
 	.arm[data-arm="web-ui-design"] { background: #dbeafe; }
 	.arm[data-arm="frontend-design"] { background: #fef3c7; }
+	.arm[data-arm="web-ui-design-0.2"] { background: #dcfce7; }
 </style>
 </head>
 <body>
 <main>
 	<h1>Blind gallery</h1>
-	<p class="lede">Each page was built by Claude Sonnet 5.5 from the same prompt, either with Claude Code's defaults, with Anthropic's frontend-design skill, or with web-ui-design. Pick your favorite in each row before you reveal which is which.</p>
+	<p class="lede">Each page was built by Claude Sonnet 5.5 from the same prompt, either with Claude Code's defaults, with Anthropic's frontend-design skill, or with web-ui-design (v0.1 or v0.2). Pick your favorite in each row before you reveal which is which.</p>
 	<button onclick="document.body.classList.toggle('revealed')">Reveal arms</button>
 	${sections.join('\n')}
 </main>

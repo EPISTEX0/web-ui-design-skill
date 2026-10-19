@@ -4,17 +4,18 @@ A skill that makes coding agents design web UI that looks deliberate, not genera
 
 We read 34 design skills for Claude Code, Cursor and Codex, and every public benchmark of them we could find. The public studies found little or no gain over an agent with no skill. What the sources do agree on is a process: real references, a written design contract, a render-and-critique loop, and a stress test. This skill is that process, plus the rules three or more skills agree on, in about 200 lines.
 
-Then we tested it. In a blind A/B of 27 builds scored by GPT, Gemini and Claude judges, it beat Claude Code's defaults by 1.7 points out of 10 and tied Anthropic's `frontend-design`.
+Then we tested it in a blind A/B of 36 builds, scored by GPT, Gemini and Claude judges. It beats Claude Code's defaults by 2 points out of 10. It scores level with Anthropic's `frontend-design` on looks, and it ships fewer measurable defects.
 
 ## Benchmark
 
-| Arm | Panel score, 1 to 10 | Win rate vs defaults | Mobile score | Checked its own render |
-| --- | --- | --- | --- | --- |
-| Claude Code defaults | 5.30 | n/a | 5.44 | 3/9 |
-| Anthropic `frontend-design` | 7.04 | 0.89 (p = 0.02) | 5.85 | 2/9 |
-| `web-ui-design` | 7.04 | 0.83 (p = 0.02) | 6.41 | 7/9 |
+| Arm | Panel score, 1 to 10 | Win rate vs defaults | Mobile score | Builds with contrast failures | Mobile overflow | Cost per build |
+| --- | --- | --- | --- | --- | --- | --- |
+| Claude Code defaults | 5.26 | n/a | 5.15 | 5/9 | 1/9 | $0.21 |
+| Anthropic `frontend-design` | 6.89 | 0.93 (p = 0.012) | 5.52 | 5/9 | 3/9 | $0.24 |
+| `web-ui-design` 0.1 | 6.96 | 0.89 (p = 0.009) | 6.41 | 6/9 | 1/9 | $0.32 |
+| `web-ui-design` 0.2 | 7.22 | 0.96 (p = 0.001) | 6.70 | 0/9 | 0/9 | $0.34 |
 
-Sonnet 5.5 built a landing page, a dashboard and a docs page 3 times per arm, in isolated sessions. Three judges from three model families scored screenshots under random labels. The two skills are statistically tied. `web-ui-design` costs about a third more per build ($0.32 against $0.24).
+Sonnet 5.5 built a landing page, a dashboard and a docs page 3 times per arm, in isolated sessions. Three judges from three model families scored screenshots under random labels. On looks, the three skills are statistically tied. Version 0.2 added a checker that measures the page. That cut contrast failures from 6 of 9 builds to 0, and the judges gave it the best mobile score.
 
 The method, every score, the limits, and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the [blind gallery](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/).
 
@@ -46,9 +47,9 @@ The skill runs seven steps in order:
 1. **Load the contract.** Read `DESIGN.md` if it exists. Its tokens outrank every default.
 2. **Write the brief.** Subject, audience, primary job, and a mode: *Persuade* (landing pages), *Operate* (apps and dashboards) or *Read* (docs).
 3. **Gather references.** Real products from the subject's world, each with the specific thing it contributes.
-4. **Set the direction.** 2 or 3 directions on a named axis, then one token plan checked against a list of generated-design tells.
+4. **Set the direction.** 2 or 3 directions on a named axis, a signature element only this subject would have, and a token plan written to `DESIGN.md` and checked against a list of generated-design tells.
 5. **Build** with tokens only and every state: loading, empty, error, disabled, hover, focus.
-6. **Run the render loop.** Screenshots at 390, 768 and 1440 px, critique against the rules, fix in batches, at most 3 rounds.
+6. **Run the render loop.** `scripts/check.mjs` renders the full page at 390, 768 and 1440 px and reports overflow, clipped content, contrast, unloaded fonts and script errors. The agent opens every screenshot tile, critiques against the rules and fixes in batches, for at most 3 rounds. The step is done when the run after the last edit is clean.
 7. **Record decisions** with their rationale in `DESIGN.md`, so the next session starts from them.
 
 Ask only for a critique and it runs step 6 alone. It reports a `Location | Before | After | Why` table.
@@ -59,10 +60,11 @@ Ask only for a critique and it runs step 6 alone. It reports a `Location | Befor
 | --- | --- | --- |
 | [`skills/web-ui-design/SKILL.md`](skills/web-ui-design/SKILL.md) | When the skill triggers | The seven steps |
 | [`reference/rules.md`](skills/web-ui-design/reference/rules.md) | During steps 4 to 6 | Tells, layout, type, color, depth, motion, states, mobile, copy, stress test |
-| [`reference/design-md-template.md`](skills/web-ui-design/reference/design-md-template.md) | At step 7 | A `DESIGN.md` with YAML tokens and a decisions table |
+| [`reference/design-md-template.md`](skills/web-ui-design/reference/design-md-template.md) | At step 4 | A `DESIGN.md` with YAML tokens and a decisions table |
+| [`scripts/check.mjs`](skills/web-ui-design/scripts/check.mjs) | Run at step 6, never read | Full-page screenshot tiles plus overflow, contrast, font and error checks. Needs Node 22 and Chrome or Chromium, and no npm install |
 | [`research/`](research/) | Never | The reports this skill was distilled from, with sources |
 
-The whole skill is about 11 KB. The large design skills we read load 17k to 50k tokens per page build.
+The instructions total about 13 KB. The large design skills we read load 17k to 50k tokens per page build.
 
 ## What the evidence says
 
@@ -89,7 +91,7 @@ Every line can be overridden by your `DESIGN.md` or your brief.
 
 ## Status
 
-Version 0.1, benchmarked on 2026-10-19. The benchmark found two gaps for the next version. No build wrote a `DESIGN.md`, and no build measured contrast, so 5 or 6 builds in every arm shipped contrast failures.
+Version 0.2, benchmarked on 2026-10-19 against 0.1. The benchmark report lists two known gaps. Dashboard tables still scroll sideways on phones, and when the skill avoids the cream-and-terracotta tell it tends to land on cold, corporate palettes. 0.2 has only been tested on the briefs that shaped it, so new briefs are the next test.
 
 If you run the skill against another design skill or no skill on your own briefs, open an issue with the screenshots. Results either way are welcome and will shape the next version.
 

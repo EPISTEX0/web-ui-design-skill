@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Slow Clay — wheel-throwing classes and open studio in Portland</title>
+<meta name="description" content="Slow Clay is a small pottery studio in Portland. Six-week wheel-throwing course with a maximum of 8 students, and open-studio memberships.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ground: oklch(95% 0.012 165);
+  --surface: oklch(98% 0.006 165);
+  --ink: oklch(24% 0.025 200);
+  --ink-2: oklch(40% 0.025 200);
+  --ink-3: oklch(46% 0.025 200);
+  --line: oklch(82% 0.015 170);
+  --accent: oklch(42% 0.15 262);
+  --accent-hover: oklch(36% 0.15 262);
+  --on-accent: oklch(98% 0.01 262);
+  --on-accent-2: oklch(88% 0.04 262);
+  --clay: oklch(62% 0.07 55);
+  --clay-light: oklch(80% 0.05 60);
+  --error: oklch(45% 0.17 28);
+
+  --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Instrument Sans", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px;
+  --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px; --s24: 96px;
+  --r-control: 4px; --r-panel: 12px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font: 400 1.0625rem/1.55 var(--font-body);
+  overflow-x: clip;
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; line-height: 1.05; margin: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+.wrap { width: min(1120px, 100% - 2 * var(--s6)); margin-inline: auto; }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 48px; padding: 0 var(--s6); border-radius: var(--r-control);
+  border: 1.5px solid var(--accent); background: var(--accent); color: var(--on-accent);
+  font-weight: 600; text-decoration: none; cursor: pointer;
+  transition: background-color 180ms var(--ease-out), transform 120ms var(--ease-out);
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn--ghost { background: transparent; color: var(--accent); }
+@media (hover: hover) {
+  .btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--on-accent); }
+}
+
+/* header */
+.site-header { padding-block: var(--s5); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); flex-wrap: wrap; }
+.brand { font-family: var(--font-display); font-weight: 700; font-size: 1.375rem; letter-spacing: -0.02em; text-decoration: none; }
+nav { display: flex; gap: var(--s6); }
+nav a { text-decoration: none; color: var(--ink-2); font-weight: 500; padding-block: var(--s3); }
+@media (hover: hover) { nav a:hover { color: var(--accent); } }
+
+/* hero */
+.hero { padding-block: var(--s12) var(--s24); }
+.hero .wrap { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: var(--s16); align-items: center; }
+.hero h1 { font-size: clamp(2.5rem, 7vw, 4.75rem); font-weight: 700; letter-spacing: -0.03em; }
+.hero .lede { font-size: 1.125rem; color: var(--ink-2); max-width: 46ch; margin-top: var(--s6); }
+.hero .actions { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s8); }
+
+.bench { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-panel); padding: var(--s6); }
+.bench svg { display: block; width: 100%; height: auto; aspect-ratio: 300 / 280; }
+.bench .controls { display: grid; gap: var(--s4); margin-top: var(--s4); }
+.ctl label { display: flex; justify-content: space-between; font-weight: 500; font-size: 0.9375rem; }
+.ctl output { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.ctl input[type=range] { width: 100%; min-height: 44px; accent-color: var(--accent); margin: 0; }
+.bench .hint { font-size: 0.9375rem; color: var(--ink-3); margin-top: var(--s2); }
+
+/* offers */
+section { scroll-margin-top: var(--s4); }
+.offers { padding-block: var(--s16) var(--s24); }
+.section-head { max-width: 40rem; margin-bottom: var(--s12); }
+.section-head h2 { font-size: clamp(2rem, 4.5vw, 3rem); }
+.section-head p { color: var(--ink-2); margin-top: var(--s4); }
+.offer-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--s6); align-items: stretch; }
+.offer { border-radius: var(--r-panel); padding: var(--s10); display: flex; flex-direction: column; }
+.offer h3 { font-size: 1.75rem; }
+.price { font-family: var(--font-display); font-weight: 700; font-size: 3.5rem; letter-spacing: -0.03em; line-height: 1; margin-top: var(--s6); font-variant-numeric: tabular-nums; }
+.price small { font-family: var(--font-body); font-size: 1rem; font-weight: 500; letter-spacing: 0; }
+.offer ul { list-style: none; padding: 0; margin: var(--s6) 0 var(--s8); display: grid; gap: var(--s3); }
+.offer li { padding-left: var(--s6); position: relative; }
+.offer li::before { content: ""; position: absolute; left: 0; top: 0.6em; width: 10px; height: 2px; background: currentColor; }
+.offer .btn { margin-top: auto; align-self: flex-start; }
+.offer--course { background: var(--accent); color: var(--on-accent); }
+.offer--course .btn { background: var(--on-accent); color: var(--accent); border-color: var(--on-accent); }
+@media (hover: hover) { .offer--course .btn:hover { background: var(--ground); color: var(--accent-hover); border-color: var(--ground); } }
+.offer--course :focus-visible { outline-color: var(--on-accent); }
+.offer--member { border: 1.5px solid var(--ink); background: transparent; }
+
+.seats { margin-top: var(--s6); }
+.seats-row { display: flex; gap: var(--s2); }
+.seat { width: 20px; height: 20px; border-radius: 50%; background: var(--clay-light); }
+.seats p { margin-top: var(--s2); font-size: 0.9375rem; color: var(--on-accent-2); }
+
+/* contact */
+.join { padding-block: var(--s16) var(--s24); border-top: 1px solid var(--line); }
+.join .wrap { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: var(--s16); }
+.join h2 { font-size: clamp(2rem, 4.5vw, 3rem); }
+.join .side p { color: var(--ink-2); margin-top: var(--s4); max-width: 38ch; }
+form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-panel); padding: var(--s8); display: grid; gap: var(--s5); }
+.field { display: grid; gap: var(--s2); }
+.field label, legend { font-weight: 500; font-size: 0.9375rem; padding: 0; }
+.field input, .field select, .field textarea {
+  min-height: 48px; padding: var(--s3) var(--s4); background: var(--ground);
+  border: 1.5px solid var(--ink-3); border-radius: var(--r-control); font-size: 1rem; width: 100%;
+  transition: border-color 150ms var(--ease-out);
+}
+.field textarea { min-height: 96px; resize: vertical; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.field input[aria-invalid=true] { border-color: var(--error); }
+.err { color: var(--error); font-size: 0.9375rem; display: none; }
+.field input[aria-invalid=true] ~ .err { display: block; }
+.status { padding: var(--s4); border-radius: var(--r-control); border: 1.5px solid var(--accent); font-size: 0.9375rem; }
+.status[hidden] { display: none; }
+.status.is-error { border-color: var(--error); color: var(--error); }
+
+footer { border-top: 1px solid var(--line); padding-block: var(--s8); color: var(--ink-3); font-size: 0.9375rem; }
+footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s2); }
+
+@media (max-width: 860px) {
+  .hero .wrap, .offer-grid, .join .wrap { grid-template-columns: 1fr; gap: var(--s10); }
+  .hero { padding-block: var(--s6) var(--s16); }
+  .offer { padding: var(--s6); }
+  form { padding: var(--s5); }
+  .offers, .join { padding-block: var(--s12); }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top">Slow Clay</a>
+    <nav aria-label="Primary">
+      <a href="#offers">Course &amp; studio</a>
+      <a href="#join">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Learn to throw, at the speed clay allows.</h1>
+        <p class="lede">A small pottery studio in Portland. Take our six-week wheel-throwing course with no more than eight classmates, or join open studio and make on your own schedule.</p>
+        <div class="actions">
+          <a class="btn" href="#join" data-interest="course">Reserve a course seat</a>
+          <a class="btn btn--ghost" href="#offers">See what’s included</a>
+        </div>
+      </div>
+
+      <div class="bench" aria-labelledby="bench-title">
+        <h2 id="bench-title" style="font-size:1rem;letter-spacing:0;font-family:var(--font-body);font-weight:600;margin-bottom:var(--s2)">Pull your first pot</h2>
+        <svg id="pot" viewBox="0 0 300 280" role="img" aria-label="A pot on a wheel. Its shape changes with the sliders below.">
+          <ellipse cx="150" cy="262" rx="132" ry="14" fill="oklch(24% 0.025 200)"/>
+          <ellipse cx="150" cy="256" rx="132" ry="14" fill="oklch(40% 0.025 200)"/>
+          <path id="pot-body" fill="oklch(42% 0.15 262)" d=""/>
+          <ellipse id="pot-rim" cx="150" cy="0" rx="0" ry="5" fill="oklch(30% 0.12 262)"/>
+        </svg>
+        <div class="controls">
+          <div class="ctl">
+            <label for="height">Height <output id="height-out" for="height"></output></label>
+            <input id="height" type="range" min="60" max="210" value="150">
+          </div>
+          <div class="ctl">
+            <label for="belly">Belly <output id="belly-out" for="belly"></output></label>
+            <input id="belly" type="range" min="0" max="100" value="55">
+          </div>
+        </div>
+        <p class="hint">On the wheel it takes a few weeks to get this kind of control. That’s the course.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="offers" id="offers">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Two ways to work with us</h2>
+        <p>Start with the course if you’re new to the wheel. Join open studio when you want room to keep making.</p>
+      </div>
+
+      <div class="offer-grid">
+        <article class="offer offer--course">
+          <h3>Wheel-throwing course</h3>
+          <div class="price">$340 <small>for 6 weeks</small></div>
+          <ul>
+            <li>Six weekly sessions at the wheel</li>
+            <li>Tuesday or Saturday mornings, your choice</li>
+            <li>Limited to 8 students, so you get real attention</li>
+          </ul>
+          <div class="seats" aria-label="Maximum of 8 students per class">
+            <div class="seats-row" aria-hidden="true">
+              <span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span>
+              <span class="seat"></span><span class="seat"></span><span class="seat"></span><span class="seat"></span>
+            </div>
+            <p>Eight seats per class. Not a seat more.</p>
+          </div>
+          <a class="btn" href="#join" data-interest="course" style="margin-top:var(--s8)">Reserve a course seat</a>
+        </article>
+
+        <article class="offer offer--member">
+          <h3>Open-studio membership</h3>
+          <div class="price">$120 <small>per month</small></div>
+          <ul>
+            <li>25 lb of clay included</li>
+            <li>Firing included</li>
+            <li>Studio time to practice and finish your own work</li>
+          </ul>
+          <a class="btn btn--ghost" href="#join" data-interest="membership">Ask about membership</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="join" id="join">
+    <div class="wrap">
+      <div class="side">
+        <h2>Tell us what you’d like to make</h2>
+        <p>Send a note and we’ll reply with the next course dates and how to book. Nothing to pay on this form.</p>
+      </div>
+
+      <form id="enquiry" novalidate>
+        <div class="field">
+          <label for="name">Your name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required>
+          <span class="err" id="name-err">Enter your name so we know who to reply to.</span>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" autocomplete="email" required>
+          <span class="err" id="email-err">Enter an email address like name@example.com.</span>
+        </div>
+        <div class="field">
+          <label for="interest">I’m interested in</label>
+          <select id="interest" name="interest">
+            <option value="course-tue">Course, Tuesday mornings</option>
+            <option value="course-sat">Course, Saturday mornings</option>
+            <option value="membership">Open-studio membership</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="note">Anything we should know? (optional)</label>
+          <textarea id="note" name="note"></textarea>
+        </div>
+        <button class="btn" type="submit">Send enquiry</button>
+        <p class="status" id="status" role="status" hidden></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Slow Clay · Portland, Oregon</span>
+    <span>Wheel-throwing and open studio</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Set this to the studio's real address before publishing.
+  var ENQUIRY_EMAIL = "hello@slowclay.example";
+
+  /* ---- pot profile ---- */
+  var body = document.getElementById("pot-body");
+  var rim = document.getElementById("pot-rim");
+  var hIn = document.getElementById("height"), bIn = document.getElementById("belly");
+  var hOut = document.getElementById("height-out"), bOut = document.getElementById("belly-out");
+  var BASE = 250, CX = 150;
+
+  function draw(h, b) {
+    var foot = 44;
+    var belly = 52 + b * 0.55;       // widest half-width
+    var lip = 38 + (100 - b) * 0.22; // half-width at the rim
+    var top = BASE - h;
+    var d = "M" + (CX - foot) + " " + BASE +
+      " L" + (CX + foot) + " " + BASE +
+      " C" + (CX + belly + 8) + " " + (BASE - h * 0.12) + " " + (CX + belly + 4) + " " + (BASE - h * 0.62) + " " + (CX + lip) + " " + top +
+      " L" + (CX - lip) + " " + top +
+      " C" + (CX - belly - 4) + " " + (BASE - h * 0.62) + " " + (CX - belly - 8) + " " + (BASE - h * 0.12) + " " + (CX - foot) + " " + BASE + "Z";
+    body.setAttribute("d", d);
+    rim.setAttribute("cy", top);
+    rim.setAttribute("rx", lip);
+  }
+  function label(h, b) {
+    hOut.textContent = Math.round(h / 210 * 100) + "%";
+    bOut.textContent = Math.round(b) + "%";
+  }
+  function update() { var h = +hIn.value, b = +bIn.value; draw(h, b); label(h, b); }
+  hIn.addEventListener("input", update);
+  bIn.addEventListener("input", update);
+
+  // One moment of motion: the pot rises on load.
+  var target = +hIn.value;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { update(); }
+  else {
+    var start = null, dur = 1100;
+    draw(20, +bIn.value); label(target, +bIn.value);
+    var ease = function (t) { return 1 - Math.pow(1 - t, 4); };
+    (function frame(ts) {
+      if (start === null) start = ts;
+      var t = Math.min((ts - start) / dur, 1);
+      draw(20 + (+hIn.value - 20) * ease(t), +bIn.value);
+      if (t < 1) requestAnimationFrame(frame); else update();
+    })(performance.now());
+    ["pointerdown", "keydown"].forEach(function (ev) {
+      document.addEventListener(ev, function () { start = -1e9; }, { once: true });
+    });
+  }
+
+  /* ---- CTA preselects interest ---- */
+  var interest = document.getElementById("interest");
+  document.querySelectorAll("[data-interest]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      interest.value = a.dataset.interest === "membership" ? "membership" : interest.value.indexOf("course") === 0 ? interest.value : "course-tue";
+    });
+  });
+
+  /* ---- enquiry form ---- */
+  var form = document.getElementById("enquiry");
+  var status = document.getElementById("status");
+  var nameEl = document.getElementById("name"), emailEl = document.getElementById("email");
+
+  function flag(el, bad) {
+    el.setAttribute("aria-invalid", bad ? "true" : "false");
+    if (bad) el.setAttribute("aria-describedby", el.id + "-err"); else el.removeAttribute("aria-describedby");
+  }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var badName = !nameEl.value.trim();
+    var badEmail = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value.trim());
+    flag(nameEl, badName); flag(emailEl, badEmail);
+    status.hidden = true; status.classList.remove("is-error");
+    if (badName || badEmail) { (badName ? nameEl : emailEl).focus(); return; }
+
+    var choice = interest.options[interest.selectedIndex].text;
+    var text = "Name: " + nameEl.value.trim() + "\nEmail: " + emailEl.value.trim() +
+      "\nInterested in: " + choice + "\n\n" + document.getElementById("note").value.trim();
+    var href = "mailto:" + ENQUIRY_EMAIL + "?subject=" + encodeURIComponent("Slow Clay enquiry: " + choice) +
+      "&body=" + encodeURIComponent(text);
+    status.hidden = false;
+    status.textContent = "Opening your email app with the message ready to send. If nothing opens, write to " + ENQUIRY_EMAIL + ".";
+    window.location.href = href;
+  });
+})();
+</script>
+</body>
+</html>

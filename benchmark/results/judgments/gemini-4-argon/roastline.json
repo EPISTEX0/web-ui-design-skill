@@ -1,125 +1,169 @@
 {
 	"scores": {
-		"V3": {
+		"P6": {
+			"craft": 8,
+			"fit": 8,
+			"hierarchy": 8,
+			"mobile": 8,
+			"overall": 8,
+			"defects": [
+				"Desktop 14-day roasted output bar chart stretches vertically to match the adjacent green coffee card height, distorting bar proportions",
+				"Desktop wholesale orders table truncates several customer and coffee names with ellipses despite available horizontal space",
+				"Desktop full-page sidebar white background stops at 900px viewport height instead of extending to the bottom of the page",
+				"Mobile top navigation bar clips the rightmost navigation items"
+			],
+			"note": "Clean, grounded roastery dashboard with strong operational hierarchy and the only mobile layout that properly reflows the wholesale orders table into cards."
+		},
+		"N2": {
 			"craft": 8,
 			"fit": 9,
 			"hierarchy": 8,
-			"mobile": 4,
+			"mobile": 3,
 			"overall": 7,
 			"defects": [
-				"Severe horizontal overflow on mobile (390px) clips the header subtitle, the right side of the roast curve and dark telemetry values, the right-column KPI cards, green inventory status labels, and the rightmost columns of both tables.",
-				"In desktop-full, the sidebar user footer ('Mara Okafor') is positioned at the 900px viewport height rather than the bottom of the full-height sidebar, leaving a large empty dark-green region below it."
+				"Severe horizontal overflow across almost every section on mobile (header subtitle, roast curve, telemetry panel, 2-column KPI grid, green coffee status text, and both tables are clipped on the right)",
+				"Mobile roast curve SVG scales down as a fixed graphic, making phase and temperature labels tiny",
+				"Desktop full-page dark green sidebar ends abruptly at 900px viewport height, leaving empty off-white background underneath"
 			],
-			"note": "Rich, domain-authentic desktop roastery command center with an expressive live roast curve and Agtron swatches, but held back by widespread horizontal clipping at 390px."
+			"note": "Rich, domain-authentic desktop design anchored by an expressive live roast curve and Agtron schedule, but severely undermined by widespread mobile horizontal clipping."
 		},
-		"Q5": {
+		"H3": {
+			"craft": 6,
+			"fit": 7,
+			"hierarchy": 7,
+			"mobile": 4,
+			"overall": 6,
+			"defects": [
+				"Roast curve has an unrealistic sharp upward kink at 5:00 and the dashed profile target line shown in the legend is missing or invisible on the chart",
+				"Green bean stock truncates 'Guatemala Huehuetenango' with an ellipsis even on desktop",
+				"All top navigation links disappear completely on mobile with no menu button or replacement navigation",
+				"Mobile green bean stock list and wholesale orders table overflow horizontally, clipping stock numbers, filter pills, and the order value column",
+				"Mobile roast curve SVG text labels shrink to near-unreadable size"
+			],
+			"note": "Warm editorial palette and clear top-level summary, held back by a flawed roast curve graphic, missing mobile navigation, and clipped mobile tables."
+		},
+		"E9": {
+			"craft": 5,
+			"fit": 4,
+			"hierarchy": 5,
+			"mobile": 2,
+			"overall": 4,
+			"defects": [
+				"No primary navigation or action buttons anywhere on the page",
+				"Large empty vertical gap inside the desktop roasted output chart card and overly narrow (~60px) stock bars in the green bean inventory table",
+				"Every card below the KPI row on mobile (roasted output chart, green bean inventory, recent roast batches, and wholesale orders) overflows horizontally and clips the right side of the content"
+			],
+			"note": "Generic SaaS analytics template with default primary chart colors, no navigation, and broken horizontal overflow across every chart and table on mobile."
+		},
+		"F8": {
+			"craft": 8,
+			"fit": 8,
+			"hierarchy": 8,
+			"mobile": 7,
+			"overall": 7,
+			"defects": [
+				"Includes literal 'Sample data' meta-text in the page subtitle and 'All figures are sample data for design review' in the footer",
+				"Mobile wholesale orders table overflows horizontally, clipping the rightmost Status column",
+				"Desktop sidebar footer metadata floats mid-page around 900px viewport height on full scroll"
+			],
+			"note": "Well-structured warm roastery workspace that balances inventory, orders, and live drum status effectively, with only minor mobile table clipping and literal sample-data labels."
+		},
+		"P3": {
+			"craft": 8,
+			"fit": 9,
+			"hierarchy": 9,
+			"mobile": 6,
+			"overall": 8,
+			"defects": [
+				"Mobile wholesale orders table overflows horizontally and clips the rightmost 'Roasted kg' column",
+				"Inline SVG charts (live roast curve and weekly roasted bar chart) scale down proportionally on mobile, making their internal text labels microscopic",
+				"Desktop sidebar footer metadata sits at the 900px fold rather than anchoring to the bottom of the full page"
+			],
+			"note": "Standout roastery control screen with an immediate operational summary, high-contrast live roast telemetry, and clear cross-linking between low green stock, blocked orders, and inbound shipments."
+		},
+		"X8": {
+			"craft": 8,
+			"fit": 8,
+			"hierarchy": 8,
+			"mobile": 5,
+			"overall": 7,
+			"defects": [
+				"Mobile top navigation bar clips on the right edge",
+				"Mobile today's roast schedule and wholesale orders tables overflow horizontally, cutting off the rightmost 3 to 4 columns of each table",
+				"Desktop full-page sidebar background stops at 900px viewport height, leaving a mismatched background tone below it"
+			],
+			"note": "Warm, well-crafted roastery aesthetic with clear inventory cover bars and actionable alerts on desktop, but multi-column tables clip heavily on mobile."
+		},
+		"D5": {
 			"craft": 7,
+			"fit": 8,
+			"hierarchy": 7,
+			"mobile": 5,
+			"overall": 6,
+			"defects": [
+				"Includes literal 'sample data' meta-text in the header subtitle and page footer",
+				"Desktop 'Roasted per day' card has awkward empty space below the caption and green inventory bullet bars are cramped",
+				"Mobile top navigation clips 'Customers' on the right edge, and the live roast SVG labels shrink to tiny text",
+				"Mobile green bean inventory and wholesale orders tables overflow horizontally, cutting off the Status column in both"
+			],
+			"note": "Capable roastery dashboard featuring a detailed live roast curve and daily output goal, tempered by cramped inventory bars and clipped mobile tables."
+		},
+		"Z4": {
+			"craft": 6,
 			"fit": 7,
 			"hierarchy": 7,
 			"mobile": 3,
 			"overall": 5,
 			"defects": [
-				"On mobile (390px), the bottom two-column grid ('Today's roast batches' and 'Wholesale orders') fails to stack into a single column, crushing each table into a narrow ~175px column and clipping most of their data.",
-				"On mobile (390px), the 'Green bean inventory' table overflows its card and clips the entire 'Status' column on the right.",
-				"On mobile (390px), the top horizontal navigation bar clips links past 'Green beans'.",
-				"In desktop-full, the sidebar user block ('Mira Kovac') floats mid-sidebar at 900px with blank space beneath it."
+				"Mobile bottom section fails to stack 'Today's roast batches' and 'Wholesale orders', squeezing both tables side-by-side into ~175px columns that clip half their data",
+				"Mobile green bean inventory table overflows horizontally and cuts off the Status column, and top nav clips on the right",
+				"Desktop 14-day bar chart stretches too tall vertically to match the adjacent inventory table",
+				"Includes literal 'All figures are sample data for design review' footer text and mid-page floating sidebar footer on full scroll"
 			],
-			"note": "Warm, well-organized desktop dashboard with a clear reorder warning banner, but the uncollapsed two-column bottom grid makes the mobile layout unusable."
+			"note": "Competent warm desktop layout with a helpful low-stock banner, but the mobile layout fails to stack its bottom two-column grid and severely clips all three tables."
 		},
-		"H8": {
-			"craft": 9,
-			"fit": 10,
-			"hierarchy": 9,
-			"mobile": 8,
-			"overall": 9,
-			"defects": [
-				"On mobile (390px), the rightmost 'Roasted kg' column in the 'Wholesale orders' table is clipped at the right edge.",
-				"On mobile (390px), the internal text annotations inside the scaled-down SVG roast curve become very small.",
-				"In desktop-full, the sidebar's bottom machine-maintenance note sits around the 900px fold line with empty sidebar space below it."
-			],
-			"note": "Exceptional editorial craft and deep roastery domain fit that pairs live drum telemetry and today's batch queue with stock cover and order fulfillment across both desktop and mobile."
-		},
-		"F2": {
-			"craft": 8,
-			"fit": 8,
-			"hierarchy": 8,
-			"mobile": 6,
-			"overall": 7,
-			"defects": [
-				"On mobile (390px), the 'Today's roast schedule' table overflows horizontally inside its card, clipping 'Green' and cutting off the 'Roasted', 'Loss', and 'Status' columns.",
-				"On mobile (390px), the 'Wholesale orders' table overflows horizontally inside its card, clipping 'Contents' and cutting off the 'Weight', 'Due', 'Status', and 'Value' columns.",
-				"On mobile (390px), the top navigation bar clips items from 'Green inventory' onward.",
-				"In desktop-full, the sidebar user profile ('Mara Okonkwo') sits at 900px with empty sidebar space below it."
-			],
-			"note": "Warm, cohesive roastery dashboard with strong hierarchy and actionable alerts on desktop, though its wide data tables clip heavily on mobile."
-		},
-		"X7": {
-			"craft": 8,
-			"fit": 8,
-			"hierarchy": 8,
-			"mobile": 9,
-			"overall": 8,
-			"defects": [
-				"On desktop, the 'Roasted output' 14-day bar chart stretches vertically to match the tall 'Green coffee' card beside it, leaving overly elongated bars.",
-				"In desktop-full, the white sidebar background and footer stop at 900px, leaving an empty gray column beneath the sidebar.",
-				"Includes a fourth-wall-breaking disclaimer footer ('Sample data for layout review. Figures are not live.')."
-			],
-			"note": "Clean, practical roastery operations dashboard with well-structured inventory cover and the best mobile table adaptation in the set."
-		},
-		"N6": {
+		"X9": {
 			"craft": 7,
 			"fit": 8,
 			"hierarchy": 7,
 			"mobile": 4,
 			"overall": 6,
 			"defects": [
-				"On mobile (390px), 'Green bean stock' and 'Wholesale orders' overflow past the right viewport edge, cutting off the days-of-cover numbers, filter pills, and the entire 'Value' column.",
-				"On mobile (390px), all top navigation links disappear with no menu button provided.",
-				"On desktop, the SVG roast curve has an unnatural sharp kink at minute 5 and its '-- Profile target' dashed line is barely visible.",
-				"The page subtitle states '5 batches roasted today, 2 more scheduled', but the 'Today's batches' list only shows the 5 completed batches."
+				"Lacks any primary action buttons (such as logging a roast batch or green delivery) on the dashboard",
+				"Includes literal 'sample data' text in the header subtitle and page footer",
+				"Mobile top navigation clips on the right, and all three full-width tables overflow horizontally, cutting off 2 to 3 columns each",
+				"Mobile roast curve SVG internal text labels shrink to very small size, and desktop sidebar user profile floats mid-page on full scroll"
 			],
-			"note": "Tasteful sage-and-espresso editorial styling on desktop, but severely compromised on mobile by missing navigation and right-edge overflow on the bottom cards."
+			"note": "Rich coffee-toned palette and informative dual-axis roast curve paired with clear alerts, but missing primary action triggers and wide tables clip badly on mobile."
 		},
-		"M5": {
+		"F4": {
+			"craft": 5,
+			"fit": 4,
+			"hierarchy": 6,
+			"mobile": 3,
+			"overall": 4,
+			"defects": [
+				"Top navigation links vanish completely on mobile with no hamburger menu or replacement navigation",
+				"Mobile green bean inventory crushes the progress bars into ~15px-wide slivers that cannot be read",
+				"Mobile wholesale orders and recent roast batches tables overflow horizontally, cutting off key columns (Due, Status, Green kg, Roasted kg, Loss, Roaster, Cupping)",
+				"Lacks primary action buttons and leaves a large empty white gap at the bottom of the desktop wholesale orders card"
+			],
+			"note": "Generic SaaS card template with bright primary chart colors, no roastery character, vanished mobile navigation, and crushed or clipped mobile data views."
+		},
+		"K8": {
 			"craft": 6,
 			"fit": 4,
 			"hierarchy": 6,
 			"mobile": 5,
 			"overall": 5,
 			"defects": [
-				"On desktop, the 'Roasted output, last 30 days' card has a large empty whitespace gap below the chart due to the taller adjacent 'Green bean stock' card.",
-				"On mobile (390px), top navigation links disappear completely with no menu toggle.",
-				"On mobile (390px), both bottom tables squeeze all columns into 390px, causing awkward narrow text wrapping ('B-\\n4821') and clipping the rightmost 'Status' column ('QC p', '✓ Ready to sh')."
+				"Top navigation links vanish completely on mobile with no menu trigger",
+				"Mobile recent roast batches and wholesale orders tables clip the right edge of their status labels ('QC p', 'QC h', 'Ready to sh')",
+				"Desktop 30-day bar chart card and wholesale orders card have large empty whitespace at the bottom",
+				"Lacks primary action buttons and prints 'sample data' in the footer"
 			],
-			"note": "A competent but generic royal-blue SaaS template that lacks coffee-specific character, interactive workflow controls, and responsive mobile table handling."
-		},
-		"U7": {
-			"craft": 5,
-			"fit": 5,
-			"hierarchy": 5,
-			"mobile": 4,
-			"overall": 4,
-			"defects": [
-				"On mobile (390px), the stock gauge bars in 'Green bean inventory' are crushed into unreadable ~15px wide slivers.",
-				"On mobile (390px), 'Wholesale orders' cuts off the 'Due' and 'Status' columns, and 'Recent roast batches' cuts off 'Green kg', 'Roasted kg', 'Loss', 'Roaster', and 'Cupping'.",
-				"On mobile (390px), top navigation links disappear completely with no menu button.",
-				"On desktop, 'Recent roast batches' is pushed entirely below the 900px fold, and the 'Wholesale orders' card has a large blank gap at the bottom."
-			],
-			"note": "Generic SaaS card template with jarring primary blue/orange/green roast-level colors, poor above-the-fold balance, and crushed gauges and clipped tables on mobile."
-		},
-		"A8": {
-			"craft": 5,
-			"fit": 4,
-			"hierarchy": 4,
-			"mobile": 3,
-			"overall": 4,
-			"defects": [
-				"On mobile (390px), every card below the KPIs ('Roasted output' chart, 'Green bean inventory', 'Recent roast batches', and 'Wholesale orders') overflows horizontally off the right edge of the viewport.",
-				"On desktop, the 'Roasted output' card has a large empty whitespace gap beneath the chart, and both 'Recent roast batches' and 'Wholesale orders' sit almost entirely below the 900px fold.",
-				"Missing application navigation on both desktop and mobile (only a 'Toggle theme' button and date-range tabs are shown)."
-			],
-			"note": "Reads like a generic 30-day BI report rather than a live roastery tool, lacks app navigation, and suffers from horizontal overflow across every major section on mobile."
+			"note": "Clean but generic blue-and-white SaaS dashboard template that lacks coffee roastery identity, primary workflow actions, and mobile navigation."
 		}
 	},
-	"ranking": ["H8", "X7", "F2", "V3", "N6", "Q5", "M5", "U7", "A8"]
+	"ranking": ["P3", "P6", "F8", "X8", "N2", "D5", "X9", "H3", "Z4", "K8", "F4", "E9"]
 }

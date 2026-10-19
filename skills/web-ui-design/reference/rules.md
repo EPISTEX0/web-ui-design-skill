@@ -4,7 +4,7 @@ These values are where at least three independent design skills agree. Where sou
 
 ## Tells
 
-These are defaults that read as generated because they appear whatever the subject. Each is legitimate when the brief asks for it. Otherwise replace it with a choice made for this subject. Removing a tell leaves a gap, so fill the gap with a decision.
+These are defaults that read as generated because they appear whatever the subject. Each is legitimate when the brief asks for it. Otherwise replace it with a choice made for this subject. Removing a tell leaves a gap, so fill the gap with a decision from the same world: a bakery that drops cream and terracotta moves to rye crust, flour and enamel tins, not to a SaaS blue.
 
 - Palettes: cream ground (near `#F4F1EA`) with serif display and terracotta accent; near-black with one acid-green or vermilion accent; purple or indigo gradients.
 - Structure: identical icon + heading + text card grids; cards nested in cards; one radius and one grey shadow on everything; gradient washes as decoration.
@@ -20,6 +20,7 @@ These are defaults that read as generated because they appear whatever the subje
 - Body line length is 45 to 75 characters.
 - Nested radius: outer radius = inner radius + padding.
 - Full-height layouts use `100dvh`. Horizontal overflow uses `overflow-x: clip`, which keeps `position: sticky` working.
+- An app sidebar sits in a grid row that spans the page, with `position: sticky; top: 0; height: 100dvh` on its content, so its background runs to the bottom of a long page.
 - Reserve space for images and async content with explicit dimensions or `aspect-ratio`.
 
 ## Type
@@ -30,6 +31,7 @@ These are defaults that read as generated because they appear whatever the subje
 - Headings get `text-wrap: balance`, and body gets `text-wrap: pretty`.
 - Changing or aligned numbers get `font-variant-numeric: tabular-nums`.
 - Use sentence case for headings, buttons and labels.
+- Every web font has a fallback stack, and the render loop confirms the font loaded. A page in Times or Arial reads as unstyled.
 
 ## Color
 
@@ -37,7 +39,7 @@ These are defaults that read as generated because they appear whatever the subje
 - Components reference semantic tokens (`--color-text-secondary`). Primitives (`--blue-600`) are referenced only by tokens.
 - Use 3 or 4 text levels (primary, secondary, tertiary, muted) on one neutral hue.
 - The accent marks actions and meaning, about 5% of the surface or less. Each view has one filled primary action.
-- Contrast: 4.5:1 for body text, 3:1 for large text, icons and control boundaries. Measure it rather than estimating.
+- Contrast: 4.5:1 for body text, 3:1 for large text, icons and control boundaries. The render loop measures it.
 - Color is paired with a second signal (icon, text, shape) wherever it carries meaning.
 
 ## Surfaces and depth
@@ -71,6 +73,9 @@ These are defaults that read as generated because they appear whatever the subje
 
 ## Mobile
 
+- At 390px every multi-column grid is one column, and every row of controls or tabs either wraps or scrolls with its cut edge visible.
+- Wide tables become stacked rows of label and value at 390px. Keep a scrolling table only when its columns must be compared, and then pin the first column.
+- Code blocks scroll inside themselves with `overflow-x: auto`. Write example lines under 60 characters so they fit a phone without scrolling.
 - Inputs are 16px or larger so iOS keeps the zoom.
 - Content respects `env(safe-area-inset-*)`.
 - `touch-action: manipulation` removes tap delay. `-webkit-tap-highlight-color: transparent` goes with a designed active state.

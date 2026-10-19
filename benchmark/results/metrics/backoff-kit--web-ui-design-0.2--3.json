@@ -1,0 +1,25 @@
+{
+  "id": "backoff-kit--web-ui-design-0.2--3",
+  "desktop": {
+    "fullH": 8193,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 1,
+      "rules": [
+        "aria-allowed-role:1"
+      ]
+    }
+  },
+  "mobile": {
+    "fullH": 9199,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null
+  }
+}

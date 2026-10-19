@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roastline · Dashboard</title>
+<style>
+:root{
+  --bg:#f3efe6; --surface:#fbf9f4; --sunken:#ece6d9;
+  --ink:#221a14; --ink-2:#5c5148; --line:#ddd4c4;
+  --accent:#a93d16; --accent-soft:#f3dccf; --slate:#37566a;
+  --good:#2b6636; --good-soft:#dcebd9; --warn:#7d5200; --warn-soft:#f4e5c2; --crit:#9c241c; --crit-soft:#f4d9d4;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r-s:4px; --r-m:8px;
+  --ease:cubic-bezier(.2,.7,.2,1); --t:140ms;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 var(--font);display:grid;grid-template-columns:216px 1fr;min-height:100vh}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* sidebar */
+aside{background:var(--ink);color:#e9e1d3;padding:20px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:24px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px;font:600 19px var(--serif);letter-spacing:.2px}
+.brand svg{flex:none}
+nav{display:flex;flex-direction:column;gap:2px}
+nav a{display:flex;align-items:center;gap:10px;padding:8px;border-radius:var(--r-s);color:#cfc5b4;text-decoration:none;transition:background var(--t) var(--ease)}
+nav a:hover{background:#352a22;color:#fff}
+nav a[aria-current]{background:#3d2e24;color:#fff;box-shadow:inset 3px 0 0 #e08a5c}
+nav .count{margin-left:auto;font:12px var(--mono);background:#4a392d;border-radius:10px;padding:0 7px}
+.who{margin-top:auto;padding:8px;font-size:12px;color:#b3a794;border-top:1px solid #3d3229}
+.who b{display:block;color:#e9e1d3;font-weight:600;font-size:13px}
+
+/* main */
+main{padding:24px 28px 40px;min-width:0}
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+h1{margin:0;font:600 26px/1.15 var(--serif)}
+.sub{color:var(--ink-2);margin-top:2px}
+.btns{display:flex;gap:8px}
+.btn{border:1px solid var(--line);background:var(--surface);padding:7px 12px;border-radius:var(--r-s);cursor:pointer;transition:background var(--t) var(--ease)}
+.btn:hover{background:var(--sunken)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.primary:hover{background:#8f3211}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);min-width:0}
+.kpi{padding:14px 16px}
+.kpi .l{color:var(--ink-2);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font:600 28px/1.2 var(--mono);margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;color:var(--ink-2);font-weight:400}
+.kpi .d{font-size:12px;color:var(--ink-2)}
+.d .up{color:var(--good)} .d .down{color:var(--crit)}
+
+.grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;margin-bottom:16px}
+.card h2{margin:0;font:600 15px var(--font)}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 0;flex-wrap:wrap}
+.ch .hint{color:var(--ink-2);font-size:12px}
+.body{padding:12px 16px 16px}
+
+/* roast curve */
+.legend{display:flex;gap:14px;font-size:12px;color:var(--ink-2)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+#curve{position:relative}
+#curve svg{width:100%;height:auto;display:block;overflow:visible}
+#tip{position:absolute;pointer-events:none;background:var(--ink);color:#f3ecdf;font-size:12px;padding:6px 8px;border-radius:var(--r-s);white-space:nowrap;opacity:0;transition:opacity var(--t);transform:translate(-50%,-110%)}
+.phases{display:flex;height:6px;border-radius:3px;overflow:hidden;gap:2px;margin:10px 0 4px}
+.phases span{display:block}
+.pl{display:flex;font-size:12px;color:var(--ink-2);gap:2px}
+.pl span b{color:var(--ink);font-family:var(--mono);font-weight:500}
+
+/* attention */
+ul.att{list-style:none;margin:0;padding:0}
+ul.att li{display:flex;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+ul.att li:first-child{border-top:0;padding-top:2px}
+.ic{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font:700 12px var(--font)}
+.ic.crit{background:var(--crit-soft);color:var(--crit)} .ic.warn{background:var(--warn-soft);color:var(--warn)} .ic.info{background:var(--sunken);color:var(--slate)}
+ul.att b{font-weight:600} ul.att span.m{color:var(--ink-2);display:block;font-size:12px}
+
+/* tables */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:500;color:var(--ink-2);text-align:left;font-size:12px;padding:8px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface)}
+td{padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--sunken)}
+th.r,td.r{text-align:right}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:1px 8px 1px 6px;border-radius:10px;font-size:12px;font-weight:500}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.good{background:var(--good-soft);color:var(--good)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.crit{background:var(--crit-soft);color:var(--crit)} .pill.info{background:var(--sunken);color:var(--ink-2)} .pill.acc{background:var(--accent-soft);color:var(--accent)}
+.cover{display:flex;align-items:center;gap:8px;min-width:150px}
+.bar{position:relative;flex:1;height:8px;background:var(--sunken);border-radius:4px}
+.bar>i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--slate)}
+.bar>i.low{background:var(--crit)} .bar>i.mid{background:var(--warn)}
+.bar>u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.7}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{border:1px solid transparent;background:none;border-radius:var(--r-s);padding:4px 10px;cursor:pointer;color:var(--ink-2);transition:background var(--t) var(--ease)}
+.tab:hover{background:var(--sunken)}
+.tab[aria-pressed=true]{background:var(--ink);color:#fff}
+.empty{padding:28px;text-align:center;color:var(--ink-2)}
+.roast-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px;border:1px solid rgba(0,0,0,.25)}
+.foot{color:var(--ink-2);font-size:12px;margin-top:20px}
+
+.grid.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:1500px){.grid.two{grid-template-columns:1fr}}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}
+@media (max-width:800px){
+  body{grid-template-columns:1fr}
+  aside{position:static;height:auto;flex-direction:row;align-items:center;padding:10px 12px;gap:12px;overflow-x:auto}
+  nav{flex-direction:row}.who,nav .count{display:none}nav a{white-space:nowrap}
+  main{padding:16px 14px 32px}
+}
+@media (max-width:480px){.kpis{grid-template-columns:1fr 1fr}.kpi .v{font-size:22px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><ellipse cx="13" cy="13" rx="9" ry="11.5" transform="rotate(25 13 13)" fill="#e08a5c"/><path d="M8 4c4 4 1 8 4 11s2 6 5 8" stroke="#221a14" stroke-width="2" fill="none" transform="translate(-1 -1)"/></svg>
+    Roastline
+  </div>
+  <nav aria-label="Main">
+    <a href="#" aria-current="page">Dashboard</a>
+    <a href="#">Green inventory</a>
+    <a href="#">Roast batches</a>
+    <a href="#">Wholesale orders <span class="count">9</span></a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Reports</a>
+  </nav>
+  <div class="who"><b>Dana Whitfield</b>Head roaster · Eastgate</div>
+</aside>
+
+<main>
+  <header class="top">
+    <div>
+      <h1>Monday roast day</h1>
+      <div class="sub">Mon 19 Oct 2026 · Probat L12 warmed up 06:40 · sample data</div>
+    </div>
+    <div class="btns">
+      <button class="btn">Receive green coffee</button>
+      <button class="btn primary">+ New roast batch</button>
+    </div>
+  </header>
+
+  <section class="kpis" aria-label="Key figures">
+    <div class="card kpi"><div class="l">Green coffee on hand</div><div class="v" id="k-green"></div><div class="d" id="k-green-d"></div></div>
+    <div class="card kpi"><div class="l">Roasted this week</div><div class="v">186 <small>kg</small></div><div class="d"><span class="up">▲ 12%</span> vs last Mon–Mon</div></div>
+    <div class="card kpi"><div class="l">Open wholesale orders</div><div class="v" id="k-orders"></div><div class="d" id="k-orders-d"></div></div>
+    <div class="card kpi"><div class="l">Avg. weight loss</div><div class="v">14.6 <small>%</small></div><div class="d"><span class="down">▲ 0.4 pt</span> over 30-day avg (14.2)</div></div>
+  </section>
+
+  <div class="grid">
+    <section class="card" aria-labelledby="h-curve">
+      <div class="ch">
+        <div><h2 id="h-curve">Latest roast · R-2610-07 Ethiopia Guji</h2><div class="hint">Charged 07:52 · 12.0 kg green · 10.3 kg out (−14.2%)</div></div>
+        <div class="legend"><span><i style="background:var(--accent)"></i>Bean temp °C</span><span><i style="background:var(--slate)"></i>Rate of rise °C/min</span></div>
+      </div>
+      <div class="body">
+        <div id="curve"><div id="tip"></div></div>
+        <div class="phases" aria-hidden="true"><span style="flex:4.1;background:#c9a98f"></span><span style="flex:4.6;background:#d9824f"></span><span style="flex:2.2;background:var(--accent)"></span></div>
+        <div class="pl"><span style="flex:4.1">Drying <b>4:06</b></span><span style="flex:4.6">Maillard <b>4:36</b></span><span style="flex:2.2">Development <b>2:12</b> · 19.8%</span></div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-att">
+      <div class="ch"><h2 id="h-att">Needs attention</h2><span class="hint">5 items</span></div>
+      <div class="body"><ul class="att" id="att"></ul></div>
+    </section>
+  </div>
+
+  <section class="card" style="margin-bottom:16px" aria-labelledby="h-inv">
+    <div class="ch"><h2 id="h-inv">Green coffee inventory</h2><span class="hint">Cover = weeks at the last 4 weeks' average roast rate · marker = reorder point</span></div>
+    <div class="tw"><table>
+      <thead><tr><th>Lot</th><th>Origin / process</th><th>Supplier</th><th class="r">On hand</th><th class="r">Reorder at</th><th>Cover</th><th>Status</th></tr></thead>
+      <tbody id="inv"></tbody>
+    </table></div>
+  </section>
+
+  <div class="grid two">
+    <section class="card" aria-labelledby="h-bat">
+      <div class="ch"><h2 id="h-bat">Today's roast batches</h2><span class="hint" id="bat-sum"></span></div>
+      <div class="tw"><table>
+        <thead><tr><th>Batch</th><th>Coffee</th><th class="r">Green</th><th class="r">Loss</th><th>Roast</th><th>Status</th></tr></thead>
+        <tbody id="bat"></tbody>
+      </table></div>
+    </section>
+
+    <section class="card" aria-labelledby="h-ord">
+      <div class="ch"><h2 id="h-ord">Wholesale orders</h2><div class="tabs" id="tabs" role="group" aria-label="Filter orders"></div></div>
+      <div class="tw"><table>
+        <thead><tr><th>Order</th><th>Customer</th><th class="r">Roasted kg</th><th class="r">Total</th><th>Due</th><th>Status</th></tr></thead>
+        <tbody id="ord"></tbody>
+      </table></div>
+    </section>
+  </div>
+  <p class="foot">All figures are sample data for design review.</p>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const fmt = n => n.toLocaleString('en-US');
+const money = n => '$' + n.toLocaleString('en-US');
+
+/* ---------- sample data ---------- */
+const lots = [
+  {lot:'GRN-0412', name:'Ethiopia Guji Natural',        sub:'G1 · natural',          sup:'Boma Trading',     kg:276, reorder:150, use:46},
+  {lot:'GRN-0409', name:'Colombia Huila Excelso',       sub:'washed · EP',           sup:'Cafexport',        kg:540, reorder:200, use:58},
+  {lot:'GRN-0398', name:'Brazil Cerrado Yellow Bourbon',sub:'pulped natural',        sup:'Fazenda Sertão',   kg:690, reorder:250, use:72},
+  {lot:'GRN-0415', name:'Guatemala Huehuetenango',      sub:'washed · SHB',          sup:'Cafexport',        kg:138, reorder:150, use:34},
+  {lot:'GRN-0403', name:'Kenya Nyeri AA',               sub:'washed · AA',           sup:'Boma Trading',     kg:69,  reorder:100, use:22},
+  {lot:'GRN-0391', name:'Sumatra Mandheling',           sub:'wet-hulled',            sup:'Kopi Lintong',     kg:310, reorder:120, use:20},
+  {lot:'GRN-0417', name:'Costa Rica Tarrazú',           sub:'honey',                 sup:'Café Montaña',     kg:205, reorder:100, use:18},
+  {lot:'GRN-0406', name:'Peru Cajamarca Decaf',         sub:'Swiss Water',           sup:'Cafexport',        kg:95,  reorder:60,  use:14},
+];
+const batches = [
+  {id:'R-2610-05', cof:'Brazil Cerrado',       g:15,   o:12.9, lvl:'Medium',      c:'#6b4228', st:['good','Done'],    time:'06:58'},
+  {id:'R-2610-06', cof:'Colombia Huila',       g:15,   o:12.8, lvl:'Medium',      c:'#6b4228', st:['good','Done'],    time:'07:24'},
+  {id:'R-2610-07', cof:'Ethiopia Guji',        g:12,   o:10.3, lvl:'Light',       c:'#9a6b46', st:['good','Done'],    time:'07:52'},
+  {id:'R-2610-08', cof:'House Espresso blend', g:15,   o:null, lvl:'Medium-dark', c:'#4a2c1b', st:['acc','Roasting'], time:'08:31'},
+  {id:'R-2610-09', cof:'Kenya Nyeri AA',       g:10,   o:null, lvl:'Light-med',   c:'#8a5c3b', st:['info','Queued'],  time:'09:05'},
+  {id:'R-2610-10', cof:'Sumatra Mandheling',   g:15,   o:null, lvl:'Dark',        c:'#33200f', st:['info','Queued'],  time:'09:40'},
+];
+const orders = [
+  {id:'WO-3187', cu:'Harbour & Pine Café',    kg:24, tot:612,  due:'Tue 20 Oct', st:['acc','Roasting'],  k:'prod'},
+  {id:'WO-3186', cu:'Linden Street Bakery',   kg:12, tot:318,  due:'Tue 20 Oct', st:['info','Packed'],   k:'ready'},
+  {id:'WO-3184', cu:'Foxglove Hotel',         kg:45, tot:1170, due:'Wed 21 Oct', st:['acc','Roasting'],  k:'prod'},
+  {id:'WO-3183', cu:'Northside Food Co-op',   kg:30, tot:744,  due:'Wed 21 Oct', st:['warn','Awaiting stock'], k:'prod'},
+  {id:'WO-3180', cu:'Marlow Office Group',    kg:18, tot:486,  due:'Thu 22 Oct', st:['info','Packed'],   k:'ready'},
+  {id:'WO-3178', cu:'Tidewater Roll & Brew',  kg:20, tot:540,  due:'Fri 23 Oct', st:['info','Draft'],    k:'draft'},
+  {id:'WO-3171', cu:'Alder & Oak Cafés',      kg:36, tot:936,  due:'Fri 16 Oct', st:['crit','Overdue pay'], k:'ready'},
+];
+const attention = [
+  ['crit','!','<b>Kenya Nyeri AA is below reorder point</b>','69 kg left, about 3.1 weeks of cover · lead time from Boma is 5 weeks'],
+  ['crit','!','<b>Guatemala Huehuetenango is below reorder point</b>','138 kg vs 150 kg trigger · 4.1 weeks of cover'],
+  ['warn','$','<b>Alder & Oak Cafés invoice 3 days overdue</b>','$936 · WO-3171 shipped Fri 16 Oct'],
+  ['warn','⏱','<b>WO-3183 waiting on Kenya Nyeri AA</b>','Needs 30 kg roasted, due Wed 21 Oct'],
+  ['info','↓','<b>Inbound: 3 × 69 kg Ethiopia Guji</b>','Arrives Thu 22 Oct at Eastgate dock'],
+];
+
+/* ---------- KPIs ---------- */
+const totalGreen = lots.reduce((a,l)=>a+l.kg,0);
+$('#k-green').innerHTML = fmt(totalGreen)+' <small>kg</small>';
+$('#k-green-d').textContent = lots.filter(l=>l.kg<l.reorder*1.0).length+' lots at or below reorder point';
+const open = orders.filter(o=>o.k!=='done');
+$('#k-orders').innerHTML = open.length+' <small>· '+money(open.reduce((a,o)=>a+o.tot,0))+'</small>';
+$('#k-orders-d').textContent = '2 due tomorrow, 1 invoice overdue';
+
+/* ---------- attention ---------- */
+$('#att').innerHTML = attention.map(a=>`<li><span class="ic ${a[0]}" aria-hidden="true">${a[1]}</span><div>${a[2]}<span class="m">${a[3]}</span></div></li>`).join('');
+
+/* ---------- inventory ---------- */
+$('#inv').innerHTML = lots.map(l=>{
+  const wk = l.kg/l.use, rp = l.reorder/l.use;
+  const cls = l.kg<l.reorder ? 'low' : l.kg<l.reorder*1.25 ? 'mid' : '';
+  const st = l.kg<l.reorder ? ['crit','Reorder now'] : l.kg<l.reorder*1.25 ? ['warn','Reorder soon'] : ['good','OK'];
+  const max = 14;
+  return `<tr><td class="num">${l.lot}</td><td><b style="font-weight:600">${l.name}</b><div style="color:var(--ink-2);font-size:12px">${l.sub}</div></td><td>${l.sup}</td>
+  <td class="r num">${fmt(l.kg)} kg</td><td class="r num">${l.reorder} kg</td>
+  <td><div class="cover"><div class="bar" role="img" aria-label="${wk.toFixed(1)} weeks of cover"><i class="${cls}" style="width:${Math.min(100,wk/max*100)}%"></i><u style="left:${rp/max*100}%"></u></div><span class="num" style="width:44px;text-align:right">${wk.toFixed(1)} wk</span></div></td>
+  <td><span class="pill ${st[0]}">${st[1]}</span></td></tr>`;
+}).join('');
+
+/* ---------- batches ---------- */
+$('#bat').innerHTML = batches.map(b=>{
+  const loss = b.o ? ((1-b.o/b.g)*100).toFixed(1)+'%' : '—';
+  return `<tr><td class="num">${b.id.slice(-2)} <span style="color:var(--ink-2)">${b.time}</span></td><td>${b.cof}</td><td class="r num">${b.g} kg</td><td class="r num">${loss}</td>
+  <td><span class="roast-dot" style="background:${b.c}"></span>${b.lvl}</td><td><span class="pill ${b.st[0]}">${b.st[1]}</span></td></tr>`;
+}).join('');
+const done = batches.filter(b=>b.o);
+$('#bat-sum').textContent = done.length+' of '+batches.length+' done · '+done.reduce((a,b)=>a+b.o,0).toFixed(1)+' kg roasted';
+
+/* ---------- orders ---------- */
+const tabsDef = [['all','All'],['prod','In production'],['ready','Ready'],['draft','Draft']];
+let tab = 'all';
+function renderOrders(){
+  $('#tabs').innerHTML = tabsDef.map(([k,l])=>{
+    const n = k==='all'?orders.length:orders.filter(o=>o.k===k).length;
+    return `<button class="tab" data-k="${k}" aria-pressed="${k===tab}">${l} ${n}</button>`;
+  }).join('');
+  const rows = orders.filter(o=>tab==='all'||o.k===tab);
+  $('#ord').innerHTML = rows.length ? rows.map(o=>`<tr><td class="num">${o.id}</td><td>${o.cu}</td><td class="r num">${o.kg}</td><td class="r num">${money(o.tot)}</td><td>${o.due}</td><td><span class="pill ${o.st[0]}">${o.st[1]}</span></td></tr>`).join('')
+    : '<tr><td colspan="6" class="empty">No orders in this view.</td></tr>';
+}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b){tab=b.dataset.k;renderOrders();}});
+renderOrders();
+
+/* ---------- roast curve ---------- */
+(function(){
+  const key=[[0,200],[.4,160],[1,112],[1.6,96],[2.5,108],[4.1,140],[6,164],[7,176],[8,187],[8.9,195],[9.5,198],[10.5,204],[11.0,207],[12.7,214]];
+  const temp=t=>{for(let i=1;i<key.length;i++)if(t<=key[i][0]){const[a,b]=[key[i-1],key[i]];return a[1]+(b[1]-a[1])*(t-a[0])/(b[0]-a[0]);}return key.at(-1)[1];};
+  const END=12.7, pts=[]; for(let t=0;t<=END+1e-6;t+=1/6)pts.push({t,T:temp(t)});
+  pts.forEach((p,i)=>{const a=pts[Math.max(0,i-3)];p.R=i<3?null:(p.T-a.T)/(p.t-a.t);});
+  const W=720,H=280,m={l:40,r:44,t:12,b:28};
+  const x=t=>m.l+t/END*(W-m.l-m.r), yT=v=>m.t+(1-(v-80)/(230-80))*(H-m.t-m.b), yR=v=>m.t+(1-(v+0)/(30))*(H-m.t-m.b);
+  const path=(f,key2)=>pts.filter(p=>p[key2]!=null&&(key2!=='R'||p.t>=2.5)).map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+f(p[key2]).toFixed(1)).join('');
+  let g='';
+  for(let v=100;v<=220;v+=40)g+=`<line x1="${m.l}" x2="${W-m.r}" y1="${yT(v)}" y2="${yT(v)}" stroke="#ddd4c4" stroke-width="1"/><text x="${m.l-8}" y="${yT(v)+4}" text-anchor="end" font-size="11" fill="#5c5148" font-family="ui-monospace,monospace">${v}</text>`;
+  for(let v=0;v<=30;v+=10)g+=`<text x="${W-m.r+8}" y="${yR(v)+4}" font-size="11" fill="#37566a" font-family="ui-monospace,monospace">${v}</text>`;
+  for(let t=0;t<=12;t+=2)g+=`<text x="${x(t)}" y="${H-8}" text-anchor="middle" font-size="11" fill="#5c5148" font-family="ui-monospace,monospace">${t}:00</text>`;
+  const fcT=8.9; // first crack
+  const ev=`<line x1="${x(fcT)}" x2="${x(fcT)}" y1="${m.t}" y2="${H-m.b}" stroke="#221a14" stroke-dasharray="3 3"/><text x="${x(fcT)-6}" y="${m.t+10}" text-anchor="end" font-size="11" fill="#221a14">First crack 8:54 · 195°C</text>
+  <circle cx="${x(1.6)}" cy="${yT(96)}" r="4" fill="#fbf9f4" stroke="#a93d16" stroke-width="2"/><text x="${x(1.6)+8}" y="${yT(96)+16}" font-size="11" fill="#221a14">Turning point 1:36</text>`;
+  const el=$('#curve');
+  el.insertAdjacentHTML('afterbegin',`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Roast curve: bean temperature rises from a 96°C turning point at 1:36 to 214°C at drop, 12:42. First crack at 8:54."><text x="${m.l-8}" y="8" text-anchor="end" font-size="10" fill="#5c5148">°C</text>${g}${ev}
+  <path d="${path(yR,'R')}" fill="none" stroke="#37566a" stroke-width="2"/>
+  <path d="${path(yT,'T')}" fill="none" stroke="#a93d16" stroke-width="2.5"/>
+  <line id="cx" y1="${m.t}" y2="${H-m.b}" stroke="#5c5148" stroke-width="1" visibility="hidden"/>
+  <circle id="d1" r="4.5" fill="#a93d16" stroke="#fbf9f4" stroke-width="2" visibility="hidden"/>
+  <rect id="hit" x="${m.l}" y="${m.t}" width="${W-m.l-m.r}" height="${H-m.t-m.b}" fill="transparent"/></svg>`);
+  const svg=el.querySelector('svg'),tip=$('#tip'),cx=$('#cx'),d1=$('#d1');
+  const mmss=t=>Math.floor(t)+':'+String(Math.round((t%1)*60)).padStart(2,'0');
+  svg.addEventListener('pointermove',e=>{
+    const r=svg.getBoundingClientRect(), sx=(e.clientX-r.left)/r.width*W;
+    const t=Math.max(0,Math.min(END,(sx-m.l)/(W-m.l-m.r)*END)), p=pts[Math.round(t*6)];
+    cx.setAttribute('x1',x(p.t));cx.setAttribute('x2',x(p.t));cx.setAttribute('visibility','visible');
+    d1.setAttribute('cx',x(p.t));d1.setAttribute('cy',yT(p.T));d1.setAttribute('visibility','visible');
+    tip.innerHTML=`${mmss(p.t)} · <b>${p.T.toFixed(0)}°C</b>`+(p.R!=null&&p.t>=2.5?` · RoR ${p.R.toFixed(1)}`:'');
+    tip.style.left=(x(p.t)/W*r.width)+'px';tip.style.top=(yT(p.T)/H*r.height)+'px';tip.style.opacity=1;
+  });
+  svg.addEventListener('pointerleave',()=>{tip.style.opacity=0;cx.setAttribute('visibility','hidden');d1.setAttribute('visibility','hidden');});
+})();
+</script>
+</body>
+</html>
