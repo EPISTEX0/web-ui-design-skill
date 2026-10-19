@@ -81,7 +81,7 @@ The full tables, including every criterion per judge, are in [`results/summary.m
 
 - 9 builds per arm. The skills-vs-defaults gap is significant. The gap between the two skills is not.
 - One builder model, Sonnet 5.5. Results may differ on Opus or other agents.
-- Judges are models, not people. Human preference may differ, so vote in the [blind gallery](results/gallery/index.html) and open an issue with your picks.
+- Judges are models, not people. Human preference may differ, so vote in the [blind gallery](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/) and open an issue with your picks.
 - Single-file static pages only. Real projects have existing code, components and a `DESIGN.md`, which is the case the skill is built for and this benchmark does not cover.
 - The skill's author ran the benchmark. Everything needed to rerun it is in this folder.
 

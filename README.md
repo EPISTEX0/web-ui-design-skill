@@ -16,7 +16,7 @@ Then we tested it. In a blind A/B of 27 builds scored by GPT, Gemini and Claude 
 
 Sonnet 5.5 built a landing page, a dashboard and a docs page 3 times per arm, in isolated sessions. Three judges from three model families scored screenshots under random labels. The two skills are statistically tied. `web-ui-design` costs about a third more per build ($0.32 against $0.24).
 
-The method, every score, the limits, and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the [blind gallery](benchmark/results/gallery/index.html).
+The method, every score, the limits, and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the [blind gallery](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/).
 
 ## Install
 
