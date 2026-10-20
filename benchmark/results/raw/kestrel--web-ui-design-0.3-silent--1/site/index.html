@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Front desk · Kestrel Physio</title>
+<style>
+:root {
+  /* primitives: kestrel slate (head), rufous (back), neutral ramp on the slate hue */
+  --n-0: oklch(1 0 0);
+  --n-50: oklch(0.972 0.004 245);
+  --n-100: oklch(0.945 0.006 245);
+  --n-200: oklch(0.9 0.008 245);
+  --n-300: oklch(0.82 0.01 245);
+  --n-500: oklch(0.52 0.02 250);
+  --n-600: oklch(0.44 0.02 250);
+  --n-900: oklch(0.24 0.025 250);
+  --slate-600: oklch(0.45 0.1 255);
+  --slate-700: oklch(0.38 0.1 255);
+  --slate-50: oklch(0.955 0.025 255);
+  --rufous-500: oklch(0.6 0.15 45);
+  --amber-700: oklch(0.44 0.1 70);
+  --amber-50: oklch(0.95 0.06 90);
+  --green-700: oklch(0.4 0.09 155);
+  --green-50: oklch(0.95 0.035 155);
+  --red-700: oklch(0.46 0.16 27);
+  --red-50: oklch(0.955 0.03 27);
+
+  /* semantic tokens */
+  --bg: var(--n-50);
+  --surface: var(--n-0);
+  --text: var(--n-900);
+  --text-2: var(--n-600);
+  --text-3: var(--n-500);
+  --border: var(--n-200);
+  --border-strong: var(--n-300);
+  --accent: var(--slate-600);
+  --accent-hover: var(--slate-700);
+  --accent-tint: var(--slate-50);
+  --now: var(--rufous-500);
+
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 16px/1.5 var(--font); text-wrap: pretty;
+  overflow-x: clip; -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3 { margin: 0; text-wrap: balance; line-height: 1.25; }
+button, input, select { font: inherit; color: inherit; touch-action: manipulation; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
+.num { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* top bar */
+.top {
+  display: flex; align-items: center; gap: var(--sp-4); flex-wrap: wrap;
+  padding: var(--sp-3) max(var(--sp-6), env(safe-area-inset-left)); background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: var(--sp-3); margin-right: auto; }
+.brand svg { flex: none; }
+.brand b { font-size: 20px; letter-spacing: -0.01em; display: block; line-height: 1.1; }
+.brand span { font-size: 14px; color: var(--text-2); }
+.clock { text-align: right; line-height: 1.2; }
+.clock .time { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+.clock .date { font-size: 14px; color: var(--text-2); }
+.open-pill { font-size: 14px; color: var(--green-700); background: var(--green-50); padding: 2px 10px; border-radius: 99px; font-weight: 600; }
+
+/* buttons */
+.btn {
+  min-height: 44px; padding: 0 var(--sp-4); border-radius: var(--r-md); border: 1px solid var(--border-strong);
+  background: var(--surface); font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-2);
+  transition: background-color 150ms var(--ease-out), transform 140ms var(--ease-out), border-color 150ms var(--ease-out);
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn.accent { color: var(--accent); border-color: var(--accent); }
+.btn.quiet { border-color: transparent; background: transparent; color: var(--text-2); }
+.btn.danger { color: var(--red-700); border-color: var(--red-700); }
+@media (hover: hover) {
+  .btn:hover { background: var(--n-100); }
+  .btn.primary:hover { background: var(--accent-hover); }
+  .btn.accent:hover { background: var(--accent-tint); }
+}
+
+/* layout */
+.page {
+  display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: var(--sp-6);
+  padding: var(--sp-6) max(var(--sp-6), env(safe-area-inset-left)) var(--sp-10); max-width: 1680px; margin: 0 auto;
+}
+@media (max-width: 1100px) { .page { grid-template-columns: minmax(0, 1fr); } .rail { order: -1; } }
+@media (max-width: 600px) { .page { padding: var(--sp-4); gap: var(--sp-4); } .top { padding: var(--sp-3) var(--sp-4); } }
+
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-3); margin-bottom: var(--sp-6); }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-3) var(--sp-4); }
+.stat .label { font-size: 14px; color: var(--text-2); }
+.stat .value { font-size: 32px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; }
+.stat .sub { font-size: 14px; color: var(--text-3); }
+.stat.hot .value { color: var(--amber-700); }
+@media (max-width: 700px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); }
+.panel > header { padding: var(--sp-4) var(--sp-4) var(--sp-3); display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.panel h2 { font-size: 18px; margin-right: auto; }
+
+/* toolbar */
+.toolbar { display: flex; gap: var(--sp-3); flex-wrap: wrap; padding: 0 var(--sp-4) var(--sp-4); align-items: center; }
+.field { display: flex; flex-direction: column; gap: 2px; font-size: 14px; color: var(--text-2); }
+.field input[type=search], .field select {
+  min-height: 44px; border: 1px solid var(--border-strong); border-radius: var(--r-md); padding: 0 var(--sp-3);
+  background: var(--surface); color: var(--text); font-size: 16px; min-width: 0;
+}
+.field input[type=search] { width: 260px; max-width: 100%; }
+.chips { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.chip {
+  min-height: 44px; padding: 0 var(--sp-3); border-radius: 99px; border: 1px solid var(--border-strong); background: var(--surface);
+  display: inline-flex; align-items: center; gap: var(--sp-2); transition: background-color 150ms var(--ease-out), transform 140ms var(--ease-out);
+}
+.chip:active { transform: scale(0.97); }
+.chip[aria-pressed=true] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip .n { font-size: 14px; opacity: 0.85; }
+.seg { display: inline-flex; border: 1px solid var(--border-strong); border-radius: var(--r-md); overflow: clip; }
+.seg button { min-height: 44px; padding: 0 var(--sp-4); border: 0; background: var(--surface); font-weight: 600; color: var(--text-2); }
+.seg button[aria-pressed=true] { background: var(--accent-tint); color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); }
+.check { display: inline-flex; align-items: center; gap: var(--sp-2); min-height: 44px; font-size: 16px; }
+.check input { width: 20px; height: 20px; accent-color: var(--accent); }
+
+/* table */
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 14px; font-weight: 600; color: var(--text-2); padding: var(--sp-2) var(--sp-3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--n-50); }
+td { padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--border); vertical-align: middle; }
+th:first-child, td:first-child { padding-left: var(--sp-4); }
+th:last-child, td:last-child { padding-right: var(--sp-4); text-align: right; }
+tr.done td { color: var(--text-3); }
+tr.hl td { background: var(--accent-tint); }
+td.time { white-space: nowrap; font-weight: 600; }
+td.time small { display: block; font-weight: 400; font-size: 14px; color: var(--text-3); }
+.pt {
+  background: none; border: 0; padding: 0; min-height: 44px; text-align: left; font-weight: 600; color: var(--text);
+  text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; max-width: 24ch;
+}
+@media (hover: hover) { .pt:hover { text-decoration-color: var(--accent); } }
+.pt-wrap { overflow-wrap: anywhere; }
+.sub { color: var(--text-2); font-size: 14px; display: block; font-weight: 400; }
+.acts { display: inline-flex; gap: var(--sp-2); justify-content: flex-end; }
+.flags { display: inline-flex; gap: 6px; margin-left: 6px; vertical-align: middle; }
+.flag { font-size: 12px; font-weight: 700; padding: 0 6px; border-radius: 4px; background: var(--amber-50); color: var(--amber-700); line-height: 20px; }
+
+.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; padding: 2px 10px 2px 8px; border-radius: 99px; white-space: nowrap; }
+.pill i { width: 8px; height: 8px; background: currentColor; display: inline-block; }
+.pill.booked { background: var(--n-100); color: var(--text-2); } .pill.booked i { border-radius: 50%; background: none; border: 2px solid currentColor; }
+.pill.late { background: var(--red-50); color: var(--red-700); } .pill.late i { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.pill.waiting { background: var(--amber-50); color: var(--amber-700); } .pill.waiting i { border-radius: 50%; }
+.pill.session { background: var(--green-50); color: var(--green-700); } .pill.session i { transform: rotate(45deg) scale(0.85); }
+.pill.done { background: var(--n-100); color: var(--text-3); } .pill.done i { border-radius: 2px; }
+.pill.noshow, .pill.cancelled { background: var(--n-100); color: var(--text-2); text-decoration: line-through; } .pill.noshow i, .pill.cancelled i { clip-path: polygon(10% 0, 50% 40%, 90% 0, 100% 10%, 60% 50%, 100% 90%, 90% 100%, 50% 60%, 10% 100%, 0 90%, 40% 50%, 0 10%); }
+
+@media (max-width: 800px) {
+  thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  table, tbody, tr, td { display: block; }
+  tr { display: grid; grid-template-columns: 1fr auto; gap: 0 var(--sp-3); padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--border); }
+  td { border: 0; padding: 2px 0 !important; text-align: left !important; }
+  td.time { grid-column: 1; }
+  td.st { grid-column: 2; grid-row: 1; text-align: right !important; }
+  td.who, td.what, td.where { grid-column: 1 / -1; }
+  td.act { grid-column: 1 / -1; padding-top: var(--sp-2) !important; }
+  .acts { display: flex; }
+  .acts .btn { flex: 1; }
+}
+
+/* empty */
+.empty { padding: var(--sp-10) var(--sp-4); text-align: center; color: var(--text-2); }
+.empty h3 { color: var(--text); font-size: 18px; margin-bottom: var(--sp-1); }
+.empty .btn { margin-top: var(--sp-3); }
+.hidden-note { padding: var(--sp-3) var(--sp-4); font-size: 14px; color: var(--text-2); }
+
+/* timeline: the signature view, one column per therapist with a live now-line */
+.tl-scroll { overflow-x: auto; padding: 0 var(--sp-4) var(--sp-4); }
+.tl { display: grid; min-width: 640px; position: relative; }
+.tl-head { position: sticky; top: 0; font-weight: 600; font-size: 14px; padding: var(--sp-2) var(--sp-2); border-bottom: 1px solid var(--border); background: var(--surface); }
+.tl-head small { display: block; font-weight: 400; color: var(--text-2); }
+.tl-hours { position: relative; }
+.tl-hours span { position: absolute; right: var(--sp-2); font-size: 13px; color: var(--text-3); transform: translateY(-50%); }
+.tl-col { position: relative; border-left: 1px solid var(--border);
+  background-image: linear-gradient(var(--border) 1px, transparent 1px); background-size: 100% 64px; }
+.blk {
+  position: absolute; left: 3px; right: 3px; border-radius: var(--r-sm); border: 1px solid var(--border-strong); border-left-width: 4px;
+  background: var(--surface); padding: 2px var(--sp-2); text-align: left; overflow: hidden; line-height: 1.25; font-size: 14px;
+  transition: transform 140ms var(--ease-out);
+}
+.blk:active { transform: scale(0.98); }
+.blk b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.blk span { display: block; color: var(--text-2); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.blk.s-booked { border-left-color: var(--n-500); }
+.blk.s-late { border-left-color: var(--red-700); background: var(--red-50); }
+.blk.s-waiting { border-left-color: var(--amber-700); background: var(--amber-50); }
+.blk.s-session { border-left-color: var(--green-700); background: var(--green-50); }
+.blk.s-done, .blk.s-noshow, .blk.s-cancelled { background: var(--n-100); color: var(--text-3); }
+.blk.s-noshow b, .blk.s-cancelled b { text-decoration: line-through; }
+.nowline { position: absolute; left: 0; right: 0; height: 0; border-top: 2px solid var(--now); z-index: 2; pointer-events: none; }
+.nowline::before { content: attr(data-t); position: absolute; left: 4px; top: -11px; background: var(--now); color: #fff; font-size: 12px; font-weight: 700; padding: 0 5px; border-radius: 4px; line-height: 20px; }
+
+/* rail */
+.rail { display: flex; flex-direction: column; gap: var(--sp-4); align-self: start; position: sticky; top: var(--sp-4); }
+@media (max-width: 1100px) { .rail { position: static; } }
+.queue { list-style: none; margin: 0; padding: 0; }
+.queue li { padding: var(--sp-3) var(--sp-4); border-top: 1px solid var(--border); display: grid; gap: 2px; }
+.queue li .row1 { display: flex; justify-content: space-between; gap: var(--sp-3); align-items: baseline; }
+.queue li b { overflow-wrap: anywhere; }
+.queue .why { font-size: 14px; color: var(--text-2); }
+.queue .why.warn { color: var(--amber-700); font-weight: 600; }
+.queue .why.bad { color: var(--red-700); font-weight: 600; }
+.queue .btn { margin-top: var(--sp-2); justify-self: start; }
+.count { font-size: 14px; font-weight: 700; background: var(--amber-50); color: var(--amber-700); border-radius: 99px; padding: 0 10px; }
+.count.zero { background: var(--n-100); color: var(--text-2); }
+.rooms { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); padding: 0 var(--sp-4) var(--sp-4); }
+.room { border: 1px solid var(--border); border-radius: var(--r-md); padding: var(--sp-2) var(--sp-3); font-size: 14px; }
+.room b { display: block; font-size: 16px; }
+.room.busy { background: var(--green-50); border-color: transparent; }
+.room.busy .t { color: var(--green-700); font-weight: 600; }
+.room .t { color: var(--text-2); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* detail drawer */
+dialog.drawer {
+  margin: 0 0 0 auto; height: 100dvh; max-height: none; width: min(460px, 100vw); border: 0; padding: 0;
+  background: var(--surface); color: var(--text); box-shadow: 0 0 0 1px oklch(0.24 0.02 250 / 0.12), -8px 0 32px oklch(0.24 0.02 250 / 0.14);
+}
+dialog.drawer[open] { animation: slide-in 280ms var(--ease-out); }
+dialog.drawer::backdrop { background: oklch(0.24 0.02 250 / 0.35); }
+@keyframes slide-in { from { transform: translateX(24px); opacity: 0; } }
+.drawer .in { display: flex; flex-direction: column; height: 100%; padding-bottom: env(safe-area-inset-bottom); }
+.drawer header { padding: var(--sp-5) var(--sp-5) var(--sp-3); display: flex; gap: var(--sp-3); align-items: flex-start; }
+.drawer header h2 { font-size: 22px; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.drawer header .x { margin-left: auto; flex: none; }
+.drawer .body { padding: 0 var(--sp-5) var(--sp-5); overflow-y: auto; flex: 1; }
+dl { display: grid; grid-template-columns: 8.5em 1fr; gap: var(--sp-2) var(--sp-3); margin: var(--sp-4) 0; }
+dt { color: var(--text-2); font-size: 14px; padding-top: 2px; }
+dd { margin: 0; overflow-wrap: anywhere; }
+.notice { border-radius: var(--r-md); padding: var(--sp-3); margin-top: var(--sp-3); font-size: 15px; background: var(--amber-50); color: var(--amber-700); }
+.note { border-left: 3px solid var(--border-strong); padding-left: var(--sp-3); color: var(--text-2); margin: var(--sp-4) 0; }
+.drawer footer { padding: var(--sp-4) var(--sp-5); border-top: 1px solid var(--border); display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+.drawer footer .btn.primary { flex: 1; }
+.progress { height: 6px; border-radius: 3px; background: var(--n-100); overflow: hidden; margin-top: 6px; }
+.progress i { display: block; height: 100%; background: var(--accent); }
+
+/* toast */
+.toast {
+  position: fixed; left: 50%; bottom: max(var(--sp-5), env(safe-area-inset-bottom)); transform: translate(-50%, 0);
+  background: var(--n-900); color: #fff; border-radius: var(--r-md); padding: var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
+  display: flex; align-items: center; gap: var(--sp-3); z-index: 50; max-width: calc(100vw - 32px);
+  transition: transform 250ms var(--ease-out), opacity 200ms var(--ease-out);
+}
+.toast { inset: auto auto max(var(--sp-5), env(safe-area-inset-bottom)) 50%; margin: 0; border: 0; }
+.toast:not(:popover-open) { display: none; }
+.toast[hidden] { display: none; }
+.toast.noundo #undo { display: none; }
+.err { color: var(--red-700); font-size: 14px; min-height: 21px; }
+.form-grid { display: grid; gap: var(--sp-3); padding: 0 var(--sp-5) var(--sp-5); overflow-y: auto; flex: 1; align-content: start; }
+.form-grid .field input, .form-grid .field select { width: 100%; }
+.toast .btn { background: transparent; color: #fff; border-color: oklch(1 0 0 / 0.4); min-height: 44px; }
+@media (hover: hover) { .toast .btn:hover { background: oklch(1 0 0 / 0.15); } }
+
+footer.page-foot { text-align: center; font-size: 14px; color: var(--text-3); padding: 0 var(--sp-4) var(--sp-6); }
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.drawer[open] { animation: fade-in 150ms linear; }
+  .btn, .chip, .blk, .toast { transition-property: opacity, background-color; }
+  .btn:active, .chip:active, .blk:active { transform: none; }
+}
+@keyframes fade-in { from { opacity: 0; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="10" fill="oklch(0.38 0.1 255)"/><path d="M6 25 C13 24 18 19 21 11 C23 17 27 21 34 22 C28 23 25 26 23 31 C21 27 17 25 6 25 Z" fill="oklch(0.6 0.15 45)"/></svg>
+    <div><b>Kestrel Physio</b><span>Front desk · Harbour Street</span></div>
+  </div>
+  <span class="open-pill" id="openPill">Open until 18:00</span>
+  <div class="clock"><div class="time num" id="clock">--:--</div><div class="date">Tuesday 20 October 2026</div></div>
+  <button class="btn primary" id="newBooking" type="button">New booking</button>
+</header>
+
+<main class="page">
+  <div>
+    <section class="stats" aria-label="Today at a glance" id="stats"></section>
+
+    <section class="panel" aria-labelledby="schedH">
+      <header>
+        <h2 id="schedH">Today’s appointments</h2>
+        <div class="seg" role="group" aria-label="View">
+          <button type="button" data-view="list" aria-pressed="true">List</button>
+          <button type="button" data-view="timeline" aria-pressed="false">Timeline</button>
+        </div>
+      </header>
+      <div class="toolbar">
+        <label class="field">Find a patient
+          <input type="search" id="q" placeholder="Name or treatment" autocomplete="off">
+        </label>
+        <div class="field" id="therapistField">Therapist
+          <div class="chips" id="chips" role="group" aria-label="Filter by therapist"></div>
+        </div>
+        <label class="check" id="finishedCheck"><input type="checkbox" id="showDone"> Show finished</label>
+      </div>
+      <div id="view"></div>
+    </section>
+  </div>
+
+  <aside class="rail" aria-label="Needs attention">
+    <section class="panel" aria-labelledby="needH">
+      <header><h2 id="needH">Needs you now</h2><span class="count" id="needCount">0</span></header>
+      <ul class="queue" id="queue"></ul>
+    </section>
+    <section class="panel" aria-labelledby="roomH">
+      <header><h2 id="roomH">Rooms</h2></header>
+      <div class="rooms" id="rooms"></div>
+    </section>
+  </aside>
+</main>
+<footer class="page-foot">Sample data for demonstration. No real patients are shown.</footer>
+
+<dialog class="drawer" id="drawer" aria-labelledby="dName"></dialog>
+<div class="toast" id="toast" popover="manual" role="status" aria-live="polite" hidden><span id="toastMsg"></span><button class="btn" id="undo" type="button">Undo</button></div>
+
+<script>
+/* ---------- sample data ---------- */
+const T = {
+  pr: { name: 'Priya Raman', short: 'Priya', role: 'Physiotherapist', room: 'Room 1' },
+  te: { name: 'Tom Eriksen', short: 'Tom', role: 'Physiotherapist', room: 'Room 2' },
+  ab: { name: 'Aoife Brennan', short: 'Aoife', role: 'Physiotherapist', room: 'Room 3' },
+  mo: { name: 'Marcus Oyelaran', short: 'Marcus', role: 'Sports rehab', room: 'Gym' },
+};
+const m = s => { const [h, mm] = s.split(':').map(Number); return h * 60 + mm; };
+const fmt = x => String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0');
+const money = n => '£' + n.toFixed(2);
+
+// [therapist, start, duration, patient, treatment, status, extras]
+const raw = [
+  ['pr','8:00',45,'Hannah Whitcombe','Initial assessment','done',{fund:'Bupa',sess:[1,6]}],
+  ['pr','9:00',30,'Gareth Pugh','Follow-up','done',{fund:'Self-pay',sess:[5,6],bal:45}],
+  ['pr','9:45',30,'Nguyễn Thị Ánh Tuyết','Follow-up','done',{fund:'Self-pay',sess:[3,8]}],
+  ['pr','10:30',45,'Rosa Delgado','Post-op knee rehab','session',{arr:'10:24',start:'10:31',fund:'AXA Health',sess:[4,12],note:'Knee replacement, week 5. Aim for 110° flexion today.'}],
+  ['pr','11:30',45,'Oliver Brandt','Initial assessment','booked',{fund:'Self-pay',form:true,first:true,note:'GP referral for lower back pain. Bring referral letter.'}],
+  ['pr','13:00',30,'Beatrice Okonkwo','Follow-up','booked',{fund:'Bupa',sess:[2,6]}],
+  ['pr','14:00',30,'Sam Li','Follow-up','booked',{fund:'Self-pay',sess:[6,6],note:'Final session. Discharge letter to GP.'}],
+  ['pr','15:15',45,'Ibrahim Yusuf','Initial assessment','booked',{fund:'Workplace claim',form:true,first:true}],
+
+  ['te','8:30',30,'Dev Patel','Follow-up','done',{fund:'Self-pay',sess:[2,4]}],
+  ['te','9:15',30,'Mei-Ling Chua','Dry needling','done',{fund:'Bupa',sess:[3,6]}],
+  ['te','10:00',30,'Callum Reid','Follow-up','done',{fund:'Self-pay',sess:[7,8],bal:45}],
+  ['te','10:30',30,'Joanna Kowalczyk','Dry needling','waiting',{arr:'10:25',fund:'AXA Health',sess:[1,4],form:true,note:'First dry needling. Consent form not yet signed.'}],
+  ['te','11:15',30,'Tomás Fernández','Follow-up','booked',{fund:'Self-pay',sess:[4,6]}],
+  ['te','12:00',45,'Elena Marchetti-Vandenberghe-Okafor','Initial assessment','booked',{fund:'Bupa',form:true,first:true}],
+  ['te','14:30',30,'Abdi Warsame','Follow-up','booked',{fund:'Self-pay',sess:[2,6]}],
+  ['te','16:00',30,'Lucy Hart','Follow-up','booked',{fund:'Self-pay',sess:[5,6]}],
+
+  ['ab','9:00',45,'Peter Nakamura','Initial assessment','done',{fund:'Self-pay',sess:[1,6],bal:70}],
+  ['ab','10:00',45,'Fatima Al-Sayed','Post-op shoulder rehab','session',{arr:'9:54',start:'10:03',fund:'AXA Health',sess:[8,12]}],
+  ['ab','11:00',30,'Wen Zhang','Follow-up','waiting',{arr:'10:38',fund:'Self-pay',sess:[3,6]}],
+  ['ab','11:45',30,'Jo Li','Follow-up','booked',{fund:'Bupa',sess:[2,4],note:'Prefers afternoon slots from next week 🕑'}],
+  ['ab','13:15',45,'Priscilla Mwangi','Initial assessment','booked',{fund:'Self-pay',form:true,first:true}],
+  ['ab','15:00',30,'Daniel Åberg','Follow-up','booked',{fund:'Self-pay',sess:[4,6]}],
+
+  ['mo','8:00',60,'Katya Ivanova','Sports rehab','done',{fund:'Self-pay',sess:[9,10]}],
+  ['mo','9:30',30,'Ben Hargreaves','Sports massage','noshow',{fund:'Self-pay',note:'Second missed appointment this month.'}],
+  ['mo','10:15',45,'Chloe Dubois','Sports rehab','booked',{fund:'Self-pay',sess:[3,8],note:'Running return programme. Called at 10:20, running late.'}],
+  ['mo','11:15',30,'Reuben Tait','Sports massage','booked',{fund:'Self-pay'}],
+  ['mo','12:00',45,'Amara Singh','Strength screen','booked',{fund:'Workplace claim',sess:[1,1]}],
+  ['mo','14:00',60,'Liam O’Connell','Sports rehab','booked',{fund:'Bupa',sess:[6,10]}],
+  ['mo','16:30',30,'Zoë Park-Whitfield','Follow-up','cancelled',{fund:'Self-pay',note:'Cancelled by patient at 09:12.'}],
+];
+const phones = ['07700 900142','07700 900318','07700 900467','07700 900521','07700 900654','07700 900779'];
+let appts = raw.map((r, i) => {
+  const [th, s, dur, name, treat, status, x] = r;
+  return { id: i + 1, th, start: m(s), dur, name, treat, status, fund: x.fund, sess: x.sess || null,
+    arr: x.arr ? m(x.arr) : null, began: x.start ? m(x.start) : null, form: !!x.form, first: !!x.first,
+    bal: x.bal || 0, note: x.note || '', phone: phones[i % phones.length], room: T[th].room };
+});
+
+/* ---------- clock: demo opens at 10:42 and runs in real time ---------- */
+const t0 = Date.now(), base = m('10:42');
+const now = () => base + Math.floor((Date.now() - t0) / 60000);
+
+/* ---------- state (filters live in the URL) ---------- */
+const params = new URLSearchParams(location.search);
+const st = { view: params.get('view') === 'timeline' ? 'timeline' : 'list', th: params.get('t') || '', q: params.get('q') || '', done: params.get('done') === '1' };
+function syncUrl() {
+  const p = new URLSearchParams();
+  if (st.view !== 'list') p.set('view', st.view);
+  if (st.th) p.set('t', st.th);
+  if (st.q) p.set('q', st.q);
+  if (st.done) p.set('done', '1');
+  history.replaceState(null, '', p.toString() ? '?' + p : location.pathname);
+}
+
+/* ---------- derived state ---------- */
+const FINISHED = ['done', 'noshow', 'cancelled'];
+function kind(a) {
+  if (a.status === 'booked') return now() >= a.start + 5 ? 'late' : 'booked';
+  return a.status;
+}
+const LABEL = { booked: 'Booked', late: 'Late', waiting: 'Waiting', session: 'In session', done: 'Finished', noshow: 'No-show', cancelled: 'Cancelled' };
+function pillText(a) {
+  const k = kind(a), n = now();
+  if (k === 'late') return 'Late ' + (n - a.start) + ' min';
+  if (k === 'waiting') return 'Waiting ' + (n - a.arr) + ' min';
+  if (k === 'booked') { const d = a.start - n; return d <= 60 ? 'In ' + d + ' min' : 'Booked'; }
+  return LABEL[k];
+}
+const pill = a => `<span class="pill ${kind(a)}"><i></i>${pillText(a)}</span>`;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const flags = a => (a.form ? '<span class="flags"><span class="flag" title="Forms outstanding">Forms</span></span>' : '');
+
+/* ---------- actions (all reversible, with undo) ---------- */
+let undoSnap = null, toastTimer;
+function hideToast() { const t = document.getElementById('toast'); if (t.matches(':popover-open')) t.hidePopover(); t.hidden = true; }
+function toast(msg, snap) {
+  undoSnap = snap;
+  document.getElementById('toastMsg').textContent = msg;
+  const t = document.getElementById('toast'); t.hidden = false; t.classList.toggle('noundo', !snap);
+  if (t.matches(':popover-open')) t.hidePopover(); t.showPopover();
+  clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 8000);
+}
+document.getElementById('undo').onclick = () => {
+  if (undoSnap) { appts = undoSnap; undoSnap = null; hideToast(); render(); if (openId) openDrawer(openId, true); }
+};
+function act(id, type) {
+  const snap = appts.map(a => ({ ...a }));
+  const a = appts.find(x => x.id === id), n = now(); let msg = '';
+  if (type === 'checkin') { a.status = 'waiting'; a.arr = n; msg = `${a.name} checked in`; }
+  if (type === 'send') { a.status = 'session'; a.began = n; msg = `${a.name} sent through to ${a.room}`; }
+  if (type === 'checkout') { a.status = 'done'; msg = `${a.name} checked out` + (a.bal ? `, ${money(a.bal)} due` : ''); }
+  if (type === 'noshow') { a.status = 'noshow'; msg = `${a.name} marked as no-show`; }
+  if (type === 'cancel') { a.status = 'cancelled'; msg = `${a.name}’s appointment cancelled`; }
+  if (type === 'pay') { a.bal = 0; msg = `Payment recorded for ${a.name}`; }
+  if (type === 'forms') { a.form = false; msg = `Forms marked as received from ${a.name}`; }
+  render(); if (openId === id) openDrawer(id, true);
+  toast(msg, snap);
+}
+function primary(a) {
+  const k = kind(a);
+  if (k === 'booked' || k === 'late') return ['checkin', 'Check in'];
+  if (k === 'waiting') return ['send', 'Send to ' + a.room];
+  if (k === 'session') return ['checkout', 'Check out'];
+  if (k === 'done' && a.bal) return ['pay', 'Take ' + money(a.bal)];
+  return null;
+}
+
+/* ---------- render: stats ---------- */
+function renderStats() {
+  const live = appts.filter(a => a.status !== 'cancelled');
+  const c = k => appts.filter(a => kind(a) === k).length;
+  const waiting = c('waiting'), late = c('late');
+  const toArrive = c('booked') + late;
+  const fin = appts.filter(a => a.status === 'done').length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat ${waiting ? 'hot' : ''}"><div class="label">Waiting now</div><div class="value num">${waiting}</div><div class="sub">${waiting ? 'longest ' + Math.max(...appts.filter(a => a.status === 'waiting').map(a => now() - a.arr)) + ' min' : 'Waiting room is clear'}</div></div>
+    <div class="stat"><div class="label">In session</div><div class="value num">${c('session')}</div><div class="sub">of 4 treatment spaces</div></div>
+    <div class="stat"><div class="label">Still to arrive</div><div class="value num">${toArrive}</div><div class="sub">${late ? late + ' running late' : 'all on time'}</div></div>
+    <div class="stat"><div class="label">Finished</div><div class="value num">${fin}</div><div class="sub">of ${live.length} booked today</div></div>`;
+}
+
+/* ---------- render: needs you now ---------- */
+function renderQueue() {
+  const n = now(), items = [];
+  appts.filter(a => a.status === 'waiting').sort((a, b) => a.arr - b.arr).forEach(a => {
+    const w = n - a.arr;
+    items.push({ a, score: 100 + w, why: `Waiting ${w} min for ${T[a.th].short}`, cls: w >= 10 ? 'warn' : '', btn: a.form ? ['forms', 'Forms received'] : ['send', 'Send to ' + a.room] });
+  });
+  appts.filter(a => kind(a) === 'late').forEach(a => items.push({ a, score: 50 + (n - a.start), why: `Was due ${fmt(a.start)}, ${n - a.start} min late`, cls: 'bad', btn: ['checkin', 'Check in'] }));
+  appts.filter(a => a.status === 'booked' && a.form && a.start - n <= 60 && a.start - n > -5).forEach(a => items.push({ a, score: 30, why: `Forms outstanding, due ${fmt(a.start)}`, cls: 'warn', btn: ['forms', 'Forms received'] }));
+  appts.filter(a => a.status === 'done' && a.bal).forEach(a => items.push({ a, score: 10, why: `${money(a.bal)} unpaid after ${fmt(a.start)} visit`, cls: '', btn: ['pay', 'Take ' + money(a.bal)] }));
+  items.sort((x, y) => y.score - x.score);
+  document.getElementById('needCount').textContent = items.length;
+  document.getElementById('needCount').className = 'count' + (items.length ? '' : ' zero');
+  document.getElementById('queue').innerHTML = items.length ? items.map(i => `
+    <li><div class="row1"><b>${esc(i.a.name)}</b><span class="num sub">${fmt(i.a.start)}</span></div>
+    <span class="why ${i.cls}">${i.why}</span>
+    <button class="btn accent" type="button" data-act="${i.btn[0]}" data-id="${i.a.id}">${i.btn[1]}</button></li>`).join('')
+    : `<li><div class="empty" style="padding:var(--sp-6) 0"><h3>Nothing needs you</h3>Nobody is waiting, late or owing.</div></li>`;
+}
+
+/* ---------- render: rooms ---------- */
+function renderRooms() {
+  document.getElementById('rooms').innerHTML = Object.entries(T).map(([k, t]) => {
+    const s = appts.find(a => a.th === k && a.status === 'session');
+    const next = appts.filter(a => a.th === k && a.status !== 'cancelled' && !FINISHED.includes(a.status) && a.status !== 'session' && a.status !== 'waiting').sort((a, b) => a.start - b.start)[0];
+    return `<div class="room ${s ? 'busy' : ''}"><b>${t.room}</b><span class="t">${s ? esc(s.name) : 'Free'}</span><span class="t">${t.short}${!s && next ? ' · next ' + fmt(next.start) : ''}</span></div>`;
+  }).join('');
+}
+
+/* ---------- render: chips ---------- */
+function renderChips() {
+  const count = k => appts.filter(a => (!k || a.th === k) && a.status !== 'cancelled').length;
+  document.getElementById('chips').innerHTML = [['', 'Everyone']].concat(Object.entries(T).map(([k, t]) => [k, t.short])).map(([k, l]) =>
+    `<button class="chip" type="button" data-th="${k}" aria-pressed="${st.th === k}">${l} <span class="n num">${count(k)}</span></button>`).join('');
+}
+
+/* ---------- render: list ---------- */
+function visible() {
+  const q = st.q.trim().toLowerCase();
+  return appts.filter(a => (!st.th || a.th === st.th) && (!q || (a.name + ' ' + a.treat).toLowerCase().includes(q)))
+    .sort((a, b) => a.start - b.start || a.id - b.id);
+}
+function renderList(all) {
+  const rows = all.filter(a => st.done || q().length || !FINISHED.includes(a.status));
+  const hiddenN = all.length - rows.length;
+  let out;
+  if (!rows.length) {
+    out = st.q || st.th
+      ? `<div class="empty"><h3>No one matches</h3>Nothing for “${esc(st.q || T[st.th].name)}” today.<br><button class="btn" type="button" data-clear>Clear filters</button></div>`
+      : `<div class="empty"><h3>Nothing left today</h3>Every appointment is finished.<br><button class="btn" type="button" data-showdone>Show finished</button></div>`;
+  } else {
+    out = `<table><thead><tr><th>Time</th><th>Patient</th><th>Treatment</th><th>With</th><th>Status</th><th><span class="sr">Actions</span></th></tr></thead><tbody>` +
+      rows.map(a => {
+        const p = primary(a), k = kind(a);
+        const more = k === 'late' ? `<button class="btn quiet" type="button" data-act="noshow" data-id="${a.id}">No-show</button>` : '';
+        return `<tr class="${FINISHED.includes(a.status) ? 'done' : ''}">
+          <td class="time num">${fmt(a.start)}<small>${a.dur} min</small></td>
+          <td class="who"><button class="pt pt-wrap" type="button" data-open="${a.id}">${esc(a.name)}</button>${flags(a)}</td>
+          <td class="what">${esc(a.treat)}${a.first ? '<span class="sub">First visit</span>' : ''}</td>
+          <td class="where">${T[a.th].short}<span class="sub">${a.room}</span></td>
+          <td class="st">${pill(a)}</td>
+          <td class="act"><span class="acts">${more}${p ? `<button class="btn ${p[0] === 'checkin' || p[0] === 'send' ? 'accent' : ''}" type="button" data-act="${p[0]}" data-id="${a.id}">${p[1]}</button>` : ''}</span></td></tr>`;
+      }).join('') + '</tbody></table>' +
+      (hiddenN ? `<div class="hidden-note">${hiddenN} finished appointment${hiddenN > 1 ? 's' : ''} hidden. <button class="btn quiet" type="button" data-showdone style="min-height:44px;display:inline-flex">Show finished</button></div>` : '');
+  }
+  return out;
+}
+const q = () => st.q.trim();
+
+/* ---------- render: timeline ---------- */
+const H0 = 8, H1 = 17, PX = 64 / 60;
+function renderTimeline(all) {
+  const cols = Object.entries(T).filter(([k]) => !st.th || k === st.th);
+  const hours = []; for (let h = H0; h <= H1; h++) hours.push(h);
+  const height = (H1 - H0) * 64;
+  const n = now();
+  let html = `<div class="tl-scroll"><div class="tl" style="grid-template-columns:48px repeat(${cols.length}, minmax(150px, 1fr))">
+    <div class="tl-head"></div>` + cols.map(([, t]) => `<div class="tl-head">${t.name}<small>${t.role} · ${t.room}</small></div>`).join('') +
+    `<div class="tl-hours" style="height:${height}px">${hours.map(h => `<span style="top:${(h - H0) * 64}px">${String(h).padStart(2, '0')}:00</span>`).join('')}</div>`;
+  cols.forEach(([k], ci) => {
+    html += `<div class="tl-col" style="height:${height}px">` + all.filter(a => a.th === k).map(a => {
+      const top = (a.start - H0 * 60) * PX, h = a.dur * PX - 3;
+      return `<button class="blk s-${kind(a)}" type="button" data-open="${a.id}" style="top:${top + 1}px;height:${h}px" title="${fmt(a.start)} ${esc(a.name)}, ${esc(a.treat)}">
+        <b>${fmt(a.start)} ${esc(a.name)}</b>${a.dur >= 45 ? `<span>${esc(a.treat)}</span>` : ''}${a.dur >= 60 ? `<span>${pillText(a)}</span>` : ''}</button>`;
+    }).join('') + (ci === 0 ? '' : '') + `</div>`;
+  });
+  // now line spans every column
+  if (n >= H0 * 60 && n <= H1 * 60) html += `<div class="nowline" data-t="${fmt(n)}" style="grid-column:1 / -1;grid-row:2;top:${(n - H0 * 60) * PX}px"></div>`;
+  html += '</div></div>';
+  return html;
+}
+
+/* ---------- render: everything ---------- */
+function render() {
+  const all = visible();
+  document.getElementById('view').innerHTML = st.view === 'list' ? renderList(all) : renderTimeline(all);
+  document.getElementById('finishedCheck').style.display = st.view === 'list' ? '' : 'none';
+  document.querySelectorAll('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === st.view));
+  document.getElementById('showDone').checked = st.done;
+  renderStats(); renderQueue(); renderRooms(); renderChips();
+  const n = now();
+  document.getElementById('clock').textContent = fmt(n);
+  const pill = document.getElementById('openPill');
+  pill.textContent = n >= m('7:30') && n < m('18:00') ? 'Open until 18:00' : 'Closed';
+  syncUrl();
+}
+
+/* ---------- drawer ---------- */
+const dlg = document.getElementById('drawer'); let openId = null;
+function openDrawer(id, keepFocus) {
+  const a = appts.find(x => x.id === id); openId = id;
+  const p = primary(a), k = kind(a);
+  dlg.innerHTML = `<div class="in">
+    <header><div><h2 id="dName">${esc(a.name)}</h2><div style="margin-top:6px">${pill(a)}</div></div>
+      <button class="btn quiet x" type="button" data-close aria-label="Close details">Close</button></header>
+    <div class="body">
+      <dl>
+        <dt>Appointment</dt><dd class="num">${fmt(a.start)}–${fmt(a.start + a.dur)} (${a.dur} min)</dd>
+        <dt>Treatment</dt><dd>${esc(a.treat)}${a.first ? ' · first visit' : ''}</dd>
+        <dt>With</dt><dd>${T[a.th].name}, ${a.room}</dd>
+        <dt>Paying via</dt><dd>${a.fund}</dd>
+        ${a.sess ? `<dt>Course</dt><dd>Session ${a.sess[0]} of ${a.sess[1]}<div class="progress" aria-hidden="true"><i style="width:${a.sess[0] / a.sess[1] * 100}%"></i></div></dd>` : ''}
+        <dt>Phone</dt><dd><a href="tel:${a.phone.replace(/\s/g, '')}">${a.phone}</a></dd>
+        ${a.arr ? `<dt>Arrived</dt><dd class="num">${fmt(a.arr)}</dd>` : ''}
+      </dl>
+      ${a.form ? `<div class="notice"><b>Forms outstanding.</b> ${a.first ? 'Intake and consent forms' : 'Consent form'} must be signed before treatment.</div>` : ''}
+      ${a.bal ? `<div class="notice"><b>${money(a.bal)} unpaid</b> from this visit.</div>` : ''}
+      ${a.note ? `<p class="note">${esc(a.note)}</p>` : ''}
+    </div>
+    <footer>
+      ${p ? `<button class="btn primary" type="button" data-act="${p[0]}" data-id="${a.id}">${p[1]}</button>` : ''}
+      ${a.form ? `<button class="btn" type="button" data-act="forms" data-id="${a.id}">Forms received</button>` : ''}
+      ${(k === 'booked' || k === 'late') ? `<button class="btn" type="button" data-act="noshow" data-id="${a.id}">Mark no-show</button><button class="btn danger" type="button" data-act="cancel" data-id="${a.id}">Cancel appointment</button>` : ''}
+      ${!p && !(k === 'booked' || k === 'late') && !a.form ? '<span class="sub" style="align-self:center">Nothing to do for this appointment.</span>' : ''}
+    </footer></div>`;
+  if (!dlg.open) dlg.showModal();
+  if (keepFocus) dlg.querySelector('footer .btn, [data-close]')?.focus();
+}
+dlg.addEventListener('close', () => { openId = null; });
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+
+/* ---------- new booking ---------- */
+function openBooking() {
+  openId = null;
+  const nxt = Math.ceil((now() + 1) / 15) * 15;
+  dlg.innerHTML = `<form class="in" id="bk" novalidate>
+    <header><div><h2 id="dName">New booking</h2></div><button class="btn quiet x" type="button" data-close aria-label="Close">Close</button></header>
+    <div class="form-grid">
+      <label class="field">Patient name<input type="search" id="bn" autocomplete="off" required><span class="err" data-for="bn"></span></label>
+      <label class="field">Treatment<select id="bt"><option>Follow-up</option><option>Initial assessment</option><option>Dry needling</option><option>Sports massage</option><option>Post-op rehab</option></select></label>
+      <label class="field">Therapist<select id="bh">${Object.entries(T).map(([k, t]) => `<option value="${k}">${t.name}</option>`).join('')}</select></label>
+      <label class="field">Start time<input type="time" id="bs" value="${fmt(nxt)}" min="08:00" max="17:30" step="900"><span class="err" data-for="bs"></span></label>
+    </div>
+    <footer><button class="btn primary" type="submit">Book appointment</button><button class="btn" type="button" data-close>Cancel</button></footer></form>`;
+  if (!dlg.open) dlg.showModal();
+  const f = document.getElementById('bk');
+  const check = id => {
+    const el = document.getElementById(id); let msg = '';
+    if (id === 'bn' && !el.value.trim()) msg = 'Enter the patient’s name.';
+    if (id === 'bs') {
+      const v = el.value ? m(el.value) : null;
+      const th = document.getElementById('bh').value;
+      if (v === null || v < 480 || v > 1050) msg = 'Pick a time between 08:00 and 17:30.';
+      else if (appts.some(a => a.th === th && a.status !== 'cancelled' && v < a.start + a.dur && v + 30 > a.start)) msg = T[th].short + ' is busy then. Try another time or therapist.';
+    }
+    f.querySelector(`[data-for=${id}]`).textContent = msg; el.setAttribute('aria-invalid', !!msg);
+    return !msg;
+  };
+  ['bn', 'bs'].forEach(id => document.getElementById(id).addEventListener('blur', () => check(id)));
+  document.getElementById('bh').addEventListener('change', () => check('bs'));
+  f.addEventListener('submit', e => {
+    e.preventDefault();
+    const ok = ['bn', 'bs'].map(check);
+    if (ok.includes(false)) { document.getElementById(['bn', 'bs'][ok.indexOf(false)]).focus(); return; }
+    const snap = appts.map(a => ({ ...a })), th = document.getElementById('bh').value, name = document.getElementById('bn').value.trim();
+    appts.push({ id: Math.max(...appts.map(a => a.id)) + 1, th, start: m(document.getElementById('bs').value), dur: 30, name,
+      treat: document.getElementById('bt').value, status: 'booked', fund: 'Self-pay', sess: null, arr: null, began: null, form: true, first: false, bal: 0, note: '', phone: '—', room: T[th].room });
+    dlg.close(); render(); toast(`${name} booked with ${T[th].short} at ${document.getElementById('bs').value}`, snap);
+  });
+  document.getElementById('bn').focus();
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.open) openDrawer(+b.dataset.open);
+  else if (b.dataset.act) act(+b.dataset.id, b.dataset.act);
+  else if (b.hasAttribute('data-close')) dlg.close();
+  else if (b.dataset.view) { st.view = b.dataset.view; render(); }
+  else if (b.dataset.th !== undefined && b.classList.contains('chip')) { st.th = b.dataset.th; render(); }
+  else if (b.hasAttribute('data-clear')) { st.th = ''; st.q = ''; document.getElementById('q').value = ''; render(); }
+  else if (b.hasAttribute('data-showdone')) { st.done = true; render(); }
+  else if (b.id === 'newBooking') openBooking();
+});
+document.getElementById('q').value = st.q;
+document.getElementById('q').addEventListener('input', e => { st.q = e.target.value; render(); });
+document.getElementById('showDone').addEventListener('change', e => { st.done = e.target.checked; render(); });
+render();
+setInterval(() => { if (!dlg.open) render(); else { document.getElementById('clock').textContent = fmt(now()); } }, 15000);
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "order": [
+    "N5",
+    "E9",
+    "N2",
+    "D9",
+    "T6",
+    "R3",
+    "S3",
+    "S6",
+    "M7",
+    "K6",
+    "A3",
+    "U3",
+    "H3",
+    "R4",
+    "F2"
+  ],
+  "key": {
+    "N5": "kestrel--web-ui-design-0.2--2",
+    "E9": "kestrel--web-ui-design-0.3--1",
+    "N2": "kestrel--web-ui-design-0.2--1",
+    "D9": "kestrel--frontend-design--3",
+    "T6": "kestrel--none--1",
+    "R3": "kestrel--web-ui-design-0.3-silent--3",
+    "S3": "kestrel--web-ui-design-0.3-silent--1",
+    "S6": "kestrel--web-ui-design-0.3-silent--2",
+    "M7": "kestrel--web-ui-design-0.3--2",
+    "K6": "kestrel--web-ui-design-0.3--3",
+    "A3": "kestrel--web-ui-design-0.2--3",
+    "U3": "kestrel--none--3",
+    "H3": "kestrel--none--2",
+    "R4": "kestrel--frontend-design--2",
+    "F2": "kestrel--frontend-design--1"
+  }
+}

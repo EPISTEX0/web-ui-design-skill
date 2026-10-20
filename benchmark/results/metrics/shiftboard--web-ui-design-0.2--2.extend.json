@@ -1,0 +1,13 @@
+{
+  "build": true,
+  "pageFound": true,
+  "newColorLiterals": 0,
+  "newRawPx": 3,
+  "newCustomProperties": 0,
+  "reusesComponents": true,
+  "newComponentFiles": 0,
+  "dependenciesAdded": [],
+  "collateralChanged": false,
+  "mobileOverflow": true,
+  "functionalPass": true
+}

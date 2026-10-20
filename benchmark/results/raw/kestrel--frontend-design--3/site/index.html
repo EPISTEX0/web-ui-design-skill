@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Front desk · Kestrel Physio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chalk:#EDF0EE; --paper:#F8FAF9; --ink:#17232B; --muted:#5B6B73; --line:#D3DAD7;
+  --blue:#2F5D8A; --blue-soft:#DCE7F1;
+  --amber:#C98A1B; --amber-soft:#F6E8C8;
+  --moss:#3F7D58; --moss-soft:#D5E8DC;
+  --brick:#B24A3B; --brick-soft:#F3D9D4;
+  --done:#E3E7E5;
+  --radius:6px;
+}
+*{box-sizing:border-box}
+html{font-size:16px}
+body{margin:0;background:var(--chalk);color:var(--ink);font:400 .95rem/1.45 "Schibsted Grotesk",system-ui,sans-serif;font-variant-numeric:tabular-nums;min-height:100vh}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:1rem 2rem;padding:1rem 1.5rem;background:var(--ink);color:#fff}
+.brand{font-weight:800;font-size:1.25rem;letter-spacing:-.01em}
+.brand span{font-weight:400;opacity:.65;margin-left:.4rem}
+.when{display:flex;align-items:baseline;gap:.9rem}
+.clock{font-size:2rem;font-weight:600;letter-spacing:-.02em}
+.date{opacity:.75}
+.search{margin-left:auto;position:relative}
+.search input{width:min(20rem,100%);padding:.55rem .8rem;border-radius:var(--radius);border:1px solid #3a4b55;background:#22323b;color:#fff}
+.search input::placeholder{color:#9db0ba}
+
+.summary{margin:0;padding:.9rem 1.5rem;font-size:1.05rem;border-bottom:1px solid var(--line);background:var(--paper)}
+.summary b{font-weight:800}
+.summary .late{color:var(--brick)}
+
+main{display:grid;grid-template-columns:minmax(0,1fr) 25rem;gap:1.25rem;padding:1.25rem 1.5rem 2rem;align-items:start}
+@media (max-width:1100px){main{grid-template-columns:1fr}}
+
+h2{margin:0 0 .6rem;font-size:1.05rem;font-weight:800;letter-spacing:-.005em}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:1rem}
+
+/* timeline */
+.tl-scroll{overflow-x:auto}
+.tl{min-width:860px;position:relative}
+.tl-head,.lane{display:grid;grid-template-columns:9.5rem 1fr}
+.hours{position:relative;height:1.6rem;border-bottom:1px solid var(--line)}
+.hours span{position:absolute;top:0;transform:translateX(-50%);font-size:.78rem;color:var(--muted)}
+.hours span:first-child{transform:none}
+.lane{border-bottom:1px solid var(--line)}
+.lane:last-child{border-bottom:0}
+.who{padding:.7rem .5rem .7rem 0}
+.who b{display:block;font-weight:600}
+.who small{color:var(--muted)}
+.track{position:relative;height:4.4rem;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),var(--line) calc(10% - 1px) 10%)}
+.nowline{position:absolute;top:0;bottom:0;width:2px;background:var(--brick);z-index:3;pointer-events:none}
+.nowline::before{content:attr(data-t);position:absolute;top:-1.55rem;left:50%;transform:translateX(-50%);background:var(--brick);color:#fff;font-size:.72rem;font-weight:600;padding:.05rem .35rem;border-radius:3px}
+.appt{position:absolute;top:.4rem;bottom:.4rem;padding:.3rem .5rem;border-radius:var(--radius);border:1px solid transparent;background:var(--blue-soft);border-color:#b7cde0;text-align:left;cursor:pointer;overflow:hidden;z-index:1;line-height:1.25}
+.appt b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appt small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appt.waiting{background:var(--amber-soft);border-color:var(--amber)}
+.appt.session{background:var(--moss);color:#fff;border-color:var(--moss)}
+.appt.session small{color:#dff0e5}
+.appt.done{background:var(--done);color:var(--muted);border-color:transparent}
+.appt.late{background:var(--brick-soft);border-color:var(--brick)}
+.appt.noshow{background:transparent;border:1px dashed var(--muted);color:var(--muted);text-decoration:line-through}
+.appt.hit{box-shadow:0 0 0 3px var(--ink)}
+.dim{opacity:.25}
+.legend{display:flex;flex-wrap:wrap;gap:.4rem 1.1rem;margin-top:.9rem;font-size:.82rem;color:var(--muted)}
+.legend i{display:inline-block;width:.8rem;height:.8rem;border-radius:3px;margin-right:.35rem;vertical-align:-1px;border:1px solid transparent}
+
+/* queue */
+.queue{display:flex;flex-direction:column;gap:1.25rem}
+.group h2{display:flex;justify-content:space-between;align-items:baseline}
+.group h2 span{font-weight:400;color:var(--muted);font-size:.9rem}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.5rem}
+.row{display:grid;grid-template-columns:1fr auto;gap:.2rem .75rem;align-items:center;padding:.7rem .8rem;background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:var(--radius)}
+.row.waiting{border-left-color:var(--amber)}
+.row.session{border-left-color:var(--moss)}
+.row.late{border-left-color:var(--brick)}
+.row.hit{outline:3px solid var(--ink)}
+.row b{font-weight:600}
+.row .meta{grid-column:1;color:var(--muted);font-size:.85rem}
+.row .flag{grid-column:1;font-size:.82rem;font-weight:600;color:var(--brick)}
+.row .flag.info{color:var(--blue)}
+.btn{grid-column:2;grid-row:1 / span 2;align-self:center;padding:.5rem .85rem;border-radius:var(--radius);border:1px solid var(--ink);background:var(--ink);color:#fff;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn:hover{background:#2c4350}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--done)}
+.empty{padding:.8rem;color:var(--muted);border:1px dashed var(--line);border-radius:var(--radius)}
+.wait{font-weight:800}
+.wait.long{color:var(--brick)}
+
+dialog{border:1px solid var(--line);border-radius:var(--radius);padding:1.4rem;width:min(26rem,92vw);background:var(--paper);color:var(--ink)}
+dialog::backdrop{background:rgba(23,35,43,.45)}
+dialog h3{margin:0 0 .2rem;font-size:1.25rem}
+dialog dl{display:grid;grid-template-columns:7rem 1fr;gap:.35rem .75rem;margin:1rem 0}
+dialog dt{color:var(--muted)} dialog dd{margin:0}
+.actions{display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:var(--ink);color:#fff;padding:.65rem 1.1rem;border-radius:var(--radius);opacity:0;transition:opacity .2s;pointer-events:none;z-index:10}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Kestrel Physio<span>Front desk</span></div>
+  <div class="when"><div class="clock" id="clock">10:42</div><div class="date">Tuesday 20 October</div></div>
+  <div class="search"><label class="sr" for="q" style="position:absolute;left:-999px">Find a patient</label><input id="q" type="search" placeholder="Find a patient" autocomplete="off"></div>
+</header>
+<p class="summary" id="summary"></p>
+
+<main>
+  <section class="panel" aria-label="Today's schedule">
+    <h2>Today's schedule</h2>
+    <div class="tl-scroll"><div class="tl" id="tl"></div></div>
+    <div class="legend">
+      <span><i style="background:var(--blue-soft);border-color:#b7cde0"></i>Booked</span>
+      <span><i style="background:var(--amber-soft);border-color:var(--amber)"></i>Waiting room</span>
+      <span><i style="background:var(--moss)"></i>In session</span>
+      <span><i style="background:var(--brick-soft);border-color:var(--brick)"></i>Late, not arrived</span>
+      <span><i style="background:var(--done)"></i>Finished</span>
+      <span><i style="border:1px dashed var(--muted)"></i>Missed</span>
+    </div>
+  </section>
+
+  <div class="queue" id="queue" aria-label="Patient queue"></div>
+</main>
+
+<dialog id="dlg"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const START=8*60, END=18*60, SPAN=END-START;
+let now=10*60+42; // demo clock starts at 10:42 and keeps ticking
+
+const staff=[
+  {id:'ho',name:'Hannah Okafor',role:'Physiotherapist · Room 1'},
+  {id:'ml',name:'Marcus Lindqvist',role:'Sports physio · Room 2'},
+  {id:'pr',name:'Priya Raman',role:'Hand therapist · Room 3'},
+  {id:'tb',name:'Tom Beckett',role:'Rehab and Pilates · Studio'}
+];
+// status: booked | waiting | session | done | noshow
+const t=(h,m)=>h*60+m;
+let appts=[
+ {id:1,s:'ho',at:t(8,0),d:45,name:'Gerald Whitcombe',type:'Lower back review',st:'done',ph:'0412 884 120'},
+ {id:2,s:'ho',at:t(9,0),d:30,name:'Ines Duarte',type:'Knee follow-up',st:'done',ph:'0431 220 905'},
+ {id:3,s:'ho',at:t(10,0),d:45,name:'Sam Achterberg',type:'Shoulder impingement',st:'session',ph:'0422 118 764',since:t(10,3)},
+ {id:4,s:'ho',at:t(11,0),d:30,name:'Beatrix Nyoka',type:'Post-op hip, week 6',st:'booked',ph:'0407 553 018',note:'Bring surgeon report'},
+ {id:5,s:'ho',at:t(13,0),d:60,name:'Callum Ferreira',type:'New patient assessment',st:'booked',ph:'0419 640 227',note:'Intake forms not returned',warn:true},
+ {id:6,s:'ho',at:t(14,30),d:30,name:'Mei-Lin Park',type:'Neck and posture',st:'booked',ph:'0433 971 556'},
+ {id:7,s:'ho',at:t(16,0),d:45,name:'Douglas Abara',type:'Ankle sprain',st:'booked',ph:'0428 305 872'},
+
+ {id:8,s:'ml',at:t(8,30),d:60,name:'Rhys Padmore',type:'Hamstring rehab',st:'done',ph:'0415 772 391'},
+ {id:9,s:'ml',at:t(10,0),d:45,name:'Annika Solheim',type:'Running assessment',st:'session',ph:'0409 226 613',since:t(10,5)},
+ {id:10,s:'ml',at:t(10,30),d:30,name:'Tomasz Kowal',type:'ACL rehab, week 14',st:'waiting',ph:'0421 889 140',arrived:t(10,26),note:'Balance due $45',warn:true},
+ {id:11,s:'ml',at:t(11,30),d:45,name:'Leilani Fonoti',type:'Tennis elbow',st:'booked',ph:'0436 117 509'},
+ {id:12,s:'ml',at:t(13,30),d:45,name:'Warren Teague',type:'Shoulder strengthening',st:'booked',ph:'0414 502 886'},
+ {id:13,s:'ml',at:t(15,0),d:60,name:'Yusuf Demir',type:'Sports injury review',st:'booked',ph:'0426 738 094'},
+
+ {id:14,s:'pr',at:t(9,0),d:45,name:'Dorothea Lang',type:'Wrist splint fitting',st:'done',ph:'0408 351 727'},
+ {id:15,s:'pr',at:t(10,15),d:30,name:'Kiran Malhotra',type:'Carpal tunnel follow-up',st:'booked',late:true,ph:'0432 640 118'},
+ {id:16,s:'pr',at:t(11,0),d:45,name:'Faye Ostrander',type:'Hand therapy, week 3',st:'waiting',ph:'0417 905 262',arrived:t(10,38)},
+ {id:17,s:'pr',at:t(13,0),d:45,name:'Benedict Oyelaran',type:'Thumb joint pain',st:'booked',ph:'0423 460 931'},
+ {id:18,s:'pr',at:t(15,30),d:30,name:'Rosalind Quist',type:'Scar management',st:'booked',ph:'0411 287 645'},
+
+ {id:19,s:'tb',at:t(8,0),d:60,name:'Group: Back care',type:'Pilates, 5 attending',st:'done',ph:'Class list'},
+ {id:20,s:'tb',at:t(9,30),d:45,name:'Patricia Vandermeer',type:'Falls prevention',st:'noshow',ph:'0405 913 372'},
+ {id:21,s:'tb',at:t(10,45),d:45,name:'Jonas Eklund',type:'Post-op knee, week 2',st:'booked',ph:'0437 266 480',note:'Arrives by taxi at 10:40',info:true},
+ {id:22,s:'tb',at:t(12,0),d:60,name:'Group: Strength basics',type:'Rehab class, 6 attending',st:'booked',ph:'Class list'},
+ {id:23,s:'tb',at:t(14,0),d:45,name:'Noor Hashemi',type:'Balance and gait',st:'booked',ph:'0429 804 316'},
+ {id:24,s:'tb',at:t(16,30),d:60,name:'Group: Desk worker reset',type:'Pilates, 8 attending',st:'booked',ph:'Class list'}
+];
+
+const $=s=>document.querySelector(s);
+const hhmm=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const staffName=id=>staff.find(x=>x.id===id).name;
+const isGroup=a=>a.name.startsWith('Group:');
+const isLate=a=>a.st==='booked'&&a.at+5<=now&&!isGroup(a);
+const cls=a=>isLate(a)?'late':a.st;
+let query='';
+const matches=a=>query&&a.name.toLowerCase().includes(query);
+
+function renderTimeline(){
+  let h='<div class="tl-head"><div></div><div class="hours">';
+  for(let m=START;m<=END;m+=60) h+=`<span style="left:${(m-START)/SPAN*100}%">${m/60}:00</span>`;
+  h+='</div></div>';
+  staff.forEach(p=>{
+    h+=`<div class="lane"><div class="who"><b>${p.name}</b><small>${p.role}</small></div><div class="track">`;
+    appts.filter(a=>a.s===p.id).forEach(a=>{
+      const c=cls(a), hit=matches(a), dim=query&&!hit;
+      h+=`<button class="appt ${c}${hit?' hit':''}${dim?' dim':''}" data-id="${a.id}" style="left:${(a.at-START)/SPAN*100}%;width:calc(${a.d/SPAN*100}% - 3px)" aria-label="${a.name}, ${hhmm(a.at)}, ${a.type}"><b>${a.name}</b><small>${hhmm(a.at)} ${a.type}</small></button>`;
+    });
+    h+='</div></div>';
+  });
+  $('#tl').innerHTML=h;
+  // now line spans the track column only
+  const nl=document.createElement('div');
+  nl.className='nowline';nl.dataset.t=hhmm(now);
+  const pct=(now-START)/SPAN*100;
+  nl.style.cssText=`left:calc(9.5rem + (100% - 9.5rem) * ${pct/100});top:1.6rem;bottom:0`;
+  $('#tl').appendChild(nl);
+}
+
+function row(a,kind,btnLabel,action){
+  const late=isLate(a);
+  let meta=`${hhmm(a.at)} with ${staffName(a.s).split(' ')[0]} · ${a.type}`;
+  let extra='';
+  if(kind==='waiting'){const w=now-a.arrived;extra=`<span class="wait${w>=15?' long':''}">${w} min</span> waiting`;}
+  if(kind==='session'){extra=`Started ${hhmm(a.since)}, ends ${hhmm(a.at+a.d)}`;}
+  const flag=a.note?`<div class="flag${a.info?' info':''}">${a.note}</div>`:'';
+  return `<li class="row ${late?'late':kind}${matches(a)?' hit':''}">
+    <b>${a.name}</b>
+    <div class="meta">${late?`<span style="color:var(--brick);font-weight:600">${now-a.at} min late.</span> `:''}${extra||meta}</div>
+    ${flag}
+    <button class="btn" data-act="${action}" data-id="${a.id}">${btnLabel}</button></li>`;
+}
+
+function renderQueue(){
+  const people=appts.filter(a=>!isGroup(a));
+  const arrivals=people.filter(a=>a.st==='booked'&&a.at<=now+30).sort((x,y)=>x.at-y.at);
+  const waiting=people.filter(a=>a.st==='waiting').sort((x,y)=>x.arrived-y.arrived);
+  const session=people.filter(a=>a.st==='session').sort((x,y)=>x.since-y.since);
+  const sec=(title,count,items,empty)=>`<section class="group"><h2>${title}<span>${count}</span></h2><ul class="list">${items.join('')||`<li class="empty">${empty}</li>`}</ul></section>`;
+  $('#queue').innerHTML=
+    sec('Arrivals',arrivals.length+' due in the next 30 min',arrivals.map(a=>row(a,'booked','Check in','checkin')),'No one else is due in the next 30 minutes.')+
+    sec('Waiting room',waiting.length+' here',waiting.map(a=>row(a,'waiting','Send to room','start')),'The waiting room is empty.')+
+    sec('In session',session.length+' now',session.map(a=>row(a,'session','Check out','finish')),'No sessions are running.');
+}
+
+function renderSummary(){
+  const people=appts.filter(a=>!isGroup(a)&&a.st!=='noshow');
+  const left=people.filter(a=>a.st!=='done').length;
+  const late=appts.filter(isLate).length;
+  const w=appts.filter(a=>a.st==='waiting').length;
+  $('#summary').innerHTML=`<b>${w}</b> in the waiting room, <b>${appts.filter(a=>a.st==='session').length}</b> in session, <b>${left}</b> patients still to be seen today`+(late?`. <span class="late"><b>${late}</b> late and not checked in.</span>`:'.');
+}
+
+function render(){renderTimeline();renderQueue();renderSummary();$('#clock').textContent=hhmm(now);}
+
+function toast(msg){const e=$('#toast');e.textContent=msg;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),2600);}
+
+function act(kind,id){
+  const a=appts.find(x=>x.id==id);
+  if(kind==='checkin'){a.st='waiting';a.arrived=now;toast(`${a.name} checked in`);}
+  else if(kind==='start'){a.st='session';a.since=now;toast(`${a.name} sent to ${staffName(a.s).split(' ')[0]}'s room`);}
+  else if(kind==='finish'){a.st='done';toast(`${a.name} checked out`+(a.warn&&a.note&&a.note.startsWith('Balance')?'. Collect '+a.note.replace('Balance due ','')+' first':''));}
+  else if(kind==='noshow'){a.st='noshow';toast(`${a.name} marked as missed`);}
+  if(a.note&&kind!=='finish'&&a.warn===undefined){}
+  render();
+}
+
+function detail(id){
+  const a=appts.find(x=>x.id==id), d=$('#dlg');
+  const next={booked:['Check in','checkin'],waiting:['Send to room','start'],session:['Check out','finish']}[a.st];
+  const labels={booked:isLate(a)?'Late, not arrived':'Booked',waiting:'In the waiting room',session:'In session',done:'Finished',noshow:'Missed'};
+  d.innerHTML=`<h3>${a.name}</h3><div style="color:var(--muted)">${a.type}</div>
+  <dl><dt>Time</dt><dd>${hhmm(a.at)} to ${hhmm(a.at+a.d)} (${a.d} min)</dd><dt>Practitioner</dt><dd>${staffName(a.s)}</dd><dt>Status</dt><dd>${labels[a.st]}</dd><dt>Phone</dt><dd>${a.ph}</dd>${a.note?`<dt>Note</dt><dd>${a.note}</dd>`:''}</dl>
+  <form method="dialog" class="actions">
+   ${a.st==='booked'&&!isGroup(a)?`<button class="btn ghost" value="noshow" style="grid-column:auto;grid-row:auto">Mark as missed</button>`:''}
+   <button class="btn ghost" value="close" style="grid-column:auto;grid-row:auto">Close</button>
+   ${next?`<button class="btn" value="${next[1]}" style="grid-column:auto;grid-row:auto">${next[0]}</button>`:''}
+  </form>`;
+  d.onclose=()=>{const v=d.returnValue;d.returnValue='';if(v&&v!=='close')act(v,id);};
+  d.showModal();
+}
+
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(b){act(b.dataset.act,b.dataset.id);return;}
+  const p=e.target.closest('.appt'); if(p) detail(p.dataset.id);
+});
+$('#q').addEventListener('input',e=>{query=e.target.value.trim().toLowerCase();render();});
+
+// advance demo clock one minute every 30 seconds
+setInterval(()=>{now=Math.min(now+1,END-1);render();},30000);
+render();
+</script>
+</body>
+</html>

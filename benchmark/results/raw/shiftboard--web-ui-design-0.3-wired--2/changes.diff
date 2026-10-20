@@ -1,0 +1,440 @@
+diff --git a/DESIGN.md b/DESIGN.md
+new file mode 100644
+index 0000000..1fb4d8a
+--- /dev/null
++++ b/DESIGN.md
+@@ -0,0 +1,25 @@
++# Shiftboard design notes
++
++Extracted from the code as found, plus the Time off page decisions.
++
++## Stack
++React 19, react-router (HashRouter), Vite, CSS modules. Components live in `src/components`, pages in `src/pages`, all values come from `src/styles/tokens.css`.
++
++## Tokens (src/styles/tokens.css)
++- Colour: warm neutral ramp (`--neutral-*`), harbour-blue accent (`--accent-*`), status colours (`--color-success|warning|danger` and `-soft`). Use the semantic `--color-*` roles.
++- Type: Hanken Grotesk, `--text-xs` to `--text-2xl`. Spacing: 4px base, `--space-*`. Radius: `--radius-*`. Depth: borders on cards, shadows only on the modal.
++- Shell: dark sidebar (232px), content max 1160px, sidebar collapses to a top bar at 760px.
++
++## Components
++Button (primary, secondary, ghost, danger; sm, md; loading), Badge (tones), Card, Table parts, Field/Input/Select/Textarea, Modal, EmptyState, Skeleton, Spinner, PageHeader, Icon.
++
++## Time off page (`/time-off`)
++- Filter is a Select, matching the Staff page; defaults to Pending because that is the manager's job. Rows sort by start date, soonest first.
++- Approve is one click. Decline opens a Modal with a required reason, because `declineRequest` rejects an empty reason.
++- Pending badge uses the accent tone, not warning: warning text on its soft background is 4.3:1 and fails contrast.
++- Secondary text uses `--color-text-muted`, not `--color-text-subtle` (3.9:1 on the surface).
++- Below 1160px the table would clip its action buttons, so rows stack into cards (CSS in `TimeOff.module.css`).
++
++## Inconsistencies noted, not fixed
++- `--color-text-subtle` and the warning badge fail contrast (Staff and Schedule use them).
++- Nav links and small buttons are under 44px tap height on phones.
+diff --git a/src/App.tsx b/src/App.tsx
+index 5fbd3c8..4dff510 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
+ import { AppShell } from './components';
+ import { Schedule } from './pages/Schedule';
+ import { Staff } from './pages/Staff';
++import { TimeOff } from './pages/TimeOff';
+ 
+ export function App() {
+   return (
+@@ -9,6 +10,7 @@ export function App() {
+       <Routes>
+         <Route path="/" element={<Schedule />} />
+         <Route path="/staff" element={<Staff />} />
++        <Route path="/time-off" element={<TimeOff />} />
+         <Route path="*" element={<Schedule />} />
+       </Routes>
+     </AppShell>
+diff --git a/src/components/Sidebar.tsx b/src/components/Sidebar.tsx
+index 58c2393..0bf8a2d 100644
+--- a/src/components/Sidebar.tsx
++++ b/src/components/Sidebar.tsx
+@@ -13,6 +13,7 @@ interface NavItem {
+ const navItems: NavItem[] = [
+   { to: '/', label: 'Schedule', icon: 'calendar' },
+   { to: '/staff', label: 'Staff', icon: 'users' },
++  { to: '/time-off', label: 'Time off', icon: 'clock' },
+ ];
+ 
+ export function Sidebar() {
+diff --git a/src/pages/TimeOff.module.css b/src/pages/TimeOff.module.css
+new file mode 100644
+index 0000000..ca3b9c7
+--- /dev/null
++++ b/src/pages/TimeOff.module.css
+@@ -0,0 +1,107 @@
++.filters {
++  max-width: 240px;
++  margin-bottom: var(--space-4);
++}
++
++.alert {
++  margin-bottom: var(--space-4);
++  padding: var(--space-3) var(--space-4);
++  background: var(--color-danger-soft);
++  border-radius: var(--radius-md);
++  color: var(--color-danger);
++  font-size: var(--text-sm);
++}
++
++.skeletons {
++  display: flex;
++  flex-direction: column;
++  gap: var(--space-3);
++  padding: var(--space-4);
++}
++
++.name {
++  font-weight: var(--font-weight-medium);
++}
++
++.subtle {
++  color: var(--color-text-muted);
++  font-size: var(--text-xs);
++}
++
++.nowrap {
++  white-space: nowrap;
++}
++
++.note {
++  min-width: 200px;
++  max-width: 320px;
++  color: var(--color-text-muted);
++}
++
++.actions {
++  display: flex;
++  justify-content: flex-end;
++  gap: var(--space-2);
++}
++
++.actionsHead {
++  position: relative;
++}
++
++.srOnly {
++  position: absolute;
++  width: 1px;
++  height: 1px;
++  overflow: hidden;
++  clip-path: inset(50%);
++  white-space: nowrap;
++}
++
++@media (max-width: 760px) {
++  .filters {
++    max-width: none;
++  }
++}
++
++/* The table needs about 840px of content width; below that, rows stack into cards */
++@media (max-width: 1160px) {
++  /* Keeps Approve and Decline on screen */
++  .table thead {
++    display: none;
++  }
++
++  .table,
++  .table tbody,
++  .table tr,
++  .table td {
++    display: block;
++  }
++
++  .table tr {
++    padding: var(--space-4);
++    border-bottom: var(--border-width) solid var(--color-border);
++  }
++
++  .table tr:last-child {
++    border-bottom: 0;
++  }
++
++  .table td {
++    padding: var(--space-1) 0;
++    border: 0;
++  }
++
++  .note {
++    min-width: 0;
++    max-width: none;
++  }
++
++  .actions {
++    justify-content: flex-start;
++    margin-top: var(--space-2);
++  }
++
++  .actions button {
++    min-height: var(--control-height-md);
++  }
++}
+diff --git a/src/pages/TimeOff.tsx b/src/pages/TimeOff.tsx
+new file mode 100644
+index 0000000..dd87c9b
+--- /dev/null
++++ b/src/pages/TimeOff.tsx
+@@ -0,0 +1,258 @@
++import { useCallback, useEffect, useMemo, useState } from 'react';
++import { Badge, Button, Card, EmptyState, Icon, PageHeader, Select, Skeleton, Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow, Textarea, Modal } from '../components';
++import type { BadgeTone } from '../components';
++import { approveRequest, declineRequest, getTimeOffRequests } from '../api/timeOff';
++import type { TimeOffRequest, TimeOffStatus, TimeOffType } from '../api/timeOff';
++import { locations } from '../data/locations';
++import { staff } from '../data/staff';
++import { formatDay } from '../lib/dates';
++import styles from './TimeOff.module.css';
++
++type StatusFilter = TimeOffStatus | 'all';
++
++const typeLabels: Record<TimeOffType, string> = { vacation: 'Vacation', sick: 'Sick leave', personal: 'Personal' };
++const statusTones: Record<TimeOffStatus, BadgeTone> = { pending: 'accent', approved: 'success', declined: 'danger' };
++const statusLabels: Record<TimeOffStatus, string> = { pending: 'Pending', approved: 'Approved', declined: 'Declined' };
++const DAY_MS = 24 * 60 * 60 * 1000;
++
++function parseDay(value: string): Date {
++  const [year, month, day] = value.split('-').map(Number);
++  return new Date(year, month - 1, day);
++}
++
++function formatRange(request: TimeOffRequest): string {
++  const start = parseDay(request.start);
++  const end = parseDay(request.end);
++  const year = (date: Date) => (date.getFullYear() === 2026 ? '' : ` ${date.getFullYear()}`);
++  if (request.start === request.end) return `${formatDay(start)}${year(start)}`;
++  return `${formatDay(start)}${year(start)} to ${formatDay(end)}${year(end)}`;
++}
++
++function countDays(request: TimeOffRequest): number {
++  return Math.round((parseDay(request.end).getTime() - parseDay(request.start).getTime()) / DAY_MS) + 1;
++}
++
++export function TimeOff() {
++  const [requests, setRequests] = useState<TimeOffRequest[] | null>(null);
++  const [loadError, setLoadError] = useState(false);
++  const [filter, setFilter] = useState<StatusFilter>('pending');
++  const [busyId, setBusyId] = useState<string | null>(null);
++  const [actionError, setActionError] = useState('');
++  const [declining, setDeclining] = useState<TimeOffRequest | null>(null);
++  const [reason, setReason] = useState('');
++  const [reasonError, setReasonError] = useState('');
++
++  const load = useCallback(() => {
++    setLoadError(false);
++    setRequests(null);
++    getTimeOffRequests().then(setRequests, () => setLoadError(true));
++  }, []);
++
++  useEffect(load, [load]);
++
++  const replace = (next: TimeOffRequest) => setRequests((current) => current?.map((item) => (item.id === next.id ? next : item)) ?? null);
++
++  const counts = useMemo(() => {
++    const result = { all: requests?.length ?? 0, pending: 0, approved: 0, declined: 0 };
++    requests?.forEach((item) => (result[item.status] += 1));
++    return result;
++  }, [requests]);
++
++  const visible = useMemo(
++    () => (requests ?? []).filter((item) => filter === 'all' || item.status === filter).sort((a, b) => a.start.localeCompare(b.start)),
++    [requests, filter],
++  );
++
++  const filterOptions = [
++    { value: 'pending', label: `Pending (${counts.pending})` },
++    { value: 'approved', label: `Approved (${counts.approved})` },
++    { value: 'declined', label: `Declined (${counts.declined})` },
++    { value: 'all', label: `All requests (${counts.all})` },
++  ];
++
++  async function approve(request: TimeOffRequest) {
++    setBusyId(request.id);
++    setActionError('');
++    try {
++      replace(await approveRequest(request.id));
++    } catch {
++      setActionError(`Could not approve the request from ${staffName(request)}. Try again.`);
++    } finally {
++      setBusyId(null);
++    }
++  }
++
++  function openDecline(request: TimeOffRequest) {
++    setDeclining(request);
++    setReason('');
++    setReasonError('');
++    setActionError('');
++  }
++
++  function closeDecline() {
++    if (busyId) return;
++    setDeclining(null);
++  }
++
++  async function confirmDecline() {
++    if (!declining) return;
++    if (!reason.trim()) {
++      setReasonError('Give a reason so the employee knows why.');
++      return;
++    }
++    setBusyId(declining.id);
++    try {
++      replace(await declineRequest(declining.id, reason));
++      setDeclining(null);
++    } catch {
++      setReasonError('Could not decline the request. Try again.');
++    } finally {
++      setBusyId(null);
++    }
++  }
++
++  return (
++    <>
++      <PageHeader
++        title="Time off"
++        description={requests ? `${counts.pending} ${counts.pending === 1 ? 'request is' : 'requests are'} waiting for review` : 'Review requests from your team'}
++      />
++
++      <div className={styles.filters}>
++        <Select id="timeoff-status" label="Show" value={filter} options={filterOptions} onChange={(event) => setFilter(event.target.value as StatusFilter)} />
++      </div>
++
++      {actionError ? (
++        <p className={styles.alert} role="alert">
++          {actionError}
++        </p>
++      ) : null}
++
++      <Card flush>
++        {loadError ? (
++          <EmptyState
++            icon="clock"
++            title="Time-off requests did not load"
++            description="Check your connection and try again."
++            action={
++              <Button variant="secondary" size="sm" onClick={load}>
++                Try again
++              </Button>
++            }
++          />
++        ) : requests === null ? (
++          <div className={styles.skeletons} aria-busy="true" aria-label="Loading requests">
++            {[0, 1, 2, 3].map((row) => (
++              <Skeleton key={row} height="var(--space-10)" />
++            ))}
++          </div>
++        ) : visible.length === 0 ? (
++          <EmptyState
++            icon="check"
++            title={filter === 'pending' ? 'All caught up' : 'No requests here'}
++            description={filter === 'pending' ? 'There are no time-off requests waiting for a decision.' : 'No requests match this filter.'}
++            action={
++              filter !== 'all' ? (
++                <Button variant="secondary" size="sm" onClick={() => setFilter('all')}>
++                  Show all requests
++                </Button>
++              ) : undefined
++            }
++          />
++        ) : (
++          <Table className={styles.table}>
++            <TableHead>
++              <TableRow>
++                <TableHeaderCell>Employee</TableHeaderCell>
++                <TableHeaderCell>Dates</TableHeaderCell>
++                <TableHeaderCell>Type</TableHeaderCell>
++                <TableHeaderCell>Note</TableHeaderCell>
++                <TableHeaderCell>Status</TableHeaderCell>
++                <TableHeaderCell className={styles.actionsHead}>
++                  <span className={styles.srOnly}>Actions</span>
++                </TableHeaderCell>
++              </TableRow>
++            </TableHead>
++            <TableBody>
++              {visible.map((request) => {
++                const member = staff.find((item) => item.id === request.staffId);
++                const days = countDays(request);
++                return (
++                  <TableRow key={request.id}>
++                    <TableCell>
++                      <p className={styles.name}>{member?.name ?? 'Unknown employee'}</p>
++                      <p className={styles.subtle}>
++                        {`${member?.role}, ${locations.find((location) => location.id === member?.locationId)?.name}`}
++                      </p>
++                    </TableCell>
++                    <TableCell>
++                      <p className={styles.nowrap}>{formatRange(request)}</p>
++                      <p className={styles.subtle}>{days} {days === 1 ? 'day' : 'days'}</p>
++                    </TableCell>
++                    <TableCell>{typeLabels[request.type]}</TableCell>
++                    <TableCell className={styles.note}>{request.note || <span className={styles.subtle}>No note</span>}</TableCell>
++                    <TableCell>
++                      <Badge tone={statusTones[request.status]}>{statusLabels[request.status]}</Badge>
++                    </TableCell>
++                    <TableCell>
++                      {request.status === 'pending' ? (
++                        <div className={styles.actions}>
++                          <Button variant="primary" size="sm" loading={busyId === request.id && !declining} disabled={busyId !== null} onClick={() => approve(request)} aria-label={`Approve request from ${member?.name}`}>
++                            <Icon name="check" />
++                            Approve
++                          </Button>
++                          <Button variant="secondary" size="sm" disabled={busyId !== null} onClick={() => openDecline(request)} aria-label={`Decline request from ${member?.name}`}>
++                            Decline
++                          </Button>
++                        </div>
++                      ) : null}
++                    </TableCell>
++                  </TableRow>
++                );
++              })}
++            </TableBody>
++          </Table>
++        )}
++      </Card>
++
++      <Modal
++        open={declining !== null}
++        title="Decline time off"
++        onClose={closeDecline}
++        footer={
++          <>
++            <Button variant="ghost" onClick={closeDecline} disabled={busyId !== null}>
++              Cancel
++            </Button>
++            <Button variant="danger" loading={busyId !== null} onClick={confirmDecline}>
++              Decline request
++            </Button>
++          </>
++        }
++      >
++        {declining ? (
++          <>
++            <p>
++              {staffName(declining)}, {typeLabels[declining.type].toLowerCase()}, {formatRange(declining)}.
++            </p>
++            <Textarea
++              id="timeoff-reason"
++              label="Reason"
++              hint="Shared with the employee."
++              value={reason}
++              error={reasonError}
++              onChange={(event) => {
++                setReason(event.target.value);
++                setReasonError('');
++              }}
++            />
++          </>
++        ) : null}
++      </Modal>
++    </>
++  );
++}
++
++function staffName(request: TimeOffRequest): string {
++  return staff.find((item) => item.id === request.staffId)?.name ?? 'this employee';
++}

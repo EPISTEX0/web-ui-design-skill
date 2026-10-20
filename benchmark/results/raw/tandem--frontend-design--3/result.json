@@ -1,0 +1,12 @@
+{
+  "brief": "tandem",
+  "arm": "frontend-design",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 116,
+  "delivered": true,
+  "client_rounds": 0,
+  "qa": [],
+  "is_error": false,
+  "num_turns": 13,
+  "total_cost_usd": 0.3261811
+}

@@ -1,0 +1,184 @@
+{
+  "scores": {
+    "K6": {
+      "improvement": 4,
+      "identity": 9,
+      "craft": 4,
+      "mobile": 4,
+      "overall": 4,
+      "defects": [
+        "The desktop presentation remains close to the dated reference, with thin section rules, underlined navigation and little hierarchy beyond heading size.",
+        "Mobile timetable entries repeat six vertically stacked fields for every session; the 6000px capture reaches only Friday, with prices still much farther down.",
+        "The small, tightly packed uppercase mobile navigation is poorly suited to older members using the site poolside.",
+        "The captured mobile notice shows only part of the closure announcement rather than a readable set of notices."
+      ],
+      "note": "It retains the club faithfully and fixes the reference's fixed-width phone layout, but leaves the dated presentation and makes checking a full week unnecessarily laborious."
+    },
+    "M9": {
+      "improvement": 6,
+      "identity": 9,
+      "craft": 6,
+      "mobile": 5,
+      "overall": 5,
+      "defects": [
+        "The mobile navigation extends beyond the right edge, clipping the Contact link.",
+        "Large introductory sections precede the timetable, and displaying the entire week as mobile cards pushes prices below the 6000px capture.",
+        "The desktop layout spends substantial space on introductory material before showing the information returning members mainly need."
+      ],
+      "note": "Clearer typography and useful timetable and price shortcuts improve the original, but clipped phone navigation and a very long default schedule undermine the refresh."
+    },
+    "Q2": {
+      "improvement": 5,
+      "identity": 9,
+      "craft": 5,
+      "mobile": 4,
+      "overall": 5,
+      "defects": [
+        "The mobile timetable expands all 27 sessions into long cards, with the 6000px capture reaching only the start of Sunday and not the prices.",
+        "No day-selection controls are visible above the long timetable, making a particular day's sessions harder to isolate.",
+        "The desktop first viewport is largely introduction and decoration, with actual timetable rows below the fold.",
+        "The captured closure notice is only partially visible rather than presented as a fully readable announcement."
+      ],
+      "note": "This is a faithful, more readable version of the old site, but the exhaustive mobile timetable and weak task prioritization keep it short of a convincing modern refresh."
+    },
+    "Q7": {
+      "improvement": 7,
+      "identity": 9,
+      "craft": 7,
+      "mobile": 6,
+      "overall": 6,
+      "defects": [
+        "The mobile navigation clips the Contact link at the right edge.",
+        "The hero, four notices and welcome section all precede the timetable, delaying the primary returning-member task.",
+        "The prominent hero actions emphasize sessions and joining without an equally direct price shortcut.",
+        "The desktop join panel leaves a large unused area beneath the small illustration beside the narrow form."
+      ],
+      "note": "Readable notices, clear day controls and consistent club styling make a strong refresh, though phone navigation overflow and an introduction-heavy hierarchy need attention."
+    },
+    "S3": {
+      "improvement": 7,
+      "identity": 9,
+      "craft": 7,
+      "mobile": 6,
+      "overall": 6,
+      "defects": [
+        "The default all-week mobile timetable is extremely long; the 6000px capture reaches only Saturday, leaving the price section out of view.",
+        "Later day controls extend outside the initially visible mobile tab strip without a strong visual cue that more days are available.",
+        "Repeated lane, level and coach metadata gives each mobile session considerable height.",
+        "The desktop news content occupies only part of its available width, leaving an unnecessarily empty area alongside it."
+      ],
+      "note": "A clear, recognizable and well-organized refresh with useful navigation, held back mainly by the excessive length of its default mobile timetable."
+    },
+    "S5": {
+      "improvement": 5,
+      "identity": 9,
+      "craft": 5,
+      "mobile": 5,
+      "overall": 5,
+      "defects": [
+        "The desktop layout remains very close to the reference, with limited improvement in hierarchy or visual polish.",
+        "The mobile layout places the complete week's timetable before membership, requiring a long scroll before prices appear near the capture's bottom.",
+        "The mobile header hides section navigation behind Menu, while the hero provides no prominent task shortcuts.",
+        "The captured mobile notice displays only part of its message."
+      ],
+      "note": "A cautious, content-preserving repair that improves readability and phone fitting but offers little beyond a competent basic restyling."
+    },
+    "U3": {
+      "improvement": 7,
+      "identity": 9,
+      "craft": 7,
+      "mobile": 7,
+      "overall": 7,
+      "defects": [
+        "The hero and welcome section still precede the timetable, giving introductory material priority over returning members' main task.",
+        "The mobile header navigation wraps into a small, crowded multi-line arrangement.",
+        "Later days are outside the initially visible mobile day-control strip.",
+        "The desktop join section has a narrow form and substantial unused space below its accompanying illustration."
+      ],
+      "note": "A coherent and readable club-preserving refresh whose focused daily timetable works well, although the phone header and information order could be sharper."
+    },
+    "U6": {
+      "improvement": 8,
+      "identity": 9,
+      "craft": 7,
+      "mobile": 8,
+      "overall": 8,
+      "defects": [
+        "The mobile hero emphasizes sessions and joining, while prices remain behind the membership navigation rather than receiving their own quick action.",
+        "Four vertically stacked membership cards add considerable mobile scrolling despite containing relatively little information.",
+        "The desktop join layout leaves a conspicuous unused area beside the form beneath the small illustration."
+      ],
+      "note": "The strongest practical refresh puts the timetable ahead of the welcome material, makes day controls and session cards readable on phones, and preserves the familiar club identity."
+    },
+    "W5": {
+      "improvement": 7,
+      "identity": 9,
+      "craft": 7,
+      "mobile": 7,
+      "overall": 7,
+      "defects": [
+        "The welcome illustration and copy still sit ahead of the timetable, adding scrolling before the main member task.",
+        "The mobile Menu hides the section links instead of leaving timetable and prices directly visible in the header.",
+        "The reduced header logo makes the club name relatively small.",
+        "Small secondary session details and news dates are less comfortable for older members than the main body text."
+      ],
+      "note": "A balanced, readable and faithful refresh with a manageable daily timetable, but its mobile navigation and introduction-first ordering could serve regular members better."
+    },
+    "Y2": {
+      "improvement": 6,
+      "identity": 9,
+      "craft": 6,
+      "mobile": 6,
+      "overall": 6,
+      "defects": [
+        "The mobile header navigation wraps awkwardly, leaving Contact on its own line.",
+        "The complete week remains expanded on phones, pushing membership prices close to the bottom of the 6000px capture.",
+        "Compact secondary timetable text is harder to scan than the bold times and session names.",
+        "The hero prioritizes timetable and joining rather than offering an equally prominent price shortcut."
+      ],
+      "note": "A sensible and recognizable improvement with relatively compact session groups, though the long mobile week and awkward header stop it feeling fully resolved."
+    },
+    "Y3": {
+      "improvement": 6,
+      "identity": 9,
+      "craft": 6,
+      "mobile": 5,
+      "overall": 5,
+      "defects": [
+        "The full week's mobile session cards consume almost the entire 6000px capture, with prices still below the visible schedule.",
+        "A floating yellow join prompt overlays the welcome illustration in the mobile capture.",
+        "The mobile header hides useful section links behind Menu while giving joining a separate persistent prompt.",
+        "The lengthy welcome section appears before the timetable despite members mainly needing times and prices."
+      ],
+      "note": "The recognizable palette and stronger typography help, but the mobile page devotes too much space and emphasis to introductions and joining rather than quick member lookup."
+    },
+    "Y6": {
+      "improvement": 5,
+      "identity": 9,
+      "craft": 5,
+      "mobile": 4,
+      "overall": 5,
+      "defects": [
+        "Mobile sessions use tall, repeated label-and-value lists; the 6000px capture reaches only Saturday and never shows membership prices.",
+        "Later day controls are clipped outside the initially visible mobile strip.",
+        "The desktop header uses two rows and the introduction occupies most of the first viewport before timetable content begins.",
+        "The page retains much of the reference's basic section-rule styling rather than developing a more deliberate visual hierarchy."
+      ],
+      "note": "It keeps the club and its content recognizable, but the inefficient phone timetable and conservative hierarchy only partially address the client's usability problem."
+    }
+  },
+  "ranking": [
+    "U6",
+    "U3",
+    "W5",
+    "S3",
+    "Q7",
+    "Y2",
+    "M9",
+    "Y3",
+    "S5",
+    "Y6",
+    "Q2",
+    "K6"
+  ]
+}

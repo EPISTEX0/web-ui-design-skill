@@ -1,0 +1,54 @@
+{
+  "id": "kestrel--web-ui-design-0.3-silent--3",
+  "desktop": {
+    "fullH": 2755,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 43,
+      "moderate": 1,
+      "minor": 0,
+      "rules": [
+        "label-content-name-mismatch:43",
+        "page-has-heading-one:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 30,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 3677,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 3958,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

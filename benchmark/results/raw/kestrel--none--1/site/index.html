@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kestrel Physio — Front Desk</title>
+<style>
+  :root {
+    --bg: #f4f6f5;
+    --panel: #ffffff;
+    --ink: #17252a;
+    --muted: #61716f;
+    --line: #dfe6e4;
+    --brand: #0f6b5c;
+    --brand-dark: #0a4d42;
+    --brand-tint: #e3f2ef;
+    --amber: #a85d00;
+    --amber-tint: #fff1dc;
+    --blue: #1d5fa8;
+    --blue-tint: #e4eefa;
+    --red: #b3261e;
+    --red-tint: #fbe8e6;
+    --grey-tint: #eceff0;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  button, input, select { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid #5aa9ff; outline-offset: 2px; }
+
+  header {
+    background: var(--brand-dark); color: #fff;
+    display: flex; align-items: center; gap: 20px; padding: 12px 24px; flex-wrap: wrap;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: .2px; }
+  .logo svg { width: 28px; height: 28px; }
+  .logo small { display: block; font-weight: 400; font-size: 12px; opacity: .75; letter-spacing: 0; }
+  .search { flex: 1; min-width: 220px; max-width: 460px; margin-left: auto; position: relative; }
+  .search input {
+    width: 100%; padding: 9px 12px; border-radius: 8px; border: 0;
+    background: rgba(255,255,255,.14); color: #fff;
+  }
+  .search input::placeholder { color: rgba(255,255,255,.7); }
+  .search input:focus { background: #fff; color: var(--ink); }
+  .search input:focus::placeholder { color: var(--muted); }
+  .clock { text-align: right; line-height: 1.2; }
+  .clock b { font-size: 22px; font-variant-numeric: tabular-nums; }
+  .clock span { display: block; font-size: 12px; opacity: .8; }
+
+  main { padding: 20px 24px 40px; max-width: 1500px; margin: 0 auto; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .stat { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 16px; }
+  .stat .n { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .stat .l { color: var(--muted); font-size: 13px; }
+  .stat.alert .n { color: var(--amber); }
+
+  .grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr); gap: 20px; align-items: start; }
+  @media (max-width: 1000px) { .grid { grid-template-columns: 1fr; } }
+
+  section.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 20px; overflow: hidden; }
+  .card h2 { margin: 0; font-size: 16px; }
+  .card-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .card-head .tools { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .count { background: var(--grey-tint); border-radius: 99px; padding: 1px 9px; font-size: 13px; color: var(--muted); }
+
+  select, .btn {
+    border: 1px solid var(--line); background: #fff; border-radius: 8px; padding: 6px 12px;
+  }
+  .btn:hover, select:hover { border-color: #b7c5c2; }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+  .btn.primary:hover { background: var(--brand-dark); }
+  .btn.small { padding: 4px 10px; font-size: 13px; }
+  .btn.danger { color: var(--red); }
+  .btn.ghost { border-color: transparent; background: transparent; color: var(--muted); }
+  .btn.ghost:hover { background: var(--grey-tint); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); padding: 8px 16px; background: #fafcfb; border-bottom: 1px solid var(--line); }
+  td { padding: 11px 16px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  tr:last-child td { border-bottom: 0; }
+  tr.now td:first-child { box-shadow: inset 4px 0 0 var(--brand); }
+  tr.done td, tr.noshow td { color: var(--muted); }
+  td.time { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+  td.time small { display: block; font-weight: 400; color: var(--muted); }
+  .pt { font-weight: 600; }
+  .sub { color: var(--muted); font-size: 13px; }
+  .flags { display: inline-flex; gap: 4px; margin-left: 6px; vertical-align: 1px; }
+  .flag { font-size: 11px; font-weight: 600; padding: 1px 6px; border-radius: 4px; background: var(--amber-tint); color: var(--amber); }
+  .flag.red { background: var(--red-tint); color: var(--red); }
+
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+  .s-scheduled { background: var(--grey-tint); color: #46545a; }
+  .s-arrived { background: var(--amber-tint); color: var(--amber); }
+  .s-inprogress { background: var(--blue-tint); color: var(--blue); }
+  .s-done { background: var(--brand-tint); color: var(--brand-dark); }
+  .s-noshow { background: var(--red-tint); color: var(--red); }
+
+  .actions { display: flex; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+  .empty { padding: 28px 16px; text-align: center; color: var(--muted); }
+
+  .room-list { list-style: none; margin: 0; padding: 0; }
+  .room-list li { padding: 12px 16px; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; }
+  .room-list li:last-child { border-bottom: 0; }
+  .room-list .grow { flex: 1; min-width: 0; }
+  .wait { font-variant-numeric: tabular-nums; font-weight: 700; text-align: right; }
+  .wait.long { color: var(--red); }
+  .wait small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+  .dot.free { background: #2e9e6b; }
+  .dot.busy { background: var(--blue); }
+  .dot.off { background: #b8c2c0; }
+
+  .tasks { list-style: none; margin: 0; padding: 4px 0; }
+  .tasks li { padding: 8px 16px; display: flex; gap: 10px; align-items: flex-start; }
+  .tasks input { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--brand); }
+  .tasks li.checked label { text-decoration: line-through; color: var(--muted); }
+
+  dialog { border: 0; border-radius: 14px; padding: 0; width: min(480px, 92vw); box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+  dialog::backdrop { background: rgba(10,30,28,.5); }
+  dialog form { padding: 22px; display: grid; gap: 14px; }
+  dialog h3 { margin: 0; font-size: 18px; }
+  dialog label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  dialog input, dialog select { padding: 8px 10px; border: 1px solid #c4d0cd; border-radius: 8px; color: var(--ink); width: 100%; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
+  .detail dl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; margin: 0; }
+  .detail dt { color: var(--muted); font-size: 13px; }
+  .detail dd { margin: 0; }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px; transition: transform .25s; z-index: 10; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+  @media (max-width: 700px) {
+    th:nth-child(3), td:nth-child(3) { display: none; }
+    main { padding: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="#e3f2ef"/><path d="M5 18c4-1 6-5 11-5 3 0 5 1 7 3l4-2-2 5c-2 4-6 6-10 6-5 0-8-3-10-7z" fill="#0f6b5c"/><circle cx="21" cy="14.5" r="1.2" fill="#e3f2ef"/></svg>
+    <div>Kestrel Physio<small>Front desk</small></div>
+  </div>
+  <div class="search">
+    <input id="search" type="search" placeholder="Search patient, therapist or phone…" aria-label="Search appointments">
+  </div>
+  <button class="btn primary" id="newBtn">+ Walk-in / New booking</button>
+  <div class="clock"><b id="clockTime">--:--</b><span id="clockDate"></span></div>
+</header>
+
+<main>
+  <div class="stats" id="stats"></div>
+
+  <div class="grid">
+    <div>
+      <section class="card" aria-labelledby="schedH">
+        <div class="card-head">
+          <h2 id="schedH">Today’s schedule</h2><span class="count" id="schedCount"></span>
+          <div class="tools">
+            <select id="therapistFilter" aria-label="Filter by therapist"></select>
+            <select id="statusFilter" aria-label="Filter by status">
+              <option value="all">All statuses</option>
+              <option value="scheduled">Not yet arrived</option>
+              <option value="arrived">Waiting</option>
+              <option value="inprogress">In session</option>
+              <option value="done">Completed</option>
+              <option value="noshow">No-show</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Time</th><th>Patient</th><th>Therapist / Room</th><th>Status</th><th><span class="sr" style="position:absolute;left:-9999px">Actions</span></th></tr></thead>
+          <tbody id="schedule"></tbody>
+        </table>
+      </section>
+    </div>
+
+    <aside>
+      <section class="card" aria-labelledby="waitH">
+        <div class="card-head"><h2 id="waitH">Waiting room</h2><span class="count" id="waitCount"></span></div>
+        <ul class="room-list" id="waiting"></ul>
+      </section>
+
+      <section class="card" aria-labelledby="clinH">
+        <div class="card-head"><h2 id="clinH">Clinicians</h2></div>
+        <ul class="room-list" id="clinicians"></ul>
+      </section>
+
+      <section class="card" aria-labelledby="taskH">
+        <div class="card-head"><h2 id="taskH">Desk to-do</h2></div>
+        <ul class="tasks" id="tasks"></ul>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<dialog id="detailDlg"><form method="dialog" class="detail" id="detailBody"></form></dialog>
+
+<dialog id="newDlg">
+  <form id="newForm" method="dialog">
+    <h3>New booking / walk-in</h3>
+    <label>Patient name<input name="name" required autocomplete="off" placeholder="e.g. Jordan Reyes"></label>
+    <div class="row2">
+      <label>Phone<input name="phone" type="tel" placeholder="0412 345 678"></label>
+      <label>Type
+        <select name="type">
+          <option>Initial assessment</option><option>Follow-up</option><option>Rehab session</option>
+          <option>Dry needling</option><option>Massage / soft tissue</option>
+        </select>
+      </label>
+    </div>
+    <div class="row2">
+      <label>Therapist<select name="therapist" id="newTherapist"></select></label>
+      <label>Time<input name="time" type="time" required></label>
+    </div>
+    <label><span><input type="checkbox" name="arrived" checked style="width:auto"> Patient is here now (check in immediately)</span></label>
+    <div class="dialog-actions">
+      <button class="btn" type="button" id="newCancel">Cancel</button>
+      <button class="btn primary" type="submit">Add to schedule</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  // ---------- Sample data (today: Tue 20 Oct 2026) ----------
+  const therapists = [
+    { id: 't1', name: 'Dr. Maya Okafor', role: 'Senior Physio', room: 'Room 1', on: true },
+    { id: 't2', name: 'Liam Brennan', role: 'Sports Physio', room: 'Room 2', on: true },
+    { id: 't3', name: 'Priya Nair', role: 'Physio · Women’s health', room: 'Room 3', on: true },
+    { id: 't4', name: 'Tom Hadley', role: 'Massage therapist', room: 'Room 4', on: false, note: 'Starts 1:00 pm' },
+  ];
+
+  // time = HH:MM (24h), dur = minutes
+  const appts = [
+    { id: 1,  time: '08:00', dur: 45, name: 'Eleanor Whitfield', phone: '0412 880 214', type: 'Follow-up', t: 't1', status: 'done', note: 'Post-op knee (TKR wk 6). Progress ROM to 110°.', flags: ['Post-op'] },
+    { id: 2,  time: '08:30', dur: 30, name: 'Marcus Ibarra', phone: '0433 019 772', type: 'Rehab session', t: 't2', status: 'done', note: 'ACL protocol, phase 2.', flags: [] },
+    { id: 3,  time: '08:45', dur: 45, name: 'Hannah Lindqvist', phone: '0421 556 903', type: 'Initial assessment', t: 't3', status: 'done', note: 'Pelvic girdle pain, 28 wks pregnant.', flags: [] },
+    { id: 4,  time: '09:30', dur: 30, name: 'Sanjay Patel', phone: '0409 311 468', type: 'Follow-up', t: 't1', status: 'done', note: 'Lumbar disc, improving.', flags: [] },
+    { id: 5,  time: '09:45', dur: 45, name: 'Chloe Armstrong', phone: '0455 207 681', type: 'Dry needling', t: 't2', status: 'inprogress', note: 'Upper trapezius / neck tension.', flags: [] },
+    { id: 6,  time: '10:00', dur: 45, name: 'Walter Nowak', phone: '0417 640 925', type: 'Follow-up', t: 't1', status: 'inprogress', note: 'Rotator cuff repair, wk 10.', flags: ['Post-op'] },
+    { id: 7,  time: '10:15', dur: 30, name: 'Isabelle Fontaine', phone: '0428 773 150', type: 'Follow-up', t: 't3', status: 'arrived', arrivedAt: '10:04', note: 'Diastasis recti programme.', flags: [] },
+    { id: 8,  time: '10:30', dur: 45, name: 'Declan O’Rourke', phone: '0466 392 087', type: 'Initial assessment', t: 't2', status: 'arrived', arrivedAt: '10:11', note: 'Left ankle sprain (netball), 5 days ago.', flags: ['New patient', 'Forms due'] },
+    { id: 9,  time: '10:45', dur: 30, name: 'Beatrice Carmichael', phone: '0402 118 569', type: 'Rehab session', t: 't1', status: 'scheduled', note: 'Hip OA strengthening.', flags: ['Balance owing $45'] },
+    { id: 10, time: '11:00', dur: 45, name: 'Kwame Asante', phone: '0439 862 304', type: 'Follow-up', t: 't3', status: 'scheduled', note: 'Plantar fasciitis.', flags: [] },
+    { id: 11, time: '11:15', dur: 30, name: 'Rachel Goldberg', phone: '0414 297 836', type: 'Follow-up', t: 't2', status: 'scheduled', note: 'Tennis elbow, 4th visit — check EPC plan (5 of 5 used after today).', flags: ['Last EPC visit'] },
+    { id: 12, time: '11:30', dur: 45, name: 'Tomás Rivera', phone: '0451 723 940', type: 'Initial assessment', t: 't1', status: 'scheduled', note: 'WorkCover claim — bring claim number.', flags: ['New patient', 'WorkCover'] },
+    { id: 13, time: '13:00', dur: 60, name: 'Olivia Pemberton', phone: '0427 504 118', type: 'Massage / soft tissue', t: 't4', status: 'scheduled', note: 'Remedial massage, upper back.', flags: [] },
+    { id: 14, time: '13:30', dur: 30, name: 'George Mitchell', phone: '0408 665 291', type: 'Rehab session', t: 't2', status: 'scheduled', note: 'Hamstring strain return-to-run.', flags: [] },
+    { id: 15, time: '14:00', dur: 45, name: 'Mei-Ling Tan', phone: '0432 186 475', type: 'Follow-up', t: 't3', status: 'scheduled', note: 'Postnatal back pain.', flags: [] },
+    { id: 16, time: '14:30', dur: 30, name: 'Anthony Russo', phone: '0419 348 062', type: 'Follow-up', t: 't1', status: 'scheduled', note: 'Lumbar facet irritation.', flags: [] },
+    { id: 17, time: '15:15', dur: 45, name: 'Fatima Al-Sayed', phone: '0446 830 217', type: 'Dry needling', t: 't2', status: 'scheduled', note: 'Glute med tendinopathy.', flags: [] },
+    { id: 18, time: '16:00', dur: 30, name: 'Patrick Lowe', phone: '0405 972 613', type: 'Follow-up', t: 't1', status: 'scheduled', note: 'Sciatica; MRI results to discuss.', flags: ['Results'] },
+    { id: 19, time: '09:00', dur: 30, name: 'Joanna Kessler', phone: '0423 659 801', type: 'Follow-up', t: 't3', status: 'noshow', note: 'Called 9:10 — no answer. Left voicemail.', flags: [] },
+  ];
+
+  const tasks = [
+    { text: 'Call Joanna Kessler to rebook (no-show 9:00)', done: false },
+    { text: 'Confirm tomorrow’s appointments (SMS batch)', done: false },
+    { text: 'Chase Beatrice Carmichael — $45 balance', done: false },
+    { text: 'Fax referral to Dr. Hollis (Walter Nowak)', done: true },
+    { text: 'Restock gel & table paper, Rooms 2–3', done: false },
+  ];
+
+  const STATUS = {
+    scheduled:  { label: 'Not yet arrived', cls: 's-scheduled' },
+    arrived:    { label: 'Waiting',         cls: 's-arrived' },
+    inprogress: { label: 'In session',      cls: 's-inprogress' },
+    done:       { label: 'Completed',       cls: 's-done' },
+    noshow:     { label: 'No-show',         cls: 's-noshow' },
+  };
+
+  // ---------- Helpers ----------
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const toMin = hhmm => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
+  const fmt12 = hhmm => { let [h, m] = hhmm.split(':').map(Number); const ap = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12; return `${h}:${String(m).padStart(2,'0')} ${ap}`; };
+  const therapist = id => therapists.find(t => t.id === id);
+  const nowMin = () => { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); };
+  const hhmmNow = () => { const d = new Date(); return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; };
+
+  // The sample data is set around mid-morning. Use the real clock if the
+  // clinic is open, otherwise pin to 10:20 so the screen is still meaningful.
+  const real = nowMin();
+  const offset = (real >= 8 * 60 && real <= 17 * 60) ? 0 : (10 * 60 + 20) - real;
+  const clinicMin = () => nowMin() + offset;
+  const clinicHHMM = () => { const m = ((clinicMin() % 1440) + 1440) % 1440; return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`; };
+
+  const state = { q: '', therapist: 'all', status: 'all' };
+
+  function toast(msg) {
+    const t = $('toast'); t.textContent = msg; t.classList.add('show');
+    clearTimeout(toast._h); toast._h = setTimeout(() => t.classList.remove('show'), 2400);
+  }
+
+  // ---------- Rendering ----------
+  function renderStats() {
+    const active = appts.filter(a => a.status !== 'noshow');
+    const waiting = appts.filter(a => a.status === 'arrived');
+    const inSess = appts.filter(a => a.status === 'inprogress');
+    const remaining = appts.filter(a => a.status === 'scheduled');
+    const noshow = appts.filter(a => a.status === 'noshow');
+    const late = remaining.filter(a => toMin(a.time) < clinicMin() - 5);
+    const items = [
+      [active.length, 'Appointments today'],
+      [appts.filter(a => a.status === 'done').length, 'Completed'],
+      [inSess.length, 'In session'],
+      [waiting.length, 'In waiting room'],
+      [remaining.length, 'Still to arrive' + (late.length ? ` (${late.length} late)` : ''), late.length > 0],
+      [noshow.length, 'No-shows', noshow.length > 0],
+    ];
+    $('stats').innerHTML = items.map(([n, l, alert]) =>
+      `<div class="stat${alert ? ' alert' : ''}"><div class="n">${n}</div><div class="l">${esc(l)}</div></div>`).join('');
+  }
+
+  function matches(a) {
+    if (state.therapist !== 'all' && a.t !== state.therapist) return false;
+    if (state.status !== 'all' && a.status !== state.status) return false;
+    if (state.q) {
+      const hay = (a.name + ' ' + therapist(a.t).name + ' ' + a.phone + ' ' + a.type).toLowerCase();
+      if (!state.q.split(/\s+/).every(w => hay.includes(w))) return false;
+    }
+    return true;
+  }
+
+  function actionButtons(a) {
+    const b = (act, label, cls = '') => `<button class="btn small ${cls}" data-act="${act}" data-id="${a.id}">${label}</button>`;
+    switch (a.status) {
+      case 'scheduled': return b('arrive', 'Check in', 'primary') + b('noshow', 'No-show', 'danger');
+      case 'arrived':   return b('start', 'Send in') + b('undo', 'Undo', 'ghost');
+      case 'inprogress':return b('finish', 'Complete');
+      case 'done':      return b('rebook', 'Rebook');
+      case 'noshow':    return b('rebook', 'Rebook') + b('undo', 'Undo', 'ghost');
+    }
+    return '';
+  }
+
+  function renderSchedule() {
+    const rows = appts.filter(matches).sort((a, b) => toMin(a.time) - toMin(b.time));
+    $('schedCount').textContent = rows.length;
+    if (!rows.length) {
+      $('schedule').innerHTML = `<tr><td colspan="5" class="empty">No appointments match.</td></tr>`;
+      return;
+    }
+    const nm = clinicMin();
+    // highlight the first not-yet-started appointment slot as "next up"
+    $('schedule').innerHTML = rows.map(a => {
+      const t = therapist(a.t);
+      const start = toMin(a.time);
+      const isNow = a.status !== 'done' && a.status !== 'noshow' && nm >= start && nm < start + a.dur;
+      const late = a.status === 'scheduled' && nm > start + 5;
+      const s = STATUS[a.status];
+      const flags = a.flags.length ? `<span class="flags">${a.flags.map(f => `<span class="flag${/owing|WorkCover/.test(f) ? ' red' : ''}">${esc(f)}</span>`).join('')}</span>` : '';
+      const sub = a.status === 'arrived' ? `Arrived ${fmt12(a.arrivedAt)}` : late ? `Running late (${nm - start} min)` : `${a.dur} min`;
+      return `<tr class="${a.status}${isNow ? ' now' : ''}">
+        <td class="time">${fmt12(a.time)}<small>${a.dur} min</small></td>
+        <td><button class="btn ghost pt" style="padding:0;text-align:left;color:inherit" data-act="detail" data-id="${a.id}">${esc(a.name)}</button>${flags}
+            <div class="sub">${esc(a.type)}</div></td>
+        <td>${esc(t.name)}<div class="sub">${esc(t.room)}</div></td>
+        <td><span class="badge ${s.cls}">${s.label}</span><div class="sub">${esc(sub)}</div></td>
+        <td><div class="actions">${actionButtons(a)}</div></td>
+      </tr>`;
+    }).join('');
+  }
+
+  function renderWaiting() {
+    const w = appts.filter(a => a.status === 'arrived').sort((a, b) => toMin(a.arrivedAt) - toMin(b.arrivedAt));
+    $('waitCount').textContent = w.length;
+    if (!w.length) { $('waiting').innerHTML = `<li class="empty" style="display:block;width:100%">Nobody waiting.</li>`; return; }
+    const nm = clinicMin();
+    $('waiting').innerHTML = w.map(a => {
+      const mins = Math.max(0, nm - toMin(a.arrivedAt));
+      return `<li>
+        <div class="grow"><div class="pt">${esc(a.name)}</div>
+          <div class="sub">${fmt12(a.time)} with ${esc(therapist(a.t).name.split(' ').slice(-1)[0])} · ${esc(a.type)}</div></div>
+        <div class="wait ${mins >= 15 ? 'long' : ''}">${mins} min<small>waiting</small></div>
+      </li>`;
+    }).join('');
+  }
+
+  function renderClinicians() {
+    $('clinicians').innerHTML = therapists.map(t => {
+      const cur = appts.find(a => a.t === t.id && a.status === 'inprogress');
+      const next = appts.filter(a => a.t === t.id && (a.status === 'scheduled' || a.status === 'arrived'))
+                        .sort((a, b) => toMin(a.time) - toMin(b.time))[0];
+      let cls = 'free', line;
+      if (!t.on) { cls = 'off'; line = t.note || 'Not in yet'; }
+      else if (cur) { cls = 'busy'; line = `With ${cur.name}`; }
+      else line = 'Free';
+      const nx = next ? `Next: ${fmt12(next.time)} ${next.name.split(' ')[0]}` : (t.on ? 'No more bookings' : '');
+      return `<li><span class="dot ${cls}" aria-hidden="true"></span>
+        <div class="grow"><div class="pt">${esc(t.name)}</div><div class="sub">${esc(t.role)} · ${esc(t.room)}</div></div>
+        <div style="text-align:right"><div>${esc(line)}</div><div class="sub">${esc(nx)}</div></div></li>`;
+    }).join('');
+  }
+
+  function renderTasks() {
+    $('tasks').innerHTML = tasks.map((t, i) =>
+      `<li class="${t.done ? 'checked' : ''}"><input type="checkbox" id="task${i}" data-task="${i}" ${t.done ? 'checked' : ''}><label for="task${i}">${esc(t.text)}</label></li>`).join('');
+  }
+
+  function renderAll() { renderStats(); renderSchedule(); renderWaiting(); renderClinicians(); }
+
+  // ---------- Actions ----------
+  function act(kind, id) {
+    const a = appts.find(x => x.id === id); if (!a) return;
+    switch (kind) {
+      case 'arrive': a.status = 'arrived'; a.arrivedAt = clinicHHMM(); toast(`${a.name} checked in`); break;
+      case 'start':  a.status = 'inprogress'; toast(`${a.name} → ${therapist(a.t).room}`); break;
+      case 'finish': a.status = 'done'; toast(`${a.name} completed — remember to take payment & rebook`); break;
+      case 'noshow': if (!confirm(`Mark ${a.name} as a no-show?`)) return; a.status = 'noshow'; toast(`${a.name} marked no-show`); break;
+      case 'undo':   a.status = 'scheduled'; delete a.arrivedAt; toast('Status reset'); break;
+      case 'rebook': toast(`Rebooking for ${a.name} — ${a.phone}`); return;
+      case 'detail': showDetail(a); return;
+    }
+    renderAll();
+  }
+
+  function showDetail(a) {
+    const t = therapist(a.t);
+    $('detailBody').innerHTML = `
+      <h3>${esc(a.name)}</h3>
+      <dl>
+        <dt>Appointment</dt><dd>${fmt12(a.time)} · ${a.dur} min · ${esc(a.type)}</dd>
+        <dt>Therapist</dt><dd>${esc(t.name)} (${esc(t.room)})</dd>
+        <dt>Phone</dt><dd><a href="tel:${esc(a.phone.replace(/\s/g, ''))}">${esc(a.phone)}</a></dd>
+        <dt>Status</dt><dd><span class="badge ${STATUS[a.status].cls}">${STATUS[a.status].label}</span></dd>
+        <dt>Alerts</dt><dd>${a.flags.length ? a.flags.map(esc).join(', ') : 'None'}</dd>
+        <dt>Notes</dt><dd>${esc(a.note || '—')}</dd>
+      </dl>
+      <div class="dialog-actions"><button class="btn primary" value="close">Close</button></div>`;
+    $('detailDlg').showModal();
+  }
+
+  // ---------- Events ----------
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-act]');
+    if (el) act(el.dataset.act, Number(el.dataset.id));
+  });
+  $('tasks').addEventListener('change', e => {
+    const i = e.target.dataset.task; if (i === undefined) return;
+    tasks[i].done = e.target.checked; renderTasks();
+  });
+  $('search').addEventListener('input', e => { state.q = e.target.value.trim().toLowerCase(); renderSchedule(); });
+  $('therapistFilter').addEventListener('change', e => { state.therapist = e.target.value; renderSchedule(); });
+  $('statusFilter').addEventListener('change', e => { state.status = e.target.value; renderSchedule(); });
+
+  $('therapistFilter').innerHTML = '<option value="all">All therapists</option>' +
+    therapists.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('');
+  $('newTherapist').innerHTML = therapists.map(t => `<option value="${t.id}">${esc(t.name)}</option>`).join('');
+
+  $('newBtn').addEventListener('click', () => {
+    $('newForm').reset();
+    $('newForm').elements.time.value = clinicHHMM();
+    $('newDlg').showModal();
+  });
+  $('newCancel').addEventListener('click', () => $('newDlg').close());
+  $('newForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const arrived = f.get('arrived') === 'on';
+    const a = {
+      id: Math.max(...appts.map(x => x.id)) + 1,
+      time: f.get('time'), dur: f.get('type') === 'Initial assessment' ? 45 : 30,
+      name: f.get('name').trim(), phone: f.get('phone').trim() || '—',
+      type: f.get('type'), t: f.get('therapist'),
+      status: arrived ? 'arrived' : 'scheduled', note: '', flags: ['New booking'],
+    };
+    if (arrived) a.arrivedAt = clinicHHMM();
+    appts.push(a);
+    $('newDlg').close();
+    toast(`${a.name} added at ${fmt12(a.time)}`);
+    renderAll();
+  });
+
+  function tick() {
+    $('clockTime').textContent = fmt12(clinicHHMM());
+    $('clockDate').textContent = 'Tuesday 20 October 2026';
+    renderStats(); renderSchedule(); renderWaiting();
+  }
+
+  renderTasks(); renderClinicians(); renderAll(); tick();
+  setInterval(tick, 30000);
+})();
+</script>
+</body>
+</html>

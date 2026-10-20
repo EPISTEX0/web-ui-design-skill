@@ -1,0 +1,229 @@
+{
+  "scores": {
+    "A9": {
+      "craft": 6,
+      "fit": 3,
+      "hierarchy": 7,
+      "mobile": 6,
+      "overall": 4,
+      "defects": [
+        "The pale-blue and red palette does not use the client's deep-green and signal-orange identity.",
+        "The listed location and opening hours do not match Oudegracht 112 and Tuesday–Saturday 09:00–18:00.",
+        "The specified models, prices, lease offer and Google review proof are absent.",
+        "The mobile floating booking strip overlaps the hero illustration."
+      ],
+      "note": "An approachable, readable cargo-bike page, but its invented practical information and generic offer undermine this particular shop's launch."
+    },
+    "C5": {
+      "craft": 7,
+      "fit": 5,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 6,
+      "defects": [
+        "The visit section still displays bracketed address, opening-hours, phone and email placeholders.",
+        "Generic bike categories replace the three named models and their supplied prices.",
+        "Neither the EUR 89 lease offer nor the 4.8-star, 310-review proof is shown.",
+        "The main booking invitation does not explain that the ride is free and lasts 30 minutes."
+      ],
+      "note": "Warm serif typography and green-and-orange styling suit Tandem well, but the page remains a general shop template rather than a complete test-ride offer."
+    },
+    "E4": {
+      "craft": 6,
+      "fit": 4,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 5,
+      "defects": [
+        "Address, hours and contact details remain visibly highlighted placeholders.",
+        "The blue-white, dark-teal and rust treatment misses the supplied brand colors and feels comparatively utilitarian.",
+        "The specified model prices, leasing and real Google rating are missing.",
+        "The free 30-minute offer is not established in the prominent booking copy."
+      ],
+      "note": "A legible, orderly booking-oriented layout, but the technical selector and unfinished business details lack the client's family-shop warmth and specificity."
+    },
+    "G2": {
+      "craft": 6,
+      "fit": 4,
+      "hierarchy": 7,
+      "mobile": 6,
+      "overall": 5,
+      "defects": [
+        "The pale-blue and red visual identity differs from the requested green and orange.",
+        "The address is an 'Add street address' placeholder, and the sample hours conflict with the supplied hours.",
+        "The model section asks visitors to request prices instead of displaying the supplied models, prices and lease offer.",
+        "The Google review proof and explicit free 30-minute promise are missing.",
+        "The mobile booking strip overlays the bottom of the hero illustration."
+      ],
+      "note": "Clear illustrations and accessible sections make this usable, but placeholder business information and missing offer details prevent it from feeling ready for Tandem."
+    },
+    "H8": {
+      "craft": 7,
+      "fit": 9,
+      "hierarchy": 9,
+      "mobile": 8,
+      "overall": 8,
+      "defects": [
+        "The initially empty cargo illustration does not immediately demonstrate the two-kids-and-groceries load.",
+        "The visible placeholder phone detail leaves the practical contact area unfinished."
+      ],
+      "note": "A focused, easy-to-scan test-ride page that brings the real offer, brand and practical information together especially effectively for phone visitors."
+    },
+    "N6": {
+      "craft": 7,
+      "fit": 9,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 8,
+      "defects": [
+        "The mobile floating action strip covers part of the hero placeholder.",
+        "The contact area shows a dummy phone number and example-domain email rather than usable shop details.",
+        "The hero placeholder is less persuasive than an immediate visual of the full family-and-groceries load."
+      ],
+      "note": "Strong alignment with the client's models, affordability, proof and free test ride outweighs a fairly conventional presentation and unfinished contact details."
+    },
+    "N9": {
+      "craft": 3,
+      "fit": 3,
+      "hierarchy": 4,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "Excessively tight desktop headline tracking makes adjacent letters collide and harms readability.",
+        "The blue-gray, navy and yellow palette ignores the requested brand colors.",
+        "The hero does not give booking the prominence of the primary task.",
+        "The supplied models, prices, leasing and real review proof are missing.",
+        "Practical location and opening information remains placeholder content."
+      ],
+      "note": "The mobile layout is serviceable, but cramped desktop display type and a generic, off-brand offer make this difficult to recommend for launch."
+    },
+    "P8": {
+      "craft": 6,
+      "fit": 4,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 5,
+      "defects": [
+        "The navy-and-red identity does not follow the requested green and orange.",
+        "The named models, prices, EUR 89 lease offer and Google review evidence are absent.",
+        "The practical shop details are unfinished placeholders.",
+        "The booking message does not clearly establish a free 30-minute appointment."
+      ],
+      "note": "A competent responsive landing page with a clear next step, but insufficiently tailored to the actual family audience, offer and shop."
+    },
+    "R4": {
+      "craft": 3,
+      "fit": 3,
+      "hierarchy": 4,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "Desktop display lettering is compressed enough for characters to overlap.",
+        "The hero gives no strong, immediate test-ride booking action.",
+        "The navy, pale-blue and yellow styling disregards the client's brand colors.",
+        "The specified models, prices, leasing and Google rating are not presented.",
+        "The shop's real address and hours are replaced by unfinished practical information."
+      ],
+      "note": "A generic bike-selection interface takes priority over the family test-ride proposition, with conspicuously weak desktop typography."
+    },
+    "R7": {
+      "craft": 6,
+      "fit": 4,
+      "hierarchy": 6,
+      "mobile": 7,
+      "overall": 5,
+      "defects": [
+        "The page substitutes a broad load-selection interface for a visual demonstration of two children plus groceries.",
+        "The named models, prices, lease offer and supplied Google review proof are missing.",
+        "The free 30-minute ride is not made explicit in the leading booking message.",
+        "The practical shop information remains unfinished rather than using the supplied address and hours."
+      ],
+      "note": "Responsive and organized, but the selector-led presentation feels more like a generic product tool than a warm local family shop."
+    },
+    "U9": {
+      "craft": 6,
+      "fit": 4,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 5,
+      "defects": [
+        "The supplied models and prices, leasing and Google rating are absent.",
+        "The visit section does not supply the client's correct address and opening hours.",
+        "The leading test-ride offer omits the important free, 30-minute reassurance.",
+        "The green-and-yellow treatment does not carry the requested signal-orange identity consistently."
+      ],
+      "note": "Friendly, readable and reasonably inviting on mobile, but too much of Tandem's actual offer and trustworthy local detail is missing."
+    },
+    "W4": {
+      "craft": 8,
+      "fit": 9,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 8,
+      "defects": [
+        "The mobile fixed booking strip overlays the following section's heading.",
+        "On mobile the hero illustration precedes the main proposition and booking copy, delaying the most important message."
+      ],
+      "note": "The strongest combination of warm visual character and client-specific content, with a persuasive family offer that needs a small mobile layering fix."
+    },
+    "X8": {
+      "craft": 6,
+      "fit": 5,
+      "hierarchy": 7,
+      "mobile": 6,
+      "overall": 5,
+      "defects": [
+        "The model cards use placeholder prices instead of the supplied prices and exact product range.",
+        "The displayed opening hours do not match Tuesday–Saturday 09:00–18:00.",
+        "The EUR 89 lease offer and real Google rating are missing.",
+        "The mobile floating booking strip obscures part of the family cargo illustration."
+      ],
+      "note": "A clear cargo-bike proposition and useful visual explanation are held back by unfinished commercial details and an intrusive mobile overlay."
+    },
+    "Y5": {
+      "craft": 5,
+      "fit": 3,
+      "hierarchy": 5,
+      "mobile": 6,
+      "overall": 4,
+      "defects": [
+        "The green-and-yellow palette omits the requested signal-orange brand emphasis.",
+        "Desktop headings use overly tight tracking that reduces readability.",
+        "The hero does not give the booking action enough prominence.",
+        "The supplied model prices, lease offer, Google rating and accurate practical shop details are absent."
+      ],
+      "note": "A reasonably tidy generic bike page, but it does little to make this shop's family-focused free test ride compelling or credible."
+    },
+    "Y7": {
+      "craft": 6,
+      "fit": 4,
+      "hierarchy": 6,
+      "mobile": 7,
+      "overall": 5,
+      "defects": [
+        "The supplied model names and prices, lease offer and review proof are missing.",
+        "The practical shop information is not completed with the supplied address and hours.",
+        "The leading offer does not clearly combine free booking with the 30-minute duration.",
+        "The yellow-orange accents do not closely follow the requested signal-orange identity."
+      ],
+      "note": "A warm, straightforward layout that adapts cleanly to mobile, but remains a general landing-page template rather than a complete Tandem booking page."
+    }
+  },
+  "ranking": [
+    "W4",
+    "H8",
+    "N6",
+    "C5",
+    "X8",
+    "Y7",
+    "U9",
+    "P8",
+    "R7",
+    "E4",
+    "G2",
+    "A9",
+    "Y5",
+    "N9",
+    "R4"
+  ]
+}

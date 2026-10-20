@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tandem – cargo bikes in Utrecht</title>
+<meta name="description" content="Tandem is a cargo bike shop in Utrecht. Try a bakfiets, longtail or trike before you buy.">
+<style>
+:root {
+  /* Color: sources in DESIGN.md */
+  --canal-900: oklch(0.24 0.045 205);
+  --canal-700: oklch(0.38 0.05 205);
+  --canal-500: oklch(0.52 0.045 205);
+  --canal-100: oklch(0.93 0.02 210);
+  --canal-50:  oklch(0.97 0.012 210);
+  --paper:     oklch(0.995 0.004 210);
+  --path-600:  oklch(0.52 0.17 33);   /* red bike-path asphalt */
+  --path-700:  oklch(0.45 0.15 33);
+  --path-100:  oklch(0.94 0.035 33);
+  --ok: oklch(0.45 0.11 150);
+
+  --color-bg: var(--canal-50);
+  --color-surface: var(--paper);
+  --color-text: var(--canal-900);
+  --color-text-2: var(--canal-700);
+  --color-text-3: var(--canal-500);
+  --color-line: oklch(0.24 0.045 205 / 0.12);
+  --color-accent: var(--path-600);
+  --color-accent-press: var(--path-700);
+  --color-accent-soft: var(--path-100);
+
+  --font: ui-rounded, "SF Pro Rounded", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px;
+  --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px; --s20: 80px; --s24: 96px;
+
+  --r-sm: 8px; --r-md: 16px; --r-lg: 24px; --r-pill: 999px;
+  --ring: 0 0 0 1px var(--color-line);
+  --lift: 0 0 0 1px var(--color-line), 0 1px 2px oklch(0.24 0.045 205 / 0.06), 0 8px 24px -8px oklch(0.24 0.045 205 / 0.12);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-press: 120ms; --t-hover: 180ms;
+  --bar-h: 72px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--color-bg); color: var(--color-text);
+  font: 400 1.0625rem/1.55 var(--font); text-wrap: pretty;
+  overflow-x: clip; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3 { text-wrap: balance; line-height: 1.1; margin: 0; letter-spacing: -0.02em; font-weight: 750; }
+h1 { font-size: clamp(2.5rem, 7vw, 4.75rem); letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.875rem, 4vw, 2.75rem); }
+h3 { font-size: 1.25rem; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: inherit; }
+img, svg { display: block; max-width: 100%; }
+:focus-visible { outline: 3px solid var(--canal-900); outline-offset: 3px; border-radius: 4px; }
+
+.wrap { width: min(1120px, 100% - 2 * var(--s6)); margin-inline: auto; }
+.section { padding-block: var(--s20); }
+.lead { font-size: 1.25rem; color: var(--color-text-2); max-width: 36em; }
+.muted { color: var(--color-text-2); }
+.skip { position: absolute; left: var(--s4); top: -100px; background: var(--paper); padding: var(--s3) var(--s4); border-radius: var(--r-sm); z-index: 50; }
+.skip:focus { top: var(--s4); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 48px; padding: 0 var(--s6); border-radius: var(--r-pill); border: 0;
+  font: 650 1rem/1 var(--font); text-decoration: none; cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover) var(--ease-out), box-shadow var(--t-hover) var(--ease-out);
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--color-accent); color: oklch(0.99 0.005 33); }
+.btn-ghost { background: transparent; color: var(--color-text); box-shadow: inset 0 0 0 1.5px var(--canal-900); }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+@media (hover: hover) {
+  .btn-primary:hover { background: var(--color-accent-press); }
+  .btn-ghost:hover { background: var(--canal-100); }
+}
+
+/* Header */
+.site-header { position: sticky; top: 0; z-index: 20; background: oklch(0.97 0.012 210 / 0.94); border-bottom: 1px solid var(--color-line); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); min-height: 64px; }
+.logo { display: inline-flex; align-items: center; gap: var(--s2); font-weight: 800; font-size: 1.375rem; letter-spacing: -0.03em; text-decoration: none; min-height: 44px; }
+.logo svg { width: 36px; height: 22px; }
+.nav { display: flex; align-items: center; gap: var(--s1); }
+.nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 var(--s3); border-radius: var(--r-pill); text-decoration: none; font-weight: 600; color: var(--color-text-2); transition: background-color var(--t-hover); }
+@media (hover: hover) { .nav a:hover { background: var(--canal-100); color: var(--color-text); } }
+.lang { display: inline-flex; padding: 3px; border-radius: var(--r-pill); background: var(--canal-100); margin-left: var(--s2); }
+.lang button { min-width: 44px; min-height: 44px; border: 0; border-radius: var(--r-pill); background: transparent; font: 700 0.875rem var(--font); color: var(--color-text-2); cursor: pointer; transition: background-color var(--t-hover), color var(--t-hover); }
+.lang button[aria-pressed="true"] { background: var(--paper); color: var(--color-text); box-shadow: var(--ring); }
+@media (max-width: 760px) { .nav a { display: none; } .lang { margin-left: 0; } }
+
+/* Hero */
+.hero { padding-block: var(--s16) var(--s20); }
+.hero-grid { display: grid; grid-template-columns: 1.05fr 1fr; gap: var(--s12); align-items: center; }
+.hero h1 { margin-bottom: var(--s6); }
+.hero .lead { margin-bottom: var(--s8); }
+.cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.open-now { display: inline-flex; align-items: center; gap: var(--s2); margin-top: var(--s6); font-weight: 600; color: var(--color-text-2); }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--canal-500); flex: none; }
+.open-now.is-open .dot { background: var(--ok); }
+.hero-art { background: var(--paper); border-radius: var(--r-lg); box-shadow: var(--lift); padding: var(--s6) var(--s6) var(--s4); aspect-ratio: 480 / 300; }
+.hero-art svg { width: 100%; height: 100%; }
+.bike-line { fill: none; stroke: var(--canal-900); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.bike-box { fill: var(--color-accent-soft); stroke: var(--color-accent); stroke-width: 6; stroke-linejoin: round; }
+.road { stroke: var(--canal-100); stroke-width: 6; stroke-linecap: round; }
+@media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: var(--s10); } .hero { padding-block: var(--s10) var(--s16); } }
+
+/* Chooser (signature) */
+.chooser { background: var(--paper); border-radius: var(--r-lg); box-shadow: var(--lift); padding: var(--s10); display: grid; grid-template-columns: 1fr 1fr; gap: var(--s12); }
+.chooser h2 { margin-bottom: var(--s3); }
+fieldset { border: 0; padding: 0; margin: var(--s6) 0 0; display: grid; gap: var(--s2); }
+legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.choice { position: relative; }
+.choice input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.choice span { display: flex; align-items: center; gap: var(--s3); min-height: 56px; padding: var(--s3) var(--s4); border-radius: var(--r-md); box-shadow: inset 0 0 0 1.5px var(--color-line); font-weight: 600; transition: box-shadow var(--t-hover), background-color var(--t-hover); }
+.choice span::before { content: ""; width: 20px; height: 20px; flex: none; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--canal-500); transition: box-shadow var(--t-hover); }
+.choice input:checked + span { background: var(--color-accent-soft); box-shadow: inset 0 0 0 2px var(--color-accent); }
+.choice input:checked + span::before { box-shadow: inset 0 0 0 6px var(--color-accent); }
+.choice input:focus-visible + span { outline: 3px solid var(--canal-900); outline-offset: 3px; }
+@media (hover: hover) { .choice input:not(:checked):hover + span { background: var(--canal-50); } }
+.result { background: var(--canal-900); color: var(--canal-50); border-radius: var(--r-md); padding: var(--s8); align-self: stretch; display: flex; flex-direction: column; gap: var(--s4); justify-content: center; }
+.result .kicker { color: oklch(0.85 0.03 210); font-weight: 600; }
+.result h3 { font-size: 1.75rem; }
+.result p { color: oklch(0.88 0.02 210); }
+.result .btn-primary { align-self: flex-start; margin-top: var(--s2); }
+.result.swap { animation: pop 260ms var(--ease-out); }
+@keyframes pop { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: none; } }
+@media (max-width: 860px) { .chooser { grid-template-columns: 1fr; padding: var(--s6); gap: var(--s8); } .result { padding: var(--s6); } }
+
+/* Bikes */
+.section-head { margin-bottom: var(--s10); display: grid; gap: var(--s3); }
+.types { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s6); }
+.type { background: var(--paper); border-radius: var(--r-lg); box-shadow: var(--ring); padding: var(--s8); display: flex; flex-direction: column; gap: var(--s4); }
+.type:nth-child(2) { margin-top: var(--s8); }
+.type:nth-child(3) { margin-top: var(--s16); }
+.type svg { width: 100%; height: 92px; }
+.type .meta { color: var(--color-text-2); font-size: 0.9375rem; margin-top: auto; padding-top: var(--s4); border-top: 1px solid var(--color-line); }
+@media (max-width: 860px) { .types { grid-template-columns: 1fr; } .type:nth-child(n) { margin-top: 0; } }
+
+/* Steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s8); counter-reset: s; }
+.steps li { counter-increment: s; padding-top: var(--s5); border-top: 3px solid var(--canal-900); display: grid; gap: var(--s2); align-content: start; }
+.steps li::before { content: counter(s); font-weight: 800; font-size: 1.25rem; color: var(--color-accent); }
+@media (max-width: 860px) { .steps { grid-template-columns: 1fr; gap: var(--s6); } }
+
+/* Test ride form */
+.ride { background: var(--canal-900); color: var(--canal-50); border-radius: var(--r-lg); padding: var(--s12); display: grid; grid-template-columns: 1fr 1fr; gap: var(--s12); }
+.ride .lead { color: oklch(0.88 0.02 210); margin-top: var(--s4); }
+form { display: grid; gap: var(--s4); }
+.field { display: grid; gap: var(--s2); }
+label { font-weight: 650; }
+input[type=text], input[type=email], select {
+  width: 100%; min-height: 48px; padding: 0 var(--s4); border-radius: var(--r-sm); border: 1.5px solid transparent;
+  background: var(--paper); color: var(--canal-900); font: 400 1rem var(--font);
+}
+input[aria-invalid="true"] { border-color: oklch(0.75 0.15 33); }
+.err { color: oklch(0.86 0.1 33); font-size: 0.9375rem; min-height: 0; }
+.err:empty { display: none; }
+.ride .btn-primary { justify-self: start; }
+.ride .btn-primary:focus-visible, .ride input:focus-visible, .ride select:focus-visible { outline-color: var(--canal-50); }
+[hidden] { display: none !important; }
+.sent { background: oklch(0.32 0.05 205); border-radius: var(--r-md); padding: var(--s6); display: grid; gap: var(--s3); }
+.sent a { color: var(--canal-50); font-weight: 650; }
+@media (max-width: 860px) { .ride { grid-template-columns: 1fr; padding: var(--s6); gap: var(--s8); } }
+
+/* Visit */
+.visit { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s12); align-items: start; }
+.visit address { font-style: normal; margin: var(--s6) 0; display: grid; gap: var(--s2); }
+.visit address a { font-weight: 650; display: inline-flex; align-items: center; min-height: 44px; }
+.todo { background: var(--color-accent-soft); border-radius: var(--r-sm); padding: 2px var(--s2); font-size: 0.9375rem; }
+table { width: 100%; border-collapse: collapse; background: var(--paper); border-radius: var(--r-md); box-shadow: var(--ring); overflow: hidden; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: var(--s3) var(--s5); border-bottom: 1px solid var(--color-line); font-weight: 400; }
+tr:last-child > * { border-bottom: 0; }
+th { font-weight: 650; }
+tr.today > * { background: var(--color-accent-soft); font-weight: 700; }
+.note { font-size: 0.9375rem; color: var(--color-text-3); margin-top: var(--s3); }
+@media (max-width: 860px) { .visit { grid-template-columns: 1fr; gap: var(--s8); } }
+
+/* FAQ */
+.faq { max-width: 780px; display: grid; }
+details { border-top: 1px solid var(--color-line); }
+details:last-child { border-bottom: 1px solid var(--color-line); }
+summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: var(--s4); min-height: 64px; font-weight: 650; font-size: 1.125rem; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-size: 1.5rem; line-height: 1; color: var(--color-accent); flex: none; width: 24px; text-align: center; transition: transform var(--t-hover) var(--ease-out); }
+details[open] summary::after { transform: rotate(45deg); }
+details p { padding-bottom: var(--s6); color: var(--color-text-2); max-width: 60ch; }
+
+/* Footer */
+footer { border-top: 1px solid var(--color-line); padding-block: var(--s10) calc(var(--s10) + var(--bar-h)); }
+.foot a { display: inline-flex; align-items: center; min-height: 44px; }
+.foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s4); color: var(--color-text-2); }
+@media (min-width: 761px) { footer { padding-bottom: var(--s10); } }
+
+/* Mobile action bar */
+.mbar { position: fixed; inset: auto 0 0 0; z-index: 30; display: none; gap: var(--s2); padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom)); background: oklch(0.97 0.012 210 / 0.96); border-top: 1px solid var(--color-line); }
+.mbar .btn { flex: 1; }
+@media (max-width: 760px) { .mbar { display: flex; } }
+
+@media (max-width: 760px) { .section { padding-block: var(--s16); } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .result.swap { animation: none; }
+  * { transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-nl="Naar de inhoud">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Tandem, home">
+      <svg viewBox="0 0 36 22" aria-hidden="true"><circle cx="8" cy="14" r="6.5" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="28" cy="14" r="6.5" fill="none" stroke="var(--color-accent)" stroke-width="2.5"/><path d="M8 14 18 4h6l4 10" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Tandem
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#bikes" data-nl="Fietsen">Bikes</a>
+      <a href="#ride" data-nl="Proefrit">Test ride</a>
+      <a href="#visit" data-nl="Langskomen">Visit</a>
+      <a href="#faq" data-nl="Vragen">FAQ</a>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="nl" aria-pressed="false">NL</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 data-nl="Neem de kinderen, de boodschappen en de hond mee. Op de fiets.">Carry the kids, the groceries and the dog. By bike.</h1>
+        <p class="lead" data-nl="Tandem is een bakfietswinkel in Utrecht. Kom langs, laad je eigen spullen in en rij een proefrondje voordat je kiest.">Tandem is a cargo bike shop in Utrecht. Come in, load up your own stuff and take a test ride before you choose.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#ride" data-nl="Plan een proefrit">Book a test ride</a>
+          <a class="btn btn-ghost" href="#find" data-nl="Welke fiets past bij mij?">Which bike fits me?</a>
+        </div>
+        <p class="open-now" id="openNow" aria-live="polite"><span class="dot" aria-hidden="true"></span><span id="openText"></span></p>
+      </div>
+      <div class="hero-art" role="img" aria-label="Illustration of a front-loading cargo bike" data-nl-label="Illustratie van een bakfiets met bak voorop">
+        <svg viewBox="0 0 480 300" aria-hidden="true">
+          <path class="road" d="M20 262h440"/>
+          <circle class="bike-line" cx="82" cy="218" r="36"/>
+          <circle class="bike-line" cx="390" cy="204" r="50"/>
+          <path class="bike-box" d="M130 126h150l-14 78H146z"/>
+          <path class="bike-line" d="M82 218 112 150M112 150l-18-28h-18M112 150h20M200 204h190M390 204 340 128h-40M340 128l-10-28h34M266 204l74-76M200 204l-40-12"/>
+          <circle cx="190" cy="104" r="14" fill="var(--canal-900)"/>
+          <circle cx="226" cy="108" r="12" fill="var(--color-accent)"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="find" style="padding-top:0">
+    <div class="wrap">
+      <div class="chooser">
+        <div>
+          <h2 data-nl="Wat ga je vervoeren?">What will you carry?</h2>
+          <p class="lead" data-nl="Kies wat het meest op jouw week lijkt. Wij vertellen welk type je als eerste moet proberen.">Pick what looks most like your week. We'll tell you which type to try first.</p>
+          <fieldset>
+            <legend data-nl="Wat ga je vervoeren?">What will you carry?</legend>
+            <label class="choice"><input type="radio" name="load" value="kids" checked><span data-nl="Kinderen, één tot drie">Children, one to three</span></label>
+            <label class="choice"><input type="radio" name="load" value="stuff"><span data-nl="Boodschappen, spullen, de hond">Groceries, gear, the dog</span></label>
+            <label class="choice"><input type="radio" name="load" value="long"><span data-nl="Een kind of volwassene achterop, en weinig ruimte thuis">One child or adult on the back, little space at home</span></label>
+          </fieldset>
+        </div>
+        <div class="result" id="result" aria-live="polite">
+          <p class="kicker" id="resKicker"></p>
+          <h3 id="resTitle"></h3>
+          <p id="resText"></p>
+          <a class="btn btn-primary" href="#ride" data-nl="Probeer deze eerst">Try this one first</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="bikes" style="padding-top:var(--s8)">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-nl="Drie soorten, één proefrit om te kiezen">Three kinds, one test ride to choose</h2>
+        <p class="lead" data-nl="Vraag ons naar de actuele modellen en prijzen. Dan zie je meteen wat er op voorraad is.">Ask us for the current models and prices, so you see what's actually in stock.</p>
+      </div>
+      <div class="types">
+        <article class="type">
+          <svg viewBox="0 0 200 92" aria-hidden="true"><path class="road" d="M6 84h188"/><circle class="bike-line" cx="34" cy="64" r="16" style="stroke-width:4"/><circle class="bike-line" cx="160" cy="60" r="20" style="stroke-width:4"/><path class="bike-box" d="M52 28h62l-6 34H58z" style="stroke-width:4"/><path class="bike-line" d="M34 64 46 38M80 60h80M160 60l-22-30" style="stroke-width:4"/></svg>
+          <h3 data-nl="Bakfiets (bak voorop)">Front-loader (bakfiets)</h3>
+          <p class="muted" data-nl="De klassieker. Kinderen zitten voor je, dus je ziet en hoort ze. Stabiel bij het opstappen.">The classic. Children sit in front of you where you can see and hear them. Steady when you get on.</p>
+          <p class="meta" data-nl="Goed voor: kinderen, grote boodschappen.">Good for: kids, big shops.</p>
+        </article>
+        <article class="type">
+          <svg viewBox="0 0 200 92" aria-hidden="true"><path class="road" d="M6 84h188"/><circle class="bike-line" cx="36" cy="62" r="18" style="stroke-width:4"/><circle class="bike-line" cx="150" cy="62" r="18" style="stroke-width:4"/><path class="bike-box" d="M104 36h58v14h-58z" style="stroke-width:4"/><path class="bike-line" d="M36 62 62 30h16M62 30l40 32M102 62h48M62 30 36 62" style="stroke-width:4"/></svg>
+          <h3 data-nl="Longtail">Longtail</h3>
+          <p class="muted" data-nl="Verlengd achterwiel met ruimte voor kinderzitjes of tassen. Voelt als een gewone fiets, alleen langer.">A stretched rear for child seats or panniers. Rides like a normal bike, only longer.</p>
+          <p class="meta" data-nl="Goed voor: smalle gangen en lange ritten.">Good for: narrow hallways, longer rides.</p>
+        </article>
+        <article class="type">
+          <svg viewBox="0 0 200 92" aria-hidden="true"><path class="road" d="M6 84h188"/><circle class="bike-line" cx="100" cy="64" r="16" style="stroke-width:4"/><circle class="bike-line" cx="30" cy="66" r="14" style="stroke-width:4"/><circle class="bike-line" cx="170" cy="66" r="14" style="stroke-width:4"/><path class="bike-box" d="M20 30h160l-8 28H28z" style="stroke-width:4"/><path class="bike-line" d="M100 64V20h-14" style="stroke-width:4"/></svg>
+          <h3 data-nl="Driewieler">Trike</h3>
+          <p class="muted" data-nl="Drie wielen, dus hij staat vanzelf rechtop. Fijn met zware lading, of als balans lastig is.">Three wheels, so it stands up on its own. Good with heavy loads or if balance is a worry.</p>
+          <p class="meta" data-nl="Goed voor: zware lading, rust bij het stilstaan.">Good for: heavy loads, calm at a standstill.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:var(--s8)">
+    <div class="wrap">
+      <div class="section-head"><h2 data-nl="Zo werkt het">How it works</h2></div>
+      <ol class="steps">
+        <li><h3 data-nl="Vertel wat je vervoert">Tell us what you carry</h3><p class="muted" data-nl="Kinderen, hond, werk of boodschappen. Dat bepaalt welke fiets je probeert.">Kids, dog, work or shopping. That decides which bike you try.</p></li>
+        <li><h3 data-nl="Rij een echt rondje">Ride a real loop</h3><p class="muted" data-nl="Neem je eigen kinderen of spullen mee en rij door Utrecht, niet alleen over het parkeerterrein.">Bring your own kids or gear and ride through Utrecht, not just round a car park.</p></li>
+        <li><h3 data-nl="Kies zonder haast">Choose without rush</h3><p class="muted" data-nl="Bevalt het, dan regelen we de rest. Zo niet, dan weet je dat nu al.">If it feels right, we sort the rest. If not, you've learned that before buying.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="ride" style="padding-top:var(--s8)">
+    <div class="wrap">
+      <div class="ride">
+        <div>
+          <h2 data-nl="Plan een proefrit">Book a test ride</h2>
+          <p class="lead" data-nl="Laat weten wanneer je kunt. We bevestigen per e-mail.">Tell us when suits you. We'll confirm by email.</p>
+        </div>
+        <div>
+          <form id="rideForm" novalidate>
+            <div class="field">
+              <label for="f-name" data-nl="Naam">Name</label>
+              <input id="f-name" name="name" type="text" autocomplete="name" required>
+              <p class="err" id="e-name" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="f-email" data-nl="E-mailadres">Email address</label>
+              <input id="f-email" name="email" type="email" autocomplete="email" required>
+              <p class="err" id="e-email" role="alert"></p>
+            </div>
+            <div class="field">
+              <label for="f-type" data-nl="Welk type wil je proberen?">Which type do you want to try?</label>
+              <select id="f-type" name="type">
+                <option value="Front-loader" data-nl="Bakfiets (bak voorop)">Front-loader</option>
+                <option value="Longtail" data-nl="Longtail">Longtail</option>
+                <option value="Trike" data-nl="Driewieler">Trike</option>
+                <option value="Not sure" data-nl="Weet ik nog niet">Not sure yet</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" type="submit" data-nl="Verstuur aanvraag">Send request</button>
+          </form>
+          <div class="sent" id="sent" hidden>
+            <h3 data-nl="Je mail is klaar om te versturen">Your email is ready to send</h3>
+            <p data-nl="Je mailprogramma opent met je aanvraag erin. Opent het niet, mail ons dan direct:">Your email app opens with your request filled in. If it doesn't, write to us directly:</p>
+            <a id="sentLink" href="#"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="visit" style="padding-top:var(--s8)">
+    <div class="wrap visit">
+      <div>
+        <h2 data-nl="Kom langs in Utrecht">Visit us in Utrecht</h2>
+        <address>
+          <span class="todo" data-nl="Straat en huisnummer invullen" id="addr">Add street address</span>
+          <span>Utrecht</span>
+          <a id="mapLink" href="#" target="_blank" rel="noopener" data-nl="Open in kaarten">Open in maps</a>
+          <a id="mailLink" href="#"></a>
+        </address>
+        <p class="muted" data-nl="Neem de kinderen gerust mee voor de proefrit. Zij zijn de beste beoordelaars van een bakfiets.">Bring the kids along for the test ride. They're the best judges of a cargo bike.</p>
+      </div>
+      <div>
+        <table aria-label="Opening hours" data-nl-label="Openingstijden">
+          <tbody id="hours"></tbody>
+        </table>
+        <p class="note" data-nl="Voorbeelduren, pas aan in de code voordat de site live gaat.">Sample hours – replace in the code before launch.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" style="padding-top:var(--s8)">
+    <div class="wrap">
+      <div class="section-head"><h2 data-nl="Veelgestelde vragen">Common questions</h2></div>
+      <div class="faq">
+        <details><summary data-nl="Is een bakfiets moeilijk te rijden?">Is a cargo bike hard to ride?</summary><p data-nl="Even wennen, vooral in bochten en bij het stilstaan. De meeste mensen voelen zich na een kwartier vertrouwd. Daarom rijden we eerst samen een rondje.">It takes a little getting used to, mostly in turns and when stopping. Most people feel at home within a quarter of an hour, which is why a test ride comes first.</p></details>
+        <details><summary data-nl="Moet ik een afspraak maken voor een proefrit?">Do I need an appointment for a test ride?</summary><p data-nl="Wij raden het aan. Dan staat het type dat je wilt proberen klaar en hebben we tijd voor je. Gebruik het formulier hierboven.">We recommend it. The type you want is ready and we have time for you. Use the form above.</p></details>
+        <details><summary data-nl="Kan ik mijn eigen kinderen meenemen?">Can I bring my own children?</summary><p data-nl="Ja, dat is juist de bedoeling. Zo zie je of zitjes, gordels en ruimte voor jullie werken.">Yes, that's the point. You see whether seats, belts and space work for your family.</p></details>
+        <details><summary data-nl="Hebben jullie elektrische modellen?">Do you have electric models?</summary><p data-nl="Vraag ons naar de actuele modellen en wat er op voorraad is. Met trapondersteuning is zware lading en een brug een stuk lichter.">Ask us what's in stock right now. Electric assist makes heavy loads and Utrecht's bridges a lot easier.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="year"></span> Tandem, Utrecht</span>
+    <a href="#top" data-nl="Terug naar boven">Back to top</a>
+  </div>
+</footer>
+
+<div class="mbar">
+  <a class="btn btn-primary" href="#ride" data-nl="Plan een proefrit">Book a test ride</a>
+  <a class="btn btn-ghost" href="#visit" data-nl="Route">Find us</a>
+</div>
+
+<script>
+/* ---- Edit these before launch ---- */
+const SHOP = {
+  email: "hello@tandem.example",      // replace with the shop's email
+  address: "",                        // e.g. "Voorbeeldstraat 1" – leave empty to show a reminder
+  // 0 = Sunday. null = closed. Sample hours, replace with the real ones.
+  hours: { 0: null, 1: null, 2: [10, 18], 3: [10, 18], 4: [10, 20], 5: [10, 18], 6: [10, 17] }
+};
+
+const T = {
+  en: {
+    days: ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+    closed: "Closed",
+    open: (t) => "Open now, until " + t,
+    shut: (d) => "Closed now" + (d ? ", opens " + d : ""),
+    errName: "Enter your name so we know who to expect.",
+    errEmail: "Enter a valid email address, like name@example.com.",
+    subject: "Test ride request",
+    body: (n, t) => "Hi Tandem,\n\nI'd like to book a test ride.\nName: " + n + "\nType: " + t + "\n\nMy preferred days and times:\n",
+    res: {
+      kids:  ["Try first", "A front-loader", "Children sit in the box in front of you, so you can talk to them and keep an eye on them. It's the most settled option for one to three kids."],
+      stuff: ["Try first", "A front-loader or a trike", "A big box takes shopping, gear and a dog. A trike adds stability when the load is heavy or you stop often."],
+      long:  ["Try first", "A longtail", "It's about as long as a normal bike with extra room behind you, so it fits in a hallway or shed more easily."]
+    }
+  },
+  nl: {
+    days: ["zondag","maandag","dinsdag","woensdag","donderdag","vrijdag","zaterdag"],
+    closed: "Gesloten",
+    open: (t) => "Nu open, tot " + t,
+    shut: (d) => "Nu gesloten" + (d ? ", open " + d : ""),
+    errName: "Vul je naam in, dan weten we wie we verwachten.",
+    errEmail: "Vul een geldig e-mailadres in, zoals naam@voorbeeld.nl.",
+    subject: "Aanvraag proefrit",
+    body: (n, t) => "Hoi Tandem,\n\nIk wil graag een proefrit plannen.\nNaam: " + n + "\nType: " + t + "\n\nMijn voorkeursdagen en -tijden:\n",
+    res: {
+      kids:  ["Probeer eerst", "Een bakfiets", "De kinderen zitten in de bak voor je, dus je kunt met ze praten en ze in het oog houden. De rustigste keuze voor één tot drie kinderen."],
+      stuff: ["Probeer eerst", "Een bakfiets of driewieler", "In een grote bak passen boodschappen, spullen en een hond. Een driewieler geeft extra stabiliteit bij zware lading of als je vaak stilstaat."],
+      long:  ["Probeer eerst", "Een longtail", "Bijna zo lang als een gewone fiets, met extra ruimte achter je. Past makkelijker in een gang of schuur."]
+    }
+  }
+};
+
+let lang = "en";
+if ((navigator.language || "").startsWith("nl")) lang = "nl";
+try { const s = localStorage.getItem("tandem-lang"); if (s === "en" || s === "nl") lang = s; } catch (e) {}
+
+const $ = (s) => document.querySelector(s);
+const pad = (n) => String(n).padStart(2, "0");
+const fmt = (h) => pad(h) + ":00";
+
+// Remember English text, then swap on language change
+document.querySelectorAll("[data-nl]").forEach((el) => { el.dataset.en = el.textContent; });
+document.querySelectorAll("[data-nl-label]").forEach((el) => { el.dataset.enLabel = el.getAttribute("aria-label") || ""; });
+
+function nowInAmsterdam() {
+  const p = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Amsterdam", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false }).formatToParts(new Date());
+  const get = (t) => p.find((x) => x.type === t).value;
+  const day = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(get("weekday"));
+  return { day, mins: (+get("hour") % 24) * 60 + +get("minute") };
+}
+
+function renderHours() {
+  const t = T[lang], { day } = nowInAmsterdam();
+  const order = [1,2,3,4,5,6,0];
+  $("#hours").innerHTML = order.map((d) => {
+    const h = SHOP.hours[d];
+    return '<tr class="' + (d === day ? "today" : "") + '"><th scope="row">' + t.days[d].replace(/^./, (c) => c.toUpperCase()) + "</th><td>" + (h ? fmt(h[0]) + " – " + fmt(h[1]) : t.closed) + "</td></tr>";
+  }).join("");
+}
+
+function renderOpen() {
+  const t = T[lang], { day, mins } = nowInAmsterdam();
+  const h = SHOP.hours[day];
+  const el = $("#openNow");
+  if (h && mins >= h[0] * 60 && mins < h[1] * 60) {
+    el.classList.add("is-open");
+    $("#openText").textContent = t.open(fmt(h[1]));
+    return;
+  }
+  el.classList.remove("is-open");
+  let next = null;
+  for (let i = 0; i < 7 && !next; i++) {
+    const d = (day + i) % 7, hh = SHOP.hours[d];
+    if (hh && (i > 0 || mins < hh[0] * 60)) next = (i === 0 ? "" : t.days[d] + " ") + fmt(hh[0]);
+  }
+  $("#openText").textContent = t.shut(next);
+}
+
+function renderResult(animate) {
+  const v = document.querySelector('input[name="load"]:checked').value;
+  const [k, title, text] = T[lang].res[v];
+  $("#resKicker").textContent = k;
+  $("#resTitle").textContent = title;
+  $("#resText").textContent = text;
+  if (animate) {
+    const r = $("#result");
+    r.classList.remove("swap"); void r.offsetWidth; r.classList.add("swap");
+  }
+}
+
+function setContact() {
+  const mail = SHOP.email;
+  $("#mailLink").href = "mailto:" + mail;
+  $("#mailLink").textContent = mail;
+  $("#mapLink").href = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent((SHOP.address ? SHOP.address + ", " : "") + "Tandem cargo bikes Utrecht");
+  if (SHOP.address) { const a = $("#addr"); a.textContent = SHOP.address; a.className = ""; a.removeAttribute("data-nl"); a.removeAttribute("data-en"); }
+}
+
+function applyLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.querySelectorAll("[data-nl]").forEach((el) => { el.textContent = l === "nl" ? el.dataset.nl : el.dataset.en; });
+  document.querySelectorAll("[data-nl-label]").forEach((el) => { el.setAttribute("aria-label", l === "nl" ? el.dataset.nlLabel : el.dataset.enLabel); });
+  document.querySelectorAll("[data-lang]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+  try { localStorage.setItem("tandem-lang", l); } catch (e) {}
+  renderHours(); renderOpen(); renderResult(false);
+  document.querySelectorAll("[data-err]").forEach((e) => { e.textContent = T[l][e.dataset.err]; });
+}
+
+document.querySelectorAll("[data-lang]").forEach((b) => b.addEventListener("click", () => applyLang(b.dataset.lang)));
+document.querySelectorAll('input[name="load"]').forEach((r) => r.addEventListener("change", () => {
+  renderResult(true);
+  const map = { kids: "Front-loader", stuff: "Front-loader", long: "Longtail" };
+  $("#f-type").value = map[r.value];
+}));
+
+// Form: validate on blur, keep input, focus first error on submit
+const form = $("#rideForm");
+function check(input, errId, key, ok) {
+  const e = $(errId);
+  if (ok(input.value.trim())) { input.removeAttribute("aria-invalid"); input.removeAttribute("aria-describedby"); e.textContent = ""; e.removeAttribute("data-err"); return true; }
+  input.setAttribute("aria-invalid", "true"); input.setAttribute("aria-describedby", errId.slice(1));
+  e.dataset.err = key; e.textContent = T[lang][key]; return false;
+}
+const vName = () => check($("#f-name"), "#e-name", "errName", (v) => v.length > 0);
+const vEmail = () => check($("#f-email"), "#e-email", "errEmail", (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v));
+$("#f-name").addEventListener("blur", vName);
+$("#f-email").addEventListener("blur", vEmail);
+form.addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  const a = vName(), b = vEmail();
+  if (!a) return $("#f-name").focus();
+  if (!b) return $("#f-email").focus();
+  const t = T[lang], name = $("#f-name").value.trim(), type = $("#f-type").value;
+  const href = "mailto:" + SHOP.email + "?subject=" + encodeURIComponent(t.subject) + "&body=" + encodeURIComponent(t.body(name, type));
+  form.hidden = true;
+  const s = $("#sent"); s.hidden = false;
+  $("#sentLink").href = href; $("#sentLink").textContent = SHOP.email;
+  s.querySelector("h3").tabIndex = -1; s.querySelector("h3").focus();
+  window.location.href = href;
+});
+
+$("#year").textContent = new Date().getFullYear();
+setContact();
+applyLang(lang);
+setInterval(renderOpen, 60000);
+</script>
+</body>
+</html>

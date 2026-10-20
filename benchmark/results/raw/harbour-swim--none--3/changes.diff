@@ -1,0 +1,962 @@
+diff --git a/a/index.html b/b/index.html
+index 27ec749..12f0044 100644
+--- a/a/index.html
++++ b/b/index.html
+@@ -2,26 +2,31 @@
+ <html lang="en">
+ <head>
+ <meta charset="utf-8">
++<meta name="viewport" content="width=device-width, initial-scale=1">
++<meta name="theme-color" content="#1b2a4a">
+ <title>Harbour Swim Club - Falmouth, Cornwall</title>
+ <meta name="description" content="Harbour Swim Club, Falmouth. Swimming lessons, squads, masters and family swims for all ages.">
+-<link rel="stylesheet" type="text/css" href="style.css">
++<link rel="stylesheet" href="style.css">
+ </head>
+-<body>
++<body id="top">
+ 
+ <div id="wrapper">
+ 
+-  <div id="header" class="clearfix">
++  <header id="header">
+     <a href="#top" id="logo"><img src="images/logo.svg" alt="Harbour Swim Club"></a>
+-    <ul id="nav">
+-      <li><a href="#timetable">Timetable</a></li>
+-      <li><a href="#membership">Membership</a></li>
+-      <li><a href="#join">Join</a></li>
+-      <li><a href="#news">News</a></li>
+-      <li><a href="#contact">Contact</a></li>
+-    </ul>
+-  </div>
++    <button id="navtoggle" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
++    <nav aria-label="Main">
++      <ul id="nav">
++        <li><a href="#timetable">Timetable</a></li>
++        <li><a href="#membership">Membership</a></li>
++        <li><a href="#join">Join</a></li>
++        <li><a href="#news">News</a></li>
++        <li><a href="#contact">Contact</a></li>
++      </ul>
++    </nav>
++  </header>
+ 
+-  <div id="ticker"><span id="tickertext">Pool closed Bank Holiday Monday 6th May &nbsp;&nbsp;***&nbsp;&nbsp; Summer timetable starts 3rd June &nbsp;&nbsp;***&nbsp;&nbsp; Junior galas: entries to Helen by 20th April &nbsp;&nbsp;***&nbsp;&nbsp; Volunteers needed for the Falmouth Regatta water safety team</span></div>
++  <div id="ticker" role="region" aria-label="Club notices"><p id="tickertext">Pool closed Bank Holiday Monday 6th May &nbsp;&bull;&nbsp; Summer timetable starts 3rd June &nbsp;&bull;&nbsp; Junior galas: entries to Helen by 20th April &nbsp;&bull;&nbsp; Volunteers needed for the Falmouth Regatta water safety team</p></div>
+ 
+   <div id="hero">
+     <img src="images/hero-pool.svg" alt="Swimmers training in the lanes at Harbour Leisure Centre pool" class="heroimg">
+@@ -31,249 +36,63 @@
+     </div>
+   </div>
+ 
+-  <div id="welcome" class="clearfix">
++  <main>
++  <section id="welcome">
+     <img src="images/swimmers.svg" alt="Two junior swimmers in the water" class="floatleft">
++    <div class="welcometext">
+     <h2>Welcome</h2>
+     <p>Harbour Swim Club is a friendly, volunteer run club based at Harbour Leisure Centre on Quay Road. We have around 240 members, from toddlers having their first splash to masters swimmers in their seventies.</p>
+-    <p class="second">Whether you want to learn to swim, keep fit, or race for the county, there is a session for you. New members are always welcome and your first visit is free, just bring a towel and a smile.</p>
+-  </div>
++    <p>Whether you want to learn to swim, keep fit, or race for the county, there is a session for you. New members are always welcome and your first visit is free, just bring a towel and a smile.</p>
++    </div>
+ 
+-  <div id="timetable">
++  </section>
++
++  <section id="timetable">
+     <h2>Weekly Timetable</h2>
+     <p class="intro">All sessions are at Harbour Leisure Centre. Please arrive 10 minutes early and report to the coach on poolside.</p>
+-    <table cellpadding="0" cellspacing="0" border="0">
+-      <tr>
+-        <th class="c1">Day</th>
+-        <th class="c2">Time</th>
+-        <th class="c3">Session</th>
+-        <th class="c4">Lane</th>
+-        <th class="c5">Level</th>
+-        <th class="c6">Coach</th>
+-      </tr>
+-      <tr>
+-        <td>Monday</td>
+-        <td>06:30 - 07:30</td>
+-        <td>Early Bird Lengths</td>
+-        <td>1-3</td>
+-        <td>All levels</td>
+-        <td>Dave</td>
+-      </tr>
+-      <tr>
+-        <td>Monday</td>
+-        <td>17:00 - 18:00</td>
+-        <td>Junior Development</td>
+-        <td>1-2</td>
+-        <td>Beginner</td>
+-        <td>Helen</td>
+-      </tr>
+-      <tr>
+-        <td>Monday</td>
+-        <td>18:00 - 19:30</td>
+-        <td>Junior Squad</td>
+-        <td>3-5</td>
+-        <td>Advanced</td>
+-        <td>Helen</td>
+-      </tr>
+-      <tr>
+-        <td>Monday</td>
+-        <td>19:30 - 20:30</td>
+-        <td>Adult Improvers</td>
+-        <td>1-3</td>
+-        <td>Improver</td>
+-        <td>Tom</td>
+-      </tr>
+-      <tr>
+-        <td>Tuesday</td>
+-        <td>07:00 - 08:00</td>
+-        <td>Masters Early Swim</td>
+-        <td>2-4</td>
+-        <td>Intermediate</td>
+-        <td>Priya</td>
+-      </tr>
+-      <tr>
+-        <td>Tuesday</td>
+-        <td>16:30 - 17:30</td>
+-        <td>Learn to Swim Stage 1</td>
+-        <td>1-2</td>
+-        <td>Beginner</td>
+-        <td>Sarah</td>
+-      </tr>
+-      <tr>
+-        <td>Tuesday</td>
+-        <td>17:30 - 18:30</td>
+-        <td>Learn to Swim Stage 2</td>
+-        <td>1-2</td>
+-        <td>Beginner</td>
+-        <td>Sarah</td>
+-      </tr>
+-      <tr>
+-        <td>Tuesday</td>
+-        <td>19:00 - 20:30</td>
+-        <td>Competition Squad</td>
+-        <td>1-5</td>
+-        <td>Advanced</td>
+-        <td>Mike</td>
+-      </tr>
+-      <tr>
+-        <td>Wednesday</td>
+-        <td>12:30 - 13:30</td>
+-        <td>Lunchtime Lanes</td>
+-        <td>1-3</td>
+-        <td>All levels</td>
+-        <td>Dave</td>
+-      </tr>
+-      <tr>
+-        <td>Wednesday</td>
+-        <td>17:00 - 18:00</td>
+-        <td>Junior Development</td>
+-        <td>1-2</td>
+-        <td>Beginner</td>
+-        <td>Helen</td>
+-      </tr>
+-      <tr>
+-        <td>Wednesday</td>
+-        <td>18:00 - 19:00</td>
+-        <td>Aqua Fit</td>
+-        <td>Shallow end</td>
+-        <td>All levels</td>
+-        <td>Priya</td>
+-      </tr>
+-      <tr>
+-        <td>Wednesday</td>
+-        <td>19:30 - 20:30</td>
+-        <td>Masters Evening Swim</td>
+-        <td>2-4</td>
+-        <td>Intermediate</td>
+-        <td>Priya</td>
+-      </tr>
+-      <tr>
+-        <td>Thursday</td>
+-        <td>06:30 - 07:30</td>
+-        <td>Early Bird Lengths</td>
+-        <td>1-3</td>
+-        <td>All levels</td>
+-        <td>Dave</td>
+-      </tr>
+-      <tr>
+-        <td>Thursday</td>
+-        <td>10:00 - 10:45</td>
+-        <td>Parent and Baby</td>
+-        <td>Teaching pool</td>
+-        <td>Beginner</td>
+-        <td>Sarah</td>
+-      </tr>
+-      <tr>
+-        <td>Thursday</td>
+-        <td>16:30 - 17:30</td>
+-        <td>Learn to Swim Stage 1</td>
+-        <td>1-2</td>
+-        <td>Beginner</td>
+-        <td>Sarah</td>
+-      </tr>
+-      <tr>
+-        <td>Thursday</td>
+-        <td>18:00 - 19:30</td>
+-        <td>Junior Squad</td>
+-        <td>3-5</td>
+-        <td>Advanced</td>
+-        <td>Mike</td>
+-      </tr>
+-      <tr>
+-        <td>Thursday</td>
+-        <td>19:30 - 20:30</td>
+-        <td>Water Polo Intro</td>
+-        <td>4-5</td>
+-        <td>Improver</td>
+-        <td>Tom</td>
+-      </tr>
+-      <tr>
+-        <td>Friday</td>
+-        <td>12:30 - 13:30</td>
+-        <td>Lunchtime Lanes</td>
+-        <td>1-3</td>
+-        <td>All levels</td>
+-        <td>Dave</td>
+-      </tr>
+-      <tr>
+-        <td>Friday</td>
+-        <td>17:00 - 18:00</td>
+-        <td>Family Fun Swim</td>
+-        <td>Whole pool</td>
+-        <td>All levels</td>
+-        <td>Helen</td>
+-      </tr>
+-      <tr>
+-        <td>Friday</td>
+-        <td>18:30 - 19:30</td>
+-        <td>Social Swim</td>
+-        <td>1-2</td>
+-        <td>All levels</td>
+-        <td>Tom</td>
+-      </tr>
+-      <tr>
+-        <td>Saturday</td>
+-        <td>08:00 - 09:30</td>
+-        <td>Junior Squad</td>
+-        <td>3-5</td>
+-        <td>Advanced</td>
+-        <td>Mike</td>
+-      </tr>
+-      <tr>
+-        <td>Saturday</td>
+-        <td>09:30 - 11:00</td>
+-        <td>Competition Squad</td>
+-        <td>1-5</td>
+-        <td>Advanced</td>
+-        <td>Mike</td>
+-      </tr>
+-      <tr>
+-        <td>Saturday</td>
+-        <td>11:00 - 12:00</td>
+-        <td>Learn to Swim Stage 3</td>
+-        <td>1-2</td>
+-        <td>Improver</td>
+-        <td>Sarah</td>
+-      </tr>
+-      <tr>
+-        <td>Saturday</td>
+-        <td>12:00 - 13:00</td>
+-        <td>Open Water Prep</td>
+-        <td>3-4</td>
+-        <td>Intermediate</td>
+-        <td>Dave</td>
+-      </tr>
+-      <tr>
+-        <td>Sunday</td>
+-        <td>10:00 - 11:30</td>
+-        <td>Sunday Family Splash</td>
+-        <td>Whole pool</td>
+-        <td>All levels</td>
+-        <td>Helen</td>
+-      </tr>
+-      <tr>
+-        <td>Sunday</td>
+-        <td>11:30 - 12:30</td>
+-        <td>Disability Swim</td>
+-        <td>Teaching pool</td>
+-        <td>All levels</td>
+-        <td>Priya</td>
+-      </tr>
+-      <tr>
+-        <td>Sunday</td>
+-        <td>18:00 - 19:00</td>
+-        <td>Adult Beginners</td>
+-        <td>1-2</td>
+-        <td>Beginner</td>
+-        <td>Tom</td>
+-      </tr>
++    <div class="tablewrap">
++    <table>
++      <thead><tr><th>Day</th><th>Time</th><th>Session</th><th>Lane</th><th>Level</th><th>Coach</th></tr></thead>
++    <tbody>
++      <tr><td data-label="Day">Monday</td><td data-label="Time">06:30 - 07:30</td><td data-label="Session">Early Bird Lengths</td><td data-label="Lane">1-3</td><td data-label="Level">All levels</td><td data-label="Coach">Dave</td></tr>
++      <tr><td data-label="Day">Monday</td><td data-label="Time">17:00 - 18:00</td><td data-label="Session">Junior Development</td><td data-label="Lane">1-2</td><td data-label="Level">Beginner</td><td data-label="Coach">Helen</td></tr>
++      <tr><td data-label="Day">Monday</td><td data-label="Time">18:00 - 19:30</td><td data-label="Session">Junior Squad</td><td data-label="Lane">3-5</td><td data-label="Level">Advanced</td><td data-label="Coach">Helen</td></tr>
++      <tr><td data-label="Day">Monday</td><td data-label="Time">19:30 - 20:30</td><td data-label="Session">Adult Improvers</td><td data-label="Lane">1-3</td><td data-label="Level">Improver</td><td data-label="Coach">Tom</td></tr>
++      <tr><td data-label="Day">Tuesday</td><td data-label="Time">07:00 - 08:00</td><td data-label="Session">Masters Early Swim</td><td data-label="Lane">2-4</td><td data-label="Level">Intermediate</td><td data-label="Coach">Priya</td></tr>
++      <tr><td data-label="Day">Tuesday</td><td data-label="Time">16:30 - 17:30</td><td data-label="Session">Learn to Swim Stage 1</td><td data-label="Lane">1-2</td><td data-label="Level">Beginner</td><td data-label="Coach">Sarah</td></tr>
++      <tr><td data-label="Day">Tuesday</td><td data-label="Time">17:30 - 18:30</td><td data-label="Session">Learn to Swim Stage 2</td><td data-label="Lane">1-2</td><td data-label="Level">Beginner</td><td data-label="Coach">Sarah</td></tr>
++      <tr><td data-label="Day">Tuesday</td><td data-label="Time">19:00 - 20:30</td><td data-label="Session">Competition Squad</td><td data-label="Lane">1-5</td><td data-label="Level">Advanced</td><td data-label="Coach">Mike</td></tr>
++      <tr><td data-label="Day">Wednesday</td><td data-label="Time">12:30 - 13:30</td><td data-label="Session">Lunchtime Lanes</td><td data-label="Lane">1-3</td><td data-label="Level">All levels</td><td data-label="Coach">Dave</td></tr>
++      <tr><td data-label="Day">Wednesday</td><td data-label="Time">17:00 - 18:00</td><td data-label="Session">Junior Development</td><td data-label="Lane">1-2</td><td data-label="Level">Beginner</td><td data-label="Coach">Helen</td></tr>
++      <tr><td data-label="Day">Wednesday</td><td data-label="Time">18:00 - 19:00</td><td data-label="Session">Aqua Fit</td><td data-label="Lane">Shallow end</td><td data-label="Level">All levels</td><td data-label="Coach">Priya</td></tr>
++      <tr><td data-label="Day">Wednesday</td><td data-label="Time">19:30 - 20:30</td><td data-label="Session">Masters Evening Swim</td><td data-label="Lane">2-4</td><td data-label="Level">Intermediate</td><td data-label="Coach">Priya</td></tr>
++      <tr><td data-label="Day">Thursday</td><td data-label="Time">06:30 - 07:30</td><td data-label="Session">Early Bird Lengths</td><td data-label="Lane">1-3</td><td data-label="Level">All levels</td><td data-label="Coach">Dave</td></tr>
++      <tr><td data-label="Day">Thursday</td><td data-label="Time">10:00 - 10:45</td><td data-label="Session">Parent and Baby</td><td data-label="Lane">Teaching pool</td><td data-label="Level">Beginner</td><td data-label="Coach">Sarah</td></tr>
++      <tr><td data-label="Day">Thursday</td><td data-label="Time">16:30 - 17:30</td><td data-label="Session">Learn to Swim Stage 1</td><td data-label="Lane">1-2</td><td data-label="Level">Beginner</td><td data-label="Coach">Sarah</td></tr>
++      <tr><td data-label="Day">Thursday</td><td data-label="Time">18:00 - 19:30</td><td data-label="Session">Junior Squad</td><td data-label="Lane">3-5</td><td data-label="Level">Advanced</td><td data-label="Coach">Mike</td></tr>
++      <tr><td data-label="Day">Thursday</td><td data-label="Time">19:30 - 20:30</td><td data-label="Session">Water Polo Intro</td><td data-label="Lane">4-5</td><td data-label="Level">Improver</td><td data-label="Coach">Tom</td></tr>
++      <tr><td data-label="Day">Friday</td><td data-label="Time">12:30 - 13:30</td><td data-label="Session">Lunchtime Lanes</td><td data-label="Lane">1-3</td><td data-label="Level">All levels</td><td data-label="Coach">Dave</td></tr>
++      <tr><td data-label="Day">Friday</td><td data-label="Time">17:00 - 18:00</td><td data-label="Session">Family Fun Swim</td><td data-label="Lane">Whole pool</td><td data-label="Level">All levels</td><td data-label="Coach">Helen</td></tr>
++      <tr><td data-label="Day">Friday</td><td data-label="Time">18:30 - 19:30</td><td data-label="Session">Social Swim</td><td data-label="Lane">1-2</td><td data-label="Level">All levels</td><td data-label="Coach">Tom</td></tr>
++      <tr><td data-label="Day">Saturday</td><td data-label="Time">08:00 - 09:30</td><td data-label="Session">Junior Squad</td><td data-label="Lane">3-5</td><td data-label="Level">Advanced</td><td data-label="Coach">Mike</td></tr>
++      <tr><td data-label="Day">Saturday</td><td data-label="Time">09:30 - 11:00</td><td data-label="Session">Competition Squad</td><td data-label="Lane">1-5</td><td data-label="Level">Advanced</td><td data-label="Coach">Mike</td></tr>
++      <tr><td data-label="Day">Saturday</td><td data-label="Time">11:00 - 12:00</td><td data-label="Session">Learn to Swim Stage 3</td><td data-label="Lane">1-2</td><td data-label="Level">Improver</td><td data-label="Coach">Sarah</td></tr>
++      <tr><td data-label="Day">Saturday</td><td data-label="Time">12:00 - 13:00</td><td data-label="Session">Open Water Prep</td><td data-label="Lane">3-4</td><td data-label="Level">Intermediate</td><td data-label="Coach">Dave</td></tr>
++      <tr><td data-label="Day">Sunday</td><td data-label="Time">10:00 - 11:30</td><td data-label="Session">Sunday Family Splash</td><td data-label="Lane">Whole pool</td><td data-label="Level">All levels</td><td data-label="Coach">Helen</td></tr>
++      <tr><td data-label="Day">Sunday</td><td data-label="Time">11:30 - 12:30</td><td data-label="Session">Disability Swim</td><td data-label="Lane">Teaching pool</td><td data-label="Level">All levels</td><td data-label="Coach">Priya</td></tr>
++      <tr><td data-label="Day">Sunday</td><td data-label="Time">18:00 - 19:00</td><td data-label="Session">Adult Beginners</td><td data-label="Lane">1-2</td><td data-label="Level">Beginner</td><td data-label="Coach">Tom</td></tr>
++    </tbody>
+     </table>
++    </div>
+     <p class="note">Timetable may change in school holidays. Check the news below.</p>
+-  </div>
+ 
+-  <div id="membership" class="clearfix">
++  </section>
++
++  <section id="membership">
+     <h2>Membership</h2>
+     <p class="intro">Pay monthly by standing order. No joining fee. Membership includes all club sessions for your category plus entry to club socials.</p>
+-    <div class="plan first">
++    <div class="plans">
++    <div class="plan">
+       <h3>Junior</h3>
+       <p class="price">&pound;18 <span>a month</span></p>
+       <p>Under 16s. Lessons, development and squad places.</p>
+@@ -288,58 +107,67 @@
+       <p class="price">&pound;65 <span>a month</span></p>
+       <p>Two adults and up to three children under 16.</p>
+     </div>
+-    <div class="plan last">
++    <div class="plan">
+       <h3>Masters</h3>
+       <p class="price">&pound;28 <span>a month</span></p>
+       <p>Over 25s. Coached training, local and national meets.</p>
+     </div>
+-  </div>
++    </div>
++  </section>
+ 
+-  <div id="join" class="clearfix">
++  <section id="join">
+     <div id="joinbox">
+       <h2>Join the club</h2>
+       <p>Fill in the form and our membership secretary will get in touch.</p>
+-      <form id="joinform" action="#" method="get">
+-        <input type="text" id="fullname" name="fullname" placeholder="Full name" class="text">
+-        <input type="text" id="email" name="email" placeholder="Email address" class="text">
+-        <input type="text" id="phone" name="phone" placeholder="Phone number" class="text">
+-        <select id="mtype" name="mtype" class="text">
+-          <option value="">Membership type</option>
++      <form id="joinform" action="#" method="get" novalidate>
++        <label for="fullname">Full name</label>
++        <input type="text" id="fullname" name="fullname" class="text" autocomplete="name" required>
++        <label for="email">Email address</label>
++        <input type="email" id="email" name="email" class="text" autocomplete="email" inputmode="email" required>
++        <label for="phone">Phone number</label>
++        <input type="tel" id="phone" name="phone" class="text" autocomplete="tel" required>
++        <label for="mtype">Membership type</label>
++        <select id="mtype" name="mtype" class="text" required>
++          <option value="">Choose one</option>
+           <option value="junior">Junior</option>
+           <option value="adult">Adult</option>
+           <option value="family">Family</option>
+           <option value="masters">Masters</option>
+         </select>
+-        <p class="consent"><input type="checkbox" id="consent" name="consent"> I am happy for the club to contact me about membership</p>
+-        <div class="button" onclick="submitJoin()">Join now</div>
++        <label class="consent"><input type="checkbox" id="consent" name="consent"> I am happy for the club to contact me about membership</label>
++        <p id="formerror" class="error" role="alert"></p>
++        <button type="submit" class="button">Join now</button>
+       </form>
+     </div>
+     <div id="joinaside">
+       <img src="images/pool.svg" alt="The pool at Harbour Leisure Centre">
+       <p class="small">Not sure yet? Come along to any session for a free trial.</p>
+     </div>
+-  </div>
+ 
+-  <div id="news">
++  </section>
++
++  <section id="news">
+     <h2>Club News</h2>
+-    <div class="item">
++    <article class="item">
+       <p class="date">12 March 2013</p>
+       <h3>Cornwall County Championships: 14 medals for Harbour</h3>
+       <p>Our juniors came home from Plymouth with six gold, four silver and four bronze. Well done to everyone who swam and thank you to the parents who helped on poolside.</p>
+-    </div>
+-    <div class="item">
++    </article>
++    <article class="item">
+       <p class="date">28 February 2013</p>
+       <h3>New Masters session on Wednesday evenings</h3>
+       <p>Priya will be coaching a new masters session on Wednesday evenings starting at half past seven. All abilities, just turn up.</p>
+-    </div>
+-    <div class="item last">
++    </article>
++    <article class="item last">
+       <p class="date">9 February 2013</p>
+       <h3>Pool maintenance closure over Easter weekend</h3>
+       <p>The leisure centre is closing the pool from Good Friday to Easter Monday while the filters are replaced. Normal sessions resume on Tuesday.</p>
+-    </div>
+-  </div>
++    </article>
+ 
+-  <div id="contact">
++  </section>
++  </main>
++
++  <footer id="contact">
+     <h2>Contact us</h2>
+     <div class="col">
+       <p>Harbour Swim Club<br>
+@@ -354,9 +182,8 @@
+       <p>Membership secretary: Helen Carne<br>
+       Registered charity no. 1049221</p>
+     </div>
+-    <div class="clear"></div>
+-    <p id="copy">&copy; 2013 Harbour Swim Club. Last updated 12 March 2013.</p>
+-  </div>
++        <p id="copy">&copy; 2013 Harbour Swim Club. Last updated 12 March 2013.</p>
++  </footer>
+ 
+ </div>
+ 
+diff --git a/a/script.js b/b/script.js
+index 4186e55..f3162c8 100644
+--- a/a/script.js
++++ b/b/script.js
+@@ -1,49 +1,54 @@
+ // Harbour Swim Club website scripts
+ 
+-// news ticker
+-var tickerPos = 980;
+-var tickerEl = document.getElementById("tickertext");
+-var tickerWidth = tickerEl.offsetWidth;
++// mobile menu
++var header = document.getElementById("header");
++var navToggle = document.getElementById("navtoggle");
+ 
+-function moveTicker() {
+-  tickerPos = tickerPos - 1;
+-  if (tickerPos < -tickerWidth) {
+-    tickerPos = 980;
+-  }
+-  tickerEl.style.left = tickerPos + "px";
++function setMenu(open) {
++  header.classList.toggle("open", open);
++  navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+ }
+-setInterval(moveTicker, 25);
++navToggle.addEventListener("click", function () {
++  setMenu(!header.classList.contains("open"));
++});
++document.getElementById("nav").addEventListener("click", function (e) {
++  if (e.target.tagName === "A") { setMenu(false); }
++});
+ 
+-// join form
+-function submitJoin() {
+-  var name = document.getElementById("fullname").value;
+-  var email = document.getElementById("email").value;
++// join form: opens the visitor's email app with a pre-filled message to the club
++var CLUB_EMAIL = "info@harbourswimclub.co.uk";
++var joinForm = document.getElementById("joinform");
++var formError = document.getElementById("formerror");
++
++function fail(message, fieldId) {
++  formError.textContent = message;
++  document.getElementById(fieldId).focus();
++}
++
++joinForm.addEventListener("submit", function (e) {
++  e.preventDefault();
++  var name = document.getElementById("fullname").value.trim();
++  var email = document.getElementById("email").value.trim();
+   var phone = document.getElementById("phone").value;
+   var type = document.getElementById("mtype").value;
+   var consent = document.getElementById("consent").checked;
+ 
+-  name = name.replace(/^\s+|\s+$/g, "");
++  if (name.length < 2) { return fail("Please enter your full name", "fullname"); }
++  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { return fail("Please enter a valid email address", "email"); }
++  if (phone.replace(/[^0-9]/g, "").length < 7) { return fail("Please enter your phone number", "phone"); }
++  if (type === "") { return fail("Please choose a membership type", "mtype"); }
++  if (!consent) { return fail("Please tick the box so we can contact you", "consent"); }
+ 
+-  if (name.length < 2) {
+-    alert("Please enter your full name");
+-    return;
+-  }
+-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+-    alert("Please enter a valid email address");
+-    return;
+-  }
+-  if (phone.replace(/[^0-9]/g, "").length < 7) {
+-    alert("Please enter your phone number");
+-    return;
+-  }
+-  if (type == "") {
+-    alert("Please choose a membership type");
+-    return;
+-  }
+-  if (!consent) {
+-    alert("Please tick the box so we can contact you");
+-    return;
+-  }
++  var types = { junior: "Junior", adult: "Adult", family: "Family", masters: "Masters" };
++  var body = "Please contact me about joining Harbour Swim Club.\r\n\r\n" +
++    "Name: " + name + "\r\n" +
++    "Email: " + email + "\r\n" +
++    "Phone: " + phone.trim() + "\r\n" +
++    "Membership type: " + types[type] + "\r\n" +
++    "I am happy for the club to contact me about membership.";
++  var href = "mailto:" + CLUB_EMAIL +
++    "?subject=" + encodeURIComponent("Membership enquiry: " + types[type]) +
++    "&body=" + encodeURIComponent(body);
+ 
+   var first = name.split(" ")[0];
+   var box = document.getElementById("joinbox");
+@@ -52,7 +57,17 @@ function submitJoin() {
+   h.appendChild(document.createTextNode("Join the club"));
+   var p = document.createElement("p");
+   p.className = "thanks";
+-  p.appendChild(document.createTextNode("Thanks, " + first + "! We will email you within two days."));
++  p.setAttribute("role", "status");
++  p.appendChild(document.createTextNode("Thanks, " + first + "! Your email app should now open with your details ready. Press Send to finish."));
++  var help = document.createElement("p");
++  help.appendChild(document.createTextNode("Nothing opened? "));
++  var link = document.createElement("a");
++  link.href = href;
++  link.appendChild(document.createTextNode("Try again"));
++  help.appendChild(link);
++  help.appendChild(document.createTextNode(", email us at " + CLUB_EMAIL + " or phone 01326 555 014."));
+   box.appendChild(h);
+   box.appendChild(p);
+-}
++  box.appendChild(help);
++  window.location.href = href;
++});
+diff --git a/a/style.css b/b/style.css
+index 2289040..7c4ced3 100644
+--- a/a/style.css
++++ b/b/style.css
+@@ -1,200 +1,262 @@
+ /* Harbour Swim Club */
+ 
++:root {
++  --navy: #1b2a4a;
++  --navy-light: #2c4170;
++  --gold: #f2c230;
++  --gold-text: #8a6a00; /* gold darkened for text on white */
++  --text: #2f3a4d;
++  --muted: #5d6879;
++  --line: #dde3ea;
++  --pad: 20px;
++}
++
++*, *::before, *::after { box-sizing: border-box; }
+ * { margin: 0; padding: 0; }
+-*:focus { outline: none; }
++html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
+ 
+ body {
+-  font-family: Verdana, Geneva, sans-serif;
+-  font-size: 13px;
+-  line-height: 1.5;
+-  color: #999;
++  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
++  font-size: 1rem;
++  line-height: 1.6;
++  color: var(--text);
+   background: #dfe6ee;
+ }
+ 
+-img { border: 0; }
+-a { color: #f2c230; }
++img { border: 0; max-width: 100%; height: auto; }
++a { color: var(--navy); }
+ a:hover { text-decoration: none; }
+-
+-.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+-.clearfix { display: inline-block; }
+-* html .clearfix { height: 1%; }
+-.clearfix { display: block; }
+-.clear { clear: both; }
+-.floatleft { float: left; margin: 0 20px 10px 0; }
++:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+ 
+ #wrapper {
+-  width: 980px;
++  max-width: 1040px;
+   margin: 0 auto;
+   background: #fff;
+-  border-left: 1px solid #c9d2dc;
+-  border-right: 1px solid #c9d2dc;
++  overflow: hidden;
+ }
+ 
+ /* header */
+ #header {
+-  height: 84px;
+-  background: #1b2a4a;
+-  padding: 10px 20px 0 20px;
+-  border-bottom: 4px solid #f2c230;
++  position: sticky;
++  top: 0;
++  z-index: 10;
++  display: flex;
++  flex-wrap: wrap;
++  align-items: center;
++  justify-content: space-between;
++  gap: 8px 16px;
++  background: var(--navy);
++  padding: 8px var(--pad);
++  border-bottom: 4px solid var(--gold);
+ }
+-#logo { float: left; }
+-#logo img { display: block; }
+-#nav { float: right; list-style: none; margin-top: 24px; }
+-#nav li { float: left; margin-left: 6px; }
+-#nav li a {
++#logo { display: block; line-height: 0; }
++#logo img { display: block; height: 56px; width: auto; }
++#nav { list-style: none; display: flex; gap: 4px; }
++#nav a {
+   display: block;
+-  font-size: 11px;
+-  padding: 2px 3px;
+-  color: #f2c230;
++  padding: 10px 12px;
++  font-size: 0.85rem;
++  letter-spacing: 0.04em;
++  color: var(--gold);
+   text-decoration: none;
+   text-transform: uppercase;
+ }
+-#nav li a:hover { color: #fff; }
++#nav a:hover { color: #fff; }
++#navtoggle {
++  display: none;
++  min-height: 44px;
++  padding: 0 16px;
++  font: inherit;
++  font-weight: 600;
++  color: var(--gold);
++  background: transparent;
++  border: 1px solid var(--gold);
++  border-radius: 4px;
++  cursor: pointer;
++}
+ 
+ /* ticker */
+ #ticker {
+-  position: relative;
+-  height: 24px;
+   overflow: hidden;
+-  background: #f4f4f4;
+-  border-bottom: 1px solid #ddd;
++  background: #f4f6f8;
++  border-bottom: 1px solid var(--line);
+ }
+ #tickertext {
+-  position: absolute;
+-  left: 980px;
+-  top: 4px;
++  display: inline-block;
++  margin: 0;
++  padding: 6px 0 6px 100%;
+   white-space: nowrap;
+-  font-size: 11px;
+-  color: #999;
++  font-size: 0.85rem;
++  color: var(--muted);
++  animation: ticker 40s linear infinite;
+ }
++#ticker:hover #tickertext { animation-play-state: paused; }
++@keyframes ticker { to { transform: translateX(-100%); } }
+ 
+ /* hero */
+-#hero { position: relative; margin-bottom: 15px; }
+-#hero .heroimg { display: block; width: 980px; }
++#hero { position: relative; margin-bottom: 15px; background: var(--navy); }
++#hero .heroimg { display: block; width: 100%; min-height: 200px; object-fit: cover; }
+ #herotext {
+   position: absolute;
+   left: 30px;
+   bottom: 24px;
+-  background: #1b2a4a;
++  background: var(--navy);
+   padding: 10px 18px 12px 18px;
+-  border-left: 5px solid #f2c230;
++  border-left: 5px solid var(--gold);
+ }
+-#herotext h1 { font-size: 26px; color: #f2c230; font-weight: bold; }
+-#herotext p { color: #fff; font-size: 12px; margin-top: 2px; }
+-
+-/* general sections */
+-#welcome, #timetable, #membership, #join, #news { padding: 10px 20px 14px 20px; }
+-#welcome { margin-bottom: 6px; }
+-#timetable { margin-top: 12px; }
+-#membership { margin-top: 20px; }
+-#join { margin-top: 8px; }
+-#news { margin-top: 17px; }
++#herotext h1 { font-size: 1.8rem; line-height: 1.2; color: var(--gold); }
++#herotext p { color: #fff; font-size: 0.95rem; margin: 2px 0 0; }
+ 
++/* sections */
++section { padding: 24px var(--pad) 14px; }
+ h2 {
+-  font-size: 20px;
+-  color: #f2c230;
+-  border-bottom: 1px solid #ddd;
+-  padding-bottom: 4px;
+-  margin-bottom: 11px;
++  font-size: 1.5rem;
++  line-height: 1.25;
++  color: var(--navy);
++  border-bottom: 3px solid var(--gold);
++  padding-bottom: 6px;
++  margin-bottom: 14px;
+ }
+-h3 { font-size: 14px; color: #666; margin-bottom: 4px; }
+-p { margin-bottom: 9px; }
+-p.second { margin-top: 3px; }
+-.intro { margin-bottom: 14px; }
+-.small { font-size: 11px; }
+-.note { margin-top: 10px; font-size: 11px; }
++h3 { font-size: 1.05rem; color: var(--navy); margin-bottom: 4px; }
++p { margin-bottom: 10px; }
++.intro { margin-bottom: 16px; }
++.small { font-size: 0.9rem; }
++.note { margin-top: 12px; font-size: 0.9rem; color: var(--muted); }
++
++/* welcome */
++#welcome { display: flex; gap: 20px; align-items: flex-start; }
++#welcome img { width: 240px; flex: none; border-radius: 6px; }
+ 
+ /* timetable */
+-#timetable table {
+-  width: 940px;
+-  table-layout: fixed;
+-  border-collapse: collapse;
+-  border: 1px solid #ccc;
+-}
+-#timetable th {
+-  background: #1b2a4a;
+-  color: #f2c230;
+-  font-size: 12px;
++.tablewrap { border: 1px solid #ccd3dc; border-radius: 6px; overflow: hidden; }
++table { width: 100%; border-collapse: collapse; }
++th {
++  background: var(--navy);
++  color: var(--gold);
++  font-size: 0.9rem;
+   text-align: left;
+-  padding: 6px 8px;
++  padding: 10px 12px;
+ }
+-#timetable td {
+-  font-size: 12px;
+-  padding: 5px 8px;
+-  border-bottom: 1px solid #e4e4e4;
+-  color: #999;
+-}
+-#timetable tr:nth-child(even) td { background: #f7f7f7; }
+-th.c1 { width: 100px; }
+-th.c2 { width: 120px; }
+-th.c3 { width: 240px; }
+-th.c4 { width: 130px; }
+-th.c5 { width: 130px; }
+-th.c6 { width: 124px; }
++td { padding: 9px 12px; border-bottom: 1px solid #e4e8ee; }
++tbody tr:last-child td { border-bottom: 0; }
++tbody tr:nth-child(even) td { background: #f6f8fa; }
++td:nth-child(2) { white-space: nowrap; }
+ 
+ /* membership */
+-.plan {
+-  float: left;
+-  width: 190px;
+-  margin: 0 18px 0 0;
+-  padding: 12px 14px 6px 14px;
+-  border: 1px solid #ddd;
+-  border-top: 4px solid #1b2a4a;
+-  height: 150px;
++#membership .plans {
++  display: grid;
++  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
++  gap: 16px;
+ }
+-.plan.first { margin-left: 2px; }
+-.plan.last { margin-right: 0; width: 192px; }
+-.plan h3 { font-size: 16px; color: #1b2a4a; }
+-.price { font-size: 24px; font-weight: bold; color: #f2c230; margin-bottom: 6px; }
+-.price span { font-size: 11px; font-weight: normal; color: #999; }
++.plan {
++  padding: 14px 16px 8px;
++  border: 1px solid var(--line);
++  border-top: 4px solid var(--navy);
++  border-radius: 4px;
++}
++.plan h3 { font-size: 1.15rem; }
++.price { font-size: 1.7rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
++.price span { font-size: 0.85rem; font-weight: 400; color: var(--muted); }
+ 
+ /* join form */
+-#joinbox { float: left; width: 560px; }
+-#joinaside { float: right; width: 320px; margin-top: 3px; }
+-#joinaside img { display: block; margin-bottom: 8px; width: 320px; }
++#join { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
++#joinbox { flex: 1 1 320px; }
++#joinaside { flex: 0 1 320px; }
++#joinaside img { display: block; width: 100%; border-radius: 6px; margin-bottom: 8px; }
++#joinform label:not(.consent) { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 3px; }
+ input.text, select.text {
+   display: block;
+-  width: 300px;
+-  font-family: Verdana, Geneva, sans-serif;
+-  font-size: 12px;
+-  padding: 5px 6px;
+-  margin-bottom: 8px;
+-  border: 1px solid #ccc;
+-  color: #666;
++  width: 100%;
++  max-width: 460px;
++  min-height: 46px;
++  font: inherit;
++  padding: 8px 10px;
++  margin-bottom: 14px;
++  border: 1px solid #8893a3;
++  border-radius: 4px;
++  color: var(--text);
++  background: #fff;
+ }
+-select.text { width: 314px; height: 28px; padding: 3px; }
+-.consent { font-size: 11px; margin: 4px 0 12px 0; }
+-.consent input { margin-right: 5px; vertical-align: middle; }
++.consent { display: flex; gap: 10px; align-items: flex-start; font-size: 0.95rem; margin: 4px 0 14px; max-width: 460px; }
++.consent input { width: 22px; height: 22px; flex: none; margin-top: 2px; }
++.error { color: #b00020; font-weight: 600; min-height: 1.6em; margin-bottom: 6px; }
+ .button {
+   display: inline-block;
+-  background: #1b2a4a;
+-  color: #f2c230;
+-  font-size: 13px;
+-  font-weight: bold;
+-  padding: 7px 22px;
+-  border: 1px solid #0e1830;
++  min-height: 48px;
++  background: var(--navy);
++  color: var(--gold);
++  font: inherit;
++  font-weight: 700;
++  padding: 0 32px;
++  border: 0;
++  border-radius: 4px;
+   cursor: pointer;
+ }
+-.button:hover { background: #2c4170; }
+-.thanks { font-size: 16px; color: #1b2a4a; margin: 20px 0; }
++.button:hover { background: var(--navy-light); }
++.thanks { font-size: 1.2rem; color: var(--navy); margin: 20px 0; }
+ 
+ /* news */
+-#news .item {
+-  border-bottom: 1px dotted #ccc;
+-  padding-bottom: 8px;
+-  margin-bottom: 12px;
+-}
++#news .item { border-bottom: 1px dotted #aab3c0; padding-bottom: 10px; margin-bottom: 14px; }
+ #news .item.last { border-bottom: 0; }
+-.date { font-size: 11px; color: #bbb; margin-bottom: 1px; }
++.date { font-size: 0.85rem; color: var(--muted); margin-bottom: 1px; }
+ 
+ /* contact */
+ #contact {
+   margin-top: 22px;
+-  background: #1b2a4a;
+-  padding: 16px 20px 10px 20px;
+-  color: #ccc;
++  background: var(--navy);
++  padding: 20px var(--pad) 12px;
++  color: #dfe4ec;
++  display: flex;
++  flex-wrap: wrap;
++  gap: 0 40px;
++}
++#contact h2 { flex: 1 1 100%; color: var(--gold); border-bottom-color: #3b4c70; }
++#contact .col { flex: 1 1 260px; }
++#contact a { color: var(--gold); }
++#copy { flex: 1 1 100%; font-size: 0.85rem; color: #aab4c8; border-top: 1px solid #3b4c70; padding-top: 10px; margin-top: 6px; }
++
++/* tablet and phone */
++@media (max-width: 760px) {
++  :root { --pad: 16px; }
++  html { scroll-padding-top: 70px; }
++  #navtoggle { display: block; }
++  #header nav { flex: 1 1 100%; display: none; }
++  #header.open nav { display: block; }
++  #nav { flex-direction: column; gap: 0; border-top: 1px solid #3b4c70; }
++  #nav a { padding: 14px 4px; font-size: 1rem; border-bottom: 1px solid #2c3d62; }
++
++  #herotext { left: 0; right: 0; bottom: 0; border-left: 0; border-top: 4px solid var(--gold); padding: 10px var(--pad); }
++  #herotext h1 { font-size: 1.4rem; }
++  #hero { margin-bottom: 0; }
++
++  #welcome { flex-direction: column; }
++  #welcome img { width: 100%; max-width: 320px; }
++
++  /* timetable becomes stacked cards */
++  .tablewrap { border: 0; border-radius: 0; }
++  thead { position: absolute; left: -9999px; }
++  table, tbody, tr, td { display: block; width: 100%; }
++  tbody tr {
++    margin-bottom: 12px;
++    border: 1px solid #ccd3dc;
++    border-left: 4px solid var(--gold);
++    border-radius: 6px;
++    background: #fff;
++    padding: 6px 0;
++  }
++  tbody tr:nth-child(even) td, td { background: transparent; border: 0; }
++  td { display: flex; justify-content: space-between; gap: 16px; padding: 3px 14px; text-align: right; }
++  td::before { content: attr(data-label); font-weight: 600; color: var(--muted); text-align: left; }
++  td:nth-child(1) { font-weight: 700; color: var(--navy); font-size: 1.05rem; }
++  td:nth-child(1)::before { content: none; }
++  td:nth-child(3) { font-weight: 600; }
++
++  .button { width: 100%; }
++  input.text, select.text { max-width: none; font-size: 16px; } /* 16px stops iOS zoom on focus */
++}
++
++/* respect reduced-motion preference */
++@media (prefers-reduced-motion: reduce) {
++  html { scroll-behavior: auto; }
++  #tickertext { animation: none; padding-left: var(--pad); white-space: normal; }
+ }
+-#contact h2 { color: #f2c230; border-bottom: 1px solid #3b4c70; }
+-#contact .col { float: left; width: 400px; margin-right: 20px; }
+-#contact p { margin-bottom: 10px; }
+-#copy { font-size: 11px; color: #8d98ae; border-top: 1px solid #3b4c70; padding-top: 8px; margin-top: 6px; }

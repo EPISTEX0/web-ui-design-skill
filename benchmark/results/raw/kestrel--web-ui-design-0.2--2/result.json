@@ -1,0 +1,12 @@
+{
+  "brief": "kestrel",
+  "arm": "web-ui-design-0.2",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 165,
+  "delivered": true,
+  "client_rounds": 0,
+  "qa": [],
+  "is_error": false,
+  "num_turns": 22,
+  "total_cost_usd": 0.5114225
+}

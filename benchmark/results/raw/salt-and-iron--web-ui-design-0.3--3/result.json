@@ -1,0 +1,17 @@
+{
+  "brief": "salt-and-iron",
+  "arm": "web-ui-design-0.3",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 214,
+  "delivered": true,
+  "client_rounds": 1,
+  "qa": [
+    {
+      "asked": "I haven't built anything yet. The folder is empty and I have no facts about *Salt and Iron*, such as dates, objects or opening hours. I don't want to make those up for a public museum page. Four quick questions first:\n\n**1. What should a visitor be able to do first on the guide?** (This decides the page's lead.)\n- **a) Plan a visit.** Dates, hours, tickets, getting there, and a short overview of the exhibition. *(My recommendation: it's the most common reason to open an exhibition page, and it works on a phone.)*\n- b) Explore the objects. A browsable gallery of the objects, with a label for each.\n- c) Use it in the galleries. A walk-through that follows the room order, for visitors who are already inside.\n\n**2. What content can you give me?** I'll only use real facts, and anything I invent will be marked as sample text.\n- **a) I'll paste or attach it.** That means the exhibition text, the object list with captions, the practical details, and any images.\n- b) Use placeholders. I'll build the structure with clearly labelled sample text for you to replace.\n- c) Some of each. Tell me what you have.\n\n**3. What look fits best?**\n- **a) Editorial.** Large serif headlines, paper-like pages and thin rules, like a printed exhibition catalogue. It suits object-led storytelling, with a chart-paper or sea-salt ground and an oxidised-iron accent. *(My recommendation.)*\n- b) Premium dark. Near-black with a single rust or brass tone, slow fades, and a dramatic gallery feel.\n- c) Swiss minimal. A clean grotesk sans, a neutral ground and one strong accent, with a modern and quiet tone.\n\n**4. Does the Harwick Maritime Museum have brand assets I should follow?**\n- **a) No, design it fresh.** Pick colours and type from the exhibition's themes of salt and iron.\n- b) Yes. Send the logo, brand colours and fonts, or a link to the museum site, and I'll match them.\n\nReply with letters such as \"1a, 2b, 3a, 4a\", or say \"your call\" and I'll go with my recommendations. In that case the page will use sample text, and I'll list every assumption when I finish.",
+      "answer": "1c, 2c, 3a, 4b.\n\nIt's used on phones inside the galleries, so it should follow the stop order, 1 to 12. I have the 12 stop titles and the exhibition dates, 14 March to 2 November 2027. Use sample text for the rest.\n\nEditorial look is fine, but follow our brand: rust red #9c3d1f, off-black and warm white, with a serif for headings like our printed labels. I don't have a logo or a link to send."
+    }
+  ],
+  "is_error": false,
+  "num_turns": 16,
+  "total_cost_usd": 0.34537550000000006
+}

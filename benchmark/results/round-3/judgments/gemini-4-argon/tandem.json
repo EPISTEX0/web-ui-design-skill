@@ -1,0 +1,208 @@
+{
+	"scores": {
+		"W4": {
+			"craft": 9,
+			"fit": 10,
+			"hierarchy": 9,
+			"mobile": 8,
+			"overall": 9,
+			"defects": [
+				"On mobile-full.jpg, the fixed bottom CTA bar ('Free 30-minute test ride / Book now') is rendered mid-page at the 900px viewport mark, overlapping the top of the 'Two kids and a week of groceries. In one box.' heading."
+			],
+			"note": "Warm, polished, and comprehensive execution that hits every client note—brand colors, 30-minute free test ride focus, interactive two-kids-plus-groceries box illustration, exact models/prices, €89/mo lease, 4.8 Google rating from 310 reviews, and Oudegracht 112 hours."
+		},
+		"N6": {
+			"craft": 8,
+			"fit": 10,
+			"hierarchy": 9,
+			"mobile": 7,
+			"overall": 8,
+			"defects": [
+				"On mobile-full.jpg, the fixed bottom action bar ('Call' / 'Book a test ride') is rendered mid-page at the 900px viewport mark right on top of the hero photo placeholder label, and the hero placeholder box is vertically squished on mobile."
+			],
+			"note": "Faithfully delivers every client requirement with a warm family tone, a charming pre-loaded cargo box illustration, clear photo placeholders, and strong test-ride booking hierarchy, held back slightly by the mobile sticky bar overlap."
+		},
+		"H8": {
+			"craft": 7,
+			"fit": 9,
+			"hierarchy": 8,
+			"mobile": 7,
+			"overall": 8,
+			"defects": [
+				"On mobile-full.jpg, the sticky bottom CTA bar ('Book your free test ride') renders mid-page at the 900px mark directly across the hero cargo bike SVG.",
+				"In 'Three bikes to test' on desktop and tablet, uneven description line counts cause the middle card ('Longtail') to be taller with its price and CTA misaligned relative to the outer cards.",
+				"Hero interactive cargo bike box is empty by default until tapped, and footer contact details show literal placeholder text for phone and email."
+			],
+			"note": "Includes all key client facts, brand colors, exact bike pricing, lease offer, Google review proof, and Oudegracht practical details, though card alignment and the empty default hero box are less refined than W4 and N6."
+		},
+		"G2": {
+			"craft": 7,
+			"fit": 4,
+			"hierarchy": 8,
+			"mobile": 6,
+			"overall": 6,
+			"defects": [
+				"On mobile-full.jpg, the fixed bottom bar ('Book a test ride' / 'Find us') renders mid-page at the 900px mark over the hero cargo bike illustration.",
+				"The three bike cards in 'Three kinds, one test ride to choose' are staggered vertically like stairs on desktop and tablet rather than aligned on a row.",
+				"Contains visible placeholder warnings ('Add street address', 'Sample hours - replace in the code before launch') and lacks the client's specific models, prices, lease offer, Google reviews, and Oudegracht 112 details."
+			],
+			"note": "Thoughtful family-focused copy and interactive load finder with strong hierarchy, but it missed the client notes and has staggered card alignment plus a mid-page sticky bar overlap on mobile."
+		},
+		"X8": {
+			"craft": 7,
+			"fit": 4,
+			"hierarchy": 8,
+			"mobile": 6,
+			"overall": 6,
+			"defects": [
+				"On mobile-full.jpg, the fixed bottom bar ('Book a test ride' / 'Call') renders mid-page at the 900px mark, covering the kids and handlebars in the hero bike illustration.",
+				"Displays a draft warning banner at the top, sample prices, and a placeholder address ('Voorbeeldstraat 12') instead of the client's actual models, prices, and Oudegracht 112 details.",
+				"The minimal bike illustrations in 'Three bikes we know inside out' lack handlebars, saddles, and rear frame connections."
+			],
+			"note": "Well-structured layout with warm typography and a pre-selected two-kids load recommender, but it lacks the client's specific models, pricing, reviews, and address and suffers from a mobile sticky-bar overlap."
+		},
+		"C5": {
+			"craft": 6,
+			"fit": 4,
+			"hierarchy": 7,
+			"mobile": 7,
+			"overall": 5,
+			"defects": [
+				"Unreplaced bracketed placeholders ('[Street and number], Utrecht', '[Add opening hours]', '[Add phone number]', '[Add email address]') in the contact section.",
+				"Uses raw system emoji as icons in the three feature cards and an awkward backwards-looking line-art bike in the hero."
+			],
+			"note": "Hits a warm green-and-orange family palette and stacks cleanly on mobile, but misses all specific client content and leaves raw bracketed placeholders and system emoji in the page."
+		},
+		"Y7": {
+			"craft": 6,
+			"fit": 4,
+			"hierarchy": 7,
+			"mobile": 7,
+			"overall": 5,
+			"defects": [
+				"Hero cargo bike illustration is drawn backwards with the orange kids' box over the rear wheel behind the saddle and no rear frame triangle.",
+				"Uses raw system emoji as card icons and leaves unreplaced bracketed placeholders ('[Street address], Utrecht', '[email]', '[phone]') in the footer."
+			],
+			"note": "Clean responsive structure and close-to-brand green and orange colors, but misses the client's models, prices, reviews, and address while featuring a backwards bike illustration."
+		},
+		"A9": {
+			"craft": 6,
+			"fit": 3,
+			"hierarchy": 7,
+			"mobile": 5,
+			"overall": 5,
+			"defects": [
+				"In 'What are you carrying?', no load pill is selected by default, leaving a large empty white box ('Choose a load to see a match.').",
+				"On mobile-full.jpg, the fixed bottom bar ('Book a test ride' / 'Call us') renders mid-page over the hero bike illustration with uneven button text wrapping.",
+				"Uses off-brand cool blue/red colors, wrong hours, and a placeholder address ('Voorbeeldstraat 12') with no client models, prices, or reviews."
+			],
+			"note": "Competent page structure and copy, but hurt by an unselected empty default state in the cargo matcher, a mid-page sticky bar overlap on mobile, and missing client details."
+		},
+		"Y5": {
+			"craft": 7,
+			"fit": 3,
+			"hierarchy": 6,
+			"mobile": 7,
+			"overall": 5,
+			"defects": [
+				"On desktop-fold.jpg, there is no primary CTA in the hero text area and the interactive card below is cut off mid-card at the 900px fold, pushing its CTA and illustration below the fold.",
+				"Large empty whitespace on the right half of the hero above the dark card on desktop and tablet.",
+				"Uses off-brand teal and yellow colors and leaves bracketed placeholders ('[Street and number], Utrecht', '[Opening hours]', '[Phone number]', '[Email address]')."
+			],
+			"note": "Sharp editorial typography and a clean mobile layout, but off-brand in color, missing all client specifics, and lacking a prominent above-the-fold hero CTA on desktop."
+		},
+		"E4": {
+			"craft": 6,
+			"fit": 3,
+			"hierarchy": 6,
+			"mobile": 6,
+			"overall": 5,
+			"defects": [
+				"Large unbalanced empty space on the right half of the desktop and tablet hero section above a full-width red stripe with a tiny, crude line-art bike icon.",
+				"Visible yellow-highlighted bracketed placeholders ('[Street and number]', '[Add opening hours]', '[Phone]', '[Email]') in the contact section."
+			],
+			"note": "Clean interactive cargo selector and service grid, but misses all client notes and has an unbalanced hero layout with visible bracketed placeholders."
+		},
+		"P8": {
+			"craft": 5,
+			"fit": 3,
+			"hierarchy": 6,
+			"mobile": 6,
+			"overall": 4,
+			"defects": [
+				"Default state in 'What are you carrying?' selects 'Passengers: None' while recommending a 'Longtail' that 'carries kids on seats'.",
+				"Crude hero line-art bike has distorted geometry with the box over the rear wheel.",
+				"Leaves yellow-highlighted bracketed placeholders ('[Street and number], Utrecht', '[Opening hours]', '[Phone number]', '[Email address]') in the footer."
+			],
+			"note": "Bold hero presence and clean responsive stacking, but marred by a contradictory default configurator state, a poorly drawn bike icon, off-brand brick-red styling, and missing client facts."
+		},
+		"U9": {
+			"craft": 4,
+			"fit": 3,
+			"hierarchy": 6,
+			"mobile": 6,
+			"overall": 4,
+			"defects": [
+				"The cargo bike SVG in both the hero and 'The Dutch classic' card is broken in half, with an empty gap where the frame should connect the front box assembly to the rear wheel.",
+				"Uses raw system emoji as card icons and leaves bracketed placeholders ('[Street + number], Utrecht', '[Tue-Sat, 10:00-18:00]', '[+31 30 000 0000]', '[hello@tandem.example]')."
+			],
+			"note": "Despite a warm palette and clear layout, the broken-in-half cargo bike SVG in the hero and bike cards and the missing client details make it unshippable."
+		},
+		"R7": {
+			"craft": 5,
+			"fit": 2,
+			"hierarchy": 5,
+			"mobile": 6,
+			"overall": 4,
+			"defects": [
+				"Contains zero illustrations, photos, or photo placeholders anywhere on the page.",
+				"The 'What do you carry?' widget has no default selection, showing only an empty prompt ('Choose a load above').",
+				"Completely omits any shop street address or opening hours anywhere on the page, alongside all other client notes."
+			],
+			"note": "An overly austere, text-only page that omits all visuals, photo placeholders, shop address, opening hours, and client-specific bike details."
+		},
+		"N9": {
+			"craft": 5,
+			"fit": 2,
+			"hierarchy": 4,
+			"mobile": 5,
+			"overall": 3,
+			"defects": [
+				"No test-ride CTA button appears anywhere above the fold in the header or hero; the only CTA button is at the very bottom of the page.",
+				"Overly tight negative letter-spacing on the display headline ('Carry more by bike.') causes letters to crowd and collide.",
+				"Unreplaced bracketed placeholders ('[10:00 - 18:00]', '[Street and number]', '[Postcode] Utrecht', '[Phone]') and cold cobalt-blue styling that clashes with the warm family brand."
+			],
+			"note": "Cold brutalist styling that buries the only test-ride CTA at the very bottom of the page and misses every client requirement."
+		},
+		"R4": {
+			"craft": 4,
+			"fit": 2,
+			"hierarchy": 4,
+			"mobile": 5,
+			"overall": 3,
+			"defects": [
+				"No test-ride CTA button appears anywhere above the fold in the header or hero; the only CTA button is at the very bottom of the page.",
+				"In 'Four ways to carry it' on desktop and tablet, the middle column is horizontally misaligned across rows, zig-zagging left and right.",
+				"Display headline has colliding letter-spacing, the hero bike's handlebars face backwards, and the footer leaves unreplaced bracketed placeholders."
+			],
+			"note": "Misses the primary test-ride conversion goal above the fold, clashes with the warm family brand, and suffers from horizontal column misalignment and a backwards bike drawing."
+		}
+	},
+	"ranking": [
+		"W4",
+		"N6",
+		"H8",
+		"G2",
+		"X8",
+		"C5",
+		"Y7",
+		"A9",
+		"Y5",
+		"E4",
+		"P8",
+		"U9",
+		"R7",
+		"N9",
+		"R4"
+	]
+}

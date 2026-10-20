@@ -1,0 +1,1274 @@
+diff --git a/DESIGN.md b/DESIGN.md
+new file mode 100644
+index 0000000..5abb8bf
+--- /dev/null
++++ b/DESIGN.md
+@@ -0,0 +1,63 @@
++---
++name: Harbour Swim Club
++mode: persuade
++page-type: Local business or service (one page)
++family: Soft and friendly
++stack: Plain HTML, CSS and JS. No build step, no framework, no web fonts. Volunteers edit by hand.
++colors:
++  bg: "#eef3f8"
++  surface: "#ffffff"
++  text: "#1b2a4a"
++  text-secondary: "#44546f"
++  border: "#d6dfe9"
++  accent: "#f2c230"
++typography:
++  display: "system sans stack (Avenir Next, Segoe UI, Roboto), 800 for prices, 700 for headings"
++  body: "same stack, 17px / 1.55"
++  scale: [15, 17, 20, 28, 36, 40]
++spacing-base: 4
++radius: { sm: 8, md: 12, lg: 20 }
++depth: ring-shadow
++motion:
++  ease-out: "cubic-bezier(0.23, 1, 0.32, 1)"
++  durations: { press: 140, hover: 150 }
++---
++
++# Harbour Swim Club design
++
++All tokens live in `:root` at the top of `style.css`. That file is the source of truth. This file explains it.
++
++## Brief
++| Item | Value | Source |
++| --- | --- | --- |
++| Subject | Volunteer-run swim club, Falmouth, about 240 members, toddlers to masters | existing site |
++| Primary action | Check the timetable, with joining second | user (2a) |
++| Audience and device | Members and parents, mostly on phones | user (members find it hard to use on phones) |
++| Assets | Navy `#1b2a4a`, yellow `#f2c230`, logo, 3 SVG illustrations | user (keep) |
++| Content | All 27 sessions, 4 prices, join form, 3 news items, 4 notices | user (keep all) |
++| Scope | Refresh: same structure and content, new visual style and responsive layout | user (1a) |
++
++## Direction
++Friendly and clear, like a good poolside noticeboard. The brand navy carries text and the footer. Yellow marks actions and meaning only: buttons, the "today" dot, the lane-rope under headings. Yellow is never used as text on white (1.6:1 contrast).
++
++Signature element: the **lane rope** under every section heading, a line of yellow floats echoing the lane ropes in the hero. The timetable opens on **today's sessions**.
++
++## Decisions
++| Decision | Rationale |
++| --- | --- |
++| Viewport meta, fluid layout, container max 1080px | The old fixed 980px layout shrank to a tiny desktop page on phones |
++| Timetable rows become cards under 760px | A 6-column table cannot fit 390px. Cards need no `data-label` attributes. Labels come from CSS `::before`, so volunteers edit plain `<td>` rows |
++| Day filter built by `script.js` from the Day column | Adding a session needs no JS change. With JS off, every row shows |
++| Filter state in `?day=` | Shareable link to a day |
++| Scrolling ticker replaced by a "Club notices" list in a `<details>` | The ticker could not be read or paused, and it ran off-screen. Content kept word for word |
++| Join form: visible labels, `type=email` and `tel`, `autocomplete`, real submit button, inline errors, focus on first error | Replaces `alert()` popups and a clickable `div`. Still front-end only, as before |
++| Membership cards link to the form and pre-select the type | One tap from price to joining |
++| Body text 17px, targets at least 44px, muted text at least 5:1 | Phone use and older members |
++| Dates, copyright and news left as they were | The user will update them |
++| System fonts only | No build step, no font files, no layout shift |
++| Header Join button is separate from the nav | Primary action stays in view on a phone while the nav scrolls |
++
++## Editing notes
++- Add a session: copy a `<tr>` in the timetable. Keep the 6 cells in order: Day, Time, Session, Lane, Level, Coach. Use the full day name, such as "Monday".
++- Notices: edit the `<li>` items under "Club notices". Delete the whole `<details>` block when there are none.
++- Change a colour: edit the variable in `:root`.
+diff --git a/index.html b/index.html
+index 27ec749..b814fd7 100644
+--- a/index.html
++++ b/index.html
+@@ -2,54 +2,94 @@
+ <html lang="en">
+ <head>
+ <meta charset="utf-8">
++<meta name="viewport" content="width=device-width, initial-scale=1">
++<meta name="theme-color" content="#1b2a4a">
+ <title>Harbour Swim Club - Falmouth, Cornwall</title>
+ <meta name="description" content="Harbour Swim Club, Falmouth. Swimming lessons, squads, masters and family swims for all ages.">
+-<link rel="stylesheet" type="text/css" href="style.css">
++<link rel="preload" as="image" href="images/hero-pool.svg" fetchpriority="high">
++<link rel="stylesheet" href="style.css">
+ </head>
+ <body>
+ 
+-<div id="wrapper">
++<a class="skip-link" href="#main">Skip to content</a>
+ 
+-  <div id="header" class="clearfix">
+-    <a href="#top" id="logo"><img src="images/logo.svg" alt="Harbour Swim Club"></a>
+-    <ul id="nav">
+-      <li><a href="#timetable">Timetable</a></li>
+-      <li><a href="#membership">Membership</a></li>
+-      <li><a href="#join">Join</a></li>
+-      <li><a href="#news">News</a></li>
+-      <li><a href="#contact">Contact</a></li>
+-    </ul>
++<header class="site-header">
++  <div class="container header-bar">
++    <a href="#top" class="logo"><img src="images/logo.svg" width="260" height="64" alt="Harbour Swim Club"></a>
++    <a href="#join" class="btn btn-primary header-join">Join</a>
++    <nav class="main-nav" aria-label="Main">
++      <ul>
++        <li><a href="#timetable">Timetable</a></li>
++        <li><a href="#membership">Membership</a></li>
++        <li><a href="#news">News</a></li>
++        <li><a href="#contact">Contact</a></li>
++      </ul>
++    </nav>
+   </div>
++</header>
+ 
+-  <div id="ticker"><span id="tickertext">Pool closed Bank Holiday Monday 6th May &nbsp;&nbsp;***&nbsp;&nbsp; Summer timetable starts 3rd June &nbsp;&nbsp;***&nbsp;&nbsp; Junior galas: entries to Helen by 20th April &nbsp;&nbsp;***&nbsp;&nbsp; Volunteers needed for the Falmouth Regatta water safety team</span></div>
++<main id="main">
+ 
+-  <div id="hero">
+-    <img src="images/hero-pool.svg" alt="Swimmers training in the lanes at Harbour Leisure Centre pool" class="heroimg">
+-    <div id="herotext">
+-      <h1>Harbour Swim Club</h1>
+-      <p>Swimming for all ages in Falmouth since 1974</p>
++  <section class="hero" id="top">
++    <div class="container">
++      <div class="hero-frame">
++        <img class="hero-img" src="images/hero-pool.svg" width="940" height="320" fetchpriority="high" alt="Swimmers training in the lanes at Harbour Leisure Centre pool">
++        <div class="hero-copy">
++          <h1>Harbour Swim Club</h1>
++          <p>Swimming for all ages in Falmouth since 1974</p>
++          <div class="actions">
++            <a class="btn btn-primary" href="#timetable">See today's sessions</a>
++            <a class="btn btn-light" href="#join">Join the club</a>
++          </div>
++        </div>
++      </div>
+     </div>
++  </section>
++
++  <!-- Club notices: add or remove <li> items. Delete the whole <details> when there is nothing to say. -->
++  <div class="container">
++    <details class="notices" open>
++      <summary>Club notices</summary>
++      <ul>
++        <li>Pool closed Bank Holiday Monday 6th May</li>
++        <li>Summer timetable starts 3rd June</li>
++        <li>Junior galas: entries to Helen by 20th April</li>
++        <li>Volunteers needed for the Falmouth Regatta water safety team</li>
++      </ul>
++    </details>
+   </div>
+ 
+-  <div id="welcome" class="clearfix">
+-    <img src="images/swimmers.svg" alt="Two junior swimmers in the water" class="floatleft">
+-    <h2>Welcome</h2>
+-    <p>Harbour Swim Club is a friendly, volunteer run club based at Harbour Leisure Centre on Quay Road. We have around 240 members, from toddlers having their first splash to masters swimmers in their seventies.</p>
+-    <p class="second">Whether you want to learn to swim, keep fit, or race for the county, there is a session for you. New members are always welcome and your first visit is free, just bring a towel and a smile.</p>
+-  </div>
++  <section id="welcome" class="section container">
++    <div class="welcome-grid">
++      <img src="images/swimmers.svg" width="300" height="200" alt="Two junior swimmers in the water" class="welcome-img">
++      <div>
++        <h2>Welcome</h2>
++        <p>Harbour Swim Club is a friendly, volunteer run club based at Harbour Leisure Centre on Quay Road. We have around 240 members, from toddlers having their first splash to masters swimmers in their seventies.</p>
++        <p>Whether you want to learn to swim, keep fit, or race for the county, there is a session for you. New members are always welcome and your first visit is free, just bring a towel and a smile.</p>
++      </div>
++    </div>
++  </section>
+ 
+-  <div id="timetable">
+-    <h2>Weekly Timetable</h2>
++  <section id="timetable" class="section container">
++    <h2>Weekly timetable</h2>
+     <p class="intro">All sessions are at Harbour Leisure Centre. Please arrive 10 minutes early and report to the coach on poolside.</p>
+-    <table cellpadding="0" cellspacing="0" border="0">
+-      <tr>
+-        <th class="c1">Day</th>
+-        <th class="c2">Time</th>
+-        <th class="c3">Session</th>
+-        <th class="c4">Lane</th>
+-        <th class="c5">Level</th>
+-        <th class="c6">Coach</th>
+-      </tr>
++    <!-- script.js fills this with a button for each day -->
++    <div class="day-filter" id="dayfilter" role="group" aria-label="Choose a day"></div>
++    <p class="day-summary" id="daysummary" role="status"></p>
++    <div class="table-card">
++      <table class="timetable">
++        <caption class="sr-only">Weekly timetable</caption>
++        <thead>
++          <tr>
++            <th scope="col">Day</th>
++            <th scope="col">Time</th>
++            <th scope="col">Session</th>
++            <th scope="col">Lane</th>
++            <th scope="col">Level</th>
++            <th scope="col">Coach</th>
++          </tr>
++        </thead>
++        <tbody>
+       <tr>
+         <td>Monday</td>
+         <td>06:30 - 07:30</td>
+@@ -266,100 +306,137 @@
+         <td>Beginner</td>
+         <td>Tom</td>
+       </tr>
+-    </table>
++        </tbody>
++      </table>
++    </div>
+     <p class="note">Timetable may change in school holidays. Check the news below.</p>
+-  </div>
++  </section>
+ 
+-  <div id="membership" class="clearfix">
++  <section id="membership" class="section container">
+     <h2>Membership</h2>
+     <p class="intro">Pay monthly by standing order. No joining fee. Membership includes all club sessions for your category plus entry to club socials.</p>
+-    <div class="plan first">
+-      <h3>Junior</h3>
+-      <p class="price">&pound;18 <span>a month</span></p>
+-      <p>Under 16s. Lessons, development and squad places.</p>
++    <div class="plans">
++      <div class="plan">
++        <h3>Junior</h3>
++        <p class="price">&pound;18 <span>a month</span></p>
++        <p>Under 16s. Lessons, development and squad places.</p>
++        <a class="btn btn-outline" href="#join" data-type="junior">Join as Junior</a>
++      </div>
++      <div class="plan">
++        <h3>Adult</h3>
++        <p class="price">&pound;32 <span>a month</span></p>
++        <p>Lane swims, improvers and social sessions.</p>
++        <a class="btn btn-outline" href="#join" data-type="adult">Join as Adult</a>
++      </div>
++      <div class="plan">
++        <h3>Family</h3>
++        <p class="price">&pound;65 <span>a month</span></p>
++        <p>Two adults and up to three children under 16.</p>
++        <a class="btn btn-outline" href="#join" data-type="family">Join as Family</a>
++      </div>
++      <div class="plan">
++        <h3>Masters</h3>
++        <p class="price">&pound;28 <span>a month</span></p>
++        <p>Over 25s. Coached training, local and national meets.</p>
++        <a class="btn btn-outline" href="#join" data-type="masters">Join as Masters</a>
++      </div>
+     </div>
+-    <div class="plan">
+-      <h3>Adult</h3>
+-      <p class="price">&pound;32 <span>a month</span></p>
+-      <p>Lane swims, improvers and social sessions.</p>
+-    </div>
+-    <div class="plan">
+-      <h3>Family</h3>
+-      <p class="price">&pound;65 <span>a month</span></p>
+-      <p>Two adults and up to three children under 16.</p>
+-    </div>
+-    <div class="plan last">
+-      <h3>Masters</h3>
+-      <p class="price">&pound;28 <span>a month</span></p>
+-      <p>Over 25s. Coached training, local and national meets.</p>
+-    </div>
+-  </div>
++  </section>
+ 
+-  <div id="join" class="clearfix">
+-    <div id="joinbox">
+-      <h2>Join the club</h2>
+-      <p>Fill in the form and our membership secretary will get in touch.</p>
+-      <form id="joinform" action="#" method="get">
+-        <input type="text" id="fullname" name="fullname" placeholder="Full name" class="text">
+-        <input type="text" id="email" name="email" placeholder="Email address" class="text">
+-        <input type="text" id="phone" name="phone" placeholder="Phone number" class="text">
+-        <select id="mtype" name="mtype" class="text">
+-          <option value="">Membership type</option>
+-          <option value="junior">Junior</option>
+-          <option value="adult">Adult</option>
+-          <option value="family">Family</option>
+-          <option value="masters">Masters</option>
+-        </select>
+-        <p class="consent"><input type="checkbox" id="consent" name="consent"> I am happy for the club to contact me about membership</p>
+-        <div class="button" onclick="submitJoin()">Join now</div>
+-      </form>
++  <section id="join" class="section container">
++    <div class="join-card">
++      <div id="joinbox">
++        <h2>Join the club</h2>
++        <p>Fill in the form and our membership secretary will get in touch.</p>
++        <form id="joinform" action="#" method="get" novalidate>
++          <div class="field">
++            <label for="fullname">Full name</label>
++            <input type="text" id="fullname" name="fullname" autocomplete="name" aria-describedby="fullname-error">
++            <p class="error" id="fullname-error" hidden></p>
++          </div>
++          <div class="field">
++            <label for="email">Email address</label>
++            <input type="email" id="email" name="email" autocomplete="email" aria-describedby="email-error">
++            <p class="error" id="email-error" hidden></p>
++          </div>
++          <div class="field">
++            <label for="phone">Phone number</label>
++            <input type="tel" id="phone" name="phone" autocomplete="tel" aria-describedby="phone-error">
++            <p class="error" id="phone-error" hidden></p>
++          </div>
++          <div class="field">
++            <label for="mtype">Membership type</label>
++            <select id="mtype" name="mtype" aria-describedby="mtype-error">
++              <option value="">Choose a type</option>
++              <option value="junior">Junior</option>
++              <option value="adult">Adult</option>
++              <option value="family">Family</option>
++              <option value="masters">Masters</option>
++            </select>
++            <p class="error" id="mtype-error" hidden></p>
++          </div>
++          <div class="field">
++            <label class="check" for="consent">
++              <input type="checkbox" id="consent" name="consent" aria-describedby="consent-error">
++              <span>I am happy for the club to contact me about membership</span>
++            </label>
++            <p class="error" id="consent-error" hidden></p>
++          </div>
++          <button type="submit" class="btn btn-primary">Join now</button>
++        </form>
++      </div>
++      <div class="join-aside">
++        <img src="images/pool.svg" width="320" height="180" alt="The pool at Harbour Leisure Centre">
++        <p class="small">Not sure yet? Come along to any session for a free trial.</p>
++      </div>
+     </div>
+-    <div id="joinaside">
+-      <img src="images/pool.svg" alt="The pool at Harbour Leisure Centre">
+-      <p class="small">Not sure yet? Come along to any session for a free trial.</p>
+-    </div>
+-  </div>
++  </section>
+ 
+-  <div id="news">
+-    <h2>Club News</h2>
+-    <div class="item">
+-      <p class="date">12 March 2013</p>
+-      <h3>Cornwall County Championships: 14 medals for Harbour</h3>
+-      <p>Our juniors came home from Plymouth with six gold, four silver and four bronze. Well done to everyone who swam and thank you to the parents who helped on poolside.</p>
++  <section id="news" class="section container">
++    <h2>Club news</h2>
++    <div class="news-list">
++      <article class="item">
++        <p class="date">12 March 2013</p>
++        <h3>Cornwall County Championships: 14 medals for Harbour</h3>
++        <p>Our juniors came home from Plymouth with six gold, four silver and four bronze. Well done to everyone who swam and thank you to the parents who helped on poolside.</p>
++      </article>
++      <article class="item">
++        <p class="date">28 February 2013</p>
++        <h3>New Masters session on Wednesday evenings</h3>
++        <p>Priya will be coaching a new masters session on Wednesday evenings starting at half past seven. All abilities, just turn up.</p>
++      </article>
++      <article class="item">
++        <p class="date">9 February 2013</p>
++        <h3>Pool maintenance closure over Easter weekend</h3>
++        <p>The leisure centre is closing the pool from Good Friday to Easter Monday while the filters are replaced. Normal sessions resume on Tuesday.</p>
++      </article>
+     </div>
+-    <div class="item">
+-      <p class="date">28 February 2013</p>
+-      <h3>New Masters session on Wednesday evenings</h3>
+-      <p>Priya will be coaching a new masters session on Wednesday evenings starting at half past seven. All abilities, just turn up.</p>
+-    </div>
+-    <div class="item last">
+-      <p class="date">9 February 2013</p>
+-      <h3>Pool maintenance closure over Easter weekend</h3>
+-      <p>The leisure centre is closing the pool from Good Friday to Easter Monday while the filters are replaced. Normal sessions resume on Tuesday.</p>
+-    </div>
+-  </div>
++  </section>
+ 
+-  <div id="contact">
++</main>
++
++<footer id="contact" class="site-footer">
++  <div class="container">
+     <h2>Contact us</h2>
+-    <div class="col">
+-      <p>Harbour Swim Club<br>
+-      Harbour Leisure Centre<br>
+-      Quay Road<br>
+-      Falmouth<br>
+-      Cornwall TR11 3XX</p>
++    <div class="contact-grid">
++      <address>
++        Harbour Swim Club<br>
++        Harbour Leisure Centre<br>
++        Quay Road<br>
++        Falmouth<br>
++        Cornwall TR11 3XX
++      </address>
++      <div>
++        <p>Phone: <a href="tel:+441326555014">01326 555 014</a><br>
++        Email: <a href="mailto:info@harbourswimclub.co.uk">info@harbourswimclub.co.uk</a></p>
++        <p>Membership secretary: Helen Carne<br>
++        Registered charity no. 1049221</p>
++      </div>
+     </div>
+-    <div class="col">
+-      <p>Phone: 01326 555 014<br>
+-      Email: info@harbourswimclub.co.uk</p>
+-      <p>Membership secretary: Helen Carne<br>
+-      Registered charity no. 1049221</p>
+-    </div>
+-    <div class="clear"></div>
+     <p id="copy">&copy; 2013 Harbour Swim Club. Last updated 12 March 2013.</p>
+   </div>
++</footer>
+ 
+-</div>
+-
+-<script type="text/javascript" src="script.js"></script>
++<script src="script.js"></script>
+ </body>
+ </html>
+diff --git a/script.js b/script.js
+index 4186e55..f8c0782 100644
+--- a/script.js
++++ b/script.js
+@@ -1,58 +1,125 @@
+ // Harbour Swim Club website scripts
+ 
+-// news ticker
+-var tickerPos = 980;
+-var tickerEl = document.getElementById("tickertext");
+-var tickerWidth = tickerEl.offsetWidth;
++// ---------- timetable day filter ----------
++// Reads the Day column of each timetable row, so adding a session needs
++// no change here. Opens on today's sessions; "All week" shows everything.
++(function () {
++  var table = document.querySelector("#timetable table");
++  var filter = document.getElementById("dayfilter");
++  var summary = document.getElementById("daysummary");
++  if (!table || !filter) return;
+ 
+-function moveTicker() {
+-  tickerPos = tickerPos - 1;
+-  if (tickerPos < -tickerWidth) {
+-    tickerPos = 980;
+-  }
+-  tickerEl.style.left = tickerPos + "px";
+-}
+-setInterval(moveTicker, 25);
++  var rows = Array.prototype.slice.call(table.querySelectorAll("tbody tr"));
++  var weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
++  var order = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
++  var today = weekdays[new Date().getDay()];
++  var buttons = {};
+ 
+-// join form
+-function submitJoin() {
+-  var name = document.getElementById("fullname").value;
+-  var email = document.getElementById("email").value;
+-  var phone = document.getElementById("phone").value;
+-  var type = document.getElementById("mtype").value;
+-  var consent = document.getElementById("consent").checked;
++  function show(day) {
++    var count = 0;
++    rows.forEach(function (row) {
++      var match = day === "All" || row.cells[0].textContent.trim() === day;
++      row.hidden = !match;
++      if (match) count++;
++    });
++    Object.keys(buttons).forEach(function (key) {
++      buttons[key].setAttribute("aria-pressed", key === day ? "true" : "false");
++    });
++    table.classList.toggle("single-day", day !== "All");
+ 
+-  name = name.replace(/^\s+|\s+$/g, "");
++    var label = day === "All" ? "All week" : day + (day === today ? " (today)" : "");
++    summary.textContent = label + ": " + count + (count === 1 ? " session" : " sessions");
+ 
+-  if (name.length < 2) {
+-    alert("Please enter your full name");
+-    return;
+-  }
+-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+-    alert("Please enter a valid email address");
+-    return;
+-  }
+-  if (phone.replace(/[^0-9]/g, "").length < 7) {
+-    alert("Please enter your phone number");
+-    return;
+-  }
+-  if (type == "") {
+-    alert("Please choose a membership type");
+-    return;
+-  }
+-  if (!consent) {
+-    alert("Please tick the box so we can contact you");
+-    return;
++    if (window.history && history.replaceState) {
++      history.replaceState(null, "", day === "All" ? location.pathname + location.hash : "?day=" + day + location.hash);
++    }
+   }
+ 
+-  var first = name.split(" ")[0];
+-  var box = document.getElementById("joinbox");
+-  box.innerHTML = "";
+-  var h = document.createElement("h2");
+-  h.appendChild(document.createTextNode("Join the club"));
+-  var p = document.createElement("p");
+-  p.className = "thanks";
+-  p.appendChild(document.createTextNode("Thanks, " + first + "! We will email you within two days."));
+-  box.appendChild(h);
+-  box.appendChild(p);
+-}
++  order.concat("All").forEach(function (day) {
++    var b = document.createElement("button");
++    b.type = "button";
++    b.textContent = day === "All" ? "All week" : day.slice(0, 3);
++    if (day !== "All") b.setAttribute("aria-label", day + (day === today ? " (today)" : ""));
++    if (day === today) b.className = "is-today";
++    b.addEventListener("click", function () { show(day); });
++    buttons[day] = b;
++    filter.appendChild(b);
++  });
++
++  var wanted = (location.search.match(/[?&]day=(\w+)/) || [])[1];
++  show(buttons[wanted] ? wanted : today);
++})();
++
++// ---------- membership buttons pre-select the join form ----------
++Array.prototype.forEach.call(document.querySelectorAll("a[data-type]"), function (link) {
++  link.addEventListener("click", function () {
++    document.getElementById("mtype").value = link.getAttribute("data-type");
++  });
++});
++
++// ---------- join form ----------
++(function () {
++  var form = document.getElementById("joinform");
++  if (!form) return;
++
++  // Each check returns an error message, or "" when the field is fine.
++  var checks = {
++    fullname: function (v) {
++      return v.replace(/^\s+|\s+$/g, "").length < 2 ? "Please enter your full name" : "";
++    },
++    email: function (v) {
++      return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? "" : "Please enter a valid email address, like name@example.com";
++    },
++    phone: function (v) {
++      return v.replace(/[^0-9]/g, "").length < 7 ? "Please enter your phone number" : "";
++    },
++    mtype: function (v) {
++      return v === "" ? "Please choose a membership type" : "";
++    },
++    consent: function (v, field) {
++      return field.checked ? "" : "Please tick the box so we can contact you";
++    }
++  };
++
++  function validate(id) {
++    var field = document.getElementById(id);
++    var message = checks[id](field.value, field);
++    var error = document.getElementById(id + "-error");
++    error.textContent = message;
++    error.hidden = !message;
++    field.setAttribute("aria-invalid", message ? "true" : "false");
++    field.closest(".field").classList.toggle("invalid", !!message);
++    return !message;
++  }
++
++  Object.keys(checks).forEach(function (id) {
++    var field = document.getElementById(id);
++    field.addEventListener(field.type === "checkbox" || field.tagName === "SELECT" ? "change" : "blur", function () {
++      validate(id);
++    });
++  });
++
++  form.addEventListener("submit", function (event) {
++    event.preventDefault();
++    var firstBad = null;
++    Object.keys(checks).forEach(function (id) {
++      if (!validate(id) && !firstBad) firstBad = document.getElementById(id);
++    });
++    if (firstBad) {
++      firstBad.focus();
++      return;
++    }
++
++    var first = document.getElementById("fullname").value.replace(/^\s+|\s+$/g, "").split(" ")[0];
++    var box = document.getElementById("joinbox");
++    box.innerHTML = "";
++    var h = document.createElement("h2");
++    h.appendChild(document.createTextNode("Join the club"));
++    var p = document.createElement("p");
++    p.className = "thanks";
++    p.setAttribute("role", "status");
++    p.appendChild(document.createTextNode("Thanks, " + first + "! We will email you within two days."));
++    box.appendChild(h);
++    box.appendChild(p);
++  });
++})();
+diff --git a/style.css b/style.css
+index 2289040..30638aa 100644
+--- a/style.css
++++ b/style.css
+@@ -1,200 +1,496 @@
+-/* Harbour Swim Club */
++/* Harbour Swim Club
++   Plain CSS, no build step. Colours, spacing and radii are the variables below:
++   change them here and the whole site follows. */
+ 
+-* { margin: 0; padding: 0; }
+-*:focus { outline: none; }
++:root {
++  /* brand */
++  --navy: #1b2a4a;
++  --navy-hover: #2c4170;
++  --yellow: #f2c230;
++  --yellow-hover: #f7d25c;
++  --yellow-tint: #fdf3cf;
++
++  /* neutrals (all tinted toward the navy) */
++  --ink: #1b2a4a;          /* headings, body */
++  --ink-2: #44546f;        /* secondary text */
++  --ink-3: #566681;        /* muted text, dates */
++  --ground: #eef3f8;       /* page background */
++  --surface: #ffffff;      /* cards */
++  --line: #d6dfe9;         /* hairlines */
++  --control: #6b7a94;      /* input borders */
++  --error: #b3261e;
++
++  /* type */
++  --font: "Avenir Next", "Segoe UI", Roboto, "Helvetica Neue", system-ui, sans-serif;
++
++  /* spacing, 4px scale */
++  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px; --s5: 20px;
++  --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
++
++  /* shape and depth */
++  --r-sm: 8px;
++  --r-md: 12px;
++  --r-lg: 20px;
++  --ring: 0 0 0 1px rgb(27 42 74 / 0.08), 0 2px 8px rgb(27 42 74 / 0.06);
++
++  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
++}
++
++*, *::before, *::after { box-sizing: border-box; }
++[hidden] { display: none !important; }
++
++html {
++  -webkit-text-size-adjust: 100%;
++  scroll-padding-top: 88px;
++}
++@media (prefers-reduced-motion: no-preference) {
++  html { scroll-behavior: smooth; }
++}
+ 
+ body {
+-  font-family: Verdana, Geneva, sans-serif;
+-  font-size: 13px;
+-  line-height: 1.5;
+-  color: #999;
+-  background: #dfe6ee;
++  margin: 0;
++  font-family: var(--font);
++  font-size: 1.0625rem;      /* 17px */
++  line-height: 1.55;
++  color: var(--ink);
++  background: var(--ground);
++  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
++  -webkit-tap-highlight-color: transparent;
+ }
+ 
+-img { border: 0; }
+-a { color: #f2c230; }
+-a:hover { text-decoration: none; }
++img { max-width: 100%; height: auto; }
++a { color: var(--navy); text-underline-offset: 3px; }
++a:hover { text-decoration-thickness: 2px; }
++a, button, input, select, summary { touch-action: manipulation; }
+ 
+-.clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+-.clearfix { display: inline-block; }
+-* html .clearfix { height: 1%; }
+-.clearfix { display: block; }
+-.clear { clear: both; }
+-.floatleft { float: left; margin: 0 20px 10px 0; }
+-
+-#wrapper {
+-  width: 980px;
+-  margin: 0 auto;
+-  background: #fff;
+-  border-left: 1px solid #c9d2dc;
+-  border-right: 1px solid #c9d2dc;
++:focus-visible {
++  outline: 3px solid var(--navy);
++  outline-offset: 3px;
++  border-radius: 4px;
+ }
+ 
+-/* header */
+-#header {
+-  height: 84px;
+-  background: #1b2a4a;
+-  padding: 10px 20px 0 20px;
+-  border-bottom: 4px solid #f2c230;
++.container {
++  width: 100%;
++  max-width: 1080px;
++  margin-inline: auto;
++  padding-inline: var(--s5);
+ }
+-#logo { float: left; }
+-#logo img { display: block; }
+-#nav { float: right; list-style: none; margin-top: 24px; }
+-#nav li { float: left; margin-left: 6px; }
+-#nav li a {
+-  display: block;
+-  font-size: 11px;
+-  padding: 2px 3px;
+-  color: #f2c230;
+-  text-decoration: none;
+-  text-transform: uppercase;
+-}
+-#nav li a:hover { color: #fff; }
+ 
+-/* ticker */
+-#ticker {
+-  position: relative;
+-  height: 24px;
++.sr-only {
++  position: absolute;
++  width: 1px; height: 1px;
+   overflow: hidden;
+-  background: #f4f4f4;
+-  border-bottom: 1px solid #ddd;
+-}
+-#tickertext {
+-  position: absolute;
+-  left: 980px;
+-  top: 4px;
++  clip-path: inset(50%);
+   white-space: nowrap;
+-  font-size: 11px;
+-  color: #999;
+ }
+ 
+-/* hero */
+-#hero { position: relative; margin-bottom: 15px; }
+-#hero .heroimg { display: block; width: 980px; }
+-#herotext {
++.skip-link {
+   position: absolute;
+-  left: 30px;
+-  bottom: 24px;
+-  background: #1b2a4a;
+-  padding: 10px 18px 12px 18px;
+-  border-left: 5px solid #f2c230;
++  left: var(--s4);
++  top: -80px;
++  z-index: 20;
++  background: var(--yellow);
++  color: var(--navy);
++  padding: var(--s3) var(--s4);
++  border-radius: var(--r-sm);
++  font-weight: 700;
+ }
+-#herotext h1 { font-size: 26px; color: #f2c230; font-weight: bold; }
+-#herotext p { color: #fff; font-size: 12px; margin-top: 2px; }
+-
+-/* general sections */
+-#welcome, #timetable, #membership, #join, #news { padding: 10px 20px 14px 20px; }
+-#welcome { margin-bottom: 6px; }
+-#timetable { margin-top: 12px; }
+-#membership { margin-top: 20px; }
+-#join { margin-top: 8px; }
+-#news { margin-top: 17px; }
++.skip-link:focus { top: var(--s2); }
+ 
++/* ---------- type ---------- */
++h1, h2, h3 { margin: 0; line-height: 1.15; text-wrap: balance; }
++p { margin: 0 0 var(--s4); text-wrap: pretty; max-width: 68ch; }
+ h2 {
+-  font-size: 20px;
+-  color: #f2c230;
+-  border-bottom: 1px solid #ddd;
+-  padding-bottom: 4px;
+-  margin-bottom: 11px;
++  font-size: 1.75rem;
++  letter-spacing: -0.02em;
++  margin-bottom: var(--s4);
+ }
+-h3 { font-size: 14px; color: #666; margin-bottom: 4px; }
+-p { margin-bottom: 9px; }
+-p.second { margin-top: 3px; }
+-.intro { margin-bottom: 14px; }
+-.small { font-size: 11px; }
+-.note { margin-top: 10px; font-size: 11px; }
+-
+-/* timetable */
+-#timetable table {
+-  width: 940px;
+-  table-layout: fixed;
+-  border-collapse: collapse;
+-  border: 1px solid #ccc;
+-}
+-#timetable th {
+-  background: #1b2a4a;
+-  color: #f2c230;
+-  font-size: 12px;
+-  text-align: left;
+-  padding: 6px 8px;
+-}
+-#timetable td {
+-  font-size: 12px;
+-  padding: 5px 8px;
+-  border-bottom: 1px solid #e4e4e4;
+-  color: #999;
+-}
+-#timetable tr:nth-child(even) td { background: #f7f7f7; }
+-th.c1 { width: 100px; }
+-th.c2 { width: 120px; }
+-th.c3 { width: 240px; }
+-th.c4 { width: 130px; }
+-th.c5 { width: 130px; }
+-th.c6 { width: 124px; }
+-
+-/* membership */
+-.plan {
+-  float: left;
+-  width: 190px;
+-  margin: 0 18px 0 0;
+-  padding: 12px 14px 6px 14px;
+-  border: 1px solid #ddd;
+-  border-top: 4px solid #1b2a4a;
+-  height: 150px;
+-}
+-.plan.first { margin-left: 2px; }
+-.plan.last { margin-right: 0; width: 192px; }
+-.plan h3 { font-size: 16px; color: #1b2a4a; }
+-.price { font-size: 24px; font-weight: bold; color: #f2c230; margin-bottom: 6px; }
+-.price span { font-size: 11px; font-weight: normal; color: #999; }
+-
+-/* join form */
+-#joinbox { float: left; width: 560px; }
+-#joinaside { float: right; width: 320px; margin-top: 3px; }
+-#joinaside img { display: block; margin-bottom: 8px; width: 320px; }
+-input.text, select.text {
++/* lane rope: the floats from the pool lines, under every section heading */
++h2::after {
++  content: "";
+   display: block;
+-  width: 300px;
+-  font-family: Verdana, Geneva, sans-serif;
+-  font-size: 12px;
+-  padding: 5px 6px;
+-  margin-bottom: 8px;
+-  border: 1px solid #ccc;
+-  color: #666;
++  height: 8px;
++  margin-top: var(--s3);
++  max-width: 320px;
++  background:
++    linear-gradient(var(--line), var(--line)) 0 50% / 100% 2px no-repeat,
++    radial-gradient(circle, var(--yellow) 3px, transparent 3.5px) 0 50% / 16px 8px repeat-x;
+ }
+-select.text { width: 314px; height: 28px; padding: 3px; }
+-.consent { font-size: 11px; margin: 4px 0 12px 0; }
+-.consent input { margin-right: 5px; vertical-align: middle; }
+-.button {
+-  display: inline-block;
+-  background: #1b2a4a;
+-  color: #f2c230;
+-  font-size: 13px;
+-  font-weight: bold;
+-  padding: 7px 22px;
+-  border: 1px solid #0e1830;
++h3 { font-size: 1.25rem; letter-spacing: -0.01em; margin-bottom: var(--s2); text-wrap: pretty; }
++.intro { color: var(--ink-2); }
++.small, .note { font-size: 0.9375rem; color: var(--ink-2); }
++.note { margin-top: var(--s4); }
++
++/* ---------- buttons ---------- */
++.btn {
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  min-height: 48px;
++  padding: 0 var(--s6);
++  border: 2px solid transparent;
++  border-radius: 999px;
++  font: inherit;
++  font-weight: 700;
++  text-decoration: none;
+   cursor: pointer;
++  transition: background-color 150ms, border-color 150ms, transform 140ms var(--ease-out);
++}
++.btn:active { transform: scale(0.97); }
++.btn-primary { background: var(--yellow); color: var(--navy); }
++.btn-outline { background: transparent; color: var(--navy); border-color: var(--navy); }
++.btn-light { background: transparent; color: #fff; border-color: #fff; }
++@media (hover: hover) {
++  .btn-primary:hover { background: var(--yellow-hover); }
++  .btn-outline:hover { background: var(--navy); color: #fff; }
++  .btn-light:hover { background: #fff; color: var(--navy); }
+ }
+-.button:hover { background: #2c4170; }
+-.thanks { font-size: 16px; color: #1b2a4a; margin: 20px 0; }
+ 
+-/* news */
+-#news .item {
+-  border-bottom: 1px dotted #ccc;
+-  padding-bottom: 8px;
+-  margin-bottom: 12px;
++/* ---------- header ---------- */
++.site-header {
++  background: var(--navy);
++  border-bottom: 4px solid var(--yellow);
++  position: relative;
++  z-index: 10;
+ }
+-#news .item.last { border-bottom: 0; }
+-.date { font-size: 11px; color: #bbb; margin-bottom: 1px; }
++.header-bar {
++  display: grid;
++  grid-template-columns: 1fr auto;
++  align-items: center;
++  column-gap: var(--s4);
++  padding-block: var(--s3) 0;
++}
++.logo { display: block; }
++.logo img { display: block; width: 182px; height: auto; }
++.header-join { min-height: 44px; padding-inline: var(--s5); }
+ 
+-/* contact */
+-#contact {
+-  margin-top: 22px;
+-  background: #1b2a4a;
+-  padding: 16px 20px 10px 20px;
+-  color: #ccc;
++.main-nav { grid-column: 1 / -1; margin-inline: calc(var(--s5) * -1); }
++.main-nav ul {
++  display: flex;
++  gap: var(--s1);
++  margin: 0;
++  padding: var(--s1) var(--s5) var(--s2);
++  list-style: none;
++  overflow-x: auto;
++  scrollbar-width: none;
++}
++.main-nav ul::-webkit-scrollbar { display: none; }
++.main-nav a {
++  display: flex;
++  align-items: center;
++  min-height: 44px;
++  padding: 0 var(--s3);
++  color: #fff;
++  font-weight: 600;
++  text-decoration: none;
++  border-radius: var(--r-sm);
++  white-space: nowrap;
++}
++.main-nav a:hover { color: var(--yellow); }
++.site-header :focus-visible,
++.site-footer :focus-visible { outline-color: var(--yellow); }
++
++/* ---------- hero ---------- */
++.hero { padding-top: var(--s4); }
++.hero-frame {
++  overflow: hidden;
++  border-radius: var(--r-lg);
++  background: var(--navy);
++  box-shadow: var(--ring);
++}
++.hero-img {
++  display: block;
++  width: 100%;
++  aspect-ratio: 4 / 3;
++  object-fit: cover;
++  object-position: 50% 100%;
++}
++.hero-copy { padding: var(--s6) var(--s5) var(--s6); }
++.hero-copy h1 {
++  font-size: 2rem;
++  letter-spacing: -0.02em;
++  color: var(--yellow);
++}
++.hero-copy p { color: #fff; margin: var(--s2) 0 var(--s5); }
++.actions { display: flex; flex-wrap: wrap; gap: var(--s3); }
++.actions .btn { flex: 1 1 200px; }
++
++/* ---------- notices ---------- */
++.notices {
++  margin-top: var(--s4);
++  background: var(--yellow-tint);
++  border-radius: var(--r-md);
++  box-shadow: var(--ring);
++}
++.notices summary {
++  display: flex;
++  align-items: center;
++  min-height: 48px;
++  padding: 0 var(--s4);
++  font-weight: 700;
++  cursor: pointer;
++  list-style: none;
++}
++.notices summary::-webkit-details-marker { display: none; }
++.notices summary::after {
++  content: "Hide";
++  margin-left: auto;
++  font-weight: 600;
++  font-size: 0.9375rem;
++  text-decoration: underline;
++}
++.notices:not([open]) summary::after { content: "Show"; }
++.notices ul { margin: 0; padding: 0 var(--s4) var(--s3) var(--s8); }
++.notices li { margin-bottom: var(--s2); }
++
++/* ---------- sections ---------- */
++.section { padding-block: var(--s10) 0; }
++.welcome-grid { display: grid; gap: var(--s6); align-items: start; }
++.welcome-img { display: block; width: 100%; border-radius: var(--r-lg); box-shadow: var(--ring); }
++
++/* ---------- timetable ---------- */
++.day-filter {
++  display: grid;
++  grid-template-columns: repeat(4, 1fr);
++  gap: var(--s2);
++  min-height: 96px;
++  margin-bottom: var(--s4);
++}
++.day-filter button {
++  min-height: 44px;
++  padding: 0 var(--s1);
++  white-space: nowrap;
++  border: 2px solid var(--control);
++  border-radius: var(--r-md);
++  background: var(--surface);
++  color: var(--navy);
++  font: inherit;
++  font-weight: 600;
++  cursor: pointer;
++  transition: background-color 150ms, color 150ms;
++}
++.day-filter button[aria-pressed="true"] {
++  background: var(--navy);
++  border-color: var(--navy);
++  color: #fff;
++}
++.day-filter .is-today::after {
++  content: "";
++  display: inline-block;
++  width: 8px; height: 8px;
++  margin-left: var(--s2);
++  border-radius: 50%;
++  background: var(--yellow);
++  box-shadow: 0 0 0 1px var(--navy);
++}
++@media (hover: hover) {
++  .day-filter button[aria-pressed="false"]:hover { background: var(--yellow-tint); }
++}
++.day-summary { font-weight: 700; margin-bottom: var(--s3); }
++
++/* phones: each session is a card, so nothing scrolls sideways */
++.timetable, .timetable tbody { display: block; }
++.timetable thead {
++  position: absolute;
++  width: 1px; height: 1px;
++  overflow: hidden;
++  clip-path: inset(50%);
++}
++.timetable tr {
++  display: flex;
++  flex-wrap: wrap;
++  column-gap: var(--s4);
++  align-items: baseline;
++  padding: var(--s4);
++  margin-bottom: var(--s3);
++  background: var(--surface);
++  border-radius: var(--r-md);
++  box-shadow: var(--ring);
++}
++.timetable td { padding: 0; color: var(--ink-2); font-size: 0.9375rem; }
++.timetable td:nth-child(1) { order: 2; font-weight: 600; }
++.timetable td:nth-child(2) {
++  order: 1;
++  flex: 1;
++  font-size: 1.0625rem;
++  font-weight: 700;
++  color: var(--ink);
++  font-variant-numeric: tabular-nums;
++}
++.timetable td:nth-child(3) {
++  order: 3;
++  flex-basis: 100%;
++  margin-block: var(--s1) var(--s2);
++  font-size: 1.25rem;
++  font-weight: 700;
++  color: var(--ink);
++}
++.timetable td:nth-child(4) { order: 4; }
++.timetable td:nth-child(5) { order: 5; }
++.timetable td:nth-child(6) { order: 6; }
++.timetable td:nth-child(4)::before { content: "Lane: "; }
++.timetable td:nth-child(6)::before { content: "Coach: "; }
++.timetable.single-day td:nth-child(1) { display: none; }
++
++@media (min-width: 760px) {
++  .table-card {
++    background: var(--surface);
++    border-radius: var(--r-lg);
++    box-shadow: var(--ring);
++    padding: var(--s2) var(--s6) var(--s4);
++  }
++  .timetable { display: table; width: 100%; border-collapse: collapse; }
++  .timetable tbody { display: table-row-group; }
++  .timetable thead {
++    position: static;
++    width: auto; height: auto;
++    overflow: visible;
++    clip-path: none;
++    display: table-header-group;
++  }
++  .timetable tr {
++    display: table-row;
++    padding: 0;
++    margin: 0;
++    background: none;
++    border-radius: 0;
++    box-shadow: none;
++  }
++  .timetable th {
++    padding: var(--s3) var(--s3);
++    text-align: left;
++    font-size: 0.9375rem;
++    color: var(--ink-3);
++    border-bottom: 2px solid var(--navy);
++  }
++  .timetable td {
++    padding: var(--s3);
++    border-bottom: 1px solid var(--line);
++    font-size: 1rem;
++    vertical-align: baseline;
++  }
++  .timetable td:nth-child(1) { color: var(--ink); }
++  .timetable td:nth-child(2) { flex: none; font-size: 1rem; white-space: nowrap; }
++  .timetable td:nth-child(3) { margin: 0; font-size: 1rem; }
++  .timetable td:nth-child(4)::before,
++  .timetable td:nth-child(6)::before { content: none; }
++  .timetable tbody tr:last-child td { border-bottom: 0; }
++  .timetable.single-day th:nth-child(1) { display: none; }
++  .day-filter { display: flex; flex-wrap: wrap; min-height: 48px; }
++  .day-filter button { min-width: 88px; }
++}
++
++/* ---------- membership ---------- */
++.plans { display: grid; gap: var(--s4); }
++.plan {
++  display: flex;
++  flex-direction: column;
++  padding: var(--s6);
++  background: var(--surface);
++  border-radius: var(--r-lg);
++  border-top: 6px solid var(--navy);
++  box-shadow: var(--ring);
++}
++.plan p:not(.price) { color: var(--ink-2); flex: 1; }
++.plan .btn { align-self: flex-start; }
++.price { font-size: 2.25rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: var(--s2); font-variant-numeric: tabular-nums; }
++.price span { font-size: 1rem; font-weight: 500; color: var(--ink-2); letter-spacing: 0; }
++
++/* ---------- join ---------- */
++.join-card {
++  display: grid;
++  gap: var(--s8);
++  padding: var(--s6) var(--s5);
++  background: var(--surface);
++  border-radius: var(--r-lg);
++  box-shadow: var(--ring);
++}
++.join-aside img { display: block; width: 100%; border-radius: var(--r-md); margin-bottom: var(--s3); box-shadow: 0 0 0 1px rgb(27 42 74 / 0.1); }
++.field { margin-bottom: var(--s4); }
++.field label:not(.check) { display: block; font-weight: 600; margin-bottom: var(--s1); }
++input[type="text"], input[type="email"], input[type="tel"], select {
++  display: block;
++  width: 100%;
++  max-width: 420px;
++  min-height: 48px;
++  padding: var(--s2) var(--s3);
++  font: inherit;
++  color: var(--ink);
++  background: var(--surface);
++  border: 2px solid var(--control);
++  border-radius: var(--r-sm);
++}
++input:focus-visible, select:focus-visible { outline-offset: 1px; border-color: var(--navy); }
++.check { display: flex; gap: var(--s3); align-items: flex-start; min-height: 44px; cursor: pointer; }
++.check input { flex: none; width: 24px; height: 24px; margin: var(--s2) 0 0; accent-color: var(--navy); }
++.field.invalid input, .field.invalid select { border-color: var(--error); }
++.error { margin: var(--s1) 0 0; color: var(--error); font-weight: 600; font-size: 0.9375rem; }
++.error::before { content: "Error: "; }
++.thanks { font-size: 1.25rem; font-weight: 700; margin: var(--s4) 0; }
++
++/* ---------- news ---------- */
++.news-list {
++  background: var(--surface);
++  border-radius: var(--r-lg);
++  box-shadow: var(--ring);
++  padding: var(--s2) var(--s5);
++}
++.news-list .item { padding: var(--s5) 0; border-bottom: 1px solid var(--line); }
++.news-list .item:last-child { border-bottom: 0; }
++.news-list p:last-child { margin-bottom: 0; }
++.date { font-size: 0.9375rem; color: var(--ink-3); margin-bottom: var(--s1); }
++
++/* ---------- footer ---------- */
++.site-footer {
++  margin-top: var(--s16);
++  padding: var(--s10) 0 calc(var(--s8) + env(safe-area-inset-bottom));
++  background: var(--navy);
++  color: #e3e9f2;
++}
++.site-footer h2 { color: var(--yellow); }
++.site-footer h2::after { --line: #3b4c70; }
++.site-footer a { color: var(--yellow); }
++.contact-grid { display: grid; gap: var(--s4) var(--s10); }
++.site-footer address { font-style: normal; margin-bottom: var(--s4); }
++.site-footer p { max-width: none; }
++#copy { margin: var(--s8) 0 0; padding-top: var(--s4); border-top: 1px solid #3b4c70; font-size: 0.9375rem; color: #b8c3d6; }
++
++/* ---------- wider screens ---------- */
++@media (min-width: 760px) {
++  .section { padding-block: var(--s16) 0; }
++  h2 { font-size: 2.25rem; }
++  .container { padding-inline: var(--s8); }
++  .header-bar { grid-template-columns: auto 1fr auto; padding-block: var(--s3); }
++  .logo img { width: 208px; }
++  .logo { grid-column: 1; grid-row: 1; }
++  .main-nav { grid-column: 2; grid-row: 1; margin: 0; justify-self: end; }
++  .header-join { grid-column: 3; grid-row: 1; }
++  .main-nav ul { padding: 0; overflow: visible; }
++  .site-header { position: sticky; top: 0; }
++  .hero { padding-top: var(--s6); }
++  .hero-img { aspect-ratio: 16 / 7; object-position: 50% 60%; }
++  .hero-copy { padding: var(--s8); }
++  .hero-copy h1 { font-size: 2.5rem; }
++  .actions .btn { flex: 0 1 auto; }
++  .welcome-grid { grid-template-columns: 300px 1fr; gap: var(--s10); }
++  .plans { grid-template-columns: repeat(2, 1fr); }
++  .join-card { grid-template-columns: 1fr 320px; padding: var(--s10); }
++  .contact-grid { grid-template-columns: 1fr 1fr; }
++}
++@media (min-width: 1000px) {
++  .hero-frame { position: relative; }
++  .hero-img { aspect-ratio: 940 / 320; object-position: 50% 50%; }
++  .hero-copy {
++    position: absolute;
++    left: var(--s8);
++    bottom: var(--s8);
++    max-width: 440px;
++    padding: var(--s6);
++    background: var(--navy);
++    border-radius: var(--r-md);
++    border-left: 6px solid var(--yellow);
++  }
++}
++@media (min-width: 1040px) {
++  .plans { grid-template-columns: repeat(4, 1fr); }
+ }
+-#contact h2 { color: #f2c230; border-bottom: 1px solid #3b4c70; }
+-#contact .col { float: left; width: 400px; margin-right: 20px; }
+-#contact p { margin-bottom: 10px; }
+-#copy { font-size: 11px; color: #8d98ae; border-top: 1px solid #3b4c70; padding-top: 8px; margin-top: 6px; }

@@ -1,29 +1,42 @@
-// Usage: node gallery.mjs
-// Writes results/gallery/index.html: every build under its blind label, with a button that reveals the arms.
-import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+// Usage: [ROUND=round-3] node gallery.mjs
+// Writes results/[<ROUND>/]gallery/index.html: every build under its blind label, with a button that reveals the arms.
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const here = import.meta.dirname
-const R = join(here, 'results')
+const R = process.env.ROUND ? join(here, 'results', process.env.ROUND) : join(here, 'results')
 const out = join(R, 'gallery')
 mkdirSync(out, { recursive: true })
 
-const titles = { 'slow-clay': 'Slow Clay pottery studio, landing page', roastline: 'Roastline roastery dashboard', 'backoff-kit': 'backoff-kit library docs' }
+const titles = {
+	'slow-clay': 'Slow Clay pottery studio, landing page',
+	roastline: 'Roastline roastery dashboard',
+	'backoff-kit': 'backoff-kit library docs',
+	tandem: 'New. Tandem bike shop, landing page',
+	kestrel: 'New. Kestrel clinic, reception check-in screen',
+	'salt-and-iron': 'New. Salt and Iron exhibition guide',
+	shiftboard: 'Extend. Shiftboard app, add a Time off page',
+	'harbour-swim': 'Improve. Harbour swim club site',
+}
+const md = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const sections = readdirSync(join(R, 'keys')).map((file) => {
 	const brief = file.replace('.json', '')
 	const { order, key } = JSON.parse(readFileSync(join(R, 'keys', file), 'utf8'))
 	const prompt = readFileSync(join(here, 'briefs', `${brief}.md`), 'utf8').trim()
-	const cards = order
-		.map((label) => {
-			const arm = key[label].split('--')[1]
-			const base = `../judging/${brief}/${label}`
-			return `<figure>
-	<a href="${base}/desktop-full.jpg"><img src="${base}/desktop-fold.jpg" alt="${label} desktop" loading="lazy"></a>
+	const dir = join(R, 'judging', brief)
+	const card = (label, arm) => {
+		const base = `../judging/${brief}/${label}`
+		const fold = existsSync(join(dir, label, 'desktop-fold.jpg')) ? 'desktop-fold.jpg' : 'desktop-full.jpg'
+		return `<figure>
+	<a href="${base}/desktop-full.jpg"><img src="${base}/${fold}" alt="${label} desktop" loading="lazy"></a>
 	<figcaption><strong>${label}</strong> <a href="${base}/desktop-full.jpg">desktop</a> <a href="${base}/mobile-full.jpg">mobile</a> <span class="arm" data-arm="${arm}">${arm}</span></figcaption>
 </figure>`
-		})
-		.join('\n')
-	return `<section><h2>${titles[brief] ?? brief}</h2><p class="prompt">${prompt}</p><div class="grid">${cards}</div></section>`
+	}
+	const reference = existsSync(join(dir, 'REFERENCE')) ? `<p class="prompt">Before the change:</p><div class="grid">${card('REFERENCE', 'original').replace('class="arm"', 'class="arm shown"')}</div><p class="prompt">After:</p>` : ''
+	const notesFile = join(here, 'profiles', `${brief}.md`)
+	const notes = existsSync(notesFile) ? `<details><summary>The simulated client's private notes</summary><pre>${md(readFileSync(notesFile, 'utf8').trim())}</pre></details>` : ''
+	const cards = order.map((label) => card(label, key[label].split('--')[1])).join('\n')
+	return `<section><h2>${titles[brief] ?? brief}</h2><p class="prompt">${md(prompt)}</p>${notes}${reference}<div class="grid">${cards}</div></section>`
 })
 
 writeFileSync(
@@ -48,16 +61,21 @@ writeFileSync(
 	img { display: block; width: 100%; aspect-ratio: 1440 / 900; object-fit: cover; object-position: top; }
 	figcaption { display: flex; gap: 12px; align-items: baseline; padding: 10px 14px; }
 	.arm { margin-left: auto; font-size: 13px; padding: 2px 8px; border-radius: 99px; background: #ececea; visibility: hidden; }
-	body.revealed .arm { visibility: visible; }
+	body.revealed .arm, .arm.shown { visibility: visible; }
+	details { max-width: 90ch; margin: 0 0 16px; font-size: 14px; }
+	pre { white-space: pre-wrap; background: white; padding: 12px; border-radius: 8px; }
 	.arm[data-arm="web-ui-design"] { background: #dbeafe; }
 	.arm[data-arm="frontend-design"] { background: #fef3c7; }
 	.arm[data-arm="web-ui-design-0.2"] { background: #dcfce7; }
+	.arm[data-arm="web-ui-design-0.3"] { background: #fce7f3; }
+	.arm[data-arm="web-ui-design-0.3-silent"] { background: #ede9fe; }
+	.arm[data-arm="web-ui-design-0.3-wired"] { background: #ffedd5; }
 </style>
 </head>
 <body>
 <main>
 	<h1>Blind gallery</h1>
-	<p class="lede">Each page was built by Claude Sonnet 5.5 from the same prompt, either with Claude Code's defaults, with Anthropic's frontend-design skill, or with web-ui-design (v0.1 or v0.2). Pick your favorite in each row before you reveal which is which.</p>
+	<p class="lede">Each page was built by Claude Sonnet 5.5 from the same prompt, either with Claude Code's defaults, with Anthropic's frontend-design skill, or with a version of web-ui-design. In round 3 a simulated client answers the builder's questions from private notes; the -silent arm's client declines to answer, and the -wired arm adds the README's CLAUDE.md line. Pick your favorite in each row before you reveal which is which.</p>
 	<button onclick="document.body.classList.toggle('revealed')">Reveal arms</button>
 	${sections.join('\n')}
 </main>

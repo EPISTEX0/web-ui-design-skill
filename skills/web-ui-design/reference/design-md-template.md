@@ -6,6 +6,9 @@ Copy into the repo root as `DESIGN.md`. Fill every value. Add `Read DESIGN.md be
 ---
 name: <product>
 mode: operate | persuade | read
+page-type: <from the catalog>
+family: <from the catalog, or "as found">
+stack: <framework, styling system, component library>
 colors:
   bg: "#..."
   surface: "#..."
@@ -28,8 +31,18 @@ motion:
 
 # <Product> design
 
+## Brief
+| Item | Value | Source |
+| --- | --- | --- |
+| Subject | ... | user / inferred from <where> / assumed (left to you) |
+| Primary action | ... | ... |
+| Audience and device | ... | ... |
+| Assets and references | ... | ... |
+| Content and proof | ... | ... |
+| Must keep and scope (Improve) | ... | ... |
+
 ## Direction
-One paragraph: subject, audience, the feeling, and the signature element.
+One paragraph: the feeling, why this family, and the signature element.
 
 ## References
 - <product>: <the specific thing taken from it>
@@ -44,4 +57,4 @@ One paragraph: subject, audience, the feeling, and the signature element.
 | Borders only, no shadows | Dense data tables; shadows add noise | YYYY-MM-DD |
 ```
 
-If the project already has a styling system, record what exists instead of inventing values. Tokens in code stay the source of truth, and this file explains them.
+If the project already has a styling system, record what exists instead of inventing values, with the file each token lives in. Tokens in code stay the source of truth, and this file explains them.

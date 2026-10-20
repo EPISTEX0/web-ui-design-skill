@@ -1,0 +1,229 @@
+{
+	"scores": {
+		"A3": {
+			"craft": 7,
+			"fit": 7,
+			"hierarchy": 7,
+			"mobile": 4,
+			"overall": 6,
+			"defects": [
+				"Short 30-minute appointment blocks in the 4-column schedule grid clip or omit time and status text vertically",
+				"Red 10:42 current-time line cuts through Omar Haddad's appointment text in the schedule grid",
+				"On tablet-full.jpg, appointment text in the fourth column (Lucas Ferreira) clips against the right border",
+				"On mobile-full.jpg, the 4-column schedule table overflows horizontally, cutting off the second column mid-word and hiding the third and fourth physiotherapists"
+			],
+			"note": "Well-structured layout that pairs the four-therapist calendar with an actionable waiting room and arrivals sidebar above the fold, though small outline buttons, off-brand rust accents, and horizontal schedule clipping on mobile hold it back."
+		},
+		"D9": {
+			"craft": 2,
+			"fit": 3,
+			"hierarchy": 4,
+			"mobile": 2,
+			"overall": 2,
+			"defects": [
+				"Header text 'Find a patient' overlaps directly on top of 'Front desk' across all viewports",
+				"Every appointment block in the 'Today's schedule' timeline is severely truncated to 1-3 characters ('Ge...', 'I...', 'Sa...', 'B..', 'M.')",
+				"Red 10:42 time indicator overlaps the 11:00 column header ('10:42 00') and collides with truncated block text",
+				"On mobile-full.jpg, severe horizontal clipping cuts off the schedule after 10:00 and cuts off all 'Check in', 'Send to room', and 'Check out' buttons on the right",
+				"Missing walk-in booking action and late/no-show controls"
+			],
+			"note": "Broken header text overlap, unreadable 1-3 character schedule blocks, missing walk-in and no-show features, and severe mobile clipping make this unusable."
+		},
+		"E9": {
+			"craft": 6,
+			"fit": 5,
+			"hierarchy": 7,
+			"mobile": 7,
+			"overall": 5,
+			"defects": [
+				"Current-time 10:42 line slices directly through appointment text for Sienna Walsh and Greta Lindqvist in the schedule grid",
+				"On tablet-full.jpg, narrow schedule columns truncate nearly all practitioner and patient names",
+				"Schedule scroll container cuts off appointments after 14:45 in desktop-full.jpg and tablet-full.jpg",
+				"Exposes developer demo copy ('Sample data for a demo day. The clock starts at 10:42 and runs from there.') in the header",
+				"Hides per-patient payment due flags and late/no-show actions behind selecting an appointment into the empty right-hand inspector panel"
+			],
+			"note": "The left action queue and mobile vertical adaptation work well, but hiding payment flags and secondary actions behind an empty inspector panel adds clicks and misses the brand teal palette."
+		},
+		"F2": {
+			"craft": 7,
+			"fit": 5,
+			"hierarchy": 6,
+			"mobile": 3,
+			"overall": 5,
+			"defects": [
+				"On mobile-full.jpg, the schedule table overflows horizontally and cuts off the treatment, status, and action button columns completely",
+				"On mobile-full.jpg, wait times and 'Send through' buttons in the Waiting room panel and text in Desk to-do are clipped off the right edge",
+				"Chronological sorting from 8:00 am pushes all upcoming 'Check in' rows below the 900px fold on desktop-fold.jpg",
+				"Completely missing a walk-in or new booking button"
+			],
+			"note": "Clean teal styling and a clear waiting-room alert panel are undermined by the missing walk-in feature, below-the-fold check-in buttons, and severe horizontal clipping on mobile."
+		},
+		"H3": {
+			"craft": 8,
+			"fit": 7,
+			"hierarchy": 6,
+			"mobile": 8,
+			"overall": 7,
+			"defects": [
+				"Chronological schedule starting at 8:00 AM places only completed, no-show, and in-session rows above the fold on desktop-fold.jpg, requiring scrolling to reach the first 'Check in' button",
+				"Payment due is buried as plain grey subtitle text ('balance due $40') rather than a visible flag or badge",
+				"Waiting room cards lack direct action buttons and there is no control to mark a patient late"
+			],
+			"note": "Polished, calm teal interface that adapts cleanly across desktop, tablet, and mobile, but chronological sorting buries active check-ins below the fold and payment flags are hidden in plain subtitle text."
+		},
+		"K6": {
+			"craft": 5,
+			"fit": 5,
+			"hierarchy": 5,
+			"mobile": 4,
+			"overall": 4,
+			"defects": [
+				"Severe text clipping inside the 'Practitioners today' horizontal timeline blocks across desktop and tablet ('Bannerr', 'Whitfiel', 'Kowalcz', 'Marchet', 'Park / 11')",
+				"On tablet-full.jpg (the target landscape tablet viewport) and mobile-full.jpg, the Waiting room and Arriving soon panels are pushed below all 25 appointment rows",
+				"On mobile-full.jpg, the 'In session' badge and 'Finish session' button on the 10:00 row overflow past the right border of the card",
+				"Displays 5 practitioners instead of the 4 physiotherapists specified in the client notes"
+			],
+			"note": "Clipped timeline blocks, five practitioners instead of four, and a tablet layout that pushes the waiting room below twenty-five schedule rows make it a poor fit for the receptionists' tablet."
+		},
+		"M7": {
+			"craft": 7,
+			"fit": 8,
+			"hierarchy": 8,
+			"mobile": 6,
+			"overall": 7,
+			"defects": [
+				"Appointment blocks inside the compact 'Therapists today' horizontal timeline strip are severely truncated to 1-3 characters ('v M...', 'v ...', '!', '* Wa...') and overlapped by the current-time line",
+				"On tablet-full.jpg, 'Beatrice ...' is truncated with an ellipsis despite ample horizontal whitespace in the row",
+				"On mobile-full.jpg, the 'Therapists today' timeline clips horizontally after 11am and the status filter pills clip on the right edge"
+			],
+			"note": "The strongest operational workflow for the receptionists because it sorts waiting, late, and upcoming check-ins to the very top above the fold with clear payment badges and one-tap actions, despite a cramped top timeline strip and off-brand palette."
+		},
+		"N2": {
+			"craft": 6,
+			"fit": 7,
+			"hierarchy": 8,
+			"mobile": 5,
+			"overall": 6,
+			"defects": [
+				"Horizontal timeline in 'Today's schedule' clips appointment cards mid-word on the right edge ('13:00 Ruth Call.' on desktop, '12:00 Chiara Ro' on tablet, '11:00 Oliver B' on mobile)",
+				"On tablet-full.jpg and mobile-full.jpg, the left edge of the timeline clips blocks underneath the sticky therapist column ('... / Done', 'et O'Neill')",
+				"Footer prints developer meta-note ('Sample data. The clock starts at 10:42 and then runs in real time.')"
+			],
+			"note": "Thoughtful front-desk hierarchy that surfaces the waiting room, late arrivals, and next-hour check-ins with large touch buttons on the left, marred by off-brand rust colors and clipped blocks at the edges of the schedule timeline."
+		},
+		"N5": {
+			"craft": 5,
+			"fit": 6,
+			"hierarchy": 7,
+			"mobile": 5,
+			"overall": 5,
+			"defects": [
+				"Left edge of the 'Today's schedule' timeline clips 09:00 blocks under the practitioner column ('9:00', 'iko T...', 'hloe ...') across desktop, tablet, and mobile",
+				"Right edge of the timeline slices appointment blocks mid-word ('14:30 Jonas Er' on desktop, '13 / F / E' on tablet, '10:30 Noah / Booke' on mobile)",
+				"Red 10:20 vertical time line cuts directly through patient names and times in the schedule",
+				"On mobile-full.jpg, Room 1 truncates 'Walter Abernathy-Featherstonehaugh...' before displaying the session end time"
+			],
+			"note": "Good arrivals and waiting-room sidebar above the fold, but the horizontal schedule timeline suffers from clipped blocks on both edges and a time indicator line that cuts through text."
+		},
+		"R3": {
+			"craft": 5,
+			"fit": 4,
+			"hierarchy": 6,
+			"mobile": 4,
+			"overall": 4,
+			"defects": [
+				"Completely missing a walk-in or new booking button",
+				"Placeholder single-letter patient name 'J' at 11:30 in the schedule list and practitioner grid",
+				"Current-time 10:42 line cuts through the text of '10:15 Fatima Al-Sayed' and '10:30 Oliver Nkemelu', and '16:00 Desmond Achebe' is sliced vertically at the bottom of the grid on desktop-fold.jpg",
+				"On tablet-full.jpg, 'Day by practitioner' is pushed below all 23 appointment rows; on mobile-full.jpg, it disappears entirely and filter pills clip on the right"
+			],
+			"note": "While the left column groups waiting and arriving patients clearly, it omits walk-in booking altogether, contains a single-letter placeholder patient name, and drops the practitioner schedule below the fold on tablet and completely on mobile."
+		},
+		"R4": {
+			"craft": 3,
+			"fit": 4,
+			"hierarchy": 4,
+			"mobile": 3,
+			"overall": 3,
+			"defects": [
+				"Horizontal timeline clips appointment cards under the sticky practitioner column on the left ('a Rahman / ehab , week 9', 's Wren') and slices cards mid-word on the right border across all viewports",
+				"Red 10:42 current-time line cuts directly through text in 'Callum Reid' and 'Amara Okeke' schedule blocks",
+				"Malformed punctuation spacing with extra spaces before commas, periods, and colons throughout the UI ('ehab , week 9', 'hour , and anyone running late .', '11 : 45 visit .')",
+				"Displays 5 practitioners instead of the 4 physiotherapists requested in the client notes, and omits action buttons from waiting room cards"
+			],
+			"note": "Clipped timeline blocks on both edges, pervasive punctuation spacing bugs, five practitioners instead of four, and a dark non-actionable waiting room sidebar make this poorly executed."
+		},
+		"S3": {
+			"craft": 5,
+			"fit": 6,
+			"hierarchy": 6,
+			"mobile": 7,
+			"overall": 5,
+			"defects": [
+				"On tablet-full.jpg, the Patient and Treatment table columns are crushed so narrow that names break mid-word across 3 to 7 lines ('Elena / March / etti- / Vande / nberg / he- / Okafor')",
+				"In the 'Needs you now' sidebar, waiting patient Joanna Kowalczyk only has a 'Forms received' button instead of the 'Send to Room 2' action shown in the table",
+				"Payment due flags are omitted from the schedule table rows and only shown for already-finished visits in the sidebar"
+			],
+			"note": "Although the sidebar surfaces urgent tasks and mobile cards stack cleanly, the target landscape tablet layout crushes table columns into unreadable multi-line word breaks."
+		},
+		"S6": {
+			"craft": 4,
+			"fit": 3,
+			"hierarchy": 5,
+			"mobile": 3,
+			"overall": 3,
+			"defects": [
+				"Completely missing a walk-in or new booking button and missing per-patient payment due flags on cards",
+				"Red 10:12 current-time line slices directly through the middle of 'Frank Holloway' in the third schedule column",
+				"Top of the fourth column clips an 08:15 appointment card so the patient name is cut off, and bottom of the schedule container vertically slices 'Tariq Mahmood' and 'Mohammed Al-Rashid' in half",
+				"On mobile-full.jpg, the 4-column schedule overflows horizontally and cuts off the third and fourth physiotherapists"
+			],
+			"note": "Despite a calm teal-tinted aesthetic and clear waiting-room cards, it omits walk-in booking and per-patient payment flags while suffering from vertically sliced schedule cards and mobile horizontal clipping."
+		},
+		"T6": {
+			"craft": 7,
+			"fit": 7,
+			"hierarchy": 5,
+			"mobile": 3,
+			"overall": 6,
+			"defects": [
+				"On mobile-full.jpg, severe horizontal table overflow cuts off the status column, hides the therapist column and all action buttons ('Check in', 'No-show', 'Send in'), and clips the right side of Waiting room, Clinicians, and Desk to-do",
+				"Top KPI card reports '18 Appointments today' while the schedule badge and actual row count are 19",
+				"Chronological sorting from 8:00 am pushes the first 'Check in' row ('10:45 am Beatrice Carmichael') to the bottom edge of desktop-fold.jpg where it is cut in half",
+				"Stray dark pill artifact floats over the schedule table in desktop-full.jpg, tablet-full.jpg, and mobile-full.jpg"
+			],
+			"note": "On-brand teal styling, clear payment badges, and one-tap check-in buttons work well on desktop and tablet once scrolled, but chronological ordering hides check-ins below the fold and the mobile layout is severely clipped horizontally."
+		},
+		"U3": {
+			"craft": 4,
+			"fit": 5,
+			"hierarchy": 5,
+			"mobile": 3,
+			"overall": 4,
+			"defects": [
+				"Primary header action button next to 'Kestrel Physio Front desk' renders as a blank white rectangle with invisible white-on-white text across all viewports",
+				"On mobile-full.jpg, the appointments table overflows horizontally, cutting off the status column and hiding all action buttons ('Check in', 'No-show', 'Send through', 'Finish'), while also clipping wait times in the Waiting room card",
+				"Chronological sorting from 08:00 pushes all 'Waiting' and 'Booked' ('Check in') rows completely below the fold on desktop-fold.jpg",
+				"Stray dark pill artifact floats over the appointments table in desktop-full.jpg, tablet-full.jpg, and mobile-full.jpg"
+			],
+			"note": "An unreadable white-on-white header button, zero check-in actions visible above the desktop fold, and severe horizontal clipping on mobile prevent this otherwise clean teal table from being shippable."
+		}
+	},
+	"ranking": [
+		"M7",
+		"H3",
+		"A3",
+		"N2",
+		"T6",
+		"E9",
+		"N5",
+		"F2",
+		"S3",
+		"K6",
+		"U3",
+		"R3",
+		"S6",
+		"R4",
+		"D9"
+	]
+}

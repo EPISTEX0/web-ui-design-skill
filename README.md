@@ -2,22 +2,29 @@
 
 A skill that makes coding agents design web UI that looks deliberate, not generated.
 
-We read 34 design skills for Claude Code, Cursor and Codex, and every public benchmark of them we could find. The public studies found little or no gain over an agent with no skill. What the sources do agree on is a process: real references, a written design contract, a render-and-critique loop, and a stress test. This skill is that process, plus the rules three or more skills agree on, in about 200 lines.
+We read 34 design skills for Claude Code, Cursor and Codex, and every public benchmark of them we could find. The public studies found little or no gain over an agent with no skill. What the sources do agree on is a process: real references, a written design contract, a render-and-critique loop, and a stress test. This skill is that process, plus the rules three or more skills agree on, in about 400 lines split so each case loads only its own steps.
 
-Then we tested it in a blind A/B of 36 builds, scored by GPT, Gemini and Claude judges. It beats Claude Code's defaults by 2 points out of 10. It scores level with Anthropic's `frontend-design` on looks, and it ships fewer measurable defects.
+Version 0.3 names the case first (a new site, a page added to an existing app, or a redesign), asks the user about the gaps that would change the design, and picks from a catalog of page types and style families instead of guessing. We tested it in three blind A/B rounds, 105 builds in all, scored by GPT, Gemini and Claude judges.
 
 ## Benchmark
 
-| Arm | Panel score, 1 to 10 | Win rate vs defaults | Mobile score | Builds with contrast failures | Mobile overflow | Cost per build |
-| --- | --- | --- | --- | --- | --- | --- |
-| Claude Code defaults | 5.26 | n/a | 5.15 | 5/9 | 1/9 | $0.21 |
-| Anthropic `frontend-design` | 6.89 | 0.93 (p = 0.012) | 5.52 | 5/9 | 3/9 | $0.24 |
-| `web-ui-design` 0.1 | 6.96 | 0.89 (p = 0.009) | 6.41 | 6/9 | 1/9 | $0.32 |
-| `web-ui-design` 0.2 | 7.22 | 0.96 (p = 0.001) | 6.70 | 0/9 | 0/9 | $0.34 |
+Round 3 gave every build a simulated client with private notes (brand colors, prices, audience, device) and judged each page against those notes. Panel score, 1 to 10:
 
-Sonnet 5.5 built a landing page, a dashboard and a docs page 3 times per arm, in isolated sessions. Three judges from three model families scored screenshots under random labels. On looks, the three skills are statistically tied. Version 0.2 added a checker that measures the page. That cut contrast failures from 6 of 9 builds to 0, and the judges gave it the best mobile score.
+| Case | Claude Code defaults | `web-ui-design` 0.2 | `web-ui-design` 0.3 |
+| --- | --- | --- | --- |
+| New site, 3 briefs, 9 builds per arm | 4.37 | 4.41 | **6.85** (win rate 0.81 vs defaults, p = 0.005), 7.72 in the 6 builds where it asked and got answers |
+| New site, the client declines every question | n/a | n/a | 4.15 |
+| Add a page to a React app, 3 builds per arm | 5.11 | 5.22 | 3.78 unwired (never triggered), **7.22** with the `CLAUDE.md` line |
+| Redesign a dated site, 3 builds per arm | 4.33 | **6.78** | 6.44 (6.67 wired) |
 
-The method, every score, the limits, and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the [blind gallery](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/).
+- **New sites gain only when the user answers.** 0.3 asks up to 4 questions before it builds. With answers it led every arm with all three judges. With a client who declined, it tied defaults, and on the exhibition brief it shipped pages full of "to confirm".
+- **Adding to an app needs the install line.** Without it the skill did not trigger once. With it, 2 of 3 Time off pages were the only ones a manager could use on a phone. At 3 builds per arm this is a strong hint, not a significant result. Every arm matched the app's look and broke no existing page.
+- **Redesigns.** Both skill versions fixed all 12 planted defects (defaults left 1 to 3) and kept the club's brand. 0.3 is no better than 0.2 here and costs more.
+- 0.3 costs $0.51 per new site against $0.35 for 0.2 and $0.16 for defaults, and takes about 3 minutes.
+
+Rounds 1 and 2 (36 builds, briefs without a client) found every design skill about 2 points above defaults, with 0.2 ahead on measurable defects: 0 contrast failures against 6 of 9 for 0.1.
+
+The method, every score, the integrity notes, the limits and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the blind galleries for [round 3](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-3/gallery/) and [round 2](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/).
 
 ## Install
 
@@ -34,37 +41,46 @@ As a Claude Code plugin:
 /plugin install web-ui-design@web-ui-design
 ```
 
-Then add one line to your project's `CLAUDE.md` or `AGENTS.md`, so the design contract loads even when the skill does not trigger:
+Then add one line to your project's `CLAUDE.md` or `AGENTS.md`, or to your user-level one:
 
 ```
-Read DESIGN.md before any UI work.
+Use the web-ui-design skill for any UI work, and read DESIGN.md first when it exists.
 ```
+
+Without it, the skill triggers on new pages and redesigns but not on "add a page to this app". In the benchmark it triggered 0 of 3 times there without the line and 3 of 3 with it.
 
 ## What the agent does
 
-The skill runs seven steps in order:
+The skill first names the case, then runs that case's steps:
 
-1. **Load the contract.** Read `DESIGN.md` if it exists. Its tokens outrank every default.
-2. **Write the brief.** Subject, audience, primary job, and a mode: *Persuade* (landing pages), *Operate* (apps and dashboards) or *Read* (docs).
-3. **Gather references.** Real products from the subject's world, each with the specific thing it contributes.
-4. **Set the direction.** 2 or 3 directions on a named axis, a signature element only this subject would have, and a token plan written to `DESIGN.md` and checked against a list of generated-design tells.
-5. **Build** with tokens only and every state: loading, empty, error, disabled, hover, focus.
-6. **Run the render loop.** `scripts/check.mjs` renders the full page at 390, 768 and 1440 px and reports overflow, clipped content, contrast, unloaded fonts and script errors. The agent opens every screenshot tile, critiques against the rules and fixes in batches, for at most 3 rounds. The step is done when the run after the last edit is clean.
-7. **Record decisions** with their rationale in `DESIGN.md`, so the next session starts from them.
+| Case | When | What changes |
+| --- | --- | --- |
+| **New** | No UI yet: "build a landing page" | Asks up to 4 multiple-choice questions, then picks a page type and a style family from the catalog and tailors the tokens to the subject |
+| **Extend** | An app with UI gets a new page or feature | Reads the design system from the code (or writes it into `DESIGN.md`), reuses components and tokens, and leaves existing pages alone |
+| **Improve** | "It looks dated", "it's hard to use on phones" | Audits first, asks the scope (polish, refresh or rebuild) and what must stay, fixes the worst problems first, then confirms every piece of content and every flow survived |
+| **Review** | Only a critique | Reports a `Location | Before | After | Why` table |
+| **Small edit** | One component or style | Changes only that, with existing tokens |
 
-Ask only for a critique and it runs step 6 alone. It reports a `Location | Before | After | Why` table.
+Every case shares four parts:
+
+1. **The contract.** `DESIGN.md` and the project's stack (framework, styling system, components) outrank the skill's defaults.
+2. **The question round.** It asks only about gaps that change a choice: the primary action, the audience and device, existing brand assets, the feel, real content, and for Improve the scope. Each question has a recommended answer, and "your call" is always a valid reply. Answers go into a Brief in `DESIGN.md` with their source.
+3. **The pattern catalog.** 12 page types in 3 modes (*Persuade*, *Operate*, *Read*), each with its sections, UX patterns and a rendering and performance budget, and 8 style families with starting tokens.
+4. **The render loop.** `scripts/check.mjs` renders the full page at 390, 768 and 1440 px. It reports overflow, clipped content, contrast, unloaded fonts, script errors, tap targets under 24px, Tab stops with no visible focus, tables that scroll sideways on phones, and a performance budget (LCP, CLS, JS, fonts, images). The agent opens every screenshot tile, walks the main flow, and fixes in batches until the run after the last edit is clean.
 
 ## What's inside
 
 | File | Loaded | Contents |
 | --- | --- | --- |
-| [`skills/web-ui-design/SKILL.md`](skills/web-ui-design/SKILL.md) | When the skill triggers | The seven steps |
-| [`reference/rules.md`](skills/web-ui-design/reference/rules.md) | During steps 4 to 6 | Tells, layout, type, color, depth, motion, states, mobile, copy, stress test |
-| [`reference/design-md-template.md`](skills/web-ui-design/reference/design-md-template.md) | At step 4 | A `DESIGN.md` with YAML tokens and a decisions table |
-| [`scripts/check.mjs`](skills/web-ui-design/scripts/check.mjs) | Run at step 6, never read | Full-page screenshot tiles plus overflow, contrast, font and error checks. Needs Node 22 and Chrome or Chromium, and no npm install |
+| [`skills/web-ui-design/SKILL.md`](skills/web-ui-design/SKILL.md) | When the skill triggers | The case router, the contract, the question round, the render loop |
+| [`reference/new.md`](skills/web-ui-design/reference/new.md), [`extend.md`](skills/web-ui-design/reference/extend.md), [`improve.md`](skills/web-ui-design/reference/improve.md) | The one matching the case | That case's steps |
+| [`reference/patterns.md`](skills/web-ui-design/reference/patterns.md) | When picking patterns | Page types and style families |
+| [`reference/rules.md`](skills/web-ui-design/reference/rules.md) | While building and checking | Tells, layout, type, color, depth, motion, states, feedback and flows, performance, mobile, copy, stress test |
+| [`reference/design-md-template.md`](skills/web-ui-design/reference/design-md-template.md) | When writing `DESIGN.md` | YAML tokens, the Brief with sources, a decisions table |
+| [`scripts/check.mjs`](skills/web-ui-design/scripts/check.mjs) | Run in the render loop, never read | Full-page screenshot tiles plus layout, contrast, font, error, tap target, focus, table and performance checks. Needs Node 22 and Chrome or Chromium, and no npm install |
 | [`research/`](research/) | Never | The reports this skill was distilled from, with sources |
 
-The instructions total about 13 KB. The large design skills we read load 17k to 50k tokens per page build.
+A New build reads about 25 KB of instructions (roughly 6k tokens): `SKILL.md`, its case file, the catalog, the rules and the template. Extend and Improve read about the same. The large design skills we read load 17k to 50k tokens per page build.
 
 ## What the evidence says
 
@@ -91,7 +107,13 @@ Every line can be overridden by your `DESIGN.md` or your brief.
 
 ## Status
 
-Version 0.2, benchmarked on 2026-10-19 against 0.1. The benchmark report lists two known gaps. Dashboard tables still scroll sideways on phones, and when the skill avoids the cream-and-terracotta tell it tends to land on cold, corporate palettes. 0.2 has only been tested on the briefs that shaped it, so new briefs are the next test.
+Version 0.3, benchmarked on 2026-10-20. Known gaps, for the next version:
+
+- **The question round can be skipped.** On the clinic check-in brief it asked 0 of 3 times and wrote every gap as "assumed", once as "left to you" when the user had said nothing.
+- **A user who will not answer gets placeholders.** With a declining client, the skill left "to confirm" in place of facts. Plausible sample content, listed for the user to replace, would serve them better.
+- **Extend needs the `CLAUDE.md` line** to trigger at all.
+- **Redesigns cost 1.7 times 0.2 for no measured gain.**
+- **The render loop gets cut short.** One Extend build never opened its 390 px screenshot, and it was the one whose actions were hidden on phones.
 
 If you run the skill against another design skill or no skill on your own briefs, open an issue with the screenshots. Results either way are welcome and will shape the next version.
 

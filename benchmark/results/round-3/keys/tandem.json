@@ -1,0 +1,36 @@
+{
+  "order": [
+    "Y7",
+    "H8",
+    "R7",
+    "G2",
+    "N6",
+    "A9",
+    "R4",
+    "Y5",
+    "W4",
+    "U9",
+    "C5",
+    "N9",
+    "E4",
+    "P8",
+    "X8"
+  ],
+  "key": {
+    "Y7": "tandem--none--3",
+    "H8": "tandem--web-ui-design-0.3--2",
+    "R7": "tandem--web-ui-design-0.2--1",
+    "G2": "tandem--web-ui-design-0.3-silent--2",
+    "N6": "tandem--web-ui-design-0.3--1",
+    "A9": "tandem--web-ui-design-0.3-silent--1",
+    "R4": "tandem--frontend-design--1",
+    "Y5": "tandem--frontend-design--3",
+    "W4": "tandem--web-ui-design-0.3--3",
+    "U9": "tandem--none--2",
+    "C5": "tandem--none--1",
+    "N9": "tandem--frontend-design--2",
+    "E4": "tandem--web-ui-design-0.2--3",
+    "P8": "tandem--web-ui-design-0.2--2",
+    "X8": "tandem--web-ui-design-0.3-silent--3"
+  }
+}

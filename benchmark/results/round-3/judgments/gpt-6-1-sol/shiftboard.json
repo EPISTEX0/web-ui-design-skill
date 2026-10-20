@@ -1,0 +1,191 @@
+{
+  "scores": {
+    "A7": {
+      "consistency": 9,
+      "craft": 6,
+      "usability": 5,
+      "mobile": 2,
+      "overall": 5,
+      "defects": [
+        "The visible submission dates are not oldest first: Dev Patel's 30 September request is last, behind October requests.",
+        "The mobile table does not expose the decision buttons, status, or complete notes in the captured width.",
+        "Mobile date and submission metadata wrap into narrow, difficult-to-scan columns.",
+        "The supplied state does not show how a manager supplies the required decline reason."
+      ],
+      "note": "The desktop fits Shiftboard well and exposes useful submission metadata, but the queue order and mobile decision workflow need correction."
+    },
+    "B5": {
+      "consistency": 9,
+      "craft": 8,
+      "usability": 7,
+      "mobile": 8,
+      "overall": 8,
+      "defects": [
+        "No submission dates or oldest-first indicator explain the order of pending requests.",
+        "The supplied state does not show a decline-reason prompt or indicate that a reason is required.",
+        "Mobile request blocks are very tall and provide few field labels, making comparisons slower.",
+        "There is no visible location filter to narrow the seven-request queue."
+      ],
+      "note": "A convincing addition to the existing app, with complete mobile requests and accessible decisions, but insufficient visibility into queue age and decline reasons."
+    },
+    "C4": {
+      "consistency": 9,
+      "craft": 6,
+      "usability": 4,
+      "mobile": 2,
+      "overall": 4,
+      "defects": [
+        "Employee locations are missing from the requests.",
+        "The mobile table leaves decision controls outside the visible width.",
+        "Dates and notes wrap into cramped multiline columns on mobile.",
+        "No submission dates or oldest-first indicator establish request age.",
+        "The supplied state does not show the required decline-reason step."
+      ],
+      "note": "The visual shell belongs to Shiftboard, but missing locations and an unusable mobile decision table make this incomplete."
+    },
+    "C5": {
+      "consistency": 9,
+      "craft": 5,
+      "usability": 3,
+      "mobile": 1,
+      "overall": 3,
+      "defects": [
+        "Requests omit employee locations.",
+        "Placing notes beneath employee names produces extremely narrow, tall text stacks on mobile.",
+        "Mobile decision controls are outside the visible table.",
+        "Dates omit years, including the December-to-January request.",
+        "No submission-age information or visible decline-reason prompt supports the required review workflow."
+      ],
+      "note": "Despite familiar styling, the compressed employee-and-note column and missing request context make this the weakest review surface."
+    },
+    "C6": {
+      "consistency": 9,
+      "craft": 7,
+      "usability": 6,
+      "mobile": 2,
+      "overall": 6,
+      "defects": [
+        "The mobile table does not show status or either decision button.",
+        "Mobile dates wrap almost word by word, making ranges and day counts difficult to scan.",
+        "No submission dates or oldest-first label make the pending order understandable.",
+        "The supplied state does not show a prompt for the required decline reason."
+      ],
+      "note": "A strong, complete desktop table with a sensible pending queue, held back by its unreworked mobile table."
+    },
+    "D2": {
+      "consistency": 9,
+      "craft": 6,
+      "usability": 4,
+      "mobile": 2,
+      "overall": 4,
+      "defects": [
+        "Requests do not show employee locations.",
+        "The mobile table omits visible decision controls and squeezes dates and notes into narrow columns.",
+        "No submission dates or oldest-first indicator establish which requests have waited longest.",
+        "The supplied state does not show how a decline reason is entered."
+      ],
+      "note": "The filters and desktop table are neatly integrated, but missing locations and inaccessible mobile decisions prevent shipping."
+    },
+    "E2": {
+      "consistency": 9,
+      "craft": 5,
+      "usability": 5,
+      "mobile": 2,
+      "overall": 5,
+      "defects": [
+        "The mobile navigation and table stop well short of the right edge, wasting scarce screen width.",
+        "Mobile date ranges break into very narrow vertical stacks.",
+        "Status and decision buttons are not visible in the mobile capture.",
+        "No submission-age information establishes oldest-first review.",
+        "The supplied state does not show the required decline-reason step."
+      ],
+      "note": "The desktop contains the necessary request details and matches the app, but mobile width handling seriously undermines the result."
+    },
+    "G6": {
+      "consistency": 9,
+      "craft": 6,
+      "usability": 5,
+      "mobile": 2,
+      "overall": 5,
+      "defects": [
+        "Mobile navigation does not span the screen, leaving an unused strip on the right.",
+        "The mobile table exposes no status or decision buttons.",
+        "Narrow mobile date and note columns require excessive wrapping.",
+        "No submitted dates or oldest-first indicator explain queue priority.",
+        "The supplied state does not show a decline-reason prompt."
+      ],
+      "note": "A faithful desktop extension whose cramped, partial-width mobile table cannot support decisions comfortably."
+    },
+    "H8": {
+      "consistency": 9,
+      "craft": 6,
+      "usability": 5,
+      "mobile": 3,
+      "overall": 5,
+      "defects": [
+        "Date years are omitted, making the December-to-January request less explicit.",
+        "Mobile dates and notes remain cramped, and decision buttons are outside the visible table.",
+        "The mobile navigation leaves an unused strip at the right edge.",
+        "No submission-age information establishes oldest-first review.",
+        "The supplied state does not show how the required decline reason is collected."
+      ],
+      "note": "Shorter dates make the mobile table slightly less dense, but it still lacks visible decisions and sacrifices useful date precision."
+    },
+    "Q2": {
+      "consistency": 9,
+      "craft": 7,
+      "usability": 5,
+      "mobile": 2,
+      "overall": 5,
+      "defects": [
+        "The mobile table does not expose status or decision controls.",
+        "Date ranges and day counts wrap into tall, narrow mobile cells.",
+        "No submission dates or oldest-first indicator make request age visible.",
+        "The supplied state does not show a decline-reason prompt."
+      ],
+      "note": "The desktop is clean and native to Shiftboard, but its mobile layout remains a clipped desktop table rather than a usable review view."
+    },
+    "Q9": {
+      "consistency": 10,
+      "craft": 9,
+      "usability": 7,
+      "mobile": 9,
+      "overall": 8,
+      "defects": [
+        "No submission dates or oldest-first indicator explain the pending order.",
+        "The supplied state does not show a decline-reason prompt or indicate that a reason is required.",
+        "Mobile details are largely unlabeled, and the status sits below the action buttons rather than with the request heading.",
+        "The screenshots provide no overlap or coverage warning."
+      ],
+      "note": "The best-balanced addition, retaining the exact product language while providing location filtering and complete, actionable mobile requests."
+    },
+    "W5": {
+      "consistency": 9,
+      "craft": 7,
+      "usability": 5,
+      "mobile": 2,
+      "overall": 5,
+      "defects": [
+        "The mobile table does not expose either decision button or status.",
+        "Dates and day counts break into narrow vertical stacks on mobile.",
+        "No submission-age information establishes an oldest-first queue.",
+        "The supplied state does not show how a manager enters the required decline reason."
+      ],
+      "note": "A polished desktop table with clear approval buttons, but the mobile capture does not support the central approval task."
+    }
+  },
+  "ranking": [
+    "Q9",
+    "B5",
+    "C6",
+    "W5",
+    "Q2",
+    "A7",
+    "H8",
+    "G6",
+    "E2",
+    "D2",
+    "C4",
+    "C5"
+  ]
+}

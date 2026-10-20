@@ -1,0 +1,51 @@
+{
+  "id": "tandem--web-ui-design-0.3--3",
+  "desktop": {
+    "fullH": 4787,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "rules": []
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 3,
+      "cls": 0.008
+    },
+    "focus": {
+      "focusStops": 30,
+      "focusInvisible": 3
+    }
+  },
+  "tablet": {
+    "fullH": 4816,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 3,
+      "cls": 0.012
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 7012,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 3,
+      "cls": 0.059
+    },
+    "focus": null
+  }
+}

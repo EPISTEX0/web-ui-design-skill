@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Salt and Iron · Harwick Maritime Museum</title>
+<meta name="description" content="The gallery guide for Salt and Iron at the Harwick Maritime Museum, 14 March to 2 November 2027. Twelve stops, in gallery order.">
+<meta name="theme-color" content="#f7f2e9">
+<style>
+:root {
+  /* Brand */
+  --rust: #9c3d1f;
+  --rust-deep: #7d2f16;
+  --ink: #1f1b18;
+  --paper: #f7f2e9;
+  /* Derived from the three brand colours */
+  --paper-deep: #ece4d4;
+  --ink-soft: #5a5148;
+  --rule: #cfc3ae;
+
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+  --measure: 36rem;
+  --tap: 48px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 1.125rem/1.6 var(--serif);
+  min-height: 100vh;
+}
+h1, h2, h3, p, ol { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--rust); outline-offset: 3px; }
+.skip { position: absolute; left: var(--s4); top: -100px; background: var(--ink); color: var(--paper); padding: var(--s3) var(--s4); z-index: 10; font-family: var(--sans); }
+.skip:focus { top: var(--s2); }
+
+.wrap { width: 100%; max-width: var(--measure); margin: 0 auto; padding-inline: var(--s5); }
+
+.label {
+  font: 600 0.8125rem/1.3 var(--sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: var(--tap); padding: 0 var(--s5);
+  font: 600 1rem/1 var(--sans);
+  text-decoration: none; cursor: pointer;
+  border: 2px solid var(--rust); border-radius: 2px;
+  background: var(--rust); color: #fff;
+}
+.btn:hover { background: var(--rust-deep); border-color: var(--rust-deep); }
+.btn.ghost { background: transparent; color: var(--rust); }
+.btn.ghost:hover { background: var(--paper-deep); }
+
+/* Home */
+.masthead { padding-block: var(--s6) var(--s5); border-bottom: 1px solid var(--rule); }
+.museum { font: 600 0.8125rem/1.3 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.title { font-weight: 700; font-size: clamp(3.25rem, 17vw, 5.5rem); line-height: 0.95; letter-spacing: -0.02em; margin-top: var(--s5); }
+.title span { color: var(--rust); font-style: italic; font-weight: 400; }
+.dates { margin-top: var(--s5); font: 600 1.0625rem/1.4 var(--sans); }
+.intro { margin-top: var(--s4); color: var(--ink-soft); }
+.cta { margin-top: var(--s5); display: flex; flex-direction: column; gap: var(--s3); }
+
+.stops-head { padding-block: var(--s6) var(--s3); display: flex; justify-content: space-between; align-items: baseline; }
+.stops-head h2 { font-size: 1.5rem; }
+.stops { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--ink); }
+.stops li { border-bottom: 1px solid var(--rule); }
+.stops a {
+  display: grid; grid-template-columns: 3.25rem 1fr auto; align-items: center; gap: var(--s3);
+  min-height: 64px; padding-block: var(--s3); text-decoration: none;
+}
+.stops a:hover { background: var(--paper-deep); }
+.num {
+  font: 700 1.5rem/1 var(--serif); font-variant-numeric: lining-nums tabular-nums;
+  color: var(--rust);
+}
+.stops .t { font-size: 1.125rem; line-height: 1.3; }
+.stops .seen { font: 600 0.75rem/1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+.stops a[aria-current="step"] .seen { color: var(--rust); }
+.note { margin-top: var(--s6); padding: var(--s4); background: var(--paper-deep); font: 0.9375rem/1.5 var(--sans); color: var(--ink-soft); }
+footer { padding-block: var(--s7) var(--s8); font: 0.9375rem/1.5 var(--sans); color: var(--ink-soft); }
+
+/* Stop view */
+.bar {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+}
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; min-height: 56px; }
+.bar a { font: 600 0.9375rem/1 var(--sans); text-decoration: none; color: var(--rust); display: inline-flex; align-items: center; min-height: var(--tap); }
+.bar .pos { font: 600 0.9375rem/1 var(--sans); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+.chain { display: flex; gap: 3px; padding-top: var(--s5); }
+.chain a { flex: 1; height: 48px; margin-block: -12px; display: flex; align-items: center; text-decoration: none; }
+.chain a::before { content: ""; display: block; width: 100%; height: 6px; background: var(--rule); border-radius: 1px; }
+.chain a.done::before { background: var(--ink); }
+.chain a.now::before { background: var(--rust); height: 12px; }
+
+.stop { padding-block: var(--s6) 140px; }
+.stop .big {
+  font: 700 clamp(5.5rem, 30vw, 8rem)/0.85 var(--serif); font-variant-numeric: lining-nums;
+  color: var(--rust); letter-spacing: -0.04em;
+}
+.stop h1 { font-size: clamp(2rem, 9vw, 2.75rem); line-height: 1.1; margin-top: var(--s4); letter-spacing: -0.01em; }
+.stop h1:focus { outline: none; }
+.where { margin-top: var(--s3); font: 600 0.9375rem/1.4 var(--sans); color: var(--ink-soft); }
+.stop .body { margin-top: var(--s5); }
+.stop .body p + p { margin-top: var(--s4); }
+.look { margin-top: var(--s6); padding: var(--s5) 0 0; border-top: 2px solid var(--rust); }
+.look p { margin-top: var(--s2); }
+.sample { margin-top: var(--s6); font: 0.875rem/1.4 var(--sans); color: var(--ink-soft); }
+
+.pager {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+  background: var(--paper); border-top: 1px solid var(--ink);
+  padding: var(--s3) 0 max(var(--s3), env(safe-area-inset-bottom));
+}
+.pager .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); }
+.pager .btn { min-height: 56px; flex-direction: column; gap: var(--s1); padding: 0 var(--s3); font-size: 0.9375rem; }
+.pager .btn small { font: 500 0.75rem/1 var(--sans); opacity: 0.85; }
+.pager .only { grid-column: 1 / -1; }
+.pager .spacer { visibility: hidden; }
+
+@media (min-width: 768px) {
+  .wrap { padding-inline: var(--s6); }
+  .cta { flex-direction: row; }
+  .masthead { padding-block: var(--s7) var(--s6); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .stop, .masthead { animation: rise .35s ease-out both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+}
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="app"><main id="main"><noscript><div class="wrap" style="padding-block:2rem"><p>This guide needs JavaScript to step through the stops. Salt and Iron runs 14 March to 2 November 2027 at the Harwick Maritime Museum.</p></div></noscript></main></div>
+
+<script>
+/* ---------------------------------------------------------------
+   CONTENT. Replace the titles and text below; nothing else needs editing.
+   Only the exhibition name, museum name and dates are real.
+   --------------------------------------------------------------- */
+const EXHIBITION = {
+  museum: 'Harwick Maritime Museum',
+  dates: '14 March – 2 November 2027',
+  intro: 'Sample text: a short welcome that sets up the two materials and tells visitors how the twelve stops run through the galleries.'
+};
+
+const STOPS = [
+  { title: 'Stop title 1' },  { title: 'Stop title 2' },  { title: 'Stop title 3' },
+  { title: 'Stop title 4' },  { title: 'Stop title 5' },  { title: 'Stop title 6' },
+  { title: 'Stop title 7' },  { title: 'Stop title 8' },  { title: 'Stop title 9' },
+  { title: 'Stop title 10' }, { title: 'Stop title 11' }, { title: 'Stop title 12' }
+].map(s => Object.assign({
+  where: 'Sample: gallery and case location',
+  body: [
+    'Sample text. This paragraph will describe the object or theme at this stop: what it is, where it came from and why it belongs in the story of salt and iron.',
+    'Sample text. A second paragraph can add the human detail, such as who made, carried or used it.'
+  ],
+  look: 'Sample text. One thing to notice at this stop.'
+}, s));
+
+/* --------------------------------------------------------------- */
+const app = document.getElementById('app');
+const KEY = 'salt-and-iron:last-stop';
+const N = STOPS.length;
+const two = n => String(n);
+
+function last() {
+  try { const v = parseInt(localStorage.getItem(KEY), 10); return v >= 1 && v <= N ? v : 0; } catch (e) { return 0; }
+}
+function remember(n) { try { localStorage.setItem(KEY, n); } catch (e) {} }
+function esc(s) { return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function home() {
+  const l = last();
+  document.title = 'Salt and Iron · ' + EXHIBITION.museum;
+  app.innerHTML = `
+  <main id="main">
+    <header class="masthead"><div class="wrap">
+      <p class="museum">${EXHIBITION.museum}</p>
+      <h1 class="title" tabindex="-1">Salt <span>and</span> Iron</h1>
+      <p class="dates">${EXHIBITION.dates}</p>
+      <p class="intro">${esc(EXHIBITION.intro)}</p>
+      <div class="cta">
+        <a class="btn" href="#stop-1">Start at stop 1</a>
+        ${l > 1 ? `<a class="btn ghost" href="#stop-${l}">Continue at stop ${l}</a>` : ''}
+      </div>
+    </div></header>
+    <section class="wrap" aria-labelledby="sh">
+      <div class="stops-head"><h2 id="sh">The twelve stops</h2><span class="label">In gallery order</span></div>
+      <ol class="stops">
+        ${STOPS.map((s, i) => `<li><a href="#stop-${i + 1}"${l === i + 1 ? ' aria-current="step"' : ''}>
+          <span class="num">${i + 1}</span><span class="t">${esc(s.title)}</span>
+          <span class="seen">${l === i + 1 ? 'You were here' : ''}</span></a></li>`).join('')}
+      </ol>
+      <p class="note">Sample content: the stop titles and all descriptions are placeholders until the final text is added.</p>
+    </section>
+    <footer class="wrap">${EXHIBITION.museum}</footer>
+  </main>`;
+}
+
+function stop(n) {
+  const s = STOPS[n - 1];
+  remember(n);
+  document.title = `${n}. ${s.title} · Salt and Iron`;
+  const prev = n > 1 ? STOPS[n - 2] : null, next = n < N ? STOPS[n] : null;
+  app.innerHTML = `
+  <header class="bar"><div class="wrap">
+    <a href="#">← All stops</a><span class="pos">Stop ${n} of ${N}</span>
+  </div></header>
+  <main id="main"><article class="stop"><div class="wrap">
+    <nav class="chain" aria-label="Progress through the stops">
+      ${STOPS.map((x, i) => `<a href="#stop-${i + 1}" class="${i + 1 < n ? 'done' : i + 1 === n ? 'now' : ''}" aria-label="Stop ${i + 1}: ${esc(x.title)}"${i + 1 === n ? ' aria-current="step"' : ''}></a>`).join('')}
+    </nav>
+    <p class="big" aria-hidden="true" style="margin-top:2rem">${n}</p>
+    <h1 tabindex="-1"><span class="sr" style="position:absolute;left:-9999px">Stop ${n}: </span>${esc(s.title)}</h1>
+    <p class="where">${esc(s.where)}</p>
+    <div class="body">${s.body.map(p => `<p>${esc(p)}</p>`).join('')}</div>
+    <div class="look"><h2 class="label">Look closer</h2><p>${esc(s.look)}</p></div>
+    <p class="sample">Sample text: replace with final stop content.</p>
+  </div></article></main>
+  <nav class="pager" aria-label="Previous and next stop"><div class="wrap">
+    ${prev ? `<a class="btn ghost" href="#stop-${n - 1}" rel="prev">← Previous<small>Stop ${n - 1}</small></a>` : '<span class="spacer"></span>'}
+    ${next ? `<a class="btn" href="#stop-${n + 1}" rel="next">Next →<small>Stop ${n + 1}</small></a>`
+           : `<a class="btn" href="#">Finish<small>Back to all stops</small></a>`}
+  </div></nav>`;
+}
+
+function route() {
+  const m = /^#stop-(\d+)$/.exec(location.hash);
+  const n = m ? parseInt(m[1], 10) : 0;
+  if (n >= 1 && n <= N) stop(n); else home();
+  window.scrollTo(0, 0);
+  const h = app.querySelector('h1');
+  if (h) h.focus({ preventScroll: true });
+}
+addEventListener('hashchange', route);
+addEventListener('keydown', e => {
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
+  const m = /^#stop-(\d+)$/.exec(location.hash);
+  if (!m) return;
+  const n = parseInt(m[1], 10);
+  if (e.key === 'ArrowRight' && n < N) location.hash = '#stop-' + (n + 1);
+  if (e.key === 'ArrowLeft' && n > 1) location.hash = '#stop-' + (n - 1);
+});
+route();
+</script>
+</body>
+</html>

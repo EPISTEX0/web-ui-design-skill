@@ -1,0 +1,15 @@
+npm notice run shiftboard@0.4.2 build
+npm notice run tsc --noEmit && vite build
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 68 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                     0.44 kB │ gzip:  0.28 kB
+dist/assets/hanken-grotesk-vietnamese-wght-normal-CHiFlh_0.woff2    9.32 kB
+dist/assets/hanken-grotesk-latin-ext-wght-normal-Dg-wlmqe.woff2    19.58 kB
+dist/assets/hanken-grotesk-latin-wght-normal-CaVRRdDk.woff2        34.70 kB
+dist/assets/index-B9pnZhcE.css                                     20.23 kB │ gzip:  6.31 kB
+dist/assets/index-JhE1BYgD.js                                     284.93 kB │ gzip: 89.93 kB
+
+✓ built in 121ms

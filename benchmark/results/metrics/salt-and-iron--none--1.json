@@ -1,0 +1,54 @@
+{
+  "id": "salt-and-iron--none--1",
+  "desktop": {
+    "fullH": 4564,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 2,
+      "moderate": 1,
+      "minor": 0,
+      "rules": [
+        "color-contrast:2",
+        "region:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 1,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 29,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 4564,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 1,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 7507,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 1,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

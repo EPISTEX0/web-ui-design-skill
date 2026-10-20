@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tandem – cargo bikes in Utrecht</title>
+<meta name="description" content="Tandem is a cargo bike shop in Utrecht. Find the bike that carries your kids, groceries or dog, and book a test ride.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:oklch(96% .008 150); --surface:oklch(99% .004 150); --ink-panel:oklch(24% .04 195);
+  --text:oklch(22% .03 190); --text-2:oklch(40% .03 190); --text-3:oklch(48% .025 190);
+  --border:oklch(86% .012 170); --accent:oklch(52% .17 38); --accent-hover:oklch(46% .17 38);
+  --on-accent:oklch(99% 0 0); --on-panel:oklch(96% .01 150); --on-panel-2:oklch(80% .02 170);
+  --focus:oklch(45% .17 250);
+  --font-display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --font-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s12:48px;--s16:64px;--s24:96px;
+  --r-sm:4px;--r-md:8px;--r-lg:16px;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font:400 16px/1.5 var(--font-body);color:var(--text);background:var(--bg);overflow-x:clip;
+  -webkit-tap-highlight-color:transparent;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;letter-spacing:-.02em;line-height:1.05;font-weight:800}
+p{text-wrap:pretty}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:var(--r-sm)}
+.wrap{max-width:1120px;margin-inline:auto;padding-inline:var(--s6)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:var(--s3) var(--s6);
+  font:600 16px/1 var(--font-body);border-radius:var(--r-md);border:1px solid transparent;cursor:pointer;text-decoration:none;
+  touch-action:manipulation;transition:background-color 160ms var(--ease-out),transform 140ms var(--ease-out),border-color 160ms var(--ease-out)}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-ghost{background:transparent;border-color:var(--border);color:var(--text)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+@media (hover:hover){.btn-primary:hover:not(:disabled){background:var(--accent-hover)}.btn-ghost:hover{border-color:var(--text)}}
+
+/* header */
+header{padding-block:var(--s5)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--s4)}
+.logo{font:800 28px/1 var(--font-display);letter-spacing:-.03em;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+nav{display:flex;gap:var(--s6);align-items:center}
+nav a:not(.btn){text-decoration:none;color:var(--text-2);font-weight:500;min-height:44px;display:inline-flex;align-items:center}
+@media (hover:hover){nav a:not(.btn):hover{color:var(--text)}}
+nav .btn{min-height:44px;padding-inline:var(--s5)}
+@media (max-width:640px){nav a:not(.btn){display:none}}
+
+/* hero */
+.hero{padding-block:var(--s12) var(--s24)}
+.hero .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:var(--s16);align-items:start}
+.hero h1{font-size:clamp(44px,7vw,80px)}
+.hero .lede{margin-top:var(--s6);font-size:20px;line-height:1.5;color:var(--text-2);max-width:34em}
+.hero .cta{margin-top:var(--s8);display:flex;gap:var(--s3);flex-wrap:wrap}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr;gap:var(--s12)}.hero{padding-block:var(--s8) var(--s16)}}
+
+/* picker (signature) */
+.picker{background:var(--ink-panel);color:var(--on-panel);border-radius:var(--r-lg);padding:var(--s8)}
+.picker h2{font-size:28px;letter-spacing:-.015em}
+.picker .sub{color:var(--on-panel-2);margin-top:var(--s2)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s6);border:0;padding:0}
+.chip{position:relative}
+.chip input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0;width:100%;height:100%}
+.chip span{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s4);border:1px solid oklch(45% .03 190);
+  border-radius:999px;font-weight:500;transition:background-color 160ms var(--ease-out),color 160ms var(--ease-out),border-color 160ms var(--ease-out)}
+.chip input:focus-visible+span{outline:3px solid var(--on-panel);outline-offset:3px}
+.chip input:checked+span{background:var(--on-panel);color:var(--ink-panel);border-color:var(--on-panel)}
+@media (hover:hover){.chip input:not(:checked):hover+span{border-color:var(--on-panel-2)}}
+.result{margin-top:var(--s8);padding-top:var(--s6);border-top:1px solid oklch(40% .03 190);min-height:176px}
+.result .kicker{color:var(--on-panel-2);font-size:14px}
+.result h3{font-size:32px;margin-top:var(--s1)}
+.result p{margin-top:var(--s3);color:var(--on-panel-2)}
+.result.in{animation:pop 300ms var(--ease-out)}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+.result .btn{margin-top:var(--s5);background:var(--on-panel);color:var(--ink-panel)}
+@media (hover:hover){.result .btn:hover{background:oklch(88% .02 150)}}
+
+/* sections */
+section.block{padding-block:var(--s24)}
+.block h2.title{font-size:clamp(32px,4.5vw,48px);max-width:16em}
+.block .intro{margin-top:var(--s4);color:var(--text-2);font-size:18px;max-width:36em}
+
+/* bike types: rows, not cards */
+.types{margin-top:var(--s12);border-top:1px solid var(--border)}
+.type{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) 200px;gap:var(--s8);align-items:start;padding-block:var(--s8);border-bottom:1px solid var(--border);scroll-margin-top:var(--s6);transition:background-color 200ms var(--ease-out)}
+.type h3{font-size:32px}
+.type p{color:var(--text-2)}
+.type.hl{background:var(--surface)}
+.meter{display:grid;gap:var(--s2);font-size:14px;color:var(--text-3)}
+.meter div{display:flex;align-items:center;gap:var(--s2)}
+.meter b{font-weight:500;width:60px}
+.dots{display:flex;gap:var(--s1)}
+.dots i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--text-2)}
+.dots i.on{background:var(--text);border-color:var(--text)}
+@media (max-width:860px){.type{grid-template-columns:1fr;gap:var(--s4)}}
+
+/* services */
+.band{background:var(--surface);border-block:1px solid var(--border)}
+.services{margin-top:var(--s12);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--s12)}
+.services h3{font-size:22px;letter-spacing:-.01em;line-height:1.2}
+.services p{margin-top:var(--s3);color:var(--text-2)}
+@media (max-width:860px){.services{grid-template-columns:1fr;gap:var(--s8)}}
+
+/* form */
+.book{display:grid;grid-template-columns:1fr 1fr;gap:var(--s16)}
+@media (max-width:860px){.book{grid-template-columns:1fr;gap:var(--s8)}}
+form{display:grid;gap:var(--s5)}
+label{display:grid;gap:var(--s2);font-weight:600;font-size:15px}
+input[type=text],input[type=email],select,textarea{font:400 16px/1.4 var(--font-body);color:var(--text);background:var(--surface);
+  border:1px solid oklch(62% .02 180);border-radius:var(--r-md);padding:var(--s3) var(--s4);min-height:48px;width:100%;
+  transition:border-color 160ms var(--ease-out)}
+textarea{min-height:104px;resize:vertical}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+[aria-invalid=true]{border-color:oklch(48% .2 25)}
+.err{color:oklch(45% .2 25);font-weight:500;font-size:14px;min-height:0}
+.err:not(:empty)::before{content:"! "}
+.status{padding:var(--s4) var(--s5);border-radius:var(--r-md);border:1px solid var(--border);background:var(--surface)}
+.status[hidden]{display:none}
+.status.ok{border-color:oklch(45% .12 150)}
+.status.bad{border-color:oklch(48% .2 25)}
+
+footer{background:var(--ink-panel);color:var(--on-panel-2);padding-block:var(--s12)}
+footer .wrap{display:flex;justify-content:space-between;gap:var(--s6);flex-wrap:wrap;align-items:center}
+footer .logo{color:var(--on-panel)}
+
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.result.in{animation:none}.btn:active{transform:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Tandem, home">Tandem</a>
+    <nav aria-label="Main">
+      <a href="#bikes">Bikes</a>
+      <a href="#service">Service</a>
+      <a class="btn btn-primary" href="#test-ride">Book a test ride</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Cargo bikes for Utrecht life.</h1>
+        <p class="lede">School run, Saturday market, the dog and the big shop. We help you find a bike that carries it all, and keep it rolling.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="#test-ride">Book a test ride</a>
+          <a class="btn btn-ghost" href="#bikes">See bike types</a>
+        </div>
+      </div>
+
+      <div class="picker" id="picker">
+        <h2>What do you carry?</h2>
+        <p class="sub">Pick what matters most. We'll point you to a bike type.</p>
+        <fieldset class="chips">
+          <legend class="sr">What do you carry most often?</legend>
+          <label class="chip"><input type="radio" name="load" value="kids"><span>Kids</span></label>
+          <label class="chip"><input type="radio" name="load" value="groceries"><span>Groceries</span></label>
+          <label class="chip"><input type="radio" name="load" value="dog"><span>A dog</span></label>
+          <label class="chip"><input type="radio" name="load" value="work"><span>Work gear</span></label>
+          <label class="chip"><input type="radio" name="load" value="mix"><span>A bit of everything</span></label>
+        </fieldset>
+        <div class="result" id="result" aria-live="polite">
+          <p class="kicker">Your match</p>
+          <h3>Choose a load above</h3>
+          <p>Not sure? Pick "A bit of everything" and we'll talk it through on a test ride.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="bikes">
+    <div class="wrap">
+      <h2 class="title">Three ways to carry more</h2>
+      <p class="intro">Every household is different. These are the main types of cargo bike, and what each one does best. Ratings are general guidance, not specific models.</p>
+      <div class="types">
+        <article class="type" id="type-box">
+          <h3>Front-box bike</h3>
+          <p>The classic Dutch bakfiets. A box between the handlebars and the rider holds kids, shopping or a dog, and you can see them the whole ride. Stable when parked, and easy to load.</p>
+          <div class="meter" aria-label="Ratings: carrying 5 of 5, nimble 3 of 5, parking 2 of 5">
+            <div><b>Carrying</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+            <div><b>Nimble</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+            <div><b>Parking</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></div>
+          </div>
+        </article>
+        <article class="type" id="type-long">
+          <h3>Longtail</h3>
+          <p>A stretched rear rack that looks like a normal bike. Carries a child or two on the back, plus panniers for groceries or work gear. A good fit for narrow streets and shared storage.</p>
+          <div class="meter" aria-label="Ratings: carrying 3 of 5, nimble 4 of 5, parking 4 of 5">
+            <div><b>Carrying</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+            <div><b>Nimble</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+            <div><b>Parking</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+          </div>
+        </article>
+        <article class="type" id="type-trike">
+          <h3>Three-wheeler</h3>
+          <p>Two wheels up front or at the back, and a deck that stays level at a standstill. Steady for heavy loads, young passengers and riders who prefer not to balance at traffic lights.</p>
+          <div class="meter" aria-label="Ratings: carrying 5 of 5, nimble 2 of 5, parking 2 of 5">
+            <div><b>Carrying</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+            <div><b>Nimble</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></div>
+            <div><b>Parking</b><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="service">
+    <div class="wrap">
+      <h2 class="title">Find it, ride it, keep it running</h2>
+      <div class="services">
+        <div><h3>Advice that starts with your day</h3><p>Tell us what you carry, how far you ride and where you park. We'll narrow the choice together.</p></div>
+        <div><h3>Test rides</h3><p>A cargo bike feels different from any other bike. Try it loaded, on real streets, before you decide.</p></div>
+        <div><h3>Care after the sale</h3><p>Cargo bikes work hard. Bring yours back when it needs attention and we'll look after it.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block band" id="test-ride">
+    <div class="wrap book">
+      <div>
+        <h2 class="title">Book a test ride</h2>
+        <p class="intro">Tell us a little about what you carry and we'll get back to you to arrange a time.</p>
+      </div>
+      <div>
+        <form id="form" novalidate>
+          <label>Name
+            <input type="text" name="name" autocomplete="name" required aria-describedby="e-name">
+            <span class="err" id="e-name"></span>
+          </label>
+          <label>Email
+            <input type="email" name="email" autocomplete="email" required aria-describedby="e-email">
+            <span class="err" id="e-email"></span>
+          </label>
+          <label>What do you want to carry?
+            <select name="load">
+              <option>Kids</option><option>Groceries</option><option>A dog</option><option>Work gear</option><option>A bit of everything</option>
+            </select>
+          </label>
+          <label>Anything else we should know?
+            <textarea name="note"></textarea>
+          </label>
+          <button class="btn btn-primary" type="submit" id="submit">Request a test ride</button>
+          <div class="status" id="status" role="status" hidden></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="logo">Tandem</span>
+    <span>Cargo bikes in Utrecht</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // Set to the shop's address (e.g. "hello@example.nl") so the form opens an email draft.
+  var CONTACT_EMAIL = "";
+
+  var picks = {
+    kids:{t:"Front-box bike",id:"type-box",why:"A box up front keeps your children where you can see and talk to them, with room for their bags too."},
+    groceries:{t:"Longtail",id:"type-long",why:"Panniers swallow a week of shopping, and the bike still rides and parks like a normal one."},
+    dog:{t:"Front-box bike",id:"type-box",why:"An open box gives a dog room to sit or lie down, and keeps them in sight."},
+    work:{t:"Three-wheeler",id:"type-trike",why:"A level deck carries tools or stock steadily, and stays put while you load and unload."},
+    mix:{t:"Front-box bike",id:"type-box",why:"The most flexible all-rounder to start from. A test ride will show whether it suits your street and storage."}
+  };
+  var result=document.getElementById("result");
+  var types=document.querySelectorAll(".type");
+
+  document.querySelectorAll('input[name=load]').forEach(function(r){
+    r.addEventListener("change",function(){
+      var p=picks[r.value];
+      result.innerHTML='<p class="kicker">Your match</p><h3></h3><p></p><a class="btn" href="#"></a>';
+      result.querySelector("h3").textContent=p.t;
+      result.querySelectorAll("p")[1].textContent=p.why;
+      var a=result.querySelector("a"); a.textContent="See "+p.t.toLowerCase(); a.href="#"+p.id;
+      result.classList.remove("in"); void result.offsetWidth; result.classList.add("in");
+      types.forEach(function(t){t.classList.toggle("hl",t.id===p.id)});
+      var sel=document.querySelector("#form select"); if(sel) sel.selectedIndex=[...sel.options].findIndex(function(o){return o.text.toLowerCase()===r.parentNode.textContent.trim().toLowerCase()})>=0?[...sel.options].findIndex(function(o){return o.text.toLowerCase()===r.parentNode.textContent.trim().toLowerCase()}):sel.selectedIndex;
+    });
+  });
+
+  var form=document.getElementById("form"),status=document.getElementById("status"),btn=document.getElementById("submit");
+  function setErr(f,msg){
+    document.getElementById("e-"+f.name).textContent=msg;
+    f.setAttribute("aria-invalid",msg?"true":"false");
+  }
+  function show(kind,msg){status.hidden=false;status.className="status "+kind;status.textContent=msg}
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    var n=form.elements.name,m=form.elements.email,bad=null;
+    setErr(n,n.value.trim()?"":"Enter your name so we know who to reply to.");
+    setErr(m,/^\S+@\S+\.\S+$/.test(m.value.trim())?"":"Enter an email address like name@example.nl.");
+    bad=[n,m].find(function(f){return f.getAttribute("aria-invalid")==="true"});
+    if(bad){bad.focus();status.hidden=true;return}
+    if(!CONTACT_EMAIL){
+      show("bad","Online requests aren't switched on yet. Please contact the shop directly to book your test ride.");
+      return;
+    }
+    var body="Name: "+n.value+"\nEmail: "+m.value+"\nCarrying: "+form.elements.load.value+"\n\n"+form.elements.note.value;
+    btn.disabled=true;
+    location.href="mailto:"+CONTACT_EMAIL+"?subject="+encodeURIComponent("Test ride request")+"&body="+encodeURIComponent(body);
+    show("ok","Thanks, "+n.value.trim()+". Your email app should open with the request. Send it and we'll be in touch.");
+    setTimeout(function(){btn.disabled=false},1500);
+  });
+})();
+</script>
+</body>
+</html>

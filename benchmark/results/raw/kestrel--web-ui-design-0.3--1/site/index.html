@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Front desk · Kestrel Physio</title>
+<meta name="description" content="Kestrel Physio front desk: today's schedule, arrivals, check-in and payments.">
+<style>
+:root {
+  /* Neutral ramp (slate, hue 250) */
+  --n-0: oklch(1 0 0);
+  --n-50: oklch(0.975 0.004 250);
+  --n-100: oklch(0.955 0.006 250);
+  --n-200: oklch(0.915 0.008 250);
+  --n-300: oklch(0.85 0.01 250);
+  --n-500: oklch(0.55 0.02 250);
+  --n-600: oklch(0.46 0.022 250);
+  --n-800: oklch(0.3 0.025 250);
+  --n-900: oklch(0.22 0.025 250);
+  /* Accent: kestrel head slate-blue */
+  --a-50: oklch(0.955 0.025 245);
+  --a-200: oklch(0.86 0.05 245);
+  --a-600: oklch(0.45 0.1 248);
+  --a-700: oklch(0.39 0.1 250);
+  /* Status */
+  --chestnut-50: oklch(0.96 0.03 60);
+  --chestnut-200: oklch(0.86 0.07 55);
+  --chestnut-700: oklch(0.45 0.13 45);
+  --moss-50: oklch(0.958 0.035 160);
+  --moss-200: oklch(0.84 0.07 160);
+  --moss-700: oklch(0.4 0.09 160);
+
+  --color-bg: var(--n-50);
+  --color-surface: var(--n-0);
+  --color-sunken: var(--n-100);
+  --color-line: var(--n-200);
+  --color-line-strong: var(--n-300);
+  --color-text: var(--n-900);
+  --color-text-2: var(--n-800);
+  --color-text-3: var(--n-600);
+  --color-action: var(--a-600);
+  --color-action-hover: var(--a-700);
+  --color-focus: oklch(0.55 0.17 255);
+
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px; --s-10: 40px;
+  --r-sm: 4px; --r-md: 8px; --r-lg: 12px;
+  --ring: 0 0 0 1px oklch(0.22 0.025 250 / 0.08), 0 1px 2px oklch(0.22 0.025 250 / 0.05), 0 4px 12px oklch(0.22 0.025 250 / 0.05);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--color-bg); color: var(--color-text);
+  font: 400 15px/1.5 var(--font); font-variant-numeric: tabular-nums;
+  overflow-x: clip; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; letter-spacing: -0.01em; }
+p { text-wrap: pretty; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--color-action); }
+:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.trunc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  min-height: 44px; padding: 0 var(--s-4); border-radius: var(--r-md);
+  border: 1px solid var(--color-line-strong); background: var(--color-surface);
+  font-weight: 600; cursor: pointer; text-decoration: none; color: var(--color-text);
+  transition: background-color 150ms, transform 120ms var(--ease-out), border-color 150ms;
+}
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary { background: var(--color-action); border-color: var(--color-action); color: #fff; }
+.btn-sm { min-height: 44px; padding: 0 var(--s-3); font-size: 14px; }
+@media (min-width: 701px) and (hover: hover) { .btn-sm { min-height: 36px; position: relative; } .btn-sm::after { content: ""; position: absolute; inset: -4px 0; } }
+.btn-quiet { border-color: transparent; background: transparent; color: var(--color-text-2); }
+@media (hover: hover) {
+  .btn:hover:not(:disabled) { background: var(--color-sunken); }
+  .btn-primary:hover:not(:disabled) { background: var(--color-action-hover); border-color: var(--color-action-hover); }
+  .btn-quiet:hover:not(:disabled) { background: var(--color-sunken); }
+}
+.btn-icon { width: 44px; padding: 0; }
+.btn svg { width: 18px; height: 18px; flex: none; }
+
+/* Top bar */
+.topbar {
+  display: flex; align-items: center; gap: var(--s-4); flex-wrap: wrap;
+  padding: var(--s-3) var(--s-6); background: var(--color-surface); border-bottom: 1px solid var(--color-line);
+}
+.brand { display: flex; align-items: center; gap: var(--s-2); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; margin-right: var(--s-4); }
+.brand svg { width: 28px; height: 28px; }
+.brand span { color: var(--color-text-3); font-weight: 500; }
+.search { position: relative; flex: 1 1 260px; max-width: 420px; }
+.search svg { position: absolute; left: 12px; top: 13px; width: 18px; height: 18px; color: var(--color-text-3); pointer-events: none; }
+.search input {
+  width: 100%; min-height: 44px; padding: 0 44px 0 40px; font-size: 16px;
+  border: 1px solid var(--color-line-strong); border-radius: var(--r-md); background: var(--color-bg);
+}
+.search kbd {
+  position: absolute; right: 10px; top: 11px; font: 600 12px/20px var(--font); padding: 0 6px;
+  border: 1px solid var(--color-line-strong); border-radius: var(--r-sm); color: var(--color-text-3); background: var(--color-surface);
+}
+.topbar-end { margin-left: auto; display: flex; align-items: center; gap: var(--s-4); }
+.clock { text-align: right; line-height: 1.25; }
+.clock strong { font-size: 20px; font-weight: 650; display: block; letter-spacing: -0.01em; }
+.clock small { color: var(--color-text-3); font-size: 13px; }
+.open-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--moss-700); margin-right: 6px; }
+
+/* Layout */
+.page { padding: var(--s-5) var(--s-6) var(--s-10); display: grid; gap: var(--s-5); }
+.sample-note { font-size: 13px; color: var(--color-text-3); }
+
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s-3); }
+.stat { background: var(--color-surface); border-radius: var(--r-lg); box-shadow: var(--ring); padding: var(--s-3) var(--s-4); }
+.stat dt { font-size: 13px; color: var(--color-text-3); }
+.stat dd { margin: 0; font-size: 26px; font-weight: 650; letter-spacing: -0.02em; line-height: 1.25; }
+.stat dd small { font-size: 13px; font-weight: 500; color: var(--color-text-3); letter-spacing: 0; margin-left: 4px; }
+.stat.attn dd { color: var(--chestnut-700); }
+
+.main { display: grid; grid-template-columns: 1fr; gap: var(--s-5); align-items: start; }
+@media (min-width: 1180px) {
+  .main { grid-template-columns: 320px minmax(0, 1fr) 340px; }
+  .detail { position: sticky; top: var(--s-4); }
+}
+.panel { background: var(--color-surface); border-radius: var(--r-lg); box-shadow: var(--ring); min-width: 0; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); padding: var(--s-4) var(--s-4) var(--s-2); flex-wrap: wrap; }
+.panel-head h2 { font-size: 17px; font-weight: 650; }
+
+/* Queue */
+.queue-group { padding: var(--s-2) var(--s-2) var(--s-3); }
+.queue-group + .queue-group { border-top: 1px solid var(--color-line); }
+.queue-group h3 { font-size: 13px; font-weight: 600; color: var(--color-text-3); padding: var(--s-2) var(--s-2) var(--s-1); display: flex; justify-content: space-between; }
+.queue-empty { padding: var(--s-2) var(--s-2) var(--s-1); color: var(--color-text-3); font-size: 14px; }
+.q-item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--s-2); align-items: center; padding: var(--s-1) var(--s-2); border-radius: var(--r-md); }
+.q-item.sel { background: var(--a-50); }
+.q-main { display: block; text-align: left; background: none; border: 0; padding: var(--s-2) 0; cursor: pointer; min-width: 0; border-radius: var(--r-sm); min-height: 44px; }
+.q-main b { display: block; font-weight: 600; }
+.q-main > span { display: block; font-size: 13px; color: var(--color-text-3); }
+.q-main .late-txt { color: var(--chestnut-700); font-weight: 600; }
+.q-main .wait-txt { color: var(--moss-700); font-weight: 600; }
+@media (hover: hover) { .q-item:hover:not(.sel) { background: var(--color-bg); } }
+
+/* Status chips */
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; line-height: 20px; padding: 0 8px; border-radius: 10px; white-space: nowrap; }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.chip.booked { background: var(--color-sunken); color: var(--n-800); }
+.chip.arrived { background: var(--moss-50); color: var(--moss-700); }
+.chip.session { background: var(--a-50); color: var(--a-700); }
+.chip.done { background: var(--color-sunken); color: var(--color-text-3); }
+.chip.done::before { border-radius: 1px; }
+.chip.late { background: var(--chestnut-50); color: var(--chestnut-700); }
+.chip.late::before { border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.chip.noshow, .chip.cancelled { background: var(--color-sunken); color: var(--color-text-3); text-decoration: line-through; }
+
+/* Schedule */
+.filters { display: flex; gap: var(--s-1); flex-wrap: wrap; }
+.filters button {
+  min-height: 44px; padding: 0 var(--s-3); border-radius: 22px; border: 1px solid var(--color-line-strong);
+  background: var(--color-surface); cursor: pointer; font-size: 14px; font-weight: 500; position: relative;
+}
+.filters button::after { content: ""; position: absolute; inset: -4px 0; }
+.filters button[aria-pressed="true"] { background: var(--n-900); border-color: var(--n-900); color: #fff; }
+@media (hover: hover) { .filters button[aria-pressed="false"]:hover { background: var(--color-sunken); } }
+
+.sched-wrap { padding: 0 var(--s-4) var(--s-4); }
+.sched { position: relative; display: grid; grid-template-columns: 52px repeat(var(--cols), minmax(0, 1fr)); max-height: 640px; overflow-y: auto; border: 1px solid var(--color-line); border-radius: var(--r-md); }
+.sched-head { display: contents; }
+.sched-head > div { position: sticky; top: 0; z-index: 3; background: var(--color-surface); border-bottom: 1px solid var(--color-line); padding: var(--s-2) var(--s-3); min-width: 0; }
+.sched-head .who b { display: block; font-weight: 600; font-size: 14px; }
+.sched-head .who span { display: block; font-size: 12px; color: var(--color-text-3); }
+.time-col { position: relative; height: var(--grid-h); }
+.time-col span { position: absolute; right: 8px; font-size: 12px; color: var(--color-text-3); transform: translateY(-50%); }
+.col { position: relative; height: var(--grid-h); border-left: 1px solid var(--color-line);
+  background-image: linear-gradient(var(--color-line) 1px, transparent 1px); background-size: 100% calc(var(--ppm) * 60px); background-position-y: 8px; }
+.blk {
+  position: absolute; left: 3px; right: 3px; border-radius: var(--r-sm); border: 0; padding: 2px 8px; text-align: left; cursor: pointer;
+  background: var(--n-100); border-left: 3px solid var(--n-500); overflow: hidden; display: flex; flex-direction: column; justify-content: center;
+  box-shadow: 0 0 0 1px oklch(0.22 0.025 250 / 0.07);
+  transition: box-shadow 150ms, transform 120ms var(--ease-out);
+}
+.blk:active { transform: scale(0.99); }
+.blk b { font-size: 13px; line-height: 1.25; font-weight: 600; }
+.blk span { font-size: 12px; line-height: 1.25; color: var(--color-text-2); }
+.blk.s-arrived { background: var(--moss-50); border-left-color: var(--moss-700); }
+.blk.s-session { background: var(--a-50); border-left-color: var(--a-600); }
+.blk.s-late { background: var(--chestnut-50); border-left-color: var(--chestnut-700); }
+.blk.s-done { background: var(--n-50); border-left-color: var(--n-300); color: var(--color-text-3); }
+.blk.s-done span { color: var(--color-text-3); }
+.blk.s-noshow, .blk.s-cancelled { background: repeating-linear-gradient(135deg, var(--n-50) 0 6px, var(--n-100) 6px 12px); border-left-color: var(--n-300); }
+.blk.s-noshow b, .blk.s-cancelled b { text-decoration: line-through; color: var(--color-text-3); }
+.blk.sel { box-shadow: 0 0 0 2px var(--color-action); z-index: 2; }
+@media (hover: hover) { .blk:hover { box-shadow: 0 0 0 1px var(--n-500); } .blk.sel:hover { box-shadow: 0 0 0 2px var(--color-action); } }
+.now-line { position: absolute; left: 52px; right: 0; height: 0; border-top: 2px solid var(--chestnut-700); z-index: 2; pointer-events: none; }
+.now-line::before { content: attr(data-t); position: absolute; left: -52px; top: -10px; font-size: 11px; font-weight: 700; background: var(--chestnut-700); color: #fff; padding: 0 5px; border-radius: 3px; line-height: 18px; }
+.agenda { display: none; }
+
+/* Detail */
+.detail-body { padding: 0 var(--s-4) var(--s-4); }
+.detail-empty { padding: var(--s-6) var(--s-4) var(--s-8); color: var(--color-text-3); }
+.detail-empty b { display: block; color: var(--color-text); font-size: 16px; margin-bottom: 4px; }
+.d-name { font-size: 22px; font-weight: 650; line-height: 1.2; overflow-wrap: anywhere; margin: var(--s-1) 0 var(--s-2); }
+.d-list { margin: var(--s-4) 0; display: grid; grid-template-columns: 96px 1fr; gap: var(--s-2) var(--s-3); font-size: 14px; }
+.d-list dt { color: var(--color-text-3); }
+.d-list dd { margin: 0; overflow-wrap: anywhere; }
+.d-note { background: var(--color-bg); border-radius: var(--r-md); padding: var(--s-3); font-size: 14px; margin-bottom: var(--s-4); }
+.d-note b { display: block; font-size: 13px; color: var(--color-text-3); font-weight: 600; margin-bottom: 2px; }
+.due { display: flex; justify-content: space-between; align-items: center; padding: var(--s-3); border-radius: var(--r-md); background: var(--chestnut-50); color: var(--chestnut-700); font-weight: 600; margin-bottom: var(--s-4); gap: var(--s-2); }
+.due.paid { background: var(--moss-50); color: var(--moss-700); }
+.d-actions { display: grid; gap: var(--s-2); }
+.d-actions .row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+.close-detail { display: none; }
+
+/* Toast */
+.toasts { position: fixed; left: 50%; bottom: calc(var(--s-4) + env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 50; width: min(440px, calc(100vw - 32px)); display: grid; gap: var(--s-2); }
+.toast { display: flex; align-items: center; justify-content: space-between; gap: var(--s-3); background: var(--n-900); color: #fff; border-radius: var(--r-md); padding: var(--s-2) var(--s-2) var(--s-2) var(--s-4); box-shadow: var(--ring); animation: pop 220ms var(--ease-out); }
+.toast .btn { color: #fff; min-height: 44px; }
+.toast .btn-quiet:hover { background: oklch(1 0 0 / 0.12) !important; }
+@keyframes pop { from { opacity: 0; transform: scale(0.95) translateY(8px); } }
+
+/* Dialog */
+dialog { border: 0; border-radius: var(--r-lg); padding: 0; width: min(480px, calc(100vw - 24px)); box-shadow: 0 0 0 1px oklch(0.22 0.025 250 / 0.1), 0 24px 64px oklch(0.22 0.025 250 / 0.3); color: var(--color-text); }
+dialog::backdrop { background: oklch(0.22 0.025 250 / 0.4); }
+dialog[open] { animation: pop 220ms var(--ease-out); }
+.dlg-head { padding: var(--s-5) var(--s-5) var(--s-2); }
+.dlg-head h2 { font-size: 20px; }
+.dlg-head p { color: var(--color-text-3); font-size: 14px; }
+.dlg-body { padding: var(--s-2) var(--s-5) var(--s-4); display: grid; gap: var(--s-4); grid-template-columns: 1fr 1fr; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.field label { font-size: 14px; font-weight: 600; }
+.field input, .field select { min-height: 44px; padding: 0 var(--s-3); font-size: 16px; border: 1px solid var(--color-line-strong); border-radius: var(--r-md); background: var(--color-surface); width: 100%; }
+.field .err { color: var(--chestnut-700); font-size: 13px; font-weight: 500; display: none; }
+.field.invalid input, .field.invalid select { border-color: var(--chestnut-700); box-shadow: 0 0 0 1px var(--chestnut-700); }
+.field.invalid .err { display: block; }
+.check { display: flex; gap: var(--s-2); align-items: center; min-height: 44px; font-size: 15px; }
+.check input { width: 20px; height: 20px; accent-color: var(--color-action); }
+.dlg-foot { display: flex; justify-content: flex-end; gap: var(--s-2); padding: var(--s-3) var(--s-5) var(--s-5); border-top: 1px solid var(--color-line); }
+
+/* Tablet and phone */
+@media (max-width: 1179px) {
+  .detail { position: fixed; z-index: 40; left: 0; right: 0; bottom: 0; max-height: 86dvh; overflow-y: auto; border-radius: var(--r-lg) var(--r-lg) 0 0; padding-bottom: env(safe-area-inset-bottom); transform: translateY(105%); visibility: hidden; transition: transform 260ms var(--ease-out), visibility 0s 260ms; box-shadow: 0 -8px 40px oklch(0.22 0.025 250 / 0.25); }
+  .detail.open { transform: none; visibility: visible; transition: transform 260ms var(--ease-out); }
+  .close-detail { display: inline-flex; }
+  .scrim { position: fixed; inset: 0; z-index: 39; background: oklch(0.22 0.025 250 / 0.35); }
+  .scrim[hidden] { display: none; }
+}
+@media (max-width: 700px) {
+  .topbar { padding: var(--s-3) var(--s-4); gap: var(--s-3); }
+  .brand { margin-right: 0; }
+  .topbar-end { margin-left: auto; }
+  .search { order: 5; flex-basis: 100%; max-width: none; }
+  .search kbd { display: none; }
+  .page { padding: var(--s-4) var(--s-4) var(--s-10); }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .sched { display: none; }
+  .agenda { display: block; }
+  .agenda-item { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: var(--s-3); align-items: center; width: 100%; text-align: left; background: none; border: 0; border-top: 1px solid var(--color-line); padding: var(--s-2) 0; min-height: 56px; cursor: pointer; }
+  .agenda-item.sel { background: var(--a-50); margin: 0 calc(var(--s-2) * -1); padding-inline: var(--s-2); width: calc(100% + var(--s-4)); }
+  .agenda-item time { font-weight: 600; font-size: 14px; }
+  .agenda-item b { display: block; font-weight: 600; }
+  .agenda-item span.sub { display: block; font-size: 13px; color: var(--color-text-3); }
+  .dlg-body { grid-template-columns: 1fr; }
+  .d-actions .row { grid-template-columns: 1fr; }
+  .clock strong { font-size: 18px; }
+  #newBtn .lbl { display: none; }
+  #newBtn { width: 44px; padding: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <svg viewBox="0 0 28 28" aria-hidden="true"><rect width="28" height="28" rx="7" fill="oklch(0.45 0.1 248)"/><path d="M4 18c5-1 8-4 10-9 1 4 4 7 10 8-5 0-8 2-10 5-2-3-5-4-10-4z" fill="oklch(0.78 0.11 55)"/></svg>
+    Kestrel <span>Physio</span>
+  </div>
+  <form class="search" role="search" onsubmit="return false">
+    <label class="sr-only" for="q">Search patients</label>
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="9" r="5.5"/><path d="m13.5 13.5 4 4"/></svg>
+    <input id="q" type="search" placeholder="Search name or phone" autocomplete="off" enterkeyhint="search">
+    <kbd aria-hidden="true">/</kbd>
+  </form>
+  <div class="topbar-end">
+    <div class="clock" aria-label="Current time">
+      <strong id="clockTime">10:42</strong>
+      <small><span class="open-dot"></span><span id="clockSub">Tue 20 Oct · open until 17:30</span></small>
+    </div>
+    <button class="btn btn-primary" id="newBtn" type="button" aria-label="New booking or walk-in">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg><span class="lbl">New booking</span>
+    </button>
+  </div>
+</header>
+
+<main class="page">
+  <p class="sample-note">Sample data for a demo day. The clock starts at 10:42 and runs from there.</p>
+
+  <dl class="stats" id="stats"></dl>
+
+  <div class="main">
+    <section class="panel" aria-labelledby="qh">
+      <div class="panel-head"><h2 id="qh">Needs the desk</h2></div>
+      <div id="queue"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="sh">
+      <div class="panel-head">
+        <h2 id="sh">Today's schedule</h2>
+        <div class="filters" id="filters" role="group" aria-label="Filter by practitioner"></div>
+      </div>
+      <div class="sched-wrap">
+        <div class="sched" id="sched"></div>
+        <div class="agenda" id="agenda"></div>
+      </div>
+    </section>
+
+    <aside class="panel detail" id="detail" aria-label="Appointment detail"></aside>
+  </div>
+</main>
+<div class="scrim" id="scrim" hidden></div>
+
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<dialog id="dlg" aria-labelledby="dlgT">
+  <form id="bookForm" novalidate>
+    <div class="dlg-head"><h2 id="dlgT">New booking</h2><p>Add a booking or a walk-in to today's schedule.</p></div>
+    <div class="dlg-body">
+      <div class="field full"><label for="f-name">Patient name</label><input id="f-name" name="name" autocomplete="off" required><div class="err" id="e-name"></div></div>
+      <div class="field full"><label for="f-phone">Mobile number</label><input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="off" placeholder="07700 900123" required><div class="err" id="e-phone"></div></div>
+      <div class="field"><label for="f-prac">Practitioner</label><select id="f-prac" name="prac"></select><div class="err" id="e-prac"></div></div>
+      <div class="field"><label for="f-type">Appointment</label><select id="f-type" name="type"></select></div>
+      <div class="field"><label for="f-time">Start time</label><select id="f-time" name="time"></select><div class="err" id="e-time"></div></div>
+      <div class="field"><label for="f-dur">Length</label><select id="f-dur" name="dur"><option value="30">30 minutes</option><option value="45" selected>45 minutes</option><option value="60">60 minutes</option></select></div>
+      <label class="check full"><input type="checkbox" id="f-walk" name="walk"> Walk-in, arrived now</label>
+    </div>
+    <div class="dlg-foot"><button class="btn" type="button" id="cancelDlg">Cancel</button><button class="btn btn-primary" type="submit">Add to schedule</button></div>
+  </form>
+</dialog>
+
+<script>
+(() => {
+  'use strict';
+  const OPEN = 8 * 60, CLOSE = 17 * 60 + 30, PPM = 1.4;
+  const START_NOW = 10 * 60 + 42;
+  const t0 = Date.now();
+  const nowMin = () => START_NOW + (Date.now() - t0) / 60000;
+
+  const PRACS = [
+    { id: 'mo', name: 'Maya Okafor', short: 'Maya', role: 'Physiotherapist' },
+    { id: 'dp', name: 'Daniel Petrov', short: 'Daniel', role: 'Sports physio' },
+    { id: 'se', name: 'Sofia Esposito', short: 'Sofia', role: 'Hand therapist' },
+    { id: 'tn', name: 'Tom Nakamura', short: 'Tom', role: 'Physiotherapist' },
+  ];
+  const TYPES = ['Initial assessment', 'Follow-up', 'Rehab session', 'Sports massage', 'Hand therapy review'];
+  const STATUS_LABEL = { booked: 'Booked', arrived: 'Waiting', session: 'In session', done: 'Done', late: 'Late', noshow: 'No-show', cancelled: 'Cancelled' };
+
+  const hm = s => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
+  const fmt = m => { m = Math.floor(m); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+
+  // [id, prac, start, dur, name, phone, type, status, extra]
+  const raw = [
+    ['a1','mo','08:00',45,'Arjun Mehta','07700 900101','Follow-up','done',{n:'Session 4 of 6',ref:'GP referral',note:'Lower back, improving. Home exercises going well.'}],
+    ['a2','mo','09:00',45,'Priya Raman','07700 900102','Rehab session','done',{n:'Session 7 of 8',ref:'Self-referred',note:'Post knee arthroscopy, week 6.'}],
+    ['a3','mo','10:00',60,'Eleanor Whitcombe','07700 900103','Initial assessment','session',{n:'First visit',ref:'Insurer: Bupa, auth 1 of 6',bal:45,note:'Shoulder pain for 3 months. Insurer pre-authorisation on file.'}],
+    ['a4','mo','11:15',45,'Bartholomew Featherstonehaugh-Wickham-Ndlovu','07700 900104','Follow-up','booked',{n:'Session 2 of 4',ref:'GP referral',bal:55,note:'Prefers to be called Bart.'}],
+    ['a5','mo','13:00',30,'Li Q','07700 900105','Follow-up','booked',{n:'Session 3 of 3',ref:'Self-referred',note:'Discharge review.'}],
+    ['a6','mo','14:00',45,'Hannah Brooks','07700 900106','Rehab session','booked',{n:'Session 5 of 10',ref:'Self-referred',bal:55}],
+    ['a7','mo','15:30',45,'Stefan Novak','07700 900107','Initial assessment','booked',{n:'First visit',ref:'GP referral',bal:75,note:'New patient: intake form not yet received.'}],
+    ['b1','dp','08:30',45,'Callum Reid','07700 900111','Sports massage','done',{n:'Session 2 of 4',ref:'Self-referred'}],
+    ['b2','dp','09:30',45,'Jamal Idowu','07700 900112','Rehab session','done',{n:'Session 9 of 12',ref:'Club physio scheme'}],
+    ['b3','dp','10:15',45,'Sienna Walsh','07700 900113','Follow-up','session',{n:'Session 3 of 6',ref:'Self-referred',bal:55,note:'Hamstring strain. Running again from next week if pain-free.'}],
+    ['b4','dp','11:00',45,'Tomasz Kowalski','07700 900114','Initial assessment','arrived',{n:'First visit',ref:'GP referral',bal:75,arr:'10:31',note:'Ankle sprain. Needs the new-patient form signed at desk.'}],
+    ['b5','dp','12:00',60,'Fatima Al-Sayed','07700 900115','Rehab session','booked',{n:'Session 6 of 8',ref:'Insurer: AXA, auth 6 of 8',note:'Last authorised session: ask her to book a review.'}],
+    ['b6','dp','14:00',45,'Oliver Grant','07700 900116','Follow-up','booked',{n:'Session 2 of 4',ref:'Self-referred',bal:55}],
+    ['b7','dp','15:00',30,'Rhys Davies','07700 900117','Sports massage','booked',{n:'Session 1 of 1',ref:'Self-referred',bal:40}],
+    ['b8','dp','16:00',45,'Imani Cole','07700 900118','Rehab session','booked',{n:'Session 4 of 6',ref:'GP referral',bal:55}],
+    ['c1','se','09:00',45,'Nguyễn Thị Hồng Ngọc','07700 900121','Hand therapy review','done',{n:'Session 3 of 5',ref:'Hospital referral'}],
+    ['c2','se','10:00',30,'田中 美咲','07700 900122','Hand therapy review','session',{n:'Session 2 of 5',ref:'Hospital referral',note:'Splint check. Prefers written instructions.'}],
+    ['c3','se','10:30',30,'Greta Lindqvist','07700 900123','Follow-up','booked',{n:'Session 5 of 6',ref:'GP referral',bal:40,note:'Not yet arrived. Last visit she was 10 minutes late.'}],
+    ['c4','se','11:30',30,'Marcus Webb','07700 900124','Hand therapy review','booked',{n:'Session 1 of 4',ref:'GP referral',bal:55}],
+    ['c5','se','12:00',30,'Wen Zhao','07700 900125','Follow-up','cancelled',{n:'Session 4 of 5',ref:'Self-referred',note:'Cancelled by phone yesterday. Offer the slot to the waiting list.'}],
+    ['c6','se','13:00',60,'Aoife Brennan','07700 900126','Initial assessment','booked',{n:'First visit',ref:'Self-referred',bal:75}],
+    ['c7','se','15:30',45,'Harriet Moss','07700 900127','Hand therapy review','booked',{n:'Session 2 of 3',ref:'GP referral',bal:55}],
+    ['d1','tn','08:00',60,'Ruth Abara','07700 900131','Rehab session','done',{n:'Session 8 of 8',ref:'Self-referred'}],
+    ['d2','tn','09:15',45,'George Fenwick','07700 900132','Follow-up','done',{n:'Session 3 of 5',ref:'GP referral'}],
+    ['d3','tn','10:30',45,'Isla Macdonald','07700 900133','Follow-up','arrived',{n:'Session 2 of 4',ref:'Self-referred',bal:55,arr:'10:38'}],
+    ['d4','tn','11:30',45,'Kofi Mensah','07700 900134','Rehab session','booked',{n:'Session 6 of 10',ref:'GP referral',bal:55}],
+    ['d5','tn','13:30',45,'Elsie Turner','07700 900135','Follow-up','booked',{n:'Session 1 of 3',ref:'Self-referred',bal:55}],
+    ['d6','tn','15:00',60,'Noah Bergström','07700 900136','Initial assessment','booked',{n:'First visit',ref:'Insurer: Vitality',bal:75}],
+  ];
+  let appts = raw.map(r => ({ id: r[0], prac: r[1], start: hm(r[2]), dur: r[3], name: r[4], phone: r[5], type: r[6], status: r[7], bal: 0, paid: r[7] === 'done', ...r[8] }));
+  appts.forEach(a => { if (a.arr) a.arr = hm(a.arr); });
+
+  /* ---------- state in URL ---------- */
+  const params = new URLSearchParams(location.search);
+  const state = { prac: PRACS.some(p => p.id === params.get('prac')) ? params.get('prac') : 'all', sel: params.get('appt'), q: params.get('q') || '' };
+  const syncUrl = () => {
+    const p = new URLSearchParams();
+    if (state.prac !== 'all') p.set('prac', state.prac);
+    if (state.sel) p.set('appt', state.sel);
+    if (state.q) p.set('q', state.q);
+    const s = p.toString();
+    try { history.replaceState(null, '', s ? '?' + s : location.pathname); } catch (e) {}
+  };
+
+  /* ---------- helpers ---------- */
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const $ = id => document.getElementById(id);
+  const prac = id => PRACS.find(p => p.id === id);
+  const money = n => '£' + n.toFixed(2).replace(/\.00$/, '');
+  const eff = a => (a.status === 'booked' && nowMin() > a.start + 5) ? 'late' : a.status;
+  const cls = s => ({ session: 'session' }[s] || s);
+  const matches = a => {
+    if (!state.q) return true;
+    const q = state.q.toLowerCase().trim(), digits = q.replace(/\D/g, '');
+    return a.name.toLowerCase().includes(q) || (digits.length > 1 && a.phone.replace(/\D/g, '').includes(digits));
+  };
+  const visible = a => (state.prac === 'all' || a.prac === state.prac) && matches(a);
+  const chip = s => `<span class="chip ${cls(s)}">${STATUS_LABEL[s]}</span>`;
+  const range = a => `${fmt(a.start)}–${fmt(a.start + a.dur)}`;
+
+  /* ---------- actions ---------- */
+  const NEXT = {
+    booked: { label: 'Check in', to: 'arrived', done: 'Checked in' },
+    late: { label: 'Check in', to: 'arrived', done: 'Checked in' },
+    arrived: { label: 'Send to treatment room', to: 'session', done: 'Session started' },
+    session: { label: 'Finish session', to: 'done', done: 'Session finished' },
+  };
+  function setStatus(a, to, msg) {
+    const prev = { status: a.status, arr: a.arr, paid: a.paid };
+    a.status = to;
+    if (to === 'arrived') a.arr = nowMin();
+    render();
+    toast(`${msg}: ${a.name}`, () => { Object.assign(a, prev); render(); });
+  }
+  function advance(a) { const n = NEXT[eff(a)]; if (n) setStatus(a, n.to, n.done); }
+  function pay(a) {
+    const prev = { paid: a.paid };
+    a.paid = true; render();
+    toast(`${money(a.bal)} taken from ${a.name}`, () => { Object.assign(a, prev); render(); });
+  }
+
+  /* ---------- render ---------- */
+  function renderStats() {
+    const total = appts.filter(a => a.status !== 'cancelled').length;
+    const inClinic = appts.filter(a => a.status === 'arrived' || a.status === 'session').length;
+    const waiting = appts.filter(a => a.status === 'arrived').length;
+    const late = appts.filter(a => eff(a) === 'late').length;
+    const due = appts.filter(a => a.bal && !a.paid && (a.status === 'arrived' || a.status === 'session' || a.status === 'done')).reduce((s, a) => s + a.bal, 0);
+    const done = appts.filter(a => a.status === 'done').length;
+    $('stats').innerHTML = `
+      <div class="stat"><dt>Appointments today</dt><dd>${total}<small>${done} done</small></dd></div>
+      <div class="stat"><dt>In the clinic</dt><dd>${inClinic}<small>${waiting} waiting</small></dd></div>
+      <div class="stat ${late ? 'attn' : ''}"><dt>Late, not arrived</dt><dd>${late}</dd></div>
+      <div class="stat ${due ? 'attn' : ''}"><dt>To take at the desk</dt><dd>${money(due)}</dd></div>`;
+  }
+
+  function qItem(a, sub) {
+    const n = NEXT[eff(a)];
+    return `<div class="q-item ${state.sel === a.id ? 'sel' : ''}">
+      <button class="q-main" data-open="${a.id}" data-key="qo-${a.id}"><b class="trunc">${esc(a.name)}</b>${sub}</button>
+      ${n ? `<button class="btn btn-sm ${eff(a) === 'arrived' ? '' : 'btn-primary'}" data-act="${a.id}" data-key="qa-${a.id}" aria-label="${esc(n.label)}: ${esc(a.name)}">${eff(a) === 'arrived' ? 'Send in' : 'Check in'}</button>` : ''}
+    </div>`;
+  }
+  function renderQueue() {
+    const list = appts.filter(visible);
+    const waiting = list.filter(a => a.status === 'arrived').sort((a, b) => a.arr - b.arr);
+    const late = list.filter(a => eff(a) === 'late').sort((a, b) => a.start - b.start);
+    const soon = list.filter(a => a.status === 'booked' && eff(a) !== 'late' && a.start <= nowMin() + 60).sort((a, b) => a.start - b.start);
+    const group = (title, items, empty, count = items.length) => `<div class="queue-group"><h3><span>${title}</span><span>${count}</span></h3>${items.length ? items.join('') : `<p class="queue-empty">${empty}</p>`}</div>`;
+    $('queue').innerHTML =
+      group('Waiting in reception', waiting.map(a => qItem(a, `<span><span class="wait-txt">Waiting ${Math.max(0, Math.round(nowMin() - a.arr))} min</span> · ${fmt(a.start)} with ${prac(a.prac).short}</span>`)), 'Nobody is waiting. Reception is clear.') +
+      group('Late, not arrived', late.map(a => qItem(a, `<span><span class="late-txt">${Math.round(nowMin() - a.start)} min late</span> · ${fmt(a.start)} with ${prac(a.prac).short}</span>`)), 'No one is running late.') +
+      group('Arriving in the next hour', soon.map(a => qItem(a, `<span>${fmt(a.start)} with ${prac(a.prac).short} · ${esc(a.type)}</span>`)), 'No one is due in the next hour.');
+    if (state.q && !list.length) $('queue').innerHTML = `<div class="queue-empty" style="padding:16px">No patient matches “${esc(state.q)}” today. Check the spelling, or add a new booking.</div>`;
+  }
+
+  function renderFilters() {
+    $('filters').innerHTML = [['all', 'Everyone'], ...PRACS.map(p => [p.id, p.short])]
+      .map(([id, l]) => `<button type="button" data-prac="${id}" aria-pressed="${state.prac === id}">${l}</button>`).join('');
+  }
+
+  function renderSchedule() {
+    const cols = state.prac === 'all' ? PRACS : PRACS.filter(p => p.id === state.prac);
+    const H = (CLOSE - OPEN) * PPM + 8;
+    const s = $('sched');
+    s.style.setProperty('--cols', cols.length);
+    s.style.setProperty('--grid-h', H + 'px');
+    s.style.setProperty('--ppm', PPM);
+    let hours = '';
+    for (let m = OPEN; m <= CLOSE; m += 60) hours += `<span style="top:${(m - OPEN) * PPM + 8}px">${fmt(m)}</span>`;
+    let html = `<div class="sched-head"><div></div>${cols.map(p => `<div class="who"><b class="trunc">${p.name}</b><span class="trunc">${p.role}</span></div>`).join('')}</div>`;
+    html += `<div class="time-col">${hours}</div>`;
+    for (const p of cols) {
+      const blocks = appts.filter(a => a.prac === p.id).map(a => {
+        const e = eff(a), dim = !visible(a) && state.q;
+        const h = a.dur * PPM - 2;
+        return `<button class="blk s-${cls(e)} ${state.sel === a.id ? 'sel' : ''}" style="top:${(a.start - OPEN) * PPM + 9}px;height:${h}px;${dim ? 'opacity:.3' : ''}" data-open="${a.id}" data-key="b-${a.id}" aria-label="${esc(a.name)}, ${range(a)}, ${STATUS_LABEL[e]}">
+          <b class="trunc">${esc(a.name)}</b>${a.dur >= 45 ? `<span class="trunc">${range(a)} · ${STATUS_LABEL[e]}</span>` : ''}</button>`;
+      }).join('');
+      html += `<div class="col">${blocks}</div>`;
+    }
+    const n = nowMin();
+    if (n >= OPEN && n <= CLOSE) html += `<div class="now-line" data-t="${fmt(n)}" style="top:${(n - OPEN) * PPM + 36}px"></div>`;
+    s.innerHTML = html;
+    // position the now line below the sticky header
+    const head = s.querySelector('.sched-head > div:nth-child(2)');
+    const nl = s.querySelector('.now-line');
+    if (nl && head) nl.style.top = (head.offsetHeight + (n - OPEN) * PPM + 8) + 'px';
+
+    // phone agenda
+    const list = appts.filter(a => (state.prac === 'all' || a.prac === state.prac) && (!state.q || matches(a))).sort((a, b) => a.start - b.start || a.prac.localeCompare(b.prac));
+    $('agenda').innerHTML = list.length ? list.map(a => `<button class="agenda-item ${state.sel === a.id ? 'sel' : ''}" data-open="${a.id}" data-key="g-${a.id}">
+      <time>${fmt(a.start)}</time><div style="min-width:0"><b class="trunc">${esc(a.name)}</b><span class="sub trunc">${prac(a.prac).short} · ${esc(a.type)}</span></div>${chip(eff(a))}</button>`).join('')
+      : `<p class="queue-empty">No appointments match. Clear the search or choose Everyone.</p>`;
+  }
+
+  function renderDetail() {
+    const d = $('detail'), a = appts.find(x => x.id === state.sel);
+    if (!a) {
+      d.innerHTML = `<div class="detail-empty"><b>Select an appointment</b>Choose someone from the queue or the schedule to check them in, take payment or see their notes.</div>`;
+      d.classList.remove('open'); $('scrim').hidden = true; return;
+    }
+    const e = eff(a), n = NEXT[e], p = prac(a.prac);
+    const owes = a.bal && !a.paid;
+    d.innerHTML = `
+      <div class="panel-head"><h2 class="sr-only">Appointment detail</h2>${chip(e)}<button class="btn btn-quiet btn-sm close-detail" data-close type="button">Close</button></div>
+      <div class="detail-body">
+        <h3 class="d-name">${esc(a.name)}</h3>
+        <dl class="d-list">
+          <dt>Time</dt><dd>${range(a)} · ${a.dur} min</dd>
+          <dt>With</dt><dd>${p.name}</dd>
+          <dt>Appointment</dt><dd>${esc(a.type)}, ${esc(a.n)}</dd>
+          <dt>Referral</dt><dd>${esc(a.ref)}</dd>
+          <dt>Phone</dt><dd><a href="tel:${a.phone.replace(/\s/g, '')}">${esc(a.phone)}</a></dd>
+          ${a.arr ? `<dt>Arrived</dt><dd>${fmt(a.arr)}</dd>` : ''}
+        </dl>
+        ${a.note ? `<div class="d-note"><b>Note</b>${esc(a.note)}</div>` : ''}
+        ${a.bal ? `<div class="due ${a.paid ? 'paid' : ''}"><span>${a.paid ? 'Paid' : 'Due at desk'}</span><span>${money(a.bal)}</span></div>` : ''}
+        <div class="d-actions">
+          ${n ? `<button class="btn btn-primary" data-act="${a.id}" data-key="d-act">${n.label}</button>` : ''}
+          <div class="row">
+            ${owes ? `<button class="btn" data-pay="${a.id}" data-key="d-pay">Take ${money(a.bal)}</button>` : ''}
+            ${(e === 'late' || e === 'booked') ? `<button class="btn" data-noshow="${a.id}" data-key="d-ns">Mark no-show</button>` : ''}
+            <a class="btn" href="tel:${a.phone.replace(/\s/g, '')}">Call patient</a>
+          </div>
+        </div>
+      </div>`;
+    if (matchMedia('(max-width:1179px)').matches) { d.classList.add('open'); $('scrim').hidden = false; }
+  }
+
+  function render() {
+    const key = document.activeElement && document.activeElement.dataset && document.activeElement.dataset.key;
+    renderStats(); renderQueue(); renderFilters(); renderSchedule(); renderDetail(); syncUrl();
+    if (key) { const el = document.querySelector(`[data-key="${key}"]`); if (el) el.focus({ preventScroll: true }); }
+  }
+
+  /* ---------- toast ---------- */
+  function toast(msg, undo) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = `<span>${esc(msg)}</span>${undo ? '<button class="btn btn-quiet btn-sm" type="button">Undo</button>' : ''}`;
+    const kill = () => t.remove();
+    if (undo) t.querySelector('button').onclick = () => { undo(); kill(); };
+    $('toasts').append(t);
+    setTimeout(kill, 6000);
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener('click', ev => {
+    const t = ev.target.closest('[data-open],[data-act],[data-pay],[data-noshow],[data-prac],[data-close]');
+    if (!t) return;
+    if (t.dataset.open) { state.sel = t.dataset.open; render(); return; }
+    if (t.dataset.act) { const a = appts.find(x => x.id === t.dataset.act); if (a) advance(a); return; }
+    if (t.dataset.pay) { pay(appts.find(x => x.id === t.dataset.pay)); return; }
+    if (t.dataset.noshow) { const a = appts.find(x => x.id === t.dataset.noshow); setStatus(a, 'noshow', 'Marked no-show'); return; }
+    if (t.dataset.prac) { state.prac = t.dataset.prac; render(); return; }
+    if (t.hasAttribute('data-close')) { state.sel = null; render(); }
+  });
+  $('scrim').addEventListener('click', () => { state.sel = null; render(); });
+  $('q').value = state.q;
+  $('q').addEventListener('input', e => { state.q = e.target.value; render(); });
+  document.addEventListener('keydown', e => {
+    const typing = /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
+    if (e.key === '/' && !typing) { e.preventDefault(); $('q').focus(); }
+    if (e.key === 'Escape' && !$('dlg').open && state.sel && matchMedia('(max-width:1179px)').matches) { state.sel = null; render(); }
+  });
+
+  /* ---------- booking dialog ---------- */
+  const dlg = $('dlg'), form = $('bookForm');
+  $('f-prac').innerHTML = PRACS.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  $('f-type').innerHTML = TYPES.map(t => `<option>${t}</option>`).join('');
+  let opts = '';
+  for (let m = OPEN; m < CLOSE; m += 15) opts += `<option value="${m}">${fmt(m)}</option>`;
+  $('f-time').innerHTML = opts;
+
+  const setErr = (name, msg) => {
+    const f = $('e-' + name); if (!f) return !msg;
+    f.textContent = msg || ''; f.parentElement.classList.toggle('invalid', !!msg);
+    const input = f.parentElement.querySelector('input,select'); if (input) input.setAttribute('aria-invalid', !!msg);
+    if (input && msg) input.setAttribute('aria-describedby', f.id); else if (input) input.removeAttribute('aria-describedby');
+    return !msg;
+  };
+  const validators = {
+    name: () => setErr('name', form.name.value.trim().length < 2 ? 'Enter the patient’s full name.' : ''),
+    phone: () => setErr('phone', form.phone.value.replace(/\D/g, '').length < 10 ? 'Enter a mobile number with at least 10 digits, for example 07700 900123.' : ''),
+    time: () => {
+      const start = +form.time.value, dur = +form.dur.value, pr = form.prac.value;
+      const clash = appts.find(a => a.prac === pr && !['cancelled', 'noshow'].includes(a.status) && start < a.start + a.dur && a.start < start + dur);
+      if (start + dur > CLOSE) return setErr('time', `That runs past closing at ${fmt(CLOSE)}. Choose an earlier start or a shorter length.`);
+      return setErr('time', clash ? `${prac(pr).short} is already booked ${range(clash)}. Choose another time or practitioner.` : '');
+    },
+  };
+  form.name.addEventListener('blur', validators.name);
+  form.phone.addEventListener('blur', validators.phone);
+  ['prac', 'time', 'dur'].forEach(n => form[n].addEventListener('change', validators.time));
+
+  const openDlg = () => {
+    form.reset(); Object.keys(validators).forEach(k => setErr(k, ''));
+    const nextSlot = Math.min(CLOSE - 15, Math.ceil(nowMin() / 15) * 15);
+    form.time.value = nextSlot;
+    dlg.showModal(); form.name.focus();
+  };
+  $('newBtn').addEventListener('click', openDlg);
+  $('cancelDlg').addEventListener('click', () => dlg.close());
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const res = Object.entries(validators).map(([k, fn]) => [k, fn()]);
+    const bad = res.find(r => !r[1]);
+    if (bad) { form[bad[0]].focus(); return; }
+    const walk = form.walk.checked;
+    const a = { id: 'n' + Date.now(), prac: form.prac.value, start: +form.time.value, dur: +form.dur.value, name: form.name.value.trim(), phone: form.phone.value.trim(),
+      type: form.type.value, status: walk ? 'arrived' : 'booked', arr: walk ? nowMin() : undefined, bal: 55, paid: false, n: 'New booking', ref: 'Self-referred' };
+    appts.push(a); state.sel = a.id; dlg.close(); render();
+    toast(`${walk ? 'Walk-in added' : 'Booked'}: ${a.name}, ${fmt(a.start)} with ${prac(a.prac).short}`, () => { appts = appts.filter(x => x !== a); if (state.sel === a.id) state.sel = null; render(); });
+  });
+
+  /* ---------- clock ---------- */
+  function tick() {
+    const n = nowMin();
+    $('clockTime').textContent = fmt(n);
+    $('clockSub').textContent = n < CLOSE ? 'Tue 20 Oct · open until ' + fmt(CLOSE) : 'Tue 20 Oct · closed';
+    render();
+  }
+  setInterval(tick, 30000);
+  matchMedia('(max-width:1179px)').addEventListener('change', render);
+  render();
+})();
+</script>
+</body>
+</html>

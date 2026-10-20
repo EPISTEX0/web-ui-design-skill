@@ -1,0 +1,226 @@
+{
+  "scores": {
+    "A4": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "Eight invented gallery entries replace the specified twelve-stop route.",
+        "Object descriptions, exhibition dates and visitor information contain visible placeholders.",
+        "No audio player or previous/next stop controls are visible.",
+        "Small card text and compact filter chips are poorly suited to older visitors reading outdoors."
+      ],
+      "note": "A reasonably tidy exhibition website, but not the accessible, stop-by-stop phone guide the museum needs."
+    },
+    "A5": {
+      "craft": 6,
+      "fit": 3,
+      "hierarchy": 6,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "Four invented galleries and eight sample objects replace the supplied twelve stops.",
+        "The mobile header shows section links without the museum identity visible alongside them.",
+        "No audio player or previous/next stop controls are visible.",
+        "Visitor information remains sample or instructional copy, and the specified exhibition dates are absent."
+      ],
+      "note": "The mobile object list and saved-visit concept are understandable, but they solve a different problem from following the exhibition's twelve stops."
+    },
+    "A9": {
+      "craft": 7,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "The route contains only three provisional stops rather than the twelve named stops.",
+        "Stop texts, dates and practical details remain conspicuous placeholders.",
+        "The mobile sticky Plan your visit bar interrupts and partially covers the transition into the exhibition introduction.",
+        "No audio player or previous/next stop controls are visible."
+      ],
+      "note": "Restrained serif typography is appropriate, but the unfinished three-stop marketing page does not support the intended gallery visit."
+    },
+    "C8": {
+      "craft": 7,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 5,
+      "overall": 3,
+      "defects": [
+        "The gallery structure and featured objects do not provide the specified twelve-stop sequence.",
+        "Practical information includes visible placeholder content.",
+        "Small secondary text, captions and compact controls weaken readability for the target audience.",
+        "No audio player or previous/next stop controls are visible."
+      ],
+      "note": "The graphic maritime treatment has personality, but its exhibition-promotion structure and display typography miss the museum's accessible label-like guide."
+    },
+    "J2": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "The six displayed entries use placeholder stop content rather than the twelve supplied stop names.",
+        "Route-building and visitor-planning sections take precedence over reading or listening at the current stop.",
+        "No audio player or previous/next stop controls are visible.",
+        "Placeholder practical information prevents the page from being publication-ready."
+      ],
+      "note": "The orderly layout is serviceable, but a provisional build-your-own route is not the requested ready-to-use exhibition guide."
+    },
+    "J8": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 5,
+      "mobile": 4,
+      "overall": 2,
+      "defects": [
+        "The mobile header and horizontal gallery navigation are clipped instead of fitting the screen.",
+        "Gallery and object content remains visibly provisional rather than identifying the twelve stops.",
+        "Small muted secondary text is difficult to read against the dark palette.",
+        "The specified dates, audio player and previous/next stop controls are not visible."
+      ],
+      "note": "An atmospheric exhibition shell is undermined by clipped mobile navigation and missing visitor-ready stop content."
+    },
+    "K4": {
+      "craft": 8,
+      "fit": 9,
+      "hierarchy": 9,
+      "mobile": 9,
+      "overall": 8,
+      "defects": [
+        "The footer explicitly identifies object texts and audio as sample content that still needs replacement."
+      ],
+      "note": "Large high-contrast type, the correct ordered stops, clear starting actions and an offline-download affordance closely match the intended older phone audience."
+    },
+    "K8": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 5,
+      "mobile": 4,
+      "overall": 2,
+      "defects": [
+        "The mobile header clips horizontally, leaving the museum identity out of view.",
+        "Four galleries and eight provisional objects replace the specified twelve-stop route.",
+        "Object and visitor-information placeholders remain visible.",
+        "No audio player or previous/next stop controls are visible."
+      ],
+      "note": "The conventional exhibition layout is coherent on larger screens, but the clipped phone navigation and wrong content model make it unsuitable for this guide."
+    },
+    "N9": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "The displayed object entries are placeholders rather than the twelve named stops.",
+        "Replacement instructions and unfinished visitor information are visible to visitors.",
+        "No audio player or previous/next stop controls are visible.",
+        "The specified exhibition dates are not supplied."
+      ],
+      "note": "The calm responsive layout reads reasonably well, but it remains a generic unfinished museum website rather than an in-gallery guide."
+    },
+    "T2": {
+      "craft": 8,
+      "fit": 9,
+      "hierarchy": 9,
+      "mobile": 9,
+      "overall": 8,
+      "defects": [
+        "The footer still identifies guide text and audio as demonstration content.",
+        "Some secondary practical information remains placeholder copy."
+      ],
+      "note": "The warm serif treatment, large phone typography, text-size controls, correct stop list and visible offline-saving action form the strongest overall response."
+    },
+    "T4": {
+      "craft": 7,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "A visitor-facing draft banner and numerous editorial placeholders remain visible.",
+        "Six provisional objects replace the specified twelve-stop sequence.",
+        "Exhibition dates are not populated with the supplied dates.",
+        "No audio player or previous/next stop controls are visible."
+      ],
+      "note": "The spacious serif design is competently composed, but it is an unfinished promotional template rather than the requested gallery companion."
+    },
+    "U3": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 5,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "Highlighted replacement instructions and placeholder descriptions remain throughout the page.",
+        "Six provisional objects do not match the twelve supplied stops.",
+        "The guide gives substantial prominence to generic visitor planning instead of the current stop.",
+        "No audio player or previous/next stop controls are visible."
+      ],
+      "note": "A readable responsive shell cannot compensate for missing stop content and a generic museum-site structure."
+    },
+    "V3": {
+      "craft": 7,
+      "fit": 5,
+      "hierarchy": 8,
+      "mobile": 8,
+      "overall": 5,
+      "defects": [
+        "All twelve stop names are shown as Stop title to confirm despite the names being supplied.",
+        "No audio player or offline-saving affordance is visible on the shown page.",
+        "The prominent outlined treatment around the exhibition title adds visual noise to an otherwise quiet reading layout."
+      ],
+      "note": "The large, high-contrast phone-first stop menu gets the basic interaction model right, but unnamed stops leave the guide materially unfinished."
+    },
+    "X4": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 6,
+      "overall": 3,
+      "defects": [
+        "The quote, six object names, descriptions and visitor details contain visible placeholders.",
+        "A five-part thematic story replaces the supplied twelve-stop route.",
+        "The small mobile header links are poorly sized for the intended older audience.",
+        "No audio player or previous/next stop controls are visible."
+      ],
+      "note": "The warm editorial styling is plausible for a museum, but the placeholder object catalogue does not meet the practical QR-guide brief."
+    },
+    "Z6": {
+      "craft": 7,
+      "fit": 1,
+      "hierarchy": 5,
+      "mobile": 4,
+      "overall": 2,
+      "defects": [
+        "The displayed exhibition dates, 12 Mar to 30 Nov, contradict the supplied dates.",
+        "Three rooms and six sample objects replace the required twelve stops.",
+        "The mobile header clips its navigation, and the sticky Plan your visit bar covers part of the hero's practical information.",
+        "Sample opening hours, prices and an Open now status are presented despite the visible placeholder-content warning.",
+        "No audio player or previous/next stop controls are visible."
+      ],
+      "note": "Confident typography and simple illustrations cannot rescue a visit-planning page with incorrect dates, provisional information and obstructive mobile elements."
+    }
+  },
+  "ranking": [
+    "T2",
+    "K4",
+    "V3",
+    "A5",
+    "A9",
+    "T4",
+    "A4",
+    "N9",
+    "X4",
+    "J2",
+    "C8",
+    "U3",
+    "J8",
+    "K8",
+    "Z6"
+  ]
+}

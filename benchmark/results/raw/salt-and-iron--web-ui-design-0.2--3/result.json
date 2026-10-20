@@ -1,0 +1,12 @@
+{
+  "brief": "salt-and-iron",
+  "arm": "web-ui-design-0.2",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 85,
+  "delivered": true,
+  "client_rounds": 0,
+  "qa": [],
+  "is_error": false,
+  "num_turns": 10,
+  "total_cost_usd": 0.26083270000000003
+}

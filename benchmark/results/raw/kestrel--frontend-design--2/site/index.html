@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Front desk · Kestrel Physio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#14303b;
+  --ink-2:#1d4150;
+  --ink-line:#2d5566;
+  --mist:#eef2f4;
+  --paper:#fbfcfc;
+  --line:#d3dde2;
+  --slate:#5f7f93;
+  --slate-text:#46646f;
+  --amber:#e8ad34;
+  --amber-tint:#fbefd0;
+  --amber-text:#8a5a00;
+  --green:#1f7a5c;
+  --berry:#b0305a;
+  --berry-tint:#f8e3ea;
+  --text:#17262d;
+  --muted:#5a6d76;
+  --label-w:172px;
+  --px-min:3px;
+  font-family:"Schibsted Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--mist);color:var(--text);font-size:15px;line-height:1.45;font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid #2b8fd1;outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+.app{display:grid;grid-template-columns:320px 1fr;min-height:100vh}
+
+/* ---------- waiting room rail ---------- */
+.rail{background:var(--ink);color:#e6eef1;padding:22px 20px 24px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{display:flex;align-items:center;gap:11px}
+.brand svg{flex:none}
+.brand b{font-size:19px;font-weight:700;letter-spacing:-.01em;display:block;line-height:1.1}
+.brand span{font-size:13px;color:#9db6c1}
+.rail h2{margin:0;font-size:13px;font-weight:600;color:#9db6c1;display:flex;justify-content:space-between;align-items:baseline}
+.rail h2 em{font-style:normal;color:var(--amber);font-size:13px}
+.wait-head{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.wait-head .n{font-size:64px;font-weight:700;line-height:.9;letter-spacing:-.04em;color:#fff}
+.wait-head p{margin:0;color:#b6cad3;font-size:14px;line-height:1.3}
+.queue{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.q{width:100%;text-align:left;background:var(--ink-2);border:1px solid var(--ink-line);border-radius:6px;padding:11px 12px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;color:inherit}
+.q:hover{background:#235064}
+.q .nm{font-weight:600;font-size:15px}
+.q .sub{grid-column:1;font-size:13px;color:#a9c0ca}
+.q .tm{grid-row:1 / span 2;grid-column:2;text-align:right;align-self:center;font-weight:700;font-size:22px;color:var(--amber);line-height:1}
+.q .tm small{display:block;font-size:11px;font-weight:500;color:#a9c0ca;margin-top:3px}
+.q.long .tm{color:#ff9db9}
+.q-empty{border:1px dashed var(--ink-line);border-radius:6px;padding:14px;color:#9db6c1;font-size:14px}
+.rail-foot{margin-top:auto;font-size:13px;color:#9db6c1;border-top:1px solid var(--ink-line);padding-top:14px}
+.rail-foot b{color:#e6eef1;font-weight:600}
+
+/* ---------- main ---------- */
+.main{padding:20px 28px 40px;min-width:0;display:flex;flex-direction:column;gap:22px}
+.top{display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center}
+.top h1{margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.top .date{color:var(--muted);font-size:14px;margin-top:3px}
+.clock{font-size:34px;font-weight:600;letter-spacing:-.03em;line-height:1;margin-left:auto}
+.search{position:relative}
+.search input{width:240px;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:9px 14px;font-weight:600;font-size:14px}
+.btn:hover{background:#fff;border-color:var(--slate)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.primary:hover{background:var(--ink-2)}
+.btn.go{background:var(--green);border-color:var(--green);color:#fff}
+.btn.go:hover{background:#18664c}
+.btn.warn{color:var(--berry);border-color:#e4b3c3}
+.btn.sm{padding:5px 10px;font-size:13px}
+
+.strip{display:flex;flex-wrap:wrap;gap:6px 28px;font-size:14px;color:var(--muted)}
+.strip b{color:var(--text);font-size:18px;font-weight:700;margin-right:5px}
+
+/* timeline */
+.board{background:var(--paper);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.scroller{overflow-x:auto}
+.grid{position:relative;width:calc(var(--label-w) + 600px * 3);min-width:100%}
+.hours,.row{display:grid;grid-template-columns:var(--label-w) 1fr}
+.hours{border-bottom:1px solid var(--line);background:#f3f6f7;height:32px}
+.hours .spacer,.who{position:sticky;left:0;z-index:4}
+.hours .spacer{background:#f3f6f7;border-right:1px solid var(--line)}
+.ticks{position:relative}
+.tick{position:absolute;top:0;bottom:0;padding:7px 0 0 6px;font-size:12px;color:var(--muted);border-left:1px solid var(--line)}
+.row{border-bottom:1px solid var(--line);min-height:84px}
+.row:last-child{border-bottom:0}
+.who{background:var(--paper);border-right:1px solid var(--line);padding:10px 12px;display:flex;gap:10px;align-items:center}
+.av{flex:none;width:36px;height:36px;border-radius:50%;background:var(--slate);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.who b{display:block;font-size:14px;line-height:1.2}
+.who span{display:block;font-size:12.5px;color:var(--muted);line-height:1.3}
+.who .st{margin-top:3px;font-weight:600}
+.who .st.free{color:var(--green)}
+.who .st.busy{color:var(--ink)}
+.track{position:relative;background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(var(--px-min)*60 - 1px),#e8eef1 calc(var(--px-min)*60 - 1px),#e8eef1 calc(var(--px-min)*60))}
+.lunch{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(135deg,transparent 0 6px,#eef2f4 6px 12px);opacity:.9}
+.ap{position:absolute;top:8px;bottom:8px;border-radius:5px;border:1px solid var(--slate);border-left-width:5px;background:#fff;padding:5px 8px;text-align:left;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:2px;transition:opacity .15s}
+.ap:hover{box-shadow:0 0 0 2px var(--ink)}
+.ap .p{font-weight:600;font-size:13.5px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap .t{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ap .s{font-size:11.5px;font-weight:600;white-space:nowrap}
+.ap.arrived{background:var(--amber-tint);border-color:var(--amber);color:#3d2900}
+.ap.arrived .t,.ap.arrived .s{color:var(--amber-text)}
+.ap.in{background:var(--green);border-color:var(--green);color:#fff}
+.ap.in .t,.ap.in .s{color:#d3efe5}
+.ap.done{background:#e3e9ec;border-color:#b9c6cc;color:#5b6b73}
+.ap.done .t,.ap.done .s{color:#5b6b73}
+.ap.late{border-color:var(--berry);background:var(--berry-tint)}
+.ap.late .s{color:var(--berry)}
+.ap.noshow{border-color:var(--berry);background:repeating-linear-gradient(135deg,#fff 0 5px,var(--berry-tint) 5px 10px);color:var(--berry)}
+.ap.noshow .p{text-decoration:line-through}
+.ap.dim{opacity:.18}
+.now{position:absolute;top:0;bottom:0;width:2px;background:var(--berry);z-index:3;pointer-events:none}
+.now i{position:absolute;top:5px;left:-22px;background:var(--berry);color:#fff;font-style:normal;font-size:11.5px;font-weight:700;padding:1px 5px;border-radius:3px;white-space:nowrap}
+
+/* lists */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:16px 18px 8px}
+.panel h2{margin:0 0 6px;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.panel .hint{margin:0 0 8px;color:var(--muted);font-size:13.5px}
+.li{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid var(--line)}
+.li:first-of-type{border-top:0}
+.li .txt{min-width:0}
+.li .txt b{display:block;font-weight:600;font-size:15px}
+.li .txt span{display:block;font-size:13.5px;color:var(--muted)}
+.li .txt button.lnk{all:unset;cursor:pointer;font-weight:600;font-size:15px;display:block}
+.li .txt button.lnk:hover{text-decoration:underline}
+.li .txt button.lnk:focus-visible{outline:3px solid #2b8fd1;outline-offset:2px}
+.li .act{display:flex;gap:6px;flex:none}
+.li.bad .txt span{color:var(--berry)}
+.empty{padding:14px 0 18px;color:var(--muted)}
+.flag{display:inline-block;font-size:12px;font-weight:600;padding:0 6px;border-radius:3px;margin-left:6px;background:#e3e9ec;color:var(--slate-text);vertical-align:1px}
+.flag.b{background:var(--berry-tint);color:var(--berry)}
+.flag.a{background:var(--amber-tint);color:var(--amber-text)}
+
+/* dialogs */
+dialog{border:0;border-radius:10px;padding:0;color:var(--text);background:var(--paper);box-shadow:0 20px 60px rgba(10,30,40,.35);width:min(480px,calc(100vw - 24px))}
+dialog::backdrop{background:rgba(14,36,46,.55)}
+dialog.sheet{margin:0 0 0 auto;height:100vh;max-height:100vh;border-radius:0;width:min(440px,100vw)}
+.dlg{padding:22px 24px 24px;display:flex;flex-direction:column;gap:16px;min-height:100%}
+.dlg h2{margin:0;font-size:22px;letter-spacing:-.02em;line-height:1.15}
+.dlg .meta{color:var(--muted);font-size:14px;margin-top:4px}
+.dlg .x{position:absolute;top:14px;right:14px;border:0;background:transparent;font-size:26px;line-height:1;width:36px;height:36px;border-radius:6px;color:var(--muted)}
+.dlg .x:hover{background:var(--mist)}
+.stat{display:inline-block;font-weight:600;font-size:13.5px;padding:3px 10px;border-radius:99px;background:#e3e9ec}
+.stat.arrived{background:var(--amber-tint);color:var(--amber-text)}
+.stat.in{background:var(--green);color:#fff}
+.stat.late,.stat.noshow{background:var(--berry-tint);color:var(--berry)}
+dl.facts{margin:0;display:grid;grid-template-columns:110px 1fr;gap:8px 12px;font-size:14.5px}
+dl.facts dt{color:var(--muted)}
+dl.facts dd{margin:0}
+.note{background:var(--mist);border-radius:6px;padding:10px 12px;font-size:14px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px}
+.acts .btn{padding:11px 16px}
+form.f{display:grid;gap:14px}
+label.fld{display:grid;gap:5px;font-size:13.5px;font-weight:600}
+label.fld input,label.fld select{padding:10px 11px;border:1px solid var(--line);border-radius:6px;background:#fff;font-weight:400;font-size:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chk{display:flex;gap:9px;align-items:center;font-size:14.5px}
+.chk input{width:18px;height:18px;accent-color:var(--ink)}
+.err{color:var(--berry);font-size:14px;min-height:1.3em;margin:0}
+
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:7px;font-weight:600;font-size:14.5px;box-shadow:0 8px 24px rgba(10,30,40,.3);z-index:50;transition:opacity .2s,transform .2s}
+.toast[hidden]{display:block;opacity:0;transform:translate(-50%,10px);pointer-events:none}
+
+@media (max-width:1100px){
+  .app{grid-template-columns:1fr}
+  .rail{position:static;height:auto}
+  .cols{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .main{padding:16px 14px 32px}
+  .clock{margin-left:0}
+  .search input{width:100%}
+  .search{flex:1 1 100%}
+  :root{--label-w:132px}
+  .who .av{display:none}
+  .li{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail" aria-label="Waiting room">
+    <div class="brand">
+      <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><circle cx="19" cy="19" r="19" fill="#e8ad34"/><path d="M5 22c5-1 9-4 14-11 5 7 9 10 14 11-5 0-9 1-14 7-5-6-9-7-14-7z" fill="#14303b"/></svg>
+      <div><b>Kestrel Physio</b><span>Front desk</span></div>
+    </div>
+    <section>
+      <div class="wait-head"><span class="n" id="waitN">0</span><p id="waitP">in the waiting room</p></div>
+      <ul class="queue" id="queue"></ul>
+    </section>
+    <div class="rail-foot" id="railFoot"></div>
+  </aside>
+
+  <main class="main">
+    <header class="top">
+      <div>
+        <h1>Today’s schedule</h1>
+        <div class="date">Tuesday 20 October 2026</div>
+      </div>
+      <div class="search"><label class="sr" for="q">Find a patient</label><input id="q" type="search" placeholder="Find a patient  ( / )" autocomplete="off"></div>
+      <button class="btn primary" id="newBtn" type="button">New booking</button>
+      <div class="clock" id="clock" aria-label="Current time">--:--</div>
+    </header>
+
+    <div class="strip" id="strip"></div>
+
+    <section class="board" aria-label="Appointments by practitioner">
+      <div class="scroller" id="scroller"><div class="grid" id="grid"></div></div>
+    </section>
+
+    <div class="cols">
+      <section class="panel"><h2>Arriving soon</h2><p class="hint">Patients due in the next hour, and anyone running late.</p><div id="soon"></div></section>
+      <section class="panel"><h2>Needs attention</h2><p class="hint">Things to sort out before they hold up a session.</p><div id="attn"></div></section>
+    </div>
+  </main>
+</div>
+
+<dialog id="detail" class="sheet" aria-labelledby="dTitle"><div class="dlg" id="dBody"></div></dialog>
+
+<dialog id="book" aria-labelledby="bTitle">
+  <div class="dlg" style="position:relative">
+    <button class="x" type="button" data-close aria-label="Close">×</button>
+    <h2 id="bTitle">New booking</h2>
+    <form class="f" id="bookForm" novalidate>
+      <label class="fld">Patient name<input id="bName" list="patients" required autocomplete="off"></label>
+      <datalist id="patients"></datalist>
+      <div class="two">
+        <label class="fld">Practitioner<select id="bPrac"></select></label>
+        <label class="fld">Length<select id="bDur"><option value="30">30 min</option><option value="45" selected>45 min</option><option value="60">60 min</option></select></label>
+      </div>
+      <div class="two">
+        <label class="fld">Start time<select id="bTime"></select></label>
+        <label class="fld">Visit type<select id="bType"><option>Follow-up</option><option>New patient assessment</option><option>Rehab session</option><option>Review</option></select></label>
+      </div>
+      <label class="chk"><input type="checkbox" id="bWalk"> Walk-in, check in now</label>
+      <p class="err" id="bErr" role="alert"></p>
+      <div class="acts"><button class="btn primary" type="submit">Book appointment</button><button class="btn" type="button" data-close>Cancel</button></div>
+    </form>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+  const T = s => { const [h, m] = s.split(':').map(Number); return h * 60 + m; };
+  const fmt = m => { m = Math.floor(m); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const money = n => '$' + n;
+  const DAY_START = T('08:00'), DAY_END = T('18:00'), PX = 3;
+
+  // The clinic clock starts at 10:42 and runs live from there.
+  const t0 = performance.now(), simStart = T('10:42') * 60;
+  const nowMin = () => (simStart + (performance.now() - t0) / 1000) / 60;
+
+  const pracs = [
+    { id: 'mo', name: 'Maya Okafor', role: 'Physiotherapist', room: 'Room 1', ini: 'MO' },
+    { id: 'tw', name: 'Tomasz Wieczorek', role: 'Sports physio', room: 'Room 2', ini: 'TW' },
+    { id: 'pr', name: 'Priya Raman', role: 'Neuro and balance', room: 'Room 3', ini: 'PR' },
+    { id: 'sh', name: 'Sam Hartley', role: 'Hand therapist', room: 'Room 4', ini: 'SH' },
+    { id: 'lf', name: 'Lena Fischer', role: 'Rehab and women’s health', room: 'Gym studio', ini: 'LF' }
+  ];
+
+  let nextId = 100;
+  const A = (id, p, s, d, name, type, status, x = {}) => ({ id, p, start: T(s), dur: d, name, type, status, phone: '', note: '', balance: 0, forms: true, isNew: false, arrivedAt: null, startedAt: null, ...x });
+  const appts = [
+    A(1,'mo','08:00',45,'Harold Brennan','Lower back review','done',{phone:'0412 555 018'}),
+    A(2,'mo','09:00',45,'Aisha Rahman','ACL rehab, week 9','done',{phone:'0431 555 270'}),
+    A(3,'mo','10:00',45,'Colm Doyle','Neck and shoulder','in',{phone:'0407 555 331',startedAt:T('10:03')}),
+    A(4,'mo','11:00',30,'Ines Marques','Plantar fasciitis follow-up','arrived',{phone:'0419 555 642',arrivedAt:T('10:31')}),
+    A(5,'mo','11:45',45,'Walter Pryce','Hip osteoarthritis','booked',{phone:'0422 555 904',balance:85,note:'Uses a walking stick. Prefers the ground-floor room.'}),
+    A(6,'mo','13:30',60,'Jun Takahashi','New patient assessment','booked',{phone:'0488 555 117',forms:false,isNew:true,note:'Referred by GP for recurring knee pain.'}),
+    A(7,'mo','15:00',45,'Beatrice Lund','Lower back pain','booked',{phone:'0410 555 786'}),
+
+    A(8,'tw','08:30',45,'Dev Malhotra','Hamstring strain','done',{phone:'0415 555 209'}),
+    A(9,'tw','09:45',45,'Ruth Adeyemi','Rotator cuff, week 4','in',{phone:'0423 555 451',startedAt:T('09:47')}),
+    A(10,'tw','10:30',45,'Callum Reid','Ankle sprain','arrived',{phone:'0437 555 063',arrivedAt:T('10:26')}),
+    A(11,'tw','11:30',45,'Mei Ling Chan','Runner’s knee','booked',{phone:'0409 555 328'}),
+    A(12,'tw','14:00',45,'Oskar Nilsson','Tennis elbow','booked',{phone:'0416 555 845',balance:40}),
+    A(13,'tw','15:15',30,'Zara Whitcombe','Post-match check','booked',{phone:'0428 555 590'}),
+
+    A(14,'pr','08:15',60,'Gerald Osei','Vestibular rehab','done',{phone:'0414 555 712'}),
+    A(15,'pr','09:30',60,'Margaret Holloway','Gait training after stroke','done',{phone:'0402 555 163',note:'Daughter attends and waits in reception.'}),
+    A(16,'pr','10:45',60,'Pavel Novak','Balance training','booked',{phone:'0421 555 877'}),
+    A(17,'pr','12:30',45,'Elodie Fontaine','Dizziness assessment','booked',{phone:'0413 555 244',forms:false,isNew:true}),
+    A(18,'pr','14:00',60,'Arthur Kincaid','Mobility, Parkinson’s','booked',{phone:'0435 555 096',note:'Book the long chair. Medication at 13:00.'}),
+
+    A(19,'sh','09:00',30,'Nadia Kovac','Wrist splint check','done',{phone:'0417 555 521'}),
+    A(20,'sh','10:15',30,'Grace Whitfield','Carpal tunnel','booked',{phone:'0426 555 308'}),
+    A(21,'sh','10:45',45,'Hector Salazar','Tendon repair, week 3','booked',{phone:'0408 555 640',balance:120}),
+    A(22,'sh','12:00',30,'Yuki Aoyama','Thumb joint pain','booked',{phone:'0432 555 913'}),
+    A(23,'sh','14:30',45,'Rosalind Ferris','Post-fracture hand therapy','booked',{phone:'0419 555 475'}),
+
+    A(24,'lf','09:00',45,'Tobias Wren','Return-to-run assessment','done',{phone:'0405 555 836'}),
+    A(25,'lf','10:30',45,'Amara Okeke','Pelvic girdle pain','in',{phone:'0429 555 612',startedAt:T('10:31')}),
+    A(26,'lf','11:30',45,'Doug Fairweather','Core strength programme','booked',{phone:'0411 555 285',balance:60}),
+    A(27,'lf','13:00',45,'Siobhan Keane','Postnatal check','booked',{phone:'0436 555 719'}),
+    A(28,'lf','16:00',60,'Leo Papadakis','Rehab gym session','booked',{phone:'0424 555 058'})
+  ];
+
+  const pr = id => pracs.find(p => p.id === id);
+  const end = a => a.start + a.dur;
+  const isLate = a => a.status === 'booked' && nowMin() > a.start + 10;
+  const kind = a => isLate(a) ? 'late' : a.status;
+  const LABEL = { booked: 'Booked', arrived: 'Waiting', in: 'In treatment', done: 'Finished', noshow: 'No-show', late: 'Late' };
+  let query = '', openId = null;
+  const hit = a => !query || a.name.toLowerCase().includes(query);
+  const $ = s => document.querySelector(s);
+
+  /* ---------- render ---------- */
+  function renderRail() {
+    const now = nowMin();
+    const w = appts.filter(a => a.status === 'arrived').sort((a, b) => a.arrivedAt - b.arrivedAt);
+    $('#waitN').textContent = w.length;
+    $('#waitP').textContent = w.length === 1 ? 'person in the waiting room' : 'people in the waiting room';
+    const list = w.filter(hit);
+    $('#queue').innerHTML = list.length ? list.map(a => {
+      const mins = Math.max(0, Math.floor(now - a.arrivedAt));
+      return `<li><button class="q ${mins >= 15 ? 'long' : ''}" data-open="${a.id}">
+        <span class="nm">${esc(a.name)}</span><span class="sub">${esc(pr(a.p).name.split(' ')[0])}, ${fmt(a.start)} · ${esc(pr(a.p).room)}</span>
+        <span class="tm">${mins}<small>min waiting</small></span></button></li>`;
+    }).join('') : `<li class="q-empty">${w.length ? 'No match in the waiting room.' : 'Nobody is waiting. New arrivals will show up here.'}</li>`;
+    const run = appts.filter(a => a.status === 'in').length;
+    $('#railFoot').innerHTML = `<b>${run}</b> in treatment now<br>Clinic open 08:00 to 18:00`;
+  }
+
+  function renderStrip() {
+    const live = appts.filter(a => a.status !== 'noshow');
+    const c = s => appts.filter(a => a.status === s).length;
+    const left = appts.filter(a => a.status === 'booked' && !isLate(a)).length;
+    $('#strip').innerHTML = [
+      [appts.length, 'booked today'], [c('done'), 'finished'], [c('in'), 'in treatment'],
+      [c('arrived'), 'waiting'], [left, 'still to arrive'], [appts.filter(isLate).length + c('noshow'), 'late or no-show']
+    ].map(([n, l]) => `<span><b>${n}</b>${l}</span>`).join('');
+  }
+
+  function renderGrid() {
+    const now = nowMin();
+    const span = DAY_END - DAY_START;
+    let h = `<div class="hours"><div class="spacer"></div><div class="ticks">`;
+    for (let m = DAY_START; m < DAY_END; m += 60) h += `<div class="tick" style="left:${(m - DAY_START) * PX}px">${fmt(m)}</div>`;
+    h += `</div></div>`;
+    for (const p of pracs) {
+      const cur = appts.find(a => a.p === p.id && a.status === 'in');
+      const st = cur ? `<span class="st busy">With ${esc(cur.name.split(' ')[0])}${now > end(cur) ? ', ' + Math.floor(now - end(cur)) + ' min over' : ''}</span>` : `<span class="st free">Free now</span>`;
+      h += `<div class="row"><div class="who"><div class="av" aria-hidden="true">${p.ini}</div><div><b>${esc(p.name)}</b><span>${esc(p.role)} · ${esc(p.room)}</span>${st}</div></div>
+        <div class="track" style="width:${span * PX}px"><div class="lunch" style="left:${(T('12:45') - DAY_START) * PX}px;width:${45 * PX}px" aria-hidden="true"></div>`;
+      for (const a of appts.filter(x => x.p === p.id)) {
+        const k = kind(a), w = a.dur * PX - 3;
+        const sub = k === 'arrived' ? `Waiting ${Math.max(0, Math.floor(now - a.arrivedAt))} min` : LABEL[k];
+        h += `<button class="ap ${k} ${hit(a) ? '' : 'dim'}" style="left:${(a.start - DAY_START) * PX}px;width:${w}px" data-open="${a.id}" title="${esc(a.name)}, ${fmt(a.start)} to ${fmt(end(a))}, ${esc(a.type)}, ${LABEL[k]}">
+          <span class="p">${esc(a.name)}</span>${w > 130 ? `<span class="t">${esc(a.type)}</span>` : ''}<span class="s">${fmt(a.start)}${w > 130 ? ' · ' + sub : ''}</span></button>`;
+      }
+      h += `</div></div>`;
+    }
+    h += `<div class="now" id="nowLine"><i>${fmt(now)}</i></div>`;
+    $('#grid').innerHTML = h;
+    positionNow();
+  }
+  function positionNow() {
+    const el = $('#nowLine'); if (!el) return;
+    const lw = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--label-w'));
+    el.style.left = (lw + (nowMin() - DAY_START) * PX) + 'px';
+    el.firstChild.textContent = fmt(nowMin());
+  }
+
+  const soonRow = a => {
+    const k = kind(a), d = a.start - nowMin();
+    const when = k === 'late' ? `${Math.floor(-d)} min late` : d <= 1 ? 'due now' : `in ${Math.round(d)} min`;
+    return `<div class="li ${k === 'late' ? 'bad' : ''}"><div class="txt"><button class="lnk" data-open="${a.id}">${esc(a.name)}${a.isNew ? '<span class="flag a">New patient</span>' : ''}</button>
+      <span>${fmt(a.start)} with ${esc(pr(a.p).name.split(' ')[0])} · ${when}</span></div>
+      <div class="act">${k === 'late' ? `<button class="btn sm" data-act="call" data-id="${a.id}">Call</button>` : ''}<button class="btn sm primary" data-act="checkin" data-id="${a.id}">Check in</button></div></div>`;
+  };
+  function renderLists() {
+    const now = nowMin();
+    const soon = appts.filter(a => a.status === 'booked' && a.start <= now + 60 && hit(a)).sort((a, b) => a.start - b.start);
+    $('#soon').innerHTML = soon.length ? soon.map(soonRow).join('') : '<div class="empty">No one else due in the next hour.</div>';
+
+    const items = [];
+    for (const a of appts) {
+      if (!hit(a)) continue;
+      if (isLate(a)) items.push({ a, bad: 1, t: `${a.name} is ${Math.floor(now - a.start)} min late`, s: `${fmt(a.start)} with ${pr(a.p).name}. Call them, or mark a no-show to free the slot.`, btn: ['Mark no-show', 'noshow', 'warn'] });
+      if (a.status === 'in' && now > end(a) + 5) {
+        const nxt = appts.find(x => x.p === a.p && x.status === 'arrived');
+        items.push({ a, bad: 1, t: `${pr(a.p).name.split(' ')[0]} is ${Math.floor(now - end(a))} min over`, s: nxt ? `${nxt.name} has been waiting ${Math.floor(now - nxt.arrivedAt)} min. Let them know.` : `${a.name}’s session ran past ${fmt(end(a))}.` });
+      }
+      if (!a.forms && ['booked', 'arrived'].includes(a.status)) items.push({ a, t: `${a.name} has not filled in the intake form`, s: `${a.isNew ? 'New patient' : 'Patient'} at ${fmt(a.start)}. Send a link before they arrive.`, btn: ['Text form link', 'forms'] });
+      if (a.balance && ['booked', 'arrived', 'in'].includes(a.status)) items.push({ a, t: `${a.name} owes ${money(a.balance)}`, s: `Collect at the end of the ${fmt(a.start)} visit.` });
+    }
+    $('#attn').innerHTML = items.length ? items.map(i => `<div class="li ${i.bad ? 'bad' : ''}"><div class="txt"><button class="lnk" data-open="${i.a.id}">${esc(i.t)}</button><span>${esc(i.s)}</span></div>
+      ${i.btn ? `<div class="act"><button class="btn sm ${i.btn[2] || ''}" data-act="${i.btn[1]}" data-id="${i.a.id}">${i.btn[0]}</button></div>` : ''}</div>`).join('') : '<div class="empty">Nothing needs attention right now.</div>';
+  }
+
+  function renderDetail() {
+    const a = appts.find(x => x.id === openId); if (!a) return;
+    const k = kind(a), p = pr(a.p), now = nowMin();
+    const acts = [];
+    if (k === 'booked' || k === 'late') acts.push(['Check in', 'checkin', 'primary'], ['Call patient', 'call'], ['Mark no-show', 'noshow', 'warn']);
+    if (k === 'arrived') acts.push(['Start treatment', 'start', 'go'], ['Call patient', 'call']);
+    if (k === 'in') acts.push([a.balance ? `Take ${money(a.balance)} and finish` : 'Finish visit', 'finish', 'go']);
+    if (k === 'done' || k === 'noshow') acts.push(['Book next visit', 'rebook', 'primary']);
+    if (!a.forms && k !== 'done' && k !== 'noshow') acts.push(['Text form link', 'forms']);
+    $('#dBody').innerHTML = `<button class="x" data-close aria-label="Close" type="button" style="position:absolute;top:14px;right:14px">×</button>
+      <div><span class="stat ${k}">${LABEL[k]}${k === 'arrived' ? ' ' + Math.floor(now - a.arrivedAt) + ' min' : ''}</span>
+      <h2 id="dTitle" style="margin-top:10px">${esc(a.name)}</h2><div class="meta">${esc(a.type)}${a.isNew ? ' · New patient' : ''}</div></div>
+      <dl class="facts">
+        <dt>Time</dt><dd>${fmt(a.start)} to ${fmt(end(a))} (${a.dur} min)</dd>
+        <dt>Practitioner</dt><dd>${esc(p.name)}, ${esc(p.room)}</dd>
+        <dt>Phone</dt><dd>${esc(a.phone)}</dd>
+        <dt>Intake form</dt><dd>${a.forms ? 'Complete' : '<b style="color:var(--berry)">Not filled in</b>'}</dd>
+        <dt>Balance</dt><dd>${a.balance ? '<b>' + money(a.balance) + ' due</b>' : 'Nothing owing'}</dd>
+        ${a.arrivedAt != null ? `<dt>Arrived</dt><dd>${fmt(a.arrivedAt)}</dd>` : ''}
+        ${a.startedAt != null ? `<dt>Started</dt><dd>${fmt(a.startedAt)}</dd>` : ''}
+      </dl>
+      ${a.note ? `<div class="note">${esc(a.note)}</div>` : ''}
+      <div class="acts">${acts.map(([l, act, c = '']) => `<button class="btn ${c}" data-act="${act}" data-id="${a.id}" type="button">${l}</button>`).join('')}</div>`;
+  }
+
+  const renderAll = () => { renderRail(); renderStrip(); renderGrid(); renderLists(); if ($('#detail').open) renderDetail(); };
+
+  /* ---------- actions ---------- */
+  let toastT;
+  function toast(msg) {
+    const t = $('#toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 2600);
+  }
+  function act(name, id) {
+    const a = appts.find(x => x.id === id); if (!a) return;
+    const first = a.name.split(' ')[0];
+    if (name === 'checkin') { a.status = 'arrived'; a.arrivedAt = nowMin(); toast(`${a.name} checked in`); }
+    else if (name === 'start') { a.status = 'in'; a.startedAt = nowMin(); toast(`Started treatment for ${a.name}`); }
+    else if (name === 'finish') { const paid = a.balance; a.status = 'done'; a.balance = 0; toast(paid ? `${money(paid)} taken, visit finished` : `Visit finished for ${a.name}`); }
+    else if (name === 'noshow') { a.status = 'noshow'; toast(`${a.name} marked as a no-show`); }
+    else if (name === 'call') toast(`Calling ${first} on ${a.phone}`);
+    else if (name === 'forms') { a.forms = true; toast(`Form link texted to ${first}`); }
+    else if (name === 'rebook') { closeDetail(); openBook({ name: a.name, p: a.p, type: 'Follow-up' }); return; }
+    renderAll();
+  }
+
+  const closeDetail = () => { $('#detail').close(); openId = null; };
+  function openDetail(id) { openId = id; renderDetail(); const d = $('#detail'); if (!d.open) d.showModal(); }
+
+  /* ---------- booking ---------- */
+  const clash = (p, s, d) => appts.some(a => a.p === p && a.status !== 'noshow' && s < end(a) && a.start < s + d);
+  function refreshSlots(keep) {
+    const p = $('#bPrac').value, d = +$('#bDur').value, now = nowMin();
+    const sel = $('#bTime'), prev = keep || sel.value;
+    let opts = '', firstFree = null;
+    for (let m = DAY_START; m + d <= DAY_END; m += 15) {
+      const past = m + 14 < now, busy = clash(p, m, d);
+      if (!past && !busy && firstFree == null) firstFree = m;
+      opts += `<option value="${m}" ${past || busy ? 'disabled' : ''}>${fmt(m)}${busy && !past ? ' (busy)' : ''}</option>`;
+    }
+    sel.innerHTML = opts;
+    const pv = prev && sel.querySelector(`option[value="${prev}"]:not([disabled])`);
+    sel.value = pv ? prev : (firstFree ?? '');
+  }
+  function openBook(pre = {}) {
+    $('#bookForm').reset(); $('#bErr').textContent = '';
+    $('#patients').innerHTML = [...new Set(appts.map(a => a.name))].map(n => `<option value="${esc(n)}">`).join('');
+    $('#bPrac').innerHTML = pracs.map(p => `<option value="${p.id}">${esc(p.name)}</option>`).join('');
+    if (pre.p) $('#bPrac').value = pre.p;
+    if (pre.name) $('#bName').value = pre.name;
+    if (pre.type) $('#bType').value = pre.type;
+    refreshSlots(); $('#book').showModal(); $('#bName').focus();
+  }
+  $('#bPrac').addEventListener('change', () => refreshSlots());
+  $('#bDur').addEventListener('change', () => refreshSlots());
+  $('#bookForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('#bName').value.trim(), s = +$('#bTime').value, d = +$('#bDur').value, p = $('#bPrac').value;
+    if (!name) { $('#bErr').textContent = 'Enter the patient’s name.'; $('#bName').focus(); return; }
+    if (!s || clash(p, s, d)) { $('#bErr').textContent = 'No free slot at that time. Pick another start time, practitioner or length.'; return; }
+    const known = appts.find(a => a.name.toLowerCase() === name.toLowerCase());
+    const walk = $('#bWalk').checked;
+    appts.push(A(nextId++, p, fmt(s), d, name, $('#bType').value, walk ? 'arrived' : 'booked', { phone: known ? known.phone : 'No phone on file', isNew: !known, forms: !!known && known.forms, arrivedAt: walk ? nowMin() : null }));
+    $('#book').close();
+    toast(walk ? `${name} booked and checked in` : `${name} booked for ${fmt(s)}`);
+    renderAll();
+  });
+
+  /* ---------- wiring ---------- */
+  document.addEventListener('click', e => {
+    const o = e.target.closest('[data-open]'); if (o) return openDetail(+o.dataset.open);
+    const a = e.target.closest('[data-act]'); if (a) return act(a.dataset.act, +a.dataset.id);
+    if (e.target.closest('[data-close]')) { const d = e.target.closest('dialog'); d.close(); if (d.id === 'detail') openId = null; }
+    if (e.target.tagName === 'DIALOG') { e.target.close(); if (e.target.id === 'detail') openId = null; }
+  });
+  $('#newBtn').addEventListener('click', () => openBook());
+  $('#q').addEventListener('input', e => { query = e.target.value.trim().toLowerCase(); renderAll(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && !/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName) && !document.querySelector('dialog[open]')) { e.preventDefault(); $('#q').focus(); }
+  });
+  window.addEventListener('resize', positionNow);
+
+  function tick() { $('#clock').textContent = fmt(nowMin()); positionNow(); }
+  renderAll(); tick();
+  $('#scroller').scrollLeft = Math.max(0, (nowMin() - DAY_START) * PX - 260);
+  setInterval(tick, 1000);
+  setInterval(renderAll, 15000);
+})();
+</script>
+</body>
+</html>

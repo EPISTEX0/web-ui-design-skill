@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salt and Iron – Visitor guide – Harwick Maritime Museum</title>
+<meta name="description" content="Online guide to Salt and Iron at the Harwick Maritime Museum.">
+<!-- SAMPLE CONTENT: gallery names, objects, hours and prices are placeholders. Edit the OBJECTS and GALLERIES arrays and the visit-info section. -->
+<style>
+:root{
+  --bg:oklch(96% .006 220);--surface:oklch(99% .003 220);--ink:oklch(22% .03 245);
+  --text:oklch(22% .03 245);--text-2:oklch(40% .025 245);--text-3:oklch(48% .02 245);
+  --border:oklch(86% .01 230);--accent:oklch(50% .15 45);--accent-ink:oklch(98% .01 60);
+  --on-ink:oklch(96% .006 220);--on-ink-2:oklch(80% .015 230);
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s6:24px;--s8:32px;--s12:48px;--s16:64px;
+  --r-sm:4px;--r-md:8px;
+  --ease:cubic-bezier(.23,1,.32,1);
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1rem/1.5 var(--font);overflow-x:clip;
+  padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  -webkit-tap-highlight-color:transparent}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.1;letter-spacing:-.02em}
+p{margin:0;text-wrap:pretty}
+a{color:inherit}
+button{font:inherit;color:inherit;touch-action:manipulation;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:68rem;margin:0 auto;padding:0 var(--s4)}
+.prose{max-width:60ch}
+.skip{position:absolute;left:var(--s2);top:-80px;background:var(--surface);padding:var(--s2) var(--s4);z-index:20}
+.skip:focus{top:var(--s2)}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:10;background:var(--ink);color:var(--on-ink)}
+.bar .wrap{display:flex;align-items:center;gap:var(--s4);min-height:56px}
+.bar b{font-weight:700;letter-spacing:-.01em;margin-right:auto;white-space:nowrap}
+.bar nav{display:flex;gap:var(--s1);overflow-x:auto;scrollbar-width:none}
+.bar nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s3);text-decoration:none;color:var(--on-ink-2);border-radius:var(--r-sm);white-space:nowrap}
+.bar nav a:hover{color:var(--on-ink)}
+@media(max-width:640px){.bar b{display:none}.bar nav{margin:0 calc(var(--s4)*-1);padding:0 var(--s4)}}
+
+/* hero */
+.hero{background:var(--ink);color:var(--on-ink);padding:var(--s12) 0 var(--s16);border-top:1px solid oklch(32% .03 245)}
+.hero small{display:block;color:var(--on-ink-2);margin-bottom:var(--s4);font-size:1rem}
+.hero h1{font-size:clamp(3rem,13vw,7.5rem);font-weight:800;letter-spacing:-.04em;line-height:.92}
+.hero h1 span{display:block;color:oklch(72% .13 45)}
+.hero p{margin-top:var(--s6);color:var(--on-ink-2);font-size:1.125rem;max-width:44ch}
+.hero .cta{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s8)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 var(--s6);border-radius:var(--r-md);border:1px solid var(--border);background:var(--surface);text-decoration:none;font-weight:600;transition:transform .14s var(--ease),background-color .2s var(--ease)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent;color:var(--on-ink);border-color:oklch(50% .03 245)}
+@media(hover:hover){.btn.primary:hover{background:oklch(45% .15 45)}.btn.ghost:hover{background:oklch(30% .03 245)}.btn:not(.primary):not(.ghost):hover{background:var(--bg)}}
+
+section{padding:var(--s12) 0 0}
+section>.wrap>h2,.sec-h{font-size:clamp(1.75rem,5vw,2.25rem);font-weight:800}
+.lede{margin-top:var(--s3);color:var(--text-2);font-size:1.125rem}
+
+/* deck plan */
+.plan{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:var(--s6);border:1px solid var(--border);border-radius:var(--r-md);background:var(--surface);overflow:hidden;counter-reset:g}
+.plan button{all:unset;box-sizing:border-box;cursor:pointer;padding:var(--s4);min-height:112px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:var(--s2);transition:background-color .2s var(--ease)}
+.plan button:last-child{border-right:0}
+.plan button:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.plan .n{font-variant-numeric:tabular-nums;font-weight:800;color:var(--accent);font-size:1.375rem}
+.plan .t{font-weight:700;line-height:1.2}
+.plan .c{color:var(--text-3);font-size:.875rem;margin-top:auto;font-variant-numeric:tabular-nums}
+.plan button[aria-pressed=true]{background:var(--ink);color:var(--on-ink)}
+.plan button[aria-pressed=true] .n{color:oklch(72% .13 45)}
+.plan button[aria-pressed=true] .c{color:var(--on-ink-2)}
+@media(hover:hover){.plan button:not([aria-pressed=true]):hover{background:var(--bg)}}
+@media(max-width:640px){.plan{grid-template-columns:1fr 1fr}.plan button{border-right:1px solid var(--border);border-bottom:1px solid var(--border);min-height:96px}.plan button:first-child{grid-column:1/-1;min-height:80px}.plan button:nth-child(2n+1):not(:first-child){border-right:0}.plan button:nth-child(n+4){border-bottom:0}}
+
+/* tools */
+.tools{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s6);align-items:end}
+.field{flex:1 1 16rem}
+.field label{display:block;font-weight:600;font-size:.875rem;margin-bottom:var(--s1)}
+.field input{width:100%;min-height:44px;padding:0 var(--s3);font:inherit;font-size:1rem;border:1px solid oklch(62% .02 240);border-radius:var(--r-md);background:var(--surface);color:var(--text)}
+.count{color:var(--text-2);font-variant-numeric:tabular-nums}
+
+/* objects */
+.list{list-style:none;margin:var(--s6) 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,19rem),1fr));gap:var(--s4)}
+.obj{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);display:flex;flex-direction:column;min-width:0}
+.obj-open{all:unset;box-sizing:border-box;cursor:pointer;display:block;padding:var(--s4);flex:1;border-radius:var(--r-md) var(--r-md) 0 0}
+.obj-open:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.tag{display:inline-flex;align-items:center;gap:var(--s2);margin-bottom:var(--s3)}
+.stop{display:grid;place-items:center;min-width:40px;height:32px;padding:0 var(--s2);background:var(--accent);color:var(--accent-ink);border-radius:var(--r-sm);font-weight:800;font-variant-numeric:tabular-nums;
+  box-shadow:inset 0 0 0 2px var(--surface),inset 0 0 0 3px var(--accent)}
+.where{color:var(--text-3);font-size:.875rem}
+.obj h3{font-size:1.375rem;font-weight:700;overflow-wrap:anywhere}
+.obj .meta{color:var(--text-2);font-size:.875rem;margin-top:var(--s1);font-variant-numeric:tabular-nums}
+.obj .sum{margin-top:var(--s3);color:var(--text-2)}
+.obj-foot{border-top:1px solid var(--border);padding:var(--s1) var(--s2)}
+.save{all:unset;box-sizing:border-box;cursor:pointer;min-height:44px;padding:0 var(--s2);display:inline-flex;align-items:center;gap:var(--s2);font-weight:600;border-radius:var(--r-sm)}
+.save:focus-visible{outline:3px solid var(--accent);outline-offset:0}
+.save::before{content:"";width:16px;height:16px;border:2px solid currentColor;border-radius:3px;background:transparent}
+.save[aria-pressed=true]{color:var(--accent)}
+.save[aria-pressed=true]::before{background:var(--accent);border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--surface)}
+@media(hover:hover){.save:hover{color:var(--accent)}}
+.empty{margin-top:var(--s6);padding:var(--s8) var(--s4);border:1px dashed oklch(70% .02 235);border-radius:var(--r-md);text-align:center;color:var(--text-2)}
+.empty .btn{margin-top:var(--s4)}
+[hidden]{display:none!important}
+
+/* my visit */
+.visit-list{list-style:none;padding:0;margin:var(--s6) 0 0;border-top:1px solid var(--border)}
+.visit-list li{display:flex;align-items:center;gap:var(--s3);padding:var(--s2) 0;border-bottom:1px solid var(--border)}
+.visit-list .name{flex:1;min-width:0;font-weight:600;overflow-wrap:anywhere}
+.visit-list button{min-height:44px;padding:0 var(--s3);background:none;border:0;color:var(--text-2);text-decoration:underline}
+
+/* info */
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:var(--s8);margin-top:var(--s6)}
+.info h3{font-size:1.125rem;margin-bottom:var(--s2)}
+.info dl{margin:0}.info dt{font-weight:600}.info dd{margin:0 0 var(--s2);color:var(--text-2)}
+footer{margin-top:var(--s16);background:var(--ink);color:var(--on-ink-2);padding:var(--s8) 0 calc(var(--s8) + env(safe-area-inset-bottom));font-size:.9375rem}
+footer b{color:var(--on-ink)}
+
+/* dialog */
+dialog{border:1px solid var(--border);border-radius:var(--r-md);padding:0;max-width:min(36rem,calc(100vw - 24px));width:100%;background:var(--surface);color:var(--text);max-height:calc(100dvh - 24px)}
+dialog::backdrop{background:oklch(15% .03 245/.6)}
+dialog[open]{animation:in .26s var(--ease)}
+@keyframes in{from{opacity:0;transform:scale(.95)}}
+.d-body{padding:var(--s6)}
+.d-body h2{font-size:1.75rem;font-weight:800;margin-bottom:var(--s2);overflow-wrap:anywhere}
+.d-body p+p{margin-top:var(--s3)}
+.d-body .look{margin-top:var(--s6);padding-top:var(--s4);border-top:1px solid var(--border)}
+.d-body .look b{display:block;margin-bottom:var(--s1)}
+.d-actions{display:flex;flex-wrap:wrap;gap:var(--s3);padding:var(--s4) var(--s6);border-top:1px solid var(--border)}
+
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}dialog[open]{animation:none}.btn{transition:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="bar">
+  <div class="wrap">
+    <b>Salt and Iron</b>
+    <nav aria-label="Guide sections">
+      <a href="#galleries">Galleries</a>
+      <a href="#visit">My visit <span id="navcount" aria-hidden="true"></span></a>
+      <a href="#info">Plan your day</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div class="hero">
+  <div class="wrap">
+    <small>Harwick Maritime Museum · Visitor guide</small>
+    <h1>Salt<br>and <span>Iron</span></h1>
+    <p>How the sea wears down what we build from metal, and the people who kept ships afloat anyway. Use this guide on your phone as you walk the galleries.</p>
+    <div class="cta">
+      <a class="btn primary" href="#galleries">Start the tour</a>
+      <a class="btn ghost" href="#info">Opening hours</a>
+    </div>
+  </div>
+</div>
+
+<section id="galleries" aria-labelledby="gh">
+  <div class="wrap">
+    <h2 id="gh">Galleries and objects</h2>
+    <p class="lede prose">Pick a gallery, or search for an object. Each rust-coloured number matches the label beside the object in the room.</p>
+    <div class="plan" id="plan" role="group" aria-label="Filter by gallery"></div>
+    <div class="tools">
+      <div class="field"><label for="q">Search objects</label><input id="q" type="search" placeholder="Try “anchor” or “lamp”" autocomplete="off"></div>
+      <p class="count" id="count" role="status" aria-live="polite"></p>
+    </div>
+    <ul class="list" id="list"></ul>
+    <div class="empty" id="none" hidden>
+      <p>No objects match that search.</p>
+      <button class="btn" id="reset" type="button">Show all objects</button>
+    </div>
+  </div>
+</section>
+
+<section id="visit" aria-labelledby="vh">
+  <div class="wrap">
+    <h2 id="vh">My visit</h2>
+    <p class="lede prose">Objects you save appear here, in gallery order. They stay on this device only.</p>
+    <ul class="visit-list" id="vlist"></ul>
+    <div class="empty" id="vempty">
+      <p>Nothing saved yet. Tick “Save” on any object to build your route.</p>
+      <a class="btn" href="#galleries">Browse objects</a>
+    </div>
+  </div>
+</section>
+
+<section id="info" aria-labelledby="ih">
+  <div class="wrap">
+    <h2 id="ih">Plan your day</h2>
+    <div class="info">
+      <div><h3>Opening hours</h3><dl><dt>Tuesday to Sunday</dt><dd>10:00 – 17:00 (sample)</dd><dt>Monday</dt><dd>Closed (sample)</dd></dl></div>
+      <div><h3>Finding us</h3><p style="color:var(--text-2)">Harwick Maritime Museum, Harbour Road, Harwick. Add the full address and transport details here.</p></div>
+      <div><h3>Access</h3><p style="color:var(--text-2)">Add step-free routes, lift locations, seating and quiet-hours information here.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><b>Salt and Iron</b> at the Harwick Maritime Museum. Object descriptions, times and prices in this guide are placeholder text until confirmed by the curators.</div></footer>
+
+<dialog id="dlg" aria-labelledby="dt">
+  <div class="d-body">
+    <div class="tag"><span class="stop" id="dstop"></span><span class="where" id="dwhere"></span></div>
+    <h2 id="dt"></h2>
+    <p class="where" id="dmeta"></p>
+    <div id="dtext" style="margin-top:12px"></div>
+    <div class="look"><b>Look closely</b><p id="dlook"></p></div>
+  </div>
+  <div class="d-actions">
+    <button class="btn primary" id="dsave" type="button"></button>
+    <button class="btn" id="dclose" type="button">Close</button>
+  </div>
+</dialog>
+
+<script>
+/* SAMPLE CONTENT – replace with the real catalogue. */
+const GALLERIES=[
+  {id:1,name:"Landfall",blurb:"Arriving by sea"},
+  {id:2,name:"The Slow Burn",blurb:"Corrosion at work"},
+  {id:3,name:"Forge and Slip",blurb:"Building in iron"},
+  {id:4,name:"Keeping Afloat",blurb:"Repair and care"}
+];
+const OBJECTS=[
+  {id:"a",stop:101,g:1,title:"Admiralty pattern anchor",meta:"Cast iron · accession SI-001 (sample)",sum:"A harbour anchor recovered from the estuary mud.",text:["Sample text. Describe where the anchor was found, how long it lay under water and what it tells us about the harbour.","Replace this paragraph with curator-approved copy."],look:"Sample: the flaking orange crust is iron oxide, not the original surface."},
+  {id:"b",stop:102,g:1,title:"Ship's bell",meta:"Bronze · accession SI-002 (sample)",sum:"Rung for watches, fog and fire.",text:["Sample text about the bell and the vessel it served.","Replace with approved copy."],look:"Sample: the green patina is a protective layer, unlike rust on iron."},
+  {id:"c",stop:201,g:2,title:"Corroded hull plate",meta:"Wrought iron · accession SI-010 (sample)",sum:"A section of plating eaten through by seawater.",text:["Sample text explaining how salt water, oxygen and metal combine to corrode a hull.","Replace with approved copy."],look:"Sample: find the rivet heads that have worn thinner than their neighbours."},
+  {id:"d",stop:202,g:2,title:"Chain link, tide zone",meta:"Iron · accession SI-011 (sample)",sum:"Worn fastest where air and water meet.",text:["Sample text on why the splash zone is hardest on iron.","Replace with approved copy."],look:"Sample: compare the waist of the link with a new one beside it."},
+  {id:"e",stop:301,g:3,title:"Riveter's hammer and set",meta:"Steel, ash · accession SI-020 (sample)",sum:"Tools used to close red-hot rivets.",text:["Sample text on the riveting gangs of the yard.","Replace with approved copy."],look:"Sample: the handle is polished by hands, not by display."},
+  {id:"f",stop:302,g:3,title:"Slipway launch cradle",meta:"Timber, iron · accession SI-021 (sample)",sum:"The cradle that carried a hull into the water.",text:["Sample text about launches at the Harwick yard.","Replace with approved copy."],look:"Sample: tallow stains mark where the ways were greased."},
+  {id:"g",stop:401,g:4,title:"Caulking irons",meta:"Iron · accession SI-030 (sample)",sum:"A set for packing seams watertight.",text:["Sample text about the caulker's trade.","Replace with approved copy."],look:"Sample: each iron has a different width for a different seam."},
+  {id:"h",stop:402,g:4,title:"Storm lantern",meta:"Tinned iron, glass · accession SI-031 (sample)",sum:"Still carries the soot of its last voyage.",text:["Sample text about lighting aboard and who maintained it.","Replace with approved copy."],look:"Sample: spot the repaired panel, a patch in a different metal."}
+];
+
+const $=s=>document.querySelector(s);
+const plan=$("#plan"),list=$("#list"),q=$("#q"),dlg=$("#dlg");
+let gal=0,saved=new Set();
+try{saved=new Set(JSON.parse(localStorage.getItem("si-saved")||"[]"))}catch(e){}
+const persist=()=>{try{localStorage.setItem("si-saved",JSON.stringify([...saved]))}catch(e){}};
+const gname=id=>GALLERIES.find(g=>g.id===id).name;
+const el=(t,c,x)=>{const n=document.createElement(t);if(c)n.className=c;if(x!=null)n.textContent=x;return n};
+
+function drawPlan(){
+  plan.replaceChildren();
+  const all=el("button");all.type="button";all.dataset.g=0;
+  all.append(el("span","n","All"),el("span","t","Every gallery"),el("span","c",OBJECTS.length+" objects"));
+  plan.append(all);
+  GALLERIES.forEach(g=>{
+    const b=el("button");b.type="button";b.dataset.g=g.id;
+    b.append(el("span","n",String(g.id)),el("span","t",g.name),el("span","c",OBJECTS.filter(o=>o.g===g.id).length+" objects"));
+    plan.append(b);
+  });
+    plan.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(+b.dataset.g===gal)));
+}
+plan.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;gal=+b.dataset.g;drawPlan();drawList()});
+
+function card(o){
+  const li=el("li","obj");
+  const open=el("button","obj-open");open.type="button";open.dataset.id=o.id;
+  const tag=el("span","tag");tag.append(el("span","stop",String(o.stop)),el("span","where","Gallery "+o.g+" · "+gname(o.g)));
+  open.append(tag,el("h3",null,o.title),el("p","meta",o.meta),el("p","sum",o.sum));
+  const foot=el("div","obj-foot");
+  const s=el("button","save","Save");s.type="button";s.dataset.id=o.id;s.setAttribute("aria-pressed",String(saved.has(o.id)));
+  s.setAttribute("aria-label","Save "+o.title+" to my visit");
+  foot.append(s);li.append(open,foot);return li;
+}
+function drawList(){
+  const t=q.value.trim().toLowerCase();
+  const rows=OBJECTS.filter(o=>(!gal||o.g===gal)&&(!t||(o.title+" "+o.sum+" "+o.meta).toLowerCase().includes(t)));
+  list.replaceChildren(...rows.map(card));
+  $("#none").hidden=rows.length>0;
+  $("#count").textContent=rows.length===1?"1 object":rows.length+" objects";
+}
+q.addEventListener("input",drawList);
+$("#reset").addEventListener("click",()=>{q.value="";gal=0;drawPlan();drawList()});
+
+function drawVisit(){
+  const rows=OBJECTS.filter(o=>saved.has(o.id)).sort((a,b)=>a.stop-b.stop);
+  $("#vlist").replaceChildren(...rows.map(o=>{
+    const li=el("li");const st=el("span","stop",String(o.stop));
+    const n=el("span","name",o.title);const r=el("button",null,"Remove");r.type="button";r.dataset.id=o.id;
+    r.setAttribute("aria-label","Remove "+o.title);li.append(st,n,r);return li}));
+  $("#vempty").hidden=rows.length>0;
+  $("#navcount").textContent=rows.length?"("+rows.length+")":"";
+}
+function toggle(id){saved.has(id)?saved.delete(id):saved.add(id);persist();drawVisit();
+  document.querySelectorAll('.save[data-id="'+id+'"]').forEach(b=>b.setAttribute("aria-pressed",String(saved.has(id))));
+  if(cur&&cur.id===id)syncDlg()}
+list.addEventListener("click",e=>{
+  const s=e.target.closest(".save");if(s)return toggle(s.dataset.id);
+  const o=e.target.closest(".obj-open");if(o)openObj(o.dataset.id)});
+$("#vlist").addEventListener("click",e=>{const b=e.target.closest("button");if(b)toggle(b.dataset.id)});
+
+let cur=null;
+function syncDlg(){const on=saved.has(cur.id);$("#dsave").textContent=on?"Saved to my visit":"Save to my visit"}
+function openObj(id){
+  cur=OBJECTS.find(o=>o.id===id);
+  $("#dstop").textContent=cur.stop;$("#dwhere").textContent="Gallery "+cur.g+" · "+gname(cur.g);
+  $("#dt").textContent=cur.title;$("#dmeta").textContent=cur.meta;
+  $("#dtext").replaceChildren(...cur.text.map(t=>el("p",null,t)));
+  $("#dlook").textContent=cur.look;syncDlg();dlg.showModal();
+}
+$("#dsave").addEventListener("click",()=>toggle(cur.id));
+$("#dclose").addEventListener("click",()=>dlg.close());
+dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
+
+drawPlan();drawList();drawVisit();
+</script>
+</body>
+</html>

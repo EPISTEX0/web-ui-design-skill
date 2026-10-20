@@ -1,0 +1,260 @@
+{
+  "site": "~/.t3/scratch/2026-10-19-t-m-hi-u-v-4465e2cb/web-ui-design-skill/benchmark/results/raw/harbour-swim--original--0/site",
+  "defects": {
+    "noViewportMeta": true,
+    "horizontalOverflowAt390": true,
+    "bodyFontUnder16At390": true,
+    "bodyTextContrastUnder45": true,
+    "navTapTargetsUnder24": true,
+    "focusIndicatorMissing": true,
+    "inputsWithoutAccessibleName": true,
+    "submitNotKeyboardReachable": true,
+    "imagesWithoutDimensions": true,
+    "tableOverflowsAt390": true,
+    "motionUnderReducedMotion": true,
+    "phoneOrEmailNotLinks": true
+  },
+  "defectDetails": {
+    "viewportMeta": null,
+    "overflowAt390": {
+      "scrollWidth": 982,
+      "viewport": 390,
+      "clippedByViewport": [
+        "a:729",
+        "a:815",
+        "a:852",
+        "a:897",
+        "a:961"
+      ]
+    },
+    "fontPx": {
+      "medianAt390": 12,
+      "bodyElementAt390": 13
+    },
+    "contrast": {
+      "at390": {
+        "failShare": 0.858074615183929,
+        "measuredChars": 3833,
+        "skippedChars": 0,
+        "examples": [
+          {
+            "el": "span",
+            "ratio": 2.59,
+            "text": "Pool closed Bank Holiday"
+          },
+          {
+            "el": "h2",
+            "ratio": 1.68,
+            "text": "Welcome"
+          },
+          {
+            "el": "p",
+            "ratio": 2.85,
+            "text": "Harbour Swim Club is a f"
+          },
+          {
+            "el": "p",
+            "ratio": 2.85,
+            "text": "Whether you want to lear"
+          }
+        ]
+      },
+      "at1440": {
+        "failShare": 0.858074615183929,
+        "measuredChars": 3833,
+        "skippedChars": 0,
+        "examples": [
+          {
+            "el": "span",
+            "ratio": 2.59,
+            "text": "Pool closed Bank Holiday"
+          },
+          {
+            "el": "h2",
+            "ratio": 1.68,
+            "text": "Welcome"
+          },
+          {
+            "el": "p",
+            "ratio": 2.85,
+            "text": "Harbour Swim Club is a f"
+          },
+          {
+            "el": "p",
+            "ratio": 2.85,
+            "text": "Whether you want to lear"
+          }
+        ]
+      }
+    },
+    "navTargets": {
+      "at390": {
+        "checked": 5,
+        "small": [
+          "Timetable:66x21",
+          "Membership:80x21",
+          "Join:31x21",
+          "News:39x21",
+          "Contact:58x21"
+        ]
+      },
+      "at1440": {
+        "checked": 5,
+        "small": [
+          "Timetable:66x21",
+          "Membership:80x21",
+          "Join:31x21",
+          "News:39x21",
+          "Contact:58x21"
+        ]
+      }
+    },
+    "focus": {
+      "at390": {
+        "tabStops": 11,
+        "noChange": [
+          "a#logo",
+          "a:Timetable",
+          "a:Membership",
+          "a:Join",
+          "a:News",
+          "a:Contact",
+          "input#fullname",
+          "input#email",
+          "input#phone",
+          "select#mtype:Membership typ",
+          "input#consent:on"
+        ],
+        "submitFound": true,
+        "submitText": "Join now",
+        "submitReachable": false
+      },
+      "at1440": {
+        "tabStops": 11,
+        "noChange": [
+          "a#logo",
+          "a:Timetable",
+          "a:Membership",
+          "a:Join",
+          "a:News",
+          "a:Contact",
+          "input#fullname",
+          "input#email",
+          "input#phone",
+          "select#mtype:Membership typ",
+          "input#consent:on"
+        ],
+        "submitFound": true,
+        "submitText": "Join now",
+        "submitReachable": false
+      }
+    },
+    "unnamedInputs": {
+      "controls": 5,
+      "unnamed": [
+        "input[text]#fullname",
+        "input[text]#email",
+        "input[text]#phone",
+        "select[select-one]#mtype",
+        "input[checkbox]#consent"
+      ]
+    },
+    "images": {
+      "total": 4,
+      "withoutDimensions": 4,
+      "examples": [
+        "images/logo.svg",
+        "images/hero-pool.svg",
+        "images/swimmers.svg"
+      ]
+    },
+    "tables": {
+      "total": 1,
+      "overflowingWidths": [
+        942
+      ]
+    },
+    "motion": {
+      "at390": {
+        "movingElements": [
+          "span#tickertext"
+        ],
+        "running": 0,
+        "marquee": 0,
+        "autoplayVideo": 0,
+        "motion": true
+      },
+      "at1440": {
+        "movingElements": [
+          "span#tickertext"
+        ],
+        "running": 0,
+        "marquee": 0,
+        "autoplayVideo": 0,
+        "motion": true
+      }
+    },
+    "contactLinks": {
+      "telLinkForClubPhone": false,
+      "mailtoLinkForClubEmail": false
+    }
+  },
+  "functional": {
+    "timetableSessionsPresent": true,
+    "allPricesPresent": true,
+    "allNewsHeadlinesPresent": true,
+    "clubNamePresent": true,
+    "navAnchorsResolve": true,
+    "joinFormValidShowsThanks": true,
+    "joinFormInvalidEmailRejected": true
+  },
+  "functionalDetails": {
+    "content": {
+      "sessionsMissing": [],
+      "sessionsExpected": 27,
+      "pricesMissing": [],
+      "newsMissing": [],
+      "clubName": true,
+      "navAnchors": {
+        "total": 6,
+        "broken": [],
+        "distinctValid": 6
+      }
+    },
+    "form": {
+      "fieldsFound": {
+        "name": true,
+        "email": true,
+        "phone": true,
+        "type": true,
+        "consent": true,
+        "submit": true,
+        "typeValue": "adult"
+      },
+      "validShowsThanks": true,
+      "validMethod": "click",
+      "invalidEmailRejected": true,
+      "dialogsOnInvalid": 1
+    }
+  },
+  "brand": {
+    "navy": {
+      "used": true,
+      "minDeltaE": 0,
+      "inPageStyles": true
+    },
+    "yellow": {
+      "used": true,
+      "minDeltaE": 0,
+      "inPageStyles": true
+    },
+    "logoPresent": true,
+    "logoDetectedBy": "name"
+  },
+  "score": {
+    "fixed": 0,
+    "total": 12,
+    "functionalPassed": 7,
+    "functionalTotal": 7
+  }
+}

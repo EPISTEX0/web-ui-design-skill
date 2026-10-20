@@ -1,0 +1,17 @@
+{
+  "brief": "salt-and-iron",
+  "arm": "web-ui-design-0.3",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 151,
+  "delivered": true,
+  "client_rounds": 1,
+  "qa": [
+    {
+      "asked": "I haven't started building yet. The folder is empty, and I'd be inventing dates, prices and objects for a real exhibition. Four quick questions first:\n\n**1. What should the guide help visitors do?**\n- **(Recommended) Plan and use the visit:** exhibition overview, a gallery-by-gallery guide, and practical info (hours, tickets, getting there). Visitors would use it before and during the visit, mostly on phones.\n- **Pre-visit information only:** a short landing page with dates, tickets and a teaser.\n- **On-site audio and object guide:** object pages that visitors reach by QR code in the galleries.\n\n**2. What feel do you want?**\n- **(Recommended) Editorial:** large serif headlines, a ground colour taken from sea-salt and weathered-iron tones, and thin rules instead of cards. It reads like a museum catalogue.\n- **Premium dark:** near-black with a single metallic tone, moody and atmospheric.\n- **Swiss minimal:** a clean sans-serif, neutral colours and one accent. This is the most practical choice for a wayfinding-heavy guide.\n\n**3. Which content can you give me?** Please paste or describe any of these:\n- the dates, opening hours, ticket prices, address and contact details\n- the exhibition's intro text and its themes or sections\n- 5–15 key objects, each with a title, date, short description and an image if you have one\n- your logo, brand colours and fonts, or the museum website to take them from\n\nIf you'd rather not supply real details yet, I can use clearly labelled placeholder content that you swap in later. I won't invent any facts and present them as real.\n\n**4. Does the guide need anything extra?** For example, a language toggle, accessibility information, a \"plan your route\" feature, or a visitor-feedback form. Or should it be a single scrolling page?\n\nIf you say \"your call\", I'll go with the recommended options, build with labelled sample content and list every assumption in my reply.",
+      "answer": "1. It's for the 12 stops. Visitors scan a QR code at each stop and read the guide on their own phone in the gallery. A few stops are outdoors on the quay. Each stop has about 120 words of text and a 1–3 minute audio clip. I don't need the other options.\n\n2. Go with the editorial feel, closest to our printed gallery labels. Use a serif for headings and our rust red #9c3d1f, with off-black and warm white. The text needs to be large and high-contrast, because many visitors are over 60 and some stops are in bright light.\n\n3. The exhibition runs 14 March to 2 November 2027. The 12 stops, in order, are:\n1. The salt road\n2. Boiling houses\n3. The harbour in 1840\n4. Iron arrives\n5. The Harwick Lady\n6. Rivets and riveters\n7. A ship's salt store\n8. Smugglers and the excise\n9. The great storm of 1872\n10. Women of the quay\n11. Last of the salt boats\n12. What remains\n\nI don't have hours, prices or the other details yet. Use labelled placeholders for the stop text and audio.\n\n4. Easy next and previous buttons between stops matter most. It should also work with patchy signal. Anything else is your call."
+    }
+  ],
+  "is_error": false,
+  "num_turns": 14,
+  "total_cost_usd": 0.3736743
+}

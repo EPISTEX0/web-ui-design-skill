@@ -1,71 +1,69 @@
 ---
 name: web-ui-design
-description: Design and build web UI that looks deliberate, not generated. Use when creating or restyling any web page, screen or component (landing page, app, dashboard, docs, form), or when critiquing how a UI looks.
+description: Design and build web UI that looks deliberate, not generated. Use for any frontend UI work, in React, Vue, Svelte or plain HTML: building a page, screen or component (landing page, app page, dashboard, docs, form), adding a page or feature with UI to an existing app, improving a UI's look or UX, or critiquing how a UI looks.
 ---
 
 # Web UI design
 
-The look comes from the process, not from a rule list. Run these steps in order. The rules live in [reference/rules.md](reference/rules.md) and apply during steps 4 to 6.
+The look comes from the process, not from a rule list. Name the case first, then run that case's steps. Every case shares the contract, the question round, the render loop and the record below. Choices come from [reference/patterns.md](reference/patterns.md), and [reference/rules.md](reference/rules.md) applies to everything you build or judge.
 
-## 1. Load the contract
+## 1. Name the case
 
-Read `DESIGN.md` at the repo root (or `.interface-design/system.md`) if it exists. Its tokens and decisions outrank every default in this skill. The brief outranks both.
+| Case | Signals | Steps |
+| --- | --- | --- |
+| **New** | No UI exists yet for this surface: "build a site", "make a landing page" | [reference/new.md](reference/new.md) |
+| **Extend** | The project already has UI and the request adds to it: a page, a feature, a component | [reference/extend.md](reference/extend.md) |
+| **Improve** | The request is to redesign, modernize or fix how existing UI looks or works | [reference/improve.md](reference/improve.md) |
+| **Review** | Only a critique is asked for | Review, below |
+| **Small edit** | One component, style or bug, with the outcome already stated | Small edit, below |
 
-Done when you can name the project's colors, type, spacing base, radius scale and depth strategy, or you know there is no contract yet.
+Read the signals from the request and the repo together. A new page inside a project with a design system is Extend: its tokens and components still bind you. Ask one question only when the request and the repo point to different cases.
 
-## 2. Write the brief
+Done when you can state the case in one line with its evidence, such as "Extend: React app with tokens in `src/styles`, request adds a page".
 
-One line each, inferred from the prompt and code. State your assumptions and proceed.
+## 2. Load the contract
 
-- **Subject**: what the product is and its world (materials, vernacular, industry).
-- **Audience** and the **primary job** of this screen.
-- **Mode**: *Persuade* (landing, marketing), *Operate* (app, dashboard, settings) or *Read* (docs, articles). Operate is quiet and conventional. Persuade spends boldness in one place.
-- **Content**: the real copy, data and states. Write sample data that looks real and label it as sample. Proof (customers, stats, quotes, logos) comes only from the user.
+Read `DESIGN.md` at the repo root (or `.interface-design/system.md`) if it exists. Read the stack from the repo: the framework, the styling system (CSS variables, Tailwind config, CSS modules), the component library and the build and dev scripts. The brief outranks `DESIGN.md`, `DESIGN.md` outranks the code's habits, and the code's habits outrank this skill's defaults.
 
-## 3. Gather references
+Done when you can name the project's colors, type, spacing, radius, depth strategy and stack, or you know there is no contract yet.
 
-Use the user's references first. With none, name 2 or 3 real products from the subject's world and the specific thing each contributes ("Linear's 13px dense table rows", not "clean like Linear").
+## 3. Run the case's steps
 
-## 4. Set the direction
+Open the case's file and run its steps in order. They call the shared sections below.
 
-Skip when the contract already decides it.
+## Question round
 
-For a new surface, sketch 2 or 3 directions that differ on a named axis (density, personality, layout model, type voice). Pick one with a one-line reason, or hand the choice to the user with a variant picker. Name the **signature element**: one thing on the screen that only this subject would have, such as a tide chart on a sailing school's booking page or a live diff on a code review tool.
+Ask about every gap that would change a choice from the catalog. A guessed gap is how a page comes out generic.
 
-Then write the token plan into `DESIGN.md` at the project root, using [reference/design-md-template.md](reference/design-md-template.md):
+1. Infer from the request, the repo and `DESIGN.md` first. Never ask what they already answer.
+2. The gaps, in this order: the primary action of the screen; who uses it and on what device; brand assets and references that already exist; the feel, offered as the 2 or 3 style families from the catalog that fit, one line each; real content and proof; for Improve, what must stay and the scope.
+3. Ask once, at most 4 questions. Each is multiple choice with your recommended option first and the reason for it. Use your question tool when you have one. Otherwise make the questions your whole reply and end the turn. The build waits for the answer.
+4. When the user answers "your call", or the request says to go ahead without questions, take your recommended options and record them as assumptions.
 
-- Color: 4 to 6 named values with roles, one accent.
-- Type: 1 or 2 families with roles, and a type scale.
-- Spacing base (4px) and radius scale.
-- One depth strategy: borders only, ring plus soft shadow, or tonal layers.
-- Motion tokens: easing curves and durations.
+Skip the round only when the request, the repo or `DESIGN.md` already answer every gap. Done when every line of the Brief in `DESIGN.md` has a value and a source: the user, inferred (name from where), or assumed after the user left it to you.
 
-Check the plan against **Tells** in the rules. Any part you would have produced for any similar brief gets revised, with the change and reason stated.
+## Render loop
 
-Done when `DESIGN.md` exists and every token in it has a value and a reason tied to the brief.
-
-## 5. Build
-
-Use the tokens from `DESIGN.md` only, never literal values. Build every state the screen can reach: loading, empty, error, disabled, hover, focus, active. Follow the rules section by section.
-
-## 6. Run the render loop
-
-Run the checker on the page:
+Run the checker on the page. For an app with a build step, start its dev server or build it and pass the URL or the built file.
 
 ```bash
 node <this skill's directory>/scripts/check.mjs <page file or URL>   # add --dark if the page has dark mode
 ```
 
-It renders the full page at 390, 768 and 1440 px, reports page overflow, clipped content, contrast, unloaded fonts and script errors, and saves screenshot tiles. Open every tile it lists. Critique the tiles against every section of the rules, fix the failures and findings as one batch, and run the checker again. Stop after 3 rounds, and list any failure still open in your reply.
+It renders the full page at 390, 768 and 1440 px. It reports overflow, clipped content, contrast, unloaded fonts, script errors, tap targets, keyboard focus, wide tables on phones and a performance budget, and it saves screenshot tiles. Open every tile it lists. Then walk the primary flow once with your browser tool: the main action, one error and one empty state. Critique the tiles and the flow against every section of the rules, fix the failures and findings as one batch, and run the checker again. Stop after 3 rounds, and list any failure still open in your reply.
 
-When the checker cannot start (no Node 22 or no Chrome), use your browser tool instead: full-page screenshots at the same widths, plus measured overflow and contrast.
+When the checker cannot start (no Node 22 or no Chrome), use your browser tool instead: full-page screenshots at the same widths, plus measured overflow, contrast and tap targets.
 
-Done when the run after your last edit reports 0 failures, you opened every tile from that run, and every rule passes or is listed as a deliberate exception with its reason. A clean pass is the floor, not proof of quality, so end with one sentence on what makes this screen belong to its subject.
+Done when the run after your last edit reports 0 failures, you opened every tile from that run, every WARN is fixed or listed with its reason, and every rule passes or is a listed exception. A clean pass is the floor, not proof of quality, so end with one sentence on what makes this screen belong to its subject.
 
-## 7. Record decisions
+## Record decisions
 
-Update `DESIGN.md` with the tokens as built and each non-obvious decision from steps 5 and 6, with its rationale. The next session reads it in step 1.
+Update `DESIGN.md` with the tokens as built and each non-obvious decision with its rationale. The next session reads it in step 2.
 
-## Review mode
+## Review
 
-When asked only to critique, run step 6 without building or fixing. Report findings as one table with the columns `Location | Before | After | Why`, most severe first.
+Run the render loop without building or fixing. Report findings as one table with the columns `Location | Before | After | Why`, most severe first.
+
+## Small edit
+
+Load the contract, make the change with existing tokens and components, and run the render loop on the affected page. Leave everything outside the request as it was, and list any problem you noticed there in one line.

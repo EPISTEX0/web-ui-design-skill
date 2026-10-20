@@ -1,0 +1,180 @@
+{
+	"scores": {
+		"Q7": {
+			"improvement": 8,
+			"identity": 8,
+			"craft": 8,
+			"mobile": 8,
+			"overall": 8,
+			"defects": [
+				"Mobile nav is a horizontal scroller that clips 'Contact' at the right edge with no visible affordance",
+				"Hero text card covers most of the swimmers in the pool illustration on desktop",
+				"Timetable defaults to today only; full week sits behind an 'All week' chip that a first-time visitor may not notice",
+				"News card text column stops well short of the card width, leaving a wide empty right side"
+			],
+			"note": "The most considered refresh: today's sessions first, compact mobile session cards, notices made readable, per-plan join buttons, all in recognisable navy and yellow."
+		},
+		"W5": {
+			"improvement": 8,
+			"identity": 8,
+			"craft": 8,
+			"mobile": 8,
+			"overall": 8,
+			"defects": [
+				"On mobile the pool hero image is cut to a thin strip above the navy title block",
+				"Day chips wrap to two uneven rows on mobile",
+				"Timetable defaults to today only; full week requires the 'All week' chip",
+				"Hero photo strip still shows the gray building band from the original artwork"
+			],
+			"note": "Clean, faithful refresh with a readable notice bar, today-first timetable and tight mobile session cards; close to shippable as is."
+		},
+		"U6": {
+			"improvement": 8,
+			"identity": 7,
+			"craft": 7,
+			"mobile": 8,
+			"overall": 8,
+			"defects": [
+				"Welcome section moved below the join form, near the bottom of the page",
+				"Mobile hero drops the pool illustration entirely, losing some club character",
+				"Club news column is narrower and centred while every other section is left-aligned to the container",
+				"Hero illustration shrunk to a small inset on desktop",
+				"Timetable defaults to today only"
+			],
+			"note": "Strongly task-first ordering (timetable, prices, join) with a good compact mobile list, at some cost to the club's welcoming character."
+		},
+		"U3": {
+			"improvement": 8,
+			"identity": 8,
+			"craft": 7,
+			"mobile": 7,
+			"overall": 7,
+			"defects": [
+				"Mobile nav wraps into two ragged rows with 'Contact' and 'Join' orphaned on the second line",
+				"Section backgrounds alternate white boxes and pale page colour inconsistently on desktop",
+				"Club news sits in a narrow left column with the right half of the section empty",
+				"Footer divider above the copyright only spans half the width",
+				"Timetable defaults to today only"
+			],
+			"note": "Bold yellow notice bar and navy join panel feel very on-brand, with a good today filter, but the mobile header and section rhythm are rough."
+		},
+		"M9": {
+			"improvement": 8,
+			"identity": 8,
+			"craft": 7,
+			"mobile": 7,
+			"overall": 7,
+			"defects": [
+				"Mobile page is long because the whole week is shown by default",
+				"Desktop welcome and timetable intro leave a large empty right-hand area",
+				"Hero still shows the gray building band from the artwork above the pool",
+				"Mobile nav row is cramped and clips 'Contact'"
+			],
+			"note": "Keeps every session grouped by day with jump chips and clear day headers on mobile, plus readable notices and join buttons per plan; solid and faithful."
+		},
+		"Y2": {
+			"improvement": 7,
+			"identity": 7,
+			"craft": 7,
+			"mobile": 7,
+			"overall": 7,
+			"defects": [
+				"Mobile nav wraps with 'Contact' alone on a second row",
+				"Day chips act as jump links while 'Tue' looks selected, which reads like a filter that does nothing",
+				"Table header row repeats for every day on desktop, adding visual noise",
+				"Welcome section moved below membership",
+				"Hero pool illustration reduced to a small inset"
+			],
+			"note": "Day-grouped timetable with a Today badge and compact mobile rows works well, though the header and chip behaviour feel unfinished."
+		},
+		"Y3": {
+			"improvement": 7,
+			"identity": 7,
+			"craft": 7,
+			"mobile": 6,
+			"overall": 7,
+			"defects": [
+				"Mobile sticky 'Join the club: first visit free' bar sits over the welcome illustration",
+				"'All days' chip label breaks onto two lines in a cramped pill",
+				"Mobile defaults to all 27 sessions, so the page runs past 6000 px before membership",
+				"Notices collapsed to one line with '3 more', hiding most notices by default",
+				"Hero pool illustration reduced to a small inset"
+			],
+			"note": "Polished desktop with a good navy hero, but the mobile view is long and has an overlapping sticky bar."
+		},
+		"S3": {
+			"improvement": 7,
+			"identity": 7,
+			"craft": 6,
+			"mobile": 6,
+			"overall": 6,
+			"defects": [
+				"Desktop footer contact block hugs the left edge instead of aligning with the content container",
+				"On mobile the first notice ('Pool closed Bank Holiday') appears hidden behind the header",
+				"Mobile defaults to the full week, a very long list of cards",
+				"Dark gradient over the hero darkens and muddies the pool artwork",
+				"Desktop notice bar wraps into two uneven lines"
+			],
+			"note": "A more modern full-bleed hero and a working day filter, let down by alignment slips and a very long mobile timetable."
+		},
+		"S5": {
+			"improvement": 6,
+			"identity": 8,
+			"craft": 6,
+			"mobile": 7,
+			"overall": 6,
+			"defects": [
+				"Desktop notice bar under the header shows as an empty gray strip",
+				"No day filter or grouping; the full 27-row table is all that is offered",
+				"Hero banner unchanged, including the gray building band",
+				"Mobile page is long; join form starts past 6000 px"
+			],
+			"note": "A careful, legible refresh with tidy compact mobile cards, but little beyond readability and the notice bar looks broken on desktop."
+		},
+		"Y6": {
+			"improvement": 6,
+			"identity": 7,
+			"craft": 5,
+			"mobile": 5,
+			"overall": 5,
+			"defects": [
+				"Membership intro paragraph is indented out of line with its heading",
+				"Desktop uses a two-row header with nav tucked left under the logo, an odd carry-over from mobile",
+				"Mobile defaults to all days with tall label/value cards, so the timetable alone fills the 6000 px capture",
+				"Mobile nav clips 'Contact' at the right edge",
+				"Full-bleed hero contrasts awkwardly with the contained content width"
+			],
+			"note": "Has the right pieces (notices, day chips, join button) but visible misalignments and a bloated mobile timetable."
+		},
+		"Q2": {
+			"improvement": 5,
+			"identity": 8,
+			"craft": 6,
+			"mobile": 5,
+			"overall": 5,
+			"defects": [
+				"Mobile timetable is 27 tall label/value cards with values right-aligned far from labels; prices are not reached within 6000 px",
+				"No day filter or grouping",
+				"Notice ticker still truncated ('Pool closed Bank Holiday Mon...')",
+				"Hero banner unchanged with gray building band"
+			],
+			"note": "Essentially the old site with better fonts, labels and a Menu button; faithful but barely modernised and tiring to scroll on a phone."
+		},
+		"K6": {
+			"improvement": 4,
+			"identity": 8,
+			"craft": 5,
+			"mobile": 4,
+			"overall": 4,
+			"defects": [
+				"Mobile timetable stacks every field as a separate row, 27 very tall cards; capture ends at Saturday with prices, form and news not reached",
+				"Mobile nav is tiny yellow text wrapping onto two lines",
+				"Notice ticker still truncated",
+				"No day filter, grouping or call to action",
+				"Desktop layout is the reference with only type and contrast changes"
+			],
+			"note": "A minimal contrast and typography fix that keeps the club look but does little for the poolside phone user."
+		}
+	},
+	"ranking": ["Q7", "W5", "U6", "U3", "M9", "Y2", "Y3", "S3", "S5", "Y6", "Q2", "K6"]
+}

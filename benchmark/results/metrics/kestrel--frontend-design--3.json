@@ -1,0 +1,56 @@
+{
+  "id": "kestrel--frontend-design--3",
+  "desktop": {
+    "fullH": 949,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 50,
+      "moderate": 2,
+      "minor": 0,
+      "rules": [
+        "color-contrast:26",
+        "label-content-name-mismatch:24",
+        "page-has-heading-one:1",
+        "region:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0.004
+    },
+    "focus": {
+      "focusStops": 30,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 949,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0.005
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 1530,
+    "overflowX": 528,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0.007
+    },
+    "focus": null
+  }
+}

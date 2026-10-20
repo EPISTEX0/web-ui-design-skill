@@ -1,0 +1,36 @@
+{
+  "order": [
+    "T4",
+    "K8",
+    "X4",
+    "J8",
+    "K4",
+    "V3",
+    "J2",
+    "U3",
+    "Z6",
+    "T2",
+    "A4",
+    "A9",
+    "N9",
+    "C8",
+    "A5"
+  ],
+  "key": {
+    "T4": "salt-and-iron--frontend-design--3",
+    "K8": "salt-and-iron--web-ui-design-0.2--2",
+    "X4": "salt-and-iron--frontend-design--2",
+    "J8": "salt-and-iron--web-ui-design-0.3-silent--1",
+    "K4": "salt-and-iron--web-ui-design-0.3--2",
+    "V3": "salt-and-iron--web-ui-design-0.3--3",
+    "J2": "salt-and-iron--web-ui-design-0.2--1",
+    "U3": "salt-and-iron--none--1",
+    "Z6": "salt-and-iron--web-ui-design-0.3-silent--2",
+    "T2": "salt-and-iron--web-ui-design-0.3--1",
+    "A4": "salt-and-iron--none--3",
+    "A9": "salt-and-iron--web-ui-design-0.3-silent--3",
+    "N9": "salt-and-iron--none--2",
+    "C8": "salt-and-iron--frontend-design--1",
+    "A5": "salt-and-iron--web-ui-design-0.2--3"
+  }
+}

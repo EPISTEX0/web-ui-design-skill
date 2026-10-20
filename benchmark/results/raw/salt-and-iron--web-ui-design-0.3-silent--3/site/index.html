@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salt and Iron – exhibition guide · Harwick Maritime Museum</title>
+<meta name="description" content="Online guide to the Salt and Iron exhibition at the Harwick Maritime Museum: the route through the galleries and how to plan your visit.">
+<meta name="theme-color" content="#1E2428">
+<style>
+:root{
+  --salt:#ECEFEE; --surface:#F7F9F8; --ink:#171C1F; --ink-2:#465157; --rule:#C4CCCF;
+  --iron:#1E2428; --iron-2:#2B3338; --rust:#9A3A18; --rust-hi:#E58E66; --salt-on-iron:#D9DFDD;
+
+  --font-serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --font-ui:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px; --s7:48px; --s8:64px; --s9:96px;
+  --radius:2px;
+  --ease-out:cubic-bezier(0.23,1,0.32,1);
+  --measure:62ch;
+  --wrap:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--salt);color:var(--ink);font:18px/1.55 var(--font-serif);
+  text-wrap:pretty;-webkit-tap-highlight-color:transparent;overflow-x:clip;
+  padding-bottom:env(safe-area-inset-bottom)}
+h1,h2,h3{font-weight:400;text-wrap:balance;margin:0}
+p{margin:0 0 var(--s4);max-width:var(--measure)}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--rust);outline-offset:3px}
+.on-iron :focus-visible{outline-color:var(--rust-hi)}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 max(var(--s4),env(safe-area-inset-left)) 0 max(var(--s4),env(safe-area-inset-right))}
+.skip{position:absolute;left:var(--s4);top:-80px;background:var(--surface);padding:var(--s3) var(--s4);z-index:20;font-family:var(--font-ui)}
+.skip:focus{top:var(--s2)}
+
+/* Placeholder marker: any fact the museum still has to supply */
+.tbc{font-family:var(--font-ui);font-size:.8em;color:var(--ink-2);
+  border-bottom:1.5px dashed var(--rust);padding-bottom:1px;white-space:normal}
+.on-iron .tbc{color:var(--salt-on-iron);border-bottom-color:var(--rust-hi)}
+
+/* Top bar */
+.bar{position:sticky;top:0;z-index:10;background:var(--iron);color:var(--salt-on-iron);
+  border-bottom:1px solid var(--iron-2);font-family:var(--font-ui)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;min-height:56px;gap:var(--s4)}
+.bar b{font-weight:600;font-size:15px;letter-spacing:.01em}
+.bar nav{display:flex;gap:var(--s1)}
+.bar nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s3);font-size:15px;text-decoration:none;
+  border-radius:var(--radius);transition:background-color 150ms var(--ease-out)}
+@media (hover:hover){.bar nav a:hover{background:var(--iron-2)}}
+.bar nav a:focus-visible{outline-color:var(--rust-hi)}
+@media (max-width:420px){.bar b span{display:none}}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 var(--s5);
+  font:600 16px/1 var(--font-ui);text-decoration:none;border-radius:var(--radius);cursor:pointer;border:1.5px solid transparent;
+  touch-action:manipulation;transition:transform 140ms var(--ease-out),background-color 150ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--rust);color:var(--surface)}
+.on-iron .btn-primary{background:var(--rust-hi);color:var(--iron)}
+.btn-quiet{border-color:currentColor;background:transparent}
+@media (hover:hover){.btn-primary:hover{background:#7F2F12}.on-iron .btn-primary:hover{background:#F0A582}
+  .btn-quiet:hover{background:rgba(255,255,255,.08)}}
+
+/* Hero */
+.hero{background:var(--iron);color:var(--surface);padding:var(--s8) 0 0;position:relative}
+.hero .place{font:500 15px/1.4 var(--font-ui);color:var(--salt-on-iron);margin-bottom:var(--s6)}
+.hero h1{font-size:clamp(3.5rem,17vw,7.5rem);line-height:.92;letter-spacing:-.03em}
+.hero h1 em{display:block;font-style:italic;color:var(--rust-hi);font-size:.42em;letter-spacing:-.01em;line-height:1.1;margin:var(--s2) 0}
+@media (min-width:900px){
+  .hero h1{font-size:clamp(6rem,12vw,10rem);white-space:nowrap}
+  .hero h1 em{display:inline;font-size:.45em;margin:0 .1em}
+}
+.hero .lede{font-size:clamp(1.25rem,3.4vw,1.5rem);line-height:1.4;color:var(--salt-on-iron);margin:var(--s6) 0 var(--s6);max-width:34ch}
+.hero .facts{display:grid;gap:var(--s4);margin:0 0 var(--s6);padding:var(--s5) 0 0;border-top:1px solid var(--iron-2);font-family:var(--font-ui);font-size:15px}
+.hero .facts dt{color:var(--salt-on-iron);margin-bottom:2px}
+.hero .facts dd{margin:0;font-size:17px}
+@media (min-width:720px){.hero .facts{grid-template-columns:repeat(3,1fr)}}
+.hero .actions{display:flex;flex-wrap:wrap;gap:var(--s3);padding-bottom:var(--s8)}
+/* waterline: the hero's iron edge, drawn as a swell */
+.waterline{height:12px;margin-top:-1px;
+  background:var(--salt) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='12' viewBox='0 0 48 12'%3E%3Cpath fill='%231E2428' d='M0 0H48V4C42 4 42 11 36 11S30 4 24 4 18 11 12 11 6 4 0 4Z'/%3E%3C/svg%3E") repeat-x top left/48px 12px}
+
+/* Sections */
+section{padding:var(--s8) 0}
+.h2{font-size:clamp(2rem,6vw,3rem);line-height:1.08;letter-spacing:-.02em;margin-bottom:var(--s5)}
+.label{font:600 15px/1.3 var(--font-ui);color:var(--rust);margin-bottom:var(--s3);display:block}
+.split{display:grid;gap:var(--s2)}
+@media (min-width:900px){.split{grid-template-columns:5fr 7fr;gap:var(--s9)}.split .h2{margin-bottom:0}}
+.intro p{font-size:1.2rem}
+
+/* Route: the signature element */
+.route{background:var(--surface);border-block:1px solid var(--rule)}
+.route-head{margin-bottom:var(--s7)}
+ol.stops{list-style:none;margin:0;padding:0;position:relative}
+ol.stops::before{content:"";position:absolute;left:11px;top:12px;bottom:12px;width:2px;background:var(--rule)}
+.stop{position:relative;padding:0 0 var(--s7) var(--s7)}
+.stop:last-child{padding-bottom:0}
+.stop::before{content:"";position:absolute;left:3px;top:10px;width:18px;height:18px;border-radius:50%;
+  background:var(--surface);border:2px solid var(--ink-2);
+  transition:background-color 300ms var(--ease-out),border-color 300ms var(--ease-out),transform 300ms var(--ease-out)}
+.stop.is-here::before{background:var(--rust);border-color:var(--rust);transform:scale(1.2)}
+.stop .gal{font:600 15px/1.3 var(--font-ui);color:var(--ink-2);margin-bottom:var(--s1)}
+.stop h3{font-size:clamp(1.75rem,5vw,2.5rem);line-height:1.1;letter-spacing:-.02em;margin-bottom:var(--s3)}
+.stop.is-here .gal{color:var(--rust)}
+@media (min-width:900px){
+  ol.stops::before{left:calc(33.33% + 11px)}
+  .stop{display:grid;grid-template-columns:calc(33.33% + var(--s7)) 1fr;padding-left:0}
+  .stop::before{left:calc(33.33% + 3px)}
+  .stop .meta{grid-column:1}
+  .stop .body{grid-column:2}
+}
+.route .note{font:15px/1.5 var(--font-ui);color:var(--ink-2);margin-top:var(--s7);max-width:60ch}
+
+/* Visit */
+.visit dl{margin:0;border-top:1px solid var(--ink)}
+.visit .row{display:grid;gap:var(--s1);padding:var(--s4) 0;border-bottom:1px solid var(--rule)}
+.visit dt{font:600 15px/1.4 var(--font-ui);color:var(--ink-2)}
+.visit dd{margin:0;font-size:1.125rem}
+.visit dd a{display:inline-block;padding:var(--s2) 0}
+@media (min-width:720px){.visit .row{grid-template-columns:200px 1fr;gap:var(--s5)}}
+#open-state{font:600 15px/1.3 var(--font-ui);margin-top:var(--s4);min-height:1.3em}
+#open-state.is-open{color:#1D6A3A}
+
+/* Closing */
+.closing{background:var(--iron);color:var(--surface);text-align:left}
+.closing .h2{max-width:16ch}
+.closing p{color:var(--salt-on-iron)}
+footer{background:var(--iron);color:var(--salt-on-iron);font:15px/1.5 var(--font-ui);padding:var(--s6) 0 calc(var(--s6) + 72px);border-top:1px solid var(--iron-2)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s6);justify-content:space-between}
+footer p{margin:0}
+footer a{display:inline-flex;align-items:center;min-height:44px}
+
+/* Sticky action bar on phones */
+.dock{position:fixed;inset:auto 0 0 0;z-index:10;background:var(--iron);padding:var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));
+  border-top:1px solid var(--iron-2);display:flex;transform:translateY(0);transition:transform 250ms var(--ease-out)}
+.dock.is-hidden{transform:translateY(110%)}
+.dock .btn{flex:1}
+@media (min-width:720px){.dock{display:none}footer{padding-bottom:var(--s6)}}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .btn,.stop::before,.dock,.bar nav a{transition:opacity 150ms linear}
+  .btn:active,.stop.is-here::before{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="bar on-iron">
+  <div class="wrap">
+    <b>Salt and Iron <span>· Harwick Maritime Museum</span></b>
+    <nav aria-label="Guide sections">
+      <a href="#exhibition">Exhibition</a>
+      <a href="#route">Route</a>
+      <a href="#visit">Visit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <div class="hero on-iron">
+    <div class="wrap">
+      <p class="place">Harwick Maritime Museum</p>
+      <h1>Salt <em>and</em> Iron</h1>
+      <p class="lede">An exhibition about what the sea does to the things we build to cross it. <span class="tbc">Final wording to confirm</span></p>
+      <dl class="facts">
+        <div><dt>Dates</dt><dd><span class="tbc">Dates to confirm</span></dd></div>
+        <div><dt>Open</dt><dd><span class="tbc">Opening hours to confirm</span></dd></div>
+        <div><dt>Entry</dt><dd><span class="tbc">Ticket prices to confirm</span></dd></div>
+      </dl>
+      <div class="actions">
+        <a class="btn btn-primary" id="book-cta" href="#visit">Plan your visit</a>
+        <a class="btn btn-quiet" href="#route">See the route</a>
+      </div>
+    </div>
+    <div class="waterline" aria-hidden="true"></div>
+  </div>
+
+  <section id="exhibition" class="intro">
+    <div class="wrap split">
+      <div>
+        <span class="label">About the exhibition</span>
+        <h2 class="h2">Where the sea meets the metal</h2>
+      </div>
+      <div>
+        <p>Salt and Iron follows two materials that have shaped life on the water: the salt that preserves, and the iron that carries. Seawater feeds on one and is fed by the other.</p>
+        <p><span class="tbc">Curator’s introduction to come</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="route" class="route" aria-labelledby="route-h">
+    <div class="wrap">
+      <div class="route-head">
+        <span class="label">Route through the galleries</span>
+        <h2 class="h2" id="route-h">Three stops, in walking order</h2>
+        <p>Follow the line down the page as you walk the show. The marker shows the stop you are reading.</p>
+      </div>
+      <ol class="stops" id="stops">
+        <li class="stop" data-stop>
+          <div class="meta"><div class="gal">Stop 1 · <span class="tbc">Gallery location</span></div><h3>Salt</h3></div>
+          <div class="body"><p><span class="tbc">Section text to come</span></p></div>
+        </li>
+        <li class="stop" data-stop>
+          <div class="meta"><div class="gal">Stop 2 · <span class="tbc">Gallery location</span></div><h3>Iron</h3></div>
+          <div class="body"><p><span class="tbc">Section text to come</span></p></div>
+        </li>
+        <li class="stop" data-stop>
+          <div class="meta"><div class="gal">Stop 3 · <span class="tbc">Gallery location</span></div><h3>Where they meet</h3></div>
+          <div class="body"><p><span class="tbc">Section text to come</span></p></div>
+        </li>
+      </ol>
+      <p class="note">Stop names are working titles taken from the exhibition name, to be replaced with the final gallery titles.</p>
+    </div>
+  </section>
+
+  <section id="visit" class="visit" aria-labelledby="visit-h">
+    <div class="wrap split">
+      <div>
+        <span class="label">Plan your visit</span>
+        <h2 class="h2" id="visit-h">Before you go</h2>
+        <p id="open-state" role="status"></p>
+      </div>
+      <dl>
+        <div class="row"><dt>Dates</dt><dd><span class="tbc">To confirm</span></dd></div>
+        <div class="row"><dt>Opening hours</dt><dd><span class="tbc">To confirm</span></dd></div>
+        <div class="row"><dt>Tickets</dt><dd><span class="tbc">Prices and booking link to confirm</span></dd></div>
+        <div class="row"><dt>Address</dt><dd>Harwick Maritime Museum<br><span class="tbc">Street address to confirm</span></dd></div>
+        <div class="row"><dt>Getting here</dt><dd><span class="tbc">Transport and parking to confirm</span></dd></div>
+        <div class="row"><dt>Access</dt><dd><span class="tbc">Step-free access, seating and facilities to confirm</span></dd></div>
+        <div class="row"><dt>Contact</dt><dd id="contact"><span class="tbc">Phone and email to confirm</span></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="closing on-iron">
+    <div class="wrap">
+      <h2 class="h2">See what the sea leaves behind</h2>
+      <p>Salt and Iron at the Harwick Maritime Museum.</p>
+      <a class="btn btn-primary" id="book-cta-2" href="#visit">Plan your visit</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Harwick Maritime Museum</p>
+    <p><a href="#main">Back to top</a></p>
+  </div>
+</footer>
+
+<div class="dock on-iron is-hidden" id="dock">
+  <a class="btn btn-primary" id="book-cta-3" href="#visit">Plan your visit</a>
+</div>
+
+<script>
+/* Museum: fill these in and the page updates itself. Leave empty to keep the "to confirm" notes. */
+const GUIDE = {
+  bookingUrl: "",          // e.g. "https://…/tickets"  → buttons become "Book tickets"
+  phone: "",               // e.g. "+44 1234 567890"
+  email: "",               // e.g. "visit@example.org"
+  // Opening hours, 0 = Sunday … 6 = Saturday, 24h "HH:MM". Use null for closed days.
+  // e.g. { 2: ["10:00","17:00"], 3: ["10:00","17:00"] }
+  hours: null
+};
+
+(function () {
+  // Booking buttons
+  if (GUIDE.bookingUrl) {
+    ["book-cta", "book-cta-2", "book-cta-3"].forEach(function (id) {
+      var a = document.getElementById(id);
+      a.href = GUIDE.bookingUrl;
+      a.textContent = "Book tickets";
+    });
+  }
+
+  // Contact links
+  var parts = [];
+  if (GUIDE.phone) parts.push('<a href="tel:' + GUIDE.phone.replace(/[^+\d]/g, "") + '">' + GUIDE.phone + "</a>");
+  if (GUIDE.email) parts.push('<a href="mailto:' + GUIDE.email + '">' + GUIDE.email + "</a>");
+  if (parts.length) document.getElementById("contact").innerHTML = parts.join("<br>");
+
+  // Open now
+  var state = document.getElementById("open-state");
+  if (GUIDE.hours) {
+    var now = new Date(), today = GUIDE.hours[now.getDay()];
+    var mins = now.getHours() * 60 + now.getMinutes();
+    var toMin = function (t) { var p = t.split(":"); return +p[0] * 60 + +p[1]; };
+    if (today && mins >= toMin(today[0]) && mins < toMin(today[1])) {
+      state.textContent = "Open now until " + today[1];
+      state.className = "is-open";
+    } else {
+      state.textContent = "Closed now";
+    }
+  }
+
+  // Route: mark the stop being read
+  var stops = Array.prototype.slice.call(document.querySelectorAll("[data-stop]"));
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          stops.forEach(function (s) { s.classList.toggle("is-here", s === e.target); });
+        }
+      });
+    }, { rootMargin: "-40% 0px -50% 0px" });
+    stops.forEach(function (s) { io.observe(s); });
+
+    // Hide the phone action bar once the visit details are on screen
+    var dock = document.getElementById("dock");
+    var seen = { hero: true, visit: false };
+    var sync = function () { dock.classList.toggle("is-hidden", seen.hero || seen.visit); };
+    new IntersectionObserver(function (e) { seen.hero = e[0].isIntersecting; sync(); })
+      .observe(document.querySelector(".hero .actions"));
+    new IntersectionObserver(function (e) { seen.visit = e[0].isIntersecting; sync(); }, { threshold: 0.3 })
+      .observe(document.getElementById("visit"));
+  } else {
+    stops[0].classList.add("is-here");
+  }
+})();
+</script>
+</body>
+</html>

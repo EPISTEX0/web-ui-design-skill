@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tandem – Cargo bikes in Utrecht</title>
+<meta name="description" content="Tandem is a cargo bike shop in Utrecht. Test ride, buy and service bakfietsen and longtails for kids, groceries, dogs and work.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mist:#E6ECEF;
+  --paper:#F5F8F9;
+  --canal:#0E2A33;
+  --cobalt:#2043D4;
+  --bell:#F2D349;
+  --muted:#4A6169;
+  --line:#BFCDD3;
+  --font:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--mist);color:var(--canal);font-family:var(--font);font-size:1.0625rem;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--cobalt);outline-offset:3px;border-radius:2px}
+.wrap{width:min(1180px,100% - 2.5rem);margin-inline:auto}
+.sr{position:absolute;left:-9999px}
+
+/* header */
+header.top{padding:1.25rem 0}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{font-weight:800;font-size:1.6rem;letter-spacing:-.03em;text-decoration:none;font-stretch:80%}
+nav{display:flex;gap:1.75rem}
+nav a{text-decoration:none;font-weight:500}
+nav a:hover{text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:2px}
+@media(max-width:620px){nav a:not(:last-child){display:none}}
+
+/* hero */
+.hero{padding:2.5rem 0 4rem}
+h1{font-size:clamp(3rem,9.5vw,8.25rem);line-height:.92;letter-spacing:-.045em;font-weight:800;font-stretch:78%;max-width:12ch}
+.hero-sub{max-width:34rem;margin-top:1.5rem;font-size:1.2rem;color:var(--muted)}
+.loader{margin-top:2.5rem;background:var(--paper);border:2px solid var(--canal);border-radius:6px;padding:1.25rem 1.25rem 1.5rem}
+.loader h2{font-size:1.15rem;font-weight:700;margin-bottom:.75rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chips button{font:inherit;font-weight:600;background:transparent;color:var(--canal);border:2px solid var(--canal);border-radius:999px;padding:.45rem 1.05rem;cursor:pointer;transition:background .15s,color .15s}
+.chips button:hover{background:var(--line)}
+.chips button[aria-pressed="true"]{background:var(--canal);color:var(--paper)}
+.stage{margin-top:1rem}
+.stage svg{display:block;width:100%;height:auto;max-height:360px;overflow:visible}
+.stage .bike{transform-origin:50% 100%}
+.stage .bike.bump{animation:bump .45s ease-out}
+@keyframes bump{30%{transform:translateY(-8px) rotate(-.6deg)}100%{transform:none}}
+.stage .cargo{display:none}
+.stage .cargo.on{display:block}
+.verdict{font-size:1.15rem;font-weight:600;margin-top:.5rem;min-height:3.2em}
+.verdict span{font-weight:400;color:var(--muted)}
+
+/* bikes */
+section{padding:4.5rem 0}
+.sec-head{display:grid;grid-template-columns:1fr 2fr;gap:2rem;margin-bottom:2.5rem}
+h2.big{font-size:clamp(2rem,4.5vw,3.4rem);line-height:1;letter-spacing:-.035em;font-weight:800;font-stretch:82%}
+.sec-head p{color:var(--muted);max-width:36rem;align-self:end}
+@media(max-width:760px){.sec-head{grid-template-columns:1fr;gap:1rem}}
+
+.models{list-style:none;padding:0;border-top:2px solid var(--canal)}
+.model{display:grid;grid-template-columns:1.1fr 2fr 1fr;gap:1.5rem;padding:1.75rem 0;border-bottom:1px solid var(--line);align-items:baseline}
+.model h3{font-size:1.9rem;letter-spacing:-.03em;font-weight:800;font-stretch:85%;line-height:1.05}
+.model p{max-width:38rem}
+.model dl{display:grid;grid-template-columns:auto 1fr;gap:.15rem .9rem;font-size:.95rem}
+.model dt{color:var(--muted)}
+.model dd{margin:0;font-weight:600}
+@media(max-width:860px){.model{grid-template-columns:1fr;gap:.6rem}}
+
+/* services */
+.services{background:var(--canal);color:var(--paper)}
+.services .sec-head p{color:#A9C0C8}
+.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.svc div{padding:0 1.75rem 0 0}
+.svc div+div{padding-left:1.75rem;border-left:1px solid #34535D}
+.svc h3{font-size:1.4rem;font-weight:700;margin-bottom:.5rem;letter-spacing:-.02em}
+.svc p{color:#C9D9DE}
+@media(max-width:860px){.svc{grid-template-columns:1fr;gap:2rem}.svc div,.svc div+div{padding:0;border:0}}
+
+/* visit */
+.visit{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;align-items:start}
+.visit h2{margin-bottom:1rem}
+.visit p{max-width:30rem;color:var(--muted)}
+.btn{display:inline-block;margin-top:1.75rem;background:var(--cobalt);color:#fff;font-weight:700;text-decoration:none;padding:.9rem 1.6rem;border-radius:6px;border:2px solid var(--cobalt);transition:background .15s,color .15s}
+.btn:hover{background:var(--bell);color:var(--canal);border-color:var(--canal)}
+.hours{background:var(--paper);border:2px solid var(--canal);border-radius:6px;padding:1.5rem}
+.hours h3{font-size:1.2rem;margin-bottom:.75rem}
+.hours table{width:100%;border-collapse:collapse}
+.hours td{padding:.4rem 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right;font-weight:600}
+.hours tr.today td{background:var(--bell);padding-inline:.5rem}
+.hours address{font-style:normal;margin-top:1.1rem}
+@media(max-width:860px){.visit{grid-template-columns:1fr}}
+
+footer{padding:2rem 0 3rem;color:var(--muted);font-size:.95rem}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top">Tandem</a>
+    <nav aria-label="Main">
+      <a href="#bikes">Bikes</a>
+      <a href="#service">Service</a>
+      <a href="#visit">Visit</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<div class="hero">
+  <div class="wrap">
+    <h1>Carry more by bike.</h1>
+    <p class="hero-sub">Tandem sells, rents out and repairs cargo bikes in Utrecht. Tell us what you haul and we'll put you on the right one.</p>
+
+    <div class="loader">
+      <h2 id="lh">What do you carry?</h2>
+      <div class="chips" role="group" aria-labelledby="lh">
+        <button type="button" data-load="kids" aria-pressed="true">Two kids</button>
+        <button type="button" data-load="groceries" aria-pressed="false">Weekly shop</button>
+        <button type="button" data-load="dog" aria-pressed="false">A big dog</button>
+        <button type="button" data-load="tree" aria-pressed="false">A Christmas tree</button>
+      </div>
+
+      <div class="stage">
+        <svg viewBox="0 0 640 300" role="img" aria-label="Side view of a cargo bike with a front box">
+          <line x1="0" y1="285" x2="640" y2="285" stroke="#0E2A33" stroke-width="2"/>
+          <g class="bike" id="bike" fill="none" stroke="#0E2A33" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+            <!-- cargo -->
+            <g class="cargo on" data-cargo="kids">
+              <circle cx="205" cy="92" r="20" fill="#F2D349"/><path d="M185 160v-34a20 20 0 0 1 40 0v34" fill="#2043D4"/>
+              <circle cx="275" cy="102" r="17" fill="#F2D349"/><path d="M258 160v-26a17 17 0 0 1 34 0v26" fill="#F5F8F9"/>
+              <path d="M190 62q15-18 30 0" />
+            </g>
+            <g class="cargo" data-cargo="groceries">
+              <rect x="170" y="112" width="70" height="50" fill="#F2D349"/>
+              <rect x="248" y="124" width="62" height="38" fill="#F5F8F9"/>
+              <path d="M190 112c0-30 30-30 30 0M272 124l8-30 12 30" />
+              <circle cx="205" cy="90" r="0"/>
+              <path d="M300 124c10-28 30-28 28 0" stroke="#2043D4"/>
+            </g>
+            <g class="cargo" data-cargo="dog">
+              <ellipse cx="240" cy="128" rx="62" ry="30" fill="#F2D349"/>
+              <circle cx="302" cy="92" r="24" fill="#F2D349"/>
+              <path d="M290 72l-8-22 22 12M312 70l10-20 6 24" fill="#F2D349"/>
+              <circle cx="310" cy="90" r="2" fill="#0E2A33"/>
+              <path d="M180 120q-26-26-12-48" />
+            </g>
+            <g class="cargo" data-cargo="tree">
+              <path d="M215 160l50-130 50 130z" fill="#2043D4"/>
+              <path d="M240 160v-34M290 160v-34M265 30v-14"/>
+              <rect x="255" y="150" width="20" height="14" fill="#F2D349"/>
+            </g>
+            <!-- box -->
+            <path d="M150 160h210l-18 62H168z" fill="#F5F8F9"/>
+            <!-- frame -->
+            <path d="M100 250L128 128M128 128h-22M114 128l12-20M100 250l-8-70"/>
+            <path d="M100 250l40-8 250 0M390 242l56-112M446 130h-22M446 130l60 112M390 242h116"/>
+            <path d="M446 130l-12-14h30"/>
+            <path d="M360 222l30 20" />
+            <!-- wheels -->
+            <circle cx="100" cy="250" r="34" fill="#E6ECEF"/>
+            <circle cx="506" cy="242" r="42" fill="#E6ECEF"/>
+            <circle cx="100" cy="250" r="5" fill="#0E2A33"/><circle cx="506" cy="242" r="5" fill="#0E2A33"/>
+          </g>
+        </svg>
+      </div>
+      <p class="verdict" id="verdict" aria-live="polite"></p>
+    </div>
+  </div>
+</div>
+
+<section id="bikes">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="big">Three bikes, three kinds of week.</h2>
+      <p>We stock the models we'd ride ourselves, with electric assist on all of them. Book a test ride and try them on your own commute.</p>
+    </div>
+    <ul class="models">
+      <li class="model">
+        <h3>The Bakfiets</h3>
+        <p>Classic box up front. Best for school runs and families with one to three children. Stable at the traffic light, easy to park in a Utrecht street.</p>
+        <dl><dt>Carries</dt><dd>Up to 3 kids</dd><dt>Assist</dt><dd>Electric</dd></dl>
+      </li>
+      <li class="model">
+        <h3>The Longtail</h3>
+        <p>Extended rear rack, handles like a normal bike. Best for one or two kids, shopping and narrow cycle paths.</p>
+        <dl><dt>Carries</dt><dd>2 kids or bags</dd><dt>Assist</dt><dd>Electric</dd></dl>
+      </li>
+      <li class="model">
+        <h3>The Trike</h3>
+        <p>Two wheels in front, a flat bed or box between them. Best for heavy loads, work use, and anyone who wants to stay upright when stopped.</p>
+        <dl><dt>Carries</dt><dd>Heavy cargo</dd><dt>Assist</dt><dd>Electric</dd></dl>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="service" class="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="big">Fixed here, by people who ride them.</h2>
+      <p>A cargo bike works hard. We keep it running, whether you bought it from us or not.</p>
+    </div>
+    <div class="svc">
+      <div><h3>Test rides</h3><p>Ride before you buy. Bring the kids or the dog and we'll check they fit.</p></div>
+      <div><h3>Repairs and servicing</h3><p>Brakes, tyres, motors, chains and boxes. We tell you the price before we start.</p></div>
+      <div><h3>Lease and subsidy advice</h3><p>We'll explain your options for employer leasing and any local grants.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap visit">
+    <div>
+      <h2 class="big">Come and ride one.</h2>
+      <p>Walk in or book a slot so a mechanic is free to go through the bikes with you. Tell us what you carry and we'll have the right ones ready.</p>
+      <a class="btn" href="mailto:hello@example.nl?subject=Test%20ride">Book a test ride</a>
+    </div>
+    <div class="hours">
+      <h3>Opening hours</h3>
+      <table>
+        <tbody>
+          <tr data-day="1"><td>Monday</td><td>Closed</td></tr>
+          <tr data-day="2"><td>Tuesday to Friday</td><td>[10:00 – 18:00]</td></tr>
+          <tr data-day="6"><td>Saturday</td><td>[10:00 – 17:00]</td></tr>
+          <tr data-day="0"><td>Sunday</td><td>Closed</td></tr>
+        </tbody>
+      </table>
+      <address>[Street and number]<br>[Postcode] Utrecht<br>[Phone] · hello@example.nl</address>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><span>Tandem, cargo bikes in Utrecht</span><span>© <span id="yr">2026</span> Tandem</span></div>
+</footer>
+
+<script>
+(function(){
+  var verdicts={
+    kids:["Two kids fit with room to spare.","Box with seat belts, rain cover and a bench for two. A Bakfiets does this best."],
+    groceries:["The whole week in one trip.","Crates and bags sit low in the box, so the bike stays steady. Any of our bikes works."],
+    dog:["Even a big dog gets a seat.","A Bakfiets with a low entry and a dog harness. Come and let them try it."],
+    tree:["Yes, the tree comes home by bike.","Stand it in the box and tie it down. A Trike or Bakfiets keeps it stable."]
+  };
+  var chips=document.querySelectorAll(".chips button");
+  var cargos=document.querySelectorAll(".cargo");
+  var bike=document.getElementById("bike");
+  var out=document.getElementById("verdict");
+  function show(k,animate){
+    chips.forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.load===k))});
+    cargos.forEach(function(c){c.classList.toggle("on",c.dataset.cargo===k)});
+    out.innerHTML=verdicts[k][0]+" <span>"+verdicts[k][1]+"</span>";
+    if(animate){bike.classList.remove("bump");void bike.getBoundingClientRect();bike.classList.add("bump")}
+  }
+  chips.forEach(function(b){b.addEventListener("click",function(){show(b.dataset.load,true)})});
+  show("kids",false);
+
+  var d=new Date().getDay();
+  var map={1:"1",2:"2",3:"2",4:"2",5:"2",6:"6",0:"0"};
+  var row=document.querySelector('.hours tr[data-day="'+map[d]+'"]');
+  if(row)row.classList.add("today");
+  document.getElementById("yr").textContent=new Date().getFullYear();
+})();
+</script>
+</body>
+</html>

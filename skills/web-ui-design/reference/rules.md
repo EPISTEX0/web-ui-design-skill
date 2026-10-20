@@ -69,12 +69,31 @@ These are defaults that read as generated because they appear whatever the subje
 - Every async view has loading (skeleton matching the final layout), empty (with the next action) and error (what happened and how to fix it) states.
 - Use native elements or accessible primitives (Radix, Base UI, React Aria) and the project's existing components.
 - Hit areas are at least 24px, and 44px on touch. Extend small controls with a pseudo-element.
-- Every input has a label. Icon-only buttons have an accessible name. Images have `alt`.
+- Every input has a visible label. Icon-only buttons have an accessible name. Images have `alt`.
+- Every interactive element is a real `button`, `a` or form control, reachable by Tab in reading order.
+
+## Feedback and flows
+
+- Every action shows a response within 100ms: a pressed state, then a pending state for anything slower.
+- Apply reversible changes at once and offer undo. Confirm first only when the action cannot be undone, and name the consequence in the confirm button ("Delete 3 invoices").
+- Use a skeleton when the layout is known and a spinner only for short waits inside a control.
+- Forms validate a field when it loses focus, show the error next to it, keep everything typed, and move focus to the first error on submit.
+- Success confirms in place, next to what changed. A toast is for results that happen elsewhere.
+- Back returns to the same filters and scroll position. State worth sharing (filters, tabs, selection) lives in the URL.
+- Keep the primary action visible without scrolling on the screen where it matters, and one thumb away on phones.
+
+## Performance
+
+- Load only the fonts you use: at most 2 families and 4 files, subset, with `font-display: swap` and a metric-matched fallback.
+- Every image has dimensions or `aspect-ratio`, the hero image is preloaded with `fetchpriority="high"`, and images below the fold use `loading="lazy"`.
+- Ship no JS a static page does not need. A Persuade or Read page works with scripts off, except the interactive parts.
+- Animate only `transform` and `opacity`. Blur filters and large shadows on scrolling elements cost frames on phones.
+- The checker's budget: CLS under 0.1, LCP under 2.5s, JS under 300 KB.
 
 ## Mobile
 
 - At 390px every multi-column grid is one column, and every row of controls or tabs either wraps or scrolls with its cut edge visible.
-- Wide tables become stacked rows of label and value at 390px. Keep a scrolling table only when its columns must be compared, and then pin the first column.
+- Wide tables become stacked rows of label and value at 390px. Keep a scrolling table only when its columns must be compared, and then pin the first column. The checker warns on any table that scrolls sideways.
 - Code blocks scroll inside themselves with `overflow-x: auto`. Write example lines under 60 characters so they fit a phone without scrolling.
 - Inputs are 16px or larger so iOS keeps the zoom.
 - Content respects `env(safe-area-inset-*)`.

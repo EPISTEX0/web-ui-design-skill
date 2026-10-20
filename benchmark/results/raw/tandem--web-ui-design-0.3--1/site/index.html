@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tandem – cargo bikes in Utrecht. Book a free 30-minute test ride</title>
+<meta name="description" content="Tandem is a cargo bike shop on the Oudegracht in Utrecht. Book a free 30-minute test ride on a Bakfiets Classic, Longtail or e-Bakfiets.">
+<style>
+:root{
+  /* brand */
+  --green-900:#10261d;
+  --green-700:#1f4d3a;
+  --green-500:#3f7a60;
+  --green-100:#dcebe2;
+  --green-50:#eef5f0;
+  --orange-500:#ff6b35;
+  --orange-600:#e9551e;
+  --orange-100:#ffe3d8;
+
+  --color-bg:var(--green-50);
+  --color-surface:#fff;
+  --color-text:var(--green-900);
+  --color-text-secondary:#3a5448;
+  --color-text-muted:#566b61;
+  --color-border:rgba(16,38,29,.14);
+  --color-accent:var(--orange-500);
+  --color-on-accent:var(--green-900);
+  --color-brand:var(--green-700);
+
+  --font-display:ui-rounded,"SF Pro Rounded","Hiragino Maru Gothic ProN","Arial Rounded MT Bold","Segoe UI",system-ui,sans-serif;
+  --font-body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;--s20:80px;--s24:96px;
+  --r-sm:12px;--r-md:16px;--r-lg:24px;--r-pill:999px;
+  --ring:0 0 0 1px rgba(16,38,29,.08),0 1px 2px rgba(16,38,29,.06),0 8px 24px -8px rgba(16,38,29,.14);
+
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-in-out:cubic-bezier(.77,0,.175,1);
+  --bar-h:72px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:80px}
+body{margin:0;font:400 1.0625rem/1.55 var(--font-body);color:var(--color-text);background:var(--color-bg);overflow-x:clip;-webkit-tap-highlight-color:transparent}
+img,svg{display:block;max-width:100%}
+h1,h2,h3{font-family:var(--font-display);line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.02em;font-weight:750}
+p{margin:0;text-wrap:pretty}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit;touch-action:manipulation}
+:focus-visible{outline:3px solid var(--green-700);outline-offset:3px;border-radius:6px}
+.on-dark :focus-visible{outline-color:var(--orange-500)}
+.wrap{width:min(1120px,100% - 2*var(--s6));margin-inline:auto}
+.skip{position:absolute;left:var(--s4);top:-60px;background:var(--color-surface);padding:var(--s3) var(--s4);border-radius:var(--r-sm);z-index:50}
+.skip:focus{top:var(--s4)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:52px;padding:0 var(--s6);border-radius:var(--r-pill);border:0;font-weight:700;text-decoration:none;cursor:pointer;background:var(--orange-500);color:var(--color-on-accent);transition:transform 140ms var(--ease-out),background-color 160ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{opacity:.6;cursor:progress}
+.btn-quiet{background:transparent;box-shadow:inset 0 0 0 2px var(--green-700);color:var(--green-700)}
+@media (hover:hover){.btn:hover{background:var(--orange-600)}.btn-quiet:hover{background:var(--green-100)}}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;background:rgba(238,245,240,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--color-border)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;min-height:64px;gap:var(--s4)}
+.mark{font:800 1.5rem/1 var(--font-display);letter-spacing:-.03em;color:var(--green-700);text-decoration:none;display:inline-flex;align-items:center;gap:var(--s2);min-height:44px}
+.mark i{width:12px;height:12px;border-radius:50%;background:var(--orange-500);display:block}
+nav ul{display:flex;gap:var(--s2);list-style:none;margin:0;padding:0;align-items:center}
+nav a:not(.btn){display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s3);text-decoration:none;font-weight:600;border-radius:var(--r-pill)}
+nav .btn{min-height:44px;padding:0 var(--s5)}
+@media (hover:hover){nav a:not(.btn):hover{background:var(--green-100)}}
+@media (max-width:760px){nav li:not(:last-child){display:none}}
+
+/* hero */
+.hero{padding:var(--s12) 0 var(--s16)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:var(--s12);align-items:center}
+.hero h1{font-size:clamp(2.5rem,6vw,4.25rem);color:var(--green-700)}
+.hero .lead{font-size:1.25rem;color:var(--color-text-secondary);margin-top:var(--s5);max-width:34ch}
+.cta-row{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s8)}
+.hero-facts{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s6);margin:var(--s8) 0 0;padding:0;list-style:none;color:var(--color-text-secondary);font-size:1rem}
+.hero-facts b{color:var(--color-text)}
+.status{display:inline-flex;align-items:center;gap:var(--s2);font-weight:600}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--color-text-muted)}
+.status[data-open="true"] .dot{background:#1f9d55}
+.photo{position:relative;aspect-ratio:4/5;border-radius:var(--r-lg);overflow:hidden;background:repeating-linear-gradient(135deg,var(--green-100) 0 14px,#d3e5da 14px 28px);box-shadow:var(--ring);display:grid;place-items:center;text-align:center;padding:var(--s6)}
+.photo span{background:var(--color-surface);border-radius:var(--r-pill);padding:var(--s2) var(--s4);font-size:.9375rem;font-weight:600;color:var(--color-text-secondary);max-width:30ch}
+.photo::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1);pointer-events:none}
+.rating{position:absolute;left:var(--s4);bottom:var(--s4);background:var(--color-surface);border-radius:var(--r-md);padding:var(--s3) var(--s4);box-shadow:var(--ring);text-align:left;display:flex;gap:var(--s3);align-items:center}
+.rating strong{font:800 1.75rem/1 var(--font-display);font-variant-numeric:tabular-nums}
+.rating small{display:block;color:var(--color-text-secondary);font-size:.875rem;line-height:1.3}
+.stars{color:var(--orange-600);letter-spacing:2px;font-size:1rem;line-height:1}
+@media (max-width:860px){.hero{padding-top:var(--s8)}.hero .wrap{grid-template-columns:1fr;gap:var(--s8)}.photo{aspect-ratio:4/3}}
+
+/* sections */
+section{padding:var(--s20) 0}
+.sec-head{max-width:46ch;margin-bottom:var(--s10)}
+.sec-head h2{font-size:clamp(1.875rem,4vw,2.75rem);color:var(--green-700)}
+.sec-head p{margin-top:var(--s4);color:var(--color-text-secondary);font-size:1.125rem}
+
+/* the box */
+.box-sec{background:var(--green-700);color:#fff}
+.box-sec .sec-head h2{color:#fff}
+.box-sec .sec-head p{color:#d3e5da}
+.box-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:var(--s10);align-items:center}
+.stage{background:#2a5c47;border-radius:var(--r-lg);padding:var(--s6);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.stage svg{width:100%;height:auto;overflow:visible}
+.stage .note{margin-top:var(--s3);color:#d3e5da;font-size:.875rem}
+.load{display:grid;gap:var(--s3)}
+.load label{display:flex;align-items:center;gap:var(--s4);min-height:64px;padding:var(--s3) var(--s5);border-radius:var(--r-md);background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 2px transparent;cursor:pointer;transition:background-color 160ms var(--ease-out),box-shadow 160ms var(--ease-out)}
+.load label:has(input:checked){background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 2px var(--orange-500)}
+.load label:has(input:focus-visible){outline:3px solid var(--orange-500);outline-offset:3px}
+.load input{appearance:none;width:24px;height:24px;border-radius:8px;border:2px solid #fff;display:grid;place-content:center;margin:0;flex:none}
+.load input::after{content:"";width:12px;height:12px;border-radius:4px;background:var(--orange-500);transform:scale(0);transition:transform 140ms var(--ease-out)}
+.load input:checked::after{transform:scale(1)}
+.load b{display:block;font-family:var(--font-display);font-size:1.125rem}
+.load small{color:#d3e5da;font-size:.9375rem}
+.verdict{margin-top:var(--s5);font:700 1.25rem/1.3 var(--font-display);min-height:2.6em}
+.box-cta{margin-top:var(--s5)}
+.kid,.shop{transition:transform 420ms var(--ease-out),opacity 300ms var(--ease-out)}
+.load-off{opacity:0;transform:translateY(-28px) scale(.95)}
+@media (max-width:860px){.box-grid{grid-template-columns:1fr}}
+
+/* models */
+.models{display:grid;gap:var(--s4)}
+.model{display:grid;grid-template-columns:96px 1fr auto;gap:var(--s6);align-items:center;background:var(--color-surface);border-radius:var(--r-lg);padding:var(--s5) var(--s6);box-shadow:var(--ring)}
+.model .ph{width:96px;aspect-ratio:1;border-radius:var(--r-md);background:repeating-linear-gradient(135deg,var(--green-100) 0 8px,#d3e5da 8px 16px);display:grid;place-items:center;font-size:.75rem;font-weight:600;color:var(--color-text-secondary);text-align:center;line-height:1.2;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.model h3{font-size:1.5rem}
+.model p{color:var(--color-text-secondary);margin-top:var(--s1)}
+.price{font:800 1.75rem/1 var(--font-display);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.lease{margin-top:var(--s6);display:flex;flex-wrap:wrap;gap:var(--s3) var(--s6);align-items:center;background:var(--orange-100);border-radius:var(--r-lg);padding:var(--s5) var(--s6)}
+.lease strong{font:800 1.5rem/1.2 var(--font-display);font-variant-numeric:tabular-nums}
+@media (max-width:640px){.model{grid-template-columns:72px 1fr;gap:var(--s4);padding:var(--s4)}.model .ph{width:72px;font-size:.6875rem}.price{grid-column:1/-1;text-align:left;font-size:1.5rem}}
+
+/* steps */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s8);counter-reset:s}
+.steps li{counter-increment:s;padding-top:var(--s5);border-top:3px solid var(--green-700)}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--green-700);color:#fff;font:800 1.125rem var(--font-display);margin-bottom:var(--s4)}
+.steps h3{font-size:1.375rem;margin-bottom:var(--s2)}
+.steps p{color:var(--color-text-secondary)}
+@media (max-width:760px){.steps{grid-template-columns:1fr;gap:var(--s6)}}
+
+/* book */
+.book{background:var(--green-100)}
+.book-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:var(--s12);align-items:start}
+.book h2{font-size:clamp(1.875rem,4vw,2.75rem);color:var(--green-700)}
+.book .sub{margin-top:var(--s4);color:var(--color-text-secondary);font-size:1.125rem}
+.place{margin:var(--s8) 0 0;padding:0;list-style:none;display:grid;gap:var(--s4)}
+.place li{display:grid;gap:2px}
+.place dt,.place .k{font-weight:700}
+.place a{text-underline-offset:3px}
+.place a{display:inline-flex;align-items:center;min-height:44px}
+table.hours{border-collapse:collapse;margin-top:var(--s2);font-variant-numeric:tabular-nums}
+table.hours th,table.hours td{text-align:left;padding:2px var(--s6) 2px 0;font-weight:400}
+table.hours tr.today{font-weight:700}
+form.card{background:var(--color-surface);border-radius:var(--r-lg);padding:var(--s8);box-shadow:var(--ring);display:grid;gap:var(--s5)}
+form.card h3{font-size:1.5rem}
+.field{display:grid;gap:var(--s2)}
+.field label{font-weight:700}
+.field input,.field select{min-height:52px;padding:0 var(--s4);border-radius:var(--r-sm);border:2px solid rgba(16,38,29,.38);background:#fff;font-size:1rem;width:100%}
+.field input:focus-visible,.field select:focus-visible{outline:3px solid var(--green-700);outline-offset:2px}
+.field [aria-invalid="true"]{border-color:#b3261e}
+.err{color:#b3261e;font-size:.9375rem;font-weight:600;min-height:0}
+.err:empty{display:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+@media (max-width:480px){.two{grid-template-columns:1fr}form.card{padding:var(--s5)}}
+.hint{font-size:.9375rem;color:var(--color-text-muted)}
+.done{background:var(--green-50);border-radius:var(--r-md);padding:var(--s5);box-shadow:inset 0 0 0 2px var(--green-700)}
+.done[hidden]{display:none}
+.done b{font-family:var(--font-display);font-size:1.25rem;display:block;margin-bottom:var(--s2)}
+@media (max-width:860px){.book-grid{grid-template-columns:1fr;gap:var(--s10)}}
+
+/* faq */
+.faq{max-width:760px}
+details{border-bottom:1px solid var(--color-border)}
+summary{list-style:none;cursor:pointer;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:var(--s4);font:700 1.25rem/1.3 var(--font-display);padding:var(--s3) 0}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.75rem;line-height:1;flex:none;transition:transform 200ms var(--ease-out)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 var(--s8) var(--s5) 0;color:var(--color-text-secondary)}
+
+footer{background:var(--green-900);color:#d3e5da;padding:var(--s12) 0 calc(var(--s12) + var(--bar-h))}
+footer .wrap{display:grid;grid-template-columns:1fr auto;gap:var(--s8);align-items:end}
+footer .mark{color:#fff}
+footer a{text-underline-offset:3px;display:inline-flex;align-items:center;min-height:44px}
+footer p+p{margin-top:var(--s2)}
+@media (max-width:640px){footer .wrap{grid-template-columns:1fr}}
+
+/* sticky bar (phones) */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:none;gap:var(--s2);padding:var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));background:rgba(238,245,240,.97);border-top:1px solid var(--color-border)}
+.bar .btn{flex:1;min-height:48px;padding:0 var(--s4)}
+@media (max-width:760px){.bar{display:flex}}
+@media (min-width:761px){footer{padding-bottom:var(--s12)}}
+
+/* one entrance moment: hero */
+@media (prefers-reduced-motion:no-preference){
+  .hero .wrap>*{animation:in 600ms var(--ease-out) both}
+  .hero .wrap>*:nth-child(2){animation-delay:90ms}
+  @keyframes in{from{opacity:0;transform:scale(.97) translateY(8px)}}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .kid,.shop{transition:opacity 200ms linear}
+  .load-off{transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mark" href="#top" aria-label="Tandem, home"><i aria-hidden="true"></i>tandem</a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#box">What fits</a></li>
+        <li><a href="#bikes">Bikes</a></li>
+        <li><a href="#visit">Visit</a></li>
+        <li><a class="btn" href="#book">Book a test ride</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<div id="top"></div>
+
+<section class="hero" style="padding-bottom:var(--s16)">
+  <div class="wrap">
+    <div>
+      <h1>Try a cargo bike. Thirty minutes, on us.</h1>
+      <p class="lead">Tandem is a family cargo bike shop on the Oudegracht in Utrecht. Take one out, load it up and see how it feels in your own city.</p>
+      <div class="cta-row">
+        <a class="btn" href="#book">Book your free test ride</a>
+        <a class="btn btn-quiet" href="#box">See what fits</a>
+      </div>
+      <ul class="hero-facts">
+        <li><b>Oudegracht 112</b>, Utrecht</li>
+        <li class="status" id="status" data-open="false"><span class="dot" aria-hidden="true"></span><span id="status-text">Tuesday to Saturday, 9:00 to 18:00</span></li>
+      </ul>
+    </div>
+    <div class="photo" role="img" aria-label="Placeholder for a photo of a family loading a cargo bike on the Oudegracht">
+      <span>Photo placeholder: a family loading the bakfiets outside the shop</span>
+      <div class="rating">
+        <strong>4.8</strong>
+        <div><span class="stars" aria-hidden="true">★★★★★</span><small>310 Google reviews</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="box-sec on-dark" id="box">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Two kids and a week of groceries. In one box.</h2>
+      <p>Load the bakfiets below. This is what the box is for.</p>
+    </div>
+    <div class="box-grid">
+      <div class="stage">
+        <svg viewBox="0 0 640 340" role="img" aria-labelledby="bt bd">
+          <title id="bt">Illustration of a cargo bike box</title>
+          <desc id="bd">A cargo bike seen from the side. Two children and a crate of groceries can be shown or hidden in the box.</desc>
+          <!-- ground -->
+          <line x1="20" y1="316" x2="620" y2="316" stroke="#fff" stroke-opacity=".25" stroke-width="2"/>
+          <!-- frame -->
+          <path d="M470 150 L520 150 L560 250" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M520 150 L500 120 M488 118 L520 118" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <path d="M360 262 L560 250" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <!-- wheels -->
+          <circle cx="130" cy="272" r="44" fill="none" stroke="#fff" stroke-width="8"/>
+          <circle cx="560" cy="272" r="44" fill="none" stroke="#fff" stroke-width="8"/>
+          <circle cx="130" cy="272" r="6" fill="#fff"/><circle cx="560" cy="272" r="6" fill="#fff"/>
+          <path d="M130 272 L180 232" stroke="#fff" stroke-width="8" stroke-linecap="round"/>
+          <!-- load (drawn before box front so it sits inside) -->
+          <g class="kid" id="kids">
+            <g>
+              <circle cx="210" cy="132" r="22" fill="#ffd2bf"/><path d="M188 128c2-18 40-18 44 0c-12-8-30-8-44 0z" fill="#10261d"/>
+              <rect x="190" y="156" width="40" height="64" rx="16" fill="#ff6b35"/>
+            </g>
+            <g>
+              <circle cx="276" cy="140" r="20" fill="#f3b999"/><path d="M256 136c2-16 38-16 40 0c-12-7-28-7-40 0z" fill="#3f7a60"/>
+              <rect x="258" y="162" width="36" height="58" rx="14" fill="#9fd0b6"/>
+            </g>
+          </g>
+          <g class="shop" id="shop">
+            <rect x="320" y="168" width="130" height="52" rx="6" fill="#c98b4e"/>
+            <rect x="330" y="140" width="22" height="36" rx="4" fill="#ffe3d8"/>
+            <rect x="358" y="128" width="16" height="48" rx="6" fill="#ff6b35"/>
+            <path d="M384 176 L394 134 L424 134 L434 176z" fill="#e8d9b0"/>
+            <circle cx="410" cy="130" r="14" fill="#7bbf6a"/>
+            <circle cx="392" cy="138" r="10" fill="#d94f3d"/>
+          </g>
+          <!-- box -->
+          <path d="M160 168 H455 L440 270 Q438 282 426 282 H190 Q178 282 175 270 Z" fill="#ff6b35" fill-opacity=".0"/>
+          <path d="M170 196 H452 L440 270 Q438 282 426 282 H190 Q178 282 176 270 Z" fill="#ff6b35"/>
+          <path d="M170 196 H452" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+        <p class="note">Illustration. Your test ride is the real thing.</p>
+      </div>
+      <div>
+        <fieldset class="load" style="border:0;padding:0;margin:0">
+          <legend class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">What goes in the box</legend>
+          <label><input type="checkbox" id="in-kids" checked><span><b>Two kids</b><small>Seated, with room to wriggle</small></span></label>
+          <label><input type="checkbox" id="in-shop" checked><span><b>A week of groceries</b><small>The whole Saturday shop</small></span></label>
+        </fieldset>
+        <p class="verdict" id="verdict" aria-live="polite"></p>
+        <a class="btn box-cta" href="#book">Try it on a test ride</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bikes">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Three bikes, one for every kind of family</h2>
+      <p>Come and ride all three. We'll help you work out which one suits your streets and your kids.</p>
+    </div>
+    <div class="models">
+      <article class="model">
+        <div class="ph" aria-hidden="true">Photo placeholder</div>
+        <div><h3>Bakfiets Classic</h3><p>The Utrecht family bike, box up front.</p></div>
+        <div class="price">€2,890</div>
+      </article>
+      <article class="model">
+        <div class="ph" aria-hidden="true">Photo placeholder</div>
+        <div><h3>Longtail</h3><p>Long and slim, with the load behind you.</p></div>
+        <div class="price">€3,450</div>
+      </article>
+      <article class="model">
+        <div class="ph" aria-hidden="true">Photo placeholder</div>
+        <div><h3>e-Bakfiets</h3><p>The Classic's box with electric assistance.</p></div>
+        <div class="price">€4,990</div>
+      </article>
+    </div>
+    <div class="lease">
+      <strong>Lease from €89 a month</strong>
+      <span>Ask us about leasing when you come for your test ride.</span>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--color-surface)">
+  <div class="wrap">
+    <div class="sec-head"><h2>How a test ride works</h2></div>
+    <ol class="steps">
+      <li><h3>Pick a time</h3><p>Choose a day and the bike you'd like to try. It takes a minute.</p></li>
+      <li><h3>Come to the shop</h3><p>Find us at Oudegracht 112. Bring the kids and the shopping bags if you like.</p></li>
+      <li><h3>Ride for 30 minutes</h3><p>It's free. Take the bike around Utrecht and see how it fits your day.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="book" id="book">
+  <div class="wrap book-grid" id="visit">
+    <div>
+      <h2>Book your free 30-minute test ride</h2>
+      <p class="sub">Tell us when you'd like to come. We'll confirm by email.</p>
+      <ul class="place">
+        <li><span class="k">Address</span><a href="https://www.google.com/maps/search/?api=1&amp;query=Oudegracht+112+Utrecht" rel="noopener">Oudegracht 112, Utrecht</a></li>
+        <li><span class="k">Opening hours</span>
+          <table class="hours" id="hours"><tbody>
+            <tr data-d="1"><th scope="row">Monday</th><td>Closed</td></tr>
+            <tr data-d="2"><th scope="row">Tuesday</th><td>9:00 – 18:00</td></tr>
+            <tr data-d="3"><th scope="row">Wednesday</th><td>9:00 – 18:00</td></tr>
+            <tr data-d="4"><th scope="row">Thursday</th><td>9:00 – 18:00</td></tr>
+            <tr data-d="5"><th scope="row">Friday</th><td>9:00 – 18:00</td></tr>
+            <tr data-d="6"><th scope="row">Saturday</th><td>9:00 – 18:00</td></tr>
+            <tr data-d="0"><th scope="row">Sunday</th><td>Closed</td></tr>
+          </tbody></table>
+        </li>
+        <!-- TODO: replace placeholder phone and email -->
+        <li><span class="k">Phone</span><a href="tel:+31300000000">+31 30 000 0000</a></li>
+        <li><span class="k">Email</span><a href="mailto:hello@example.com">hello@example.com</a></li>
+      </ul>
+    </div>
+
+    <form class="card" id="form" novalidate>
+      <h3>Reserve your ride</h3>
+      <div class="field">
+        <label for="name">Your name</label>
+        <input id="name" name="name" autocomplete="name" required>
+        <div class="err" id="name-err" role="alert"></div>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+        <div class="err" id="email-err" role="alert"></div>
+      </div>
+      <div class="two">
+        <div class="field">
+          <label for="bike">Bike to try</label>
+          <select id="bike" name="bike">
+            <option>Bakfiets Classic</option>
+            <option>Longtail</option>
+            <option>e-Bakfiets</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="date">Day</label>
+          <input id="date" name="date" type="date" required>
+          <div class="err" id="date-err" role="alert"></div>
+        </div>
+      </div>
+      <button class="btn" type="submit" id="submit">Request my test ride</button>
+      <p class="hint">Free, 30 minutes. We're open Tuesday to Saturday.</p>
+      <div class="done" id="done" hidden role="status" tabindex="-1">
+        <b>Almost there</b>
+        <span id="done-text">Your email app should open with your request. Send it and we'll confirm your time.</span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head"><h2>Good to know</h2></div>
+    <div class="faq">
+      <details><summary>Is the test ride really free?</summary><p>Yes. A test ride is 30 minutes and costs nothing.</p></details>
+      <details><summary>When can I come?</summary><p>Tuesday to Saturday, between 9:00 and 18:00. Pick a day in the form and we'll confirm a time.</p></details>
+      <details><summary>Where is the shop?</summary><p>Oudegracht 112 in Utrecht.</p></details>
+      <details><summary>Can I lease a cargo bike?</summary><p>Yes, leasing starts from €89 a month. Ask us in the shop and we'll go through the options.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="on-dark">
+  <div class="wrap">
+    <div>
+      <a class="mark" href="#top"><i aria-hidden="true"></i>tandem</a>
+      <p style="margin-top:var(--s4)">Cargo bikes in Utrecht. Oudegracht 112. Tuesday to Saturday, 9:00 to 18:00.</p>
+    </div>
+    <div>
+      <p><a href="tel:+31300000000">+31 30 000 0000</a></p>
+      <p><a href="mailto:hello@example.com">hello@example.com</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="bar">
+  <a class="btn btn-quiet" href="tel:+31300000000">Call</a>
+  <a class="btn" href="#book">Book a test ride</a>
+</div>
+
+<script>
+(function(){
+  var SHOP_EMAIL="hello@example.com"; // TODO: replace with the real address
+
+  /* open now, in Utrecht time */
+  var days={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+  function nowNl(){
+    var p=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Amsterdam",weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date()),o={};
+    p.forEach(function(x){o[x.type]=x.value});
+    return {d:days[o.weekday],m:(+o.hour%24)*60+ +o.minute};
+  }
+  var t=nowNl(),open=t.d>=2&&t.d<=6&&t.m>=540&&t.m<1080;
+  var st=document.getElementById("status");
+  st.dataset.open=open;
+  document.getElementById("status-text").textContent=open?"Open now, until 18:00":"Closed now. Open Tuesday to Saturday, 9:00 to 18:00";
+  var row=document.querySelector('#hours tr[data-d="'+t.d+'"]');
+  if(row)row.className="today";
+
+  /* the box */
+  var kids=document.getElementById("kids"),shop=document.getElementById("shop"),ik=document.getElementById("in-kids"),is=document.getElementById("in-shop"),v=document.getElementById("verdict");
+  function load(){
+    kids.classList.toggle("load-off",!ik.checked);
+    shop.classList.toggle("load-off",!is.checked);
+    v.textContent=ik.checked&&is.checked?"Both fit. That's the school run and the shop in one trip.":ik.checked?"Room to spare. Add the groceries.":is.checked?"Groceries only. Now add the kids.":"An empty box. Load it up.";
+  }
+  ik.addEventListener("change",load);is.addEventListener("change",load);load();
+
+  /* form */
+  var f=document.getElementById("form"),dateEl=document.getElementById("date");
+  var iso=function(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+  dateEl.min=iso(new Date());
+  function check(id,msg){
+    var el=document.getElementById(id),er=document.getElementById(id+"-err"),bad=false,val=el.value.trim();
+    if(!val)bad=msg.empty;
+    else if(id==="email"&&!/^\S+@\S+\.\S+$/.test(val))bad=msg.bad;
+    else if(id==="date"){var d=new Date(val+"T12:00:00").getDay();if(d===0||d===1)bad=msg.bad}
+    el.setAttribute("aria-invalid",bad?"true":"false");
+    er.textContent=bad||"";
+    return !bad;
+  }
+  var rules={
+    name:{empty:"Please tell us your name."},
+    email:{empty:"Please enter your email.",bad:"That email doesn't look right. Check for a missing @ or dot."},
+    date:{empty:"Please pick a day.",bad:"We're closed on Sunday and Monday. Pick a day from Tuesday to Saturday."}
+  };
+  Object.keys(rules).forEach(function(id){document.getElementById(id).addEventListener("blur",function(){check(id,rules[id])})});
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    var first=null;
+    Object.keys(rules).forEach(function(id){if(!check(id,rules[id])&&!first)first=document.getElementById(id)});
+    if(first){first.focus();return}
+    var body="Hi Tandem,\n\nI'd like a free 30-minute test ride.\n\nName: "+f.name.value+"\nEmail: "+f.email.value+"\nBike: "+f.bike.value+"\nDay: "+f.date.value+"\n";
+    var href="mailto:"+SHOP_EMAIL+"?subject="+encodeURIComponent("Test ride request")+"&body="+encodeURIComponent(body);
+    var done=document.getElementById("done");
+    done.hidden=false;done.focus();
+    location.href=href;
+  });
+})();
+</script>
+</body>
+</html>

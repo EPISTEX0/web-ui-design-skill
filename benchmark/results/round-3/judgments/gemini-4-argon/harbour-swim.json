@@ -1,0 +1,175 @@
+{
+	"scores": {
+		"U6": {
+			"improvement": 9,
+			"identity": 9,
+			"craft": 8,
+			"mobile": 9,
+			"overall": 9,
+			"defects": [
+				"Timetable defaults to showing only Tuesday's 4 sessions until 'All days' or another day pill is selected.",
+				"The pool hero illustration is hidden on the 390px mobile viewport.",
+				"The Club news section on desktop and tablet sits in a narrow centered column with wide empty side margins compared to adjacent two-column sections."
+			],
+			"note": "Smartest user-centered refresh that elevates the timetable and membership prices for poolside phone users while keeping every section compact, unclipped, and faithful to the club's identity."
+		},
+		"W5": {
+			"improvement": 8,
+			"identity": 9,
+			"craft": 8,
+			"mobile": 8,
+			"overall": 8,
+			"defects": [
+				"Timetable defaults to 'Tue (today)' showing 4 of the 27 sessions until 'All week' or another day tab is selected.",
+				"Desktop and tablet Join section leaves a large empty whitespace below the right-hand pool diagram.",
+				"Keeps the Welcome section above the timetable and prices rather than prioritizing quick poolside lookup."
+			],
+			"note": "Clean, dependable refresh that preserves the club's familiar layout and illustrations while fixing contrast, notices, day filtering, and mobile responsiveness without any clipping."
+		},
+		"Q7": {
+			"improvement": 8,
+			"identity": 9,
+			"craft": 8,
+			"mobile": 7,
+			"overall": 8,
+			"defects": [
+				"On the 390px mobile viewport, the horizontal navigation bar overflows slightly on the right, clipping 'Contact' to 'Contac'.",
+				"The bottom of the Contact footer on mobile is cut off at the 6000px capture limit after 'Harbour Leisure Centre', omitting the street address, phone, email, and charity number.",
+				"Timetable defaults to Tuesday's 4 sessions unless another day tab or 'All week' is clicked."
+			],
+			"note": "Polished and characterful redesign with lane-rope section dividers and today-first timetable tabs, held back slightly by minor mobile navbar overflow and footer truncation."
+		},
+		"U3": {
+			"improvement": 7,
+			"identity": 8,
+			"craft": 7,
+			"mobile": 7,
+			"overall": 7,
+			"defects": [
+				"On the 390px mobile viewport, the horizontal row of day filter tabs clips 'Fri', 'Sat', and 'Sun' off the right edge.",
+				"Timetable defaults to Tuesday's 4 sessions rather than showing all sessions until 'All days' is selected.",
+				"Large empty dark-navy space sits below the pool diagram in the desktop and tablet Join section."
+			],
+			"note": "Solid boxed-layout refresh with readable club notices and compact mobile height, but the day filter tabs clip horizontally on narrow screens."
+		},
+		"Y2": {
+			"improvement": 7,
+			"identity": 9,
+			"craft": 8,
+			"mobile": 6,
+			"overall": 7,
+			"defects": [
+				"On the 390px mobile viewport, rendering all 27 sessions across 7 day groups pushes the page past the 6000px cutoff right after Membership, cutting off Welcome, the Join form, Club news, and Contact.",
+				"In the mobile header, 'Contact' wraps alone onto a second navigation line."
+			],
+			"note": "Well-crafted desktop and tablet design that smartly prioritizes the timetable and prices and groups all 7 days clearly, but rendering all 27 sessions at once makes the mobile page far too long."
+		},
+		"M9": {
+			"improvement": 7,
+			"identity": 8,
+			"craft": 7,
+			"mobile": 5,
+			"overall": 6,
+			"defects": [
+				"On the 390px mobile viewport, the navigation links row overflows horizontally on the right, clipping 'Contact' to 'C...'.",
+				"On mobile, rendering all 27 session cards vertically pushes Membership prices, the Join form, Club news, and Contact past the 6000px cutoff.",
+				"Desktop Join section has an unbalanced two-column layout with a large empty space beneath the pool illustration."
+			],
+			"note": "Clean full-bleed refresh with day-grouped tables and clear notices on desktop, but mobile suffers from navbar overflow and an overly long uncollapsed timetable."
+		},
+		"Y3": {
+			"improvement": 6,
+			"identity": 8,
+			"craft": 6,
+			"mobile": 5,
+			"overall": 6,
+			"defects": [
+				"On mobile, a floating yellow 'Join the club · First visit free' pill overlaps the Welcome swimmers illustration.",
+				"Inside mobile session cards with 'Intermediate' level, the level value collides directly with the coach label ('IntermediatePriya', 'IntermediateDave') with no spacing.",
+				"Only one club notice is shown by default, hiding the other three behind a '3 more' link.",
+				"Defaulting to 'All days' on mobile pushes the final Sunday session, Membership prices, Join form, Club news, and Contact past the 6000px cutoff."
+			],
+			"note": "Attractive desktop hero and typography, but mobile execution is hurt by an overlapping floating CTA button, text collisions in session cards, and excessive page length."
+		},
+		"S3": {
+			"improvement": 6,
+			"identity": 7,
+			"craft": 6,
+			"mobile": 4,
+			"overall": 5,
+			"defects": [
+				"On the 390px mobile viewport, the first club notice ('Pool closed Bank Holiday Monday 6th May') is cut off at the top of the notice banner.",
+				"On mobile, the day filter pills clip after 'Wed', hiding 'Thu', 'Fri', 'Sat', and 'Sun' off-screen to the right.",
+				"Defaulting to 'All week' on mobile stacks 27 tall cards and cuts off the page after the first Saturday session, omitting the rest of the weekend, Membership, Join form, News, and Contact.",
+				"The full-bleed hero banner awkwardly crops and stretches the top of the pool illustration on desktop."
+			],
+			"note": "Introduces day pills and a full-width layout, but mobile clips both the primary bank-holiday closure notice and the second half of the week's filter pills."
+		},
+		"Y6": {
+			"improvement": 6,
+			"identity": 8,
+			"craft": 5,
+			"mobile": 4,
+			"overall": 5,
+			"defects": [
+				"In the Membership section on desktop and tablet, the 'Membership' heading and its introductory paragraph sit awkwardly side-by-side instead of stacked.",
+				"On the 390px mobile viewport, the day filter pills clip horizontally after 'Wed' ('T...').",
+				"Tall 6-row mobile session cards with 'All days' selected push Saturday, Sunday, Membership prices, Join form, Club news, and Contact past the 6000px cutoff."
+			],
+			"note": "Improves colors and notice visibility, but has a broken Membership header layout on desktop and severe vertical bloat and pill clipping on mobile."
+		},
+		"S5": {
+			"improvement": 4,
+			"identity": 8,
+			"craft": 4,
+			"mobile": 4,
+			"overall": 4,
+			"defects": [
+				"The yellow notice bar under the header is completely blank on desktop and tablet and clipped ('Pool closed Bank Holiday') on mobile.",
+				"No day filtering or grouping is provided for the 27-session timetable.",
+				"On mobile, stacking all 27 session cards pushes everything below the 'Full name' field in the Join form (remaining inputs, pool diagram, News, and Contact) past the 6000px cutoff."
+			],
+			"note": "Minimal stylesheet patch that improves text contrast and stacks mobile table rows, but loses the notice ticker on desktop and offers no way to filter the 27-session timetable."
+		},
+		"Q2": {
+			"improvement": 3,
+			"identity": 8,
+			"craft": 4,
+			"mobile": 3,
+			"overall": 3,
+			"defects": [
+				"Leaves the top notice ticker clipped ('Pool closed Bank Holiday') at the right edge across desktop, tablet, and mobile.",
+				"No day filtering or grouping for the 27-row timetable.",
+				"Tall 6-field stacked mobile cards cause the 390px page to cut off on Saturday ('Learn to Swim Stage 3'), omitting Sunday, Membership prices, Join form, News, and Contact."
+			],
+			"note": "Bare-minimum CSS contrast and responsive-table patch that leaves the broken notice ticker intact and turns the mobile timetable into an endless scroll."
+		},
+		"K6": {
+			"improvement": 3,
+			"identity": 8,
+			"craft": 4,
+			"mobile": 3,
+			"overall": 3,
+			"defects": [
+				"Leaves the top notice ticker clipped ('Pool closed Bank Holiday') at the right edge across desktop, tablet, and mobile.",
+				"No day filtering or grouping for the 27-row timetable.",
+				"Tall 6-row stacked mobile cards cause the 390px page to cut off at the first Saturday session ('08:00 - 09:30'), omitting the rest of Saturday, Sunday, Membership prices, Join form, News, and Contact."
+			],
+			"note": "Superficial contrast and table-stacking tweak that leaves the broken notice banner untouched and buries prices, news, and the join form beneath 27 tall mobile cards."
+		}
+	},
+	"ranking": [
+		"U6",
+		"W5",
+		"Q7",
+		"U3",
+		"Y2",
+		"M9",
+		"Y3",
+		"S3",
+		"Y6",
+		"S5",
+		"Q2",
+		"K6"
+	]
+}

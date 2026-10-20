@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tandem – cargo bikes in Utrecht</title>
+<meta name="description" content="Tandem is a cargo bike shop in Utrecht. Try, buy, rent and repair cargo bikes for kids, groceries and work.">
+<style>
+:root{
+  --ground:oklch(0.965 0.004 250);
+  --surface:oklch(1 0 0);
+  --ink:oklch(0.22 0.02 250);
+  --ink-2:oklch(0.42 0.02 250);
+  --ink-3:oklch(0.5 0.02 250);
+  --asphalt:oklch(0.25 0.015 250);
+  --on-asphalt:oklch(0.96 0.004 250);
+  --on-asphalt-2:oklch(0.8 0.01 250);
+  --accent:oklch(0.5 0.17 32);
+  --accent-hover:oklch(0.44 0.16 32);
+  --line:oklch(0.22 0.02 250 / 0.14);
+  --focus:oklch(0.5 0.17 260);
+  --ease:cubic-bezier(0.23,1,0.32,1);
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --r-1:4px;--r-2:12px;
+  --s-1:4px;--s-2:8px;--s-3:12px;--s-4:16px;--s-5:24px;--s-6:32px;--s-7:48px;--s-8:64px;--s-9:96px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{overflow-x:clip;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font:400 17px/1.55 var(--font);overflow-x:clip;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{margin:0;font-weight:800;letter-spacing:-0.03em;line-height:1.02;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:var(--r-1)}
+.wrap{width:min(1120px,100% - 2*var(--s-5));margin-inline:auto}
+.skip{position:absolute;left:-999px;top:var(--s-2);background:var(--surface);padding:var(--s-2) var(--s-4);z-index:10}
+.skip:focus{left:var(--s-2)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 var(--s-5);border-radius:var(--r-1);border:2px solid var(--ink);background:transparent;color:var(--ink);font:700 17px/1 var(--font);text-decoration:none;cursor:pointer;touch-action:manipulation;transition:background-color 160ms var(--ease),color 160ms var(--ease),transform 120ms var(--ease)}
+.btn:active{transform:scale(0.97)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+@media (hover:hover){
+  .btn:hover{background:var(--ink);color:var(--surface)}
+  .btn-primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:#fff}
+}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:var(--s-4);padding-block:var(--s-4)}
+.logo{font-weight:800;font-size:24px;letter-spacing:-0.04em;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.nav{display:flex;gap:var(--s-5);align-items:center}
+.nav a:not(.btn){text-decoration:none;font-weight:600;min-height:44px;display:inline-flex;align-items:center}
+@media (hover:hover){.nav a:not(.btn):hover{text-decoration:underline;text-underline-offset:6px}}
+.nav .btn{min-height:44px;padding:0 var(--s-4)}
+@media (max-width:720px){.nav a:not(.btn){display:none}}
+
+/* hero */
+.hero{background:var(--accent);color:#fff;position:relative;overflow:hidden}
+.hero .wrap{padding-block:var(--s-8) 0;display:grid;gap:var(--s-6)}
+.hero h1{font-size:clamp(44px,9vw,104px);max-width:12ch}
+.hero p.lead{font-size:22px;line-height:1.4;max-width:32ch}
+.hero .actions{display:flex;flex-wrap:wrap;gap:var(--s-3)}
+.hero .btn{border-color:#fff;color:#fff}
+.hero .btn-primary{background:#fff;color:var(--accent)}
+@media (hover:hover){.hero .btn:hover{background:#fff;color:var(--accent)}.hero .btn-primary:hover{background:var(--ink);border-color:var(--ink);color:#fff}}
+.road{position:relative;height:96px;margin-top:var(--s-4)}
+.road::before{content:"";position:absolute;left:0;right:0;bottom:28px;height:4px;background:repeating-linear-gradient(90deg,#fff 0 40px,transparent 40px 72px);opacity:.9}
+.bike{position:absolute;bottom:20px;left:0;width:min(340px,70%);height:auto;color:#fff;animation:roll 1.2s var(--ease) both}
+@keyframes roll{from{transform:translateX(-30%);opacity:0}to{transform:none;opacity:1}}
+.bike{left:max(var(--s-5),calc(50% - 560px + var(--s-5)))}
+.hero .wrap{position:relative}
+@media (min-width:900px){.bike{left:auto;right:max(var(--s-5),calc(50% - 560px + var(--s-5)));width:420px}}
+
+/* sections */
+section{padding-block:var(--s-9)}
+.head{display:grid;gap:var(--s-3);margin-bottom:var(--s-7);max-width:640px}
+.head h2{font-size:clamp(32px,5vw,52px)}
+.head p{color:var(--ink-2)}
+
+/* chooser */
+.chooser{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-5);align-items:start}
+@media (max-width:860px){.chooser{grid-template-columns:1fr}}
+fieldset{border:0;margin:0 0 var(--s-5);padding:0}
+legend{font-weight:700;margin-bottom:var(--s-3);padding:0}
+.opts{display:flex;flex-wrap:wrap;gap:var(--s-2)}
+.opts label{position:relative}
+.opts input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.opts span{display:inline-flex;align-items:center;min-height:48px;padding:0 var(--s-4);border:2px solid var(--line);border-radius:var(--r-1);background:var(--surface);font-weight:600;transition:background-color 160ms var(--ease),border-color 160ms var(--ease),color 160ms var(--ease)}
+.opts input:checked+span{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.opts input:focus-visible+span{outline:3px solid var(--focus);outline-offset:3px}
+@media (hover:hover){.opts input:not(:checked):hover+span{border-color:var(--ink)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-2);padding:var(--s-6)}
+.result{background:var(--asphalt);color:var(--on-asphalt);border-radius:var(--r-2);padding:var(--s-6);display:grid;gap:var(--s-4);position:sticky;top:var(--s-4)}
+.result h3{font-size:32px}
+.result p{color:var(--on-asphalt-2)}
+.result .btn{border-color:var(--on-asphalt);color:var(--on-asphalt);justify-self:start}
+.result .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.result ul{margin:0;padding:0;list-style:none;display:grid;gap:var(--s-2)}
+.result li{padding-left:var(--s-5);position:relative}
+.result li::before{content:"";position:absolute;left:0;top:.7em;width:12px;height:3px;background:var(--on-asphalt-2)}
+.result .swap{animation:swap 200ms var(--ease)}
+@keyframes swap{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+
+/* services */
+.services{display:grid;grid-template-columns:repeat(4,1fr);border-top:2px solid var(--ink)}
+.svc{padding:var(--s-5) var(--s-5) var(--s-5) 0;display:grid;gap:var(--s-2);align-content:start}
+.svc+.svc{padding-left:var(--s-5);border-left:1px solid var(--line)}
+.svc h3{font-size:24px}
+.svc p{color:var(--ink-2)}
+@media (max-width:900px){.services{grid-template-columns:1fr 1fr}.svc:nth-child(odd){padding-left:0;border-left:0}.svc:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (max-width:560px){.services{grid-template-columns:1fr}.svc{padding-left:0!important;border-left:0!important}.svc+.svc{border-top:1px solid var(--line)}}
+
+/* visit */
+.visit{background:var(--asphalt);color:var(--on-asphalt)}
+.visit .head p{color:var(--on-asphalt-2)}
+.visit-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-8)}
+@media (max-width:860px){.visit-grid{grid-template-columns:1fr;gap:var(--s-7)}}
+dl{margin:0 0 var(--s-6);display:grid;grid-template-columns:auto 1fr;gap:var(--s-2) var(--s-5)}
+dt{color:var(--on-asphalt-2)}dd{margin:0;font-variant-numeric:tabular-nums}
+.todo{background:oklch(0.85 0.12 90);color:var(--ink);padding:0 var(--s-1);border-radius:2px}
+form{display:grid;gap:var(--s-4)}
+.field{display:grid;gap:var(--s-1)}
+label.l{font-weight:600}
+input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;min-height:48px;padding:var(--s-3) var(--s-4);font:400 17px/1.4 var(--font);color:var(--ink);background:var(--surface);border:2px solid transparent;border-radius:var(--r-1)}
+textarea{min-height:96px;resize:vertical}
+input:disabled{opacity:.6}
+.err{color:oklch(0.85 0.12 30);min-height:1.4em;font-size:15px}
+input[aria-invalid=true]{border-color:oklch(0.7 0.19 30)}
+.ok{background:var(--surface);color:var(--ink);padding:var(--s-5);border-radius:var(--r-2)}
+.ok[hidden]{display:none}
+footer{padding-block:var(--s-6);font-size:15px;color:var(--ink-2)}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--s-3)}
+noscript p{padding:var(--s-4);background:var(--surface)}
+@media (prefers-reduced-motion:reduce){.bike,.result .swap{animation:none}*{transition-duration:0.01ms!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="top" style="padding-block:0 0;margin-bottom:var(--s-6)">
+      <a class="logo" href="#" aria-label="Tandem, home">Tandem</a>
+      <nav class="nav" aria-label="Main">
+        <a href="#choose">Find your bike</a>
+        <a href="#services">Services</a>
+        <a href="#visit">Visit</a>
+        <a class="btn" href="#book">Book a ride</a>
+      </nav>
+    </div>
+    <h1>Leave the car at home.</h1>
+    <p class="lead">Cargo bikes for kids, groceries and work, from a shop in Utrecht. Try one before you decide.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#book">Book a test ride</a>
+      <a class="btn" href="#choose">Which bike fits?</a>
+    </div>
+    <div class="road" aria-hidden="true">
+      <svg class="bike" viewBox="0 0 420 150" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="70" cy="105" r="34"/><circle cx="350" cy="105" r="34"/>
+        <path d="M70 105 L150 105 L190 55 L226 55 M150 105 L190 55 M190 55 L180 38 M168 38 H196"/>
+        <path d="M226 55 L350 105 M226 55 L226 70"/>
+        <path d="M98 40 H210 L200 100 H110 Z" fill="currentColor" fill-opacity=".18"/>
+        <path d="M240 60 L330 60 L350 105"/>
+      </svg>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section id="choose">
+  <div class="wrap">
+    <div class="head">
+      <h2>What are you carrying?</h2>
+      <p>Tell us your load and we'll point you to the type of bike to try first. Final choice happens on a test ride.</p>
+    </div>
+    <div class="chooser">
+      <div class="panel">
+        <fieldset>
+          <legend>Passengers</legend>
+          <div class="opts" role="radiogroup" aria-label="Passengers">
+            <label><input type="radio" name="kids" value="0" checked><span>None</span></label>
+            <label><input type="radio" name="kids" value="1"><span>1 child</span></label>
+            <label><input type="radio" name="kids" value="2"><span>2 children</span></label>
+            <label><input type="radio" name="kids" value="3"><span>3 or more</span></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Cargo</legend>
+          <div class="opts">
+            <label><input type="radio" name="cargo" value="light" checked><span>Groceries</span></label>
+            <label><input type="radio" name="cargo" value="dog"><span>A dog</span></label>
+            <label><input type="radio" name="cargo" value="heavy"><span>Tools or goods</span></label>
+          </div>
+        </fieldset>
+        <fieldset style="margin:0">
+          <legend>Your streets</legend>
+          <div class="opts">
+            <label><input type="radio" name="terrain" value="flat" checked><span>Mostly flat</span></label>
+            <label><input type="radio" name="terrain" value="hilly"><span>Hills or long trips</span></label>
+          </div>
+        </fieldset>
+      </div>
+      <div class="result" aria-live="polite" id="result"></div>
+    </div>
+  </div>
+</section>
+
+<section id="services" style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><h2>Everything after the sale, too</h2></div>
+    <div class="services">
+      <div class="svc"><h3>Test rides</h3><p>Ride the bike with your own kids or load, on Utrecht streets.</p></div>
+      <div class="svc"><h3>Sales</h3><p>New and second-hand cargo bikes, fitted to you.</p></div>
+      <div class="svc"><h3>Rental</h3><p>Try for a weekend or cover a busy month.</p></div>
+      <div class="svc"><h3>Repair</h3><p>Service and repairs for cargo bikes, bought here or not.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap visit-grid">
+    <div>
+      <div class="head"><h2>Come by the shop</h2><p>Walk in, or book a slot so a bike is ready for you.</p></div>
+      <dl>
+        <dt>Address</dt><dd><span class="todo">[Street and number], Utrecht</span></dd>
+        <dt>Open</dt><dd><span class="todo">[Opening hours]</span></dd>
+        <dt>Phone</dt><dd><span class="todo">[Phone number]</span></dd>
+        <dt>Email</dt><dd><span class="todo">[Email address]</span></dd>
+      </dl>
+    </div>
+    <div id="book">
+      <h3 style="font-size:32px;margin-bottom:var(--s-5)">Book a test ride</h3>
+      <form id="form" novalidate>
+        <div class="field"><label class="l" for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required><div class="err" id="e-name"></div></div>
+        <div class="field"><label class="l" for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required><div class="err" id="e-email"></div></div>
+        <div class="field"><label class="l" for="type">Bike type</label>
+          <select id="type" name="type"><option>Not sure yet</option><option>Front-loader (bakfiets)</option><option>Longtail</option><option>Three-wheeler</option><option>Electric cargo bike</option></select></div>
+        <div class="field"><label class="l" for="note">Anything we should know?</label><textarea id="note" name="note" placeholder="Number of children, ages, what you carry"></textarea></div>
+        <button class="btn btn-primary" type="submit">Send request</button>
+      </form>
+      <div class="ok" id="ok" hidden role="status"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>Tandem, Utrecht</span><span>&copy; <span id="yr">2026</span> Tandem</span></div></footer>
+
+<script>
+const SHOP_EMAIL = 'info@example.nl'; // TODO: replace with the shop's real address
+
+const BIKES = {
+  front: {name:'Front-loader (bakfiets)', type:'Front-loader (bakfiets)', why:['Box up front: kids sit where you can see and talk to them','Stable when parked, easy to load','Best for flat city riding']},
+  long: {name:'Longtail', type:'Longtail', why:['Long rear rack carries kids on seats or bags and crates','Narrower and easier to store, closer to a normal bike','Good when you also ride longer distances']},
+  trike: {name:'Three-wheeler', type:'Three-wheeler', why:['Stands upright on its own, even when loaded','Wide box for heavy or awkward loads','Suits work use and stop-start deliveries']},
+  ebox: {name:'Electric front-loader', type:'Electric cargo bike', why:['Motor assist keeps heavy loads and hills manageable','Box carries up to three children or a big load','Ask us about range on your usual route']}
+};
+
+function pick(kids, cargo, terrain){
+  if (cargo === 'heavy') return terrain === 'hilly' ? 'ebox' : 'trike';
+  if (terrain === 'hilly' || kids >= 3) return 'ebox';
+  if (kids === 0 && cargo === 'light') return 'long';
+  if (cargo === 'dog' || kids >= 2) return 'front';
+  return kids === 1 ? 'long' : 'front';
+}
+
+const result = document.getElementById('result');
+const typeSel = document.getElementById('type');
+function val(n){ return document.querySelector('input[name='+n+']:checked').value; }
+function render(){
+  const key = pick(+val('kids'), val('cargo'), val('terrain'));
+  const b = BIKES[key];
+  result.innerHTML = '<div class="swap" style="display:grid;gap:16px">' +
+    '<p>Try this first</p><h3>' + b.name + '</h3><ul>' + b.why.map(w => '<li>'+w+'</li>').join('') + '</ul>' +
+    '<a class="btn btn-primary" href="#book" data-type="' + b.type + '">Book a test ride</a></div>';
+  result.querySelector('[data-type]').addEventListener('click', e => { typeSel.value = e.currentTarget.dataset.type; });
+}
+document.querySelectorAll('.chooser input').forEach(i => i.addEventListener('change', render));
+render();
+
+const form = document.getElementById('form');
+const ok = document.getElementById('ok');
+function setErr(id, msg){
+  document.getElementById('e-'+id).textContent = msg;
+  document.getElementById(id).setAttribute('aria-invalid', msg ? 'true' : 'false');
+}
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const name = form.name.value.trim(), email = form.email.value.trim();
+  setErr('name', name ? '' : 'Enter your name so we know who to expect.');
+  setErr('email', /^\S+@\S+\.\S+$/.test(email) ? '' : 'Enter an email address like name@example.com.');
+  if (!name || !/^\S+@\S+\.\S+$/.test(email)) { form.querySelector('[aria-invalid=true]').focus(); return; }
+  const body = 'Name: '+name+'\nEmail: '+email+'\nBike type: '+form.type.value+'\n\n'+form.note.value;
+  location.href = 'mailto:'+SHOP_EMAIL+'?subject='+encodeURIComponent('Test ride request')+'&body='+encodeURIComponent(body);
+  ok.hidden = false;
+  ok.textContent = 'Your email app should open with the request ready to send. If it did not, write to us directly and mention your preferred bike.';
+});
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+{
+  "id": "tandem--frontend-design--1",
+  "desktop": {
+    "fullH": 2926,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 0,
+      "rules": []
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 5,
+      "cls": 0.003
+    },
+    "focus": {
+      "focusStops": 27,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 2828,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 5,
+      "cls": 0.003
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 3427,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 5,
+      "cls": 0.001
+    },
+    "focus": null
+  }
+}

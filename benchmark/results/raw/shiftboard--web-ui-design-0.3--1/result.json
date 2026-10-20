@@ -1,0 +1,12 @@
+{
+  "brief": "shiftboard",
+  "arm": "web-ui-design-0.3",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 30,
+  "delivered": true,
+  "client_rounds": 0,
+  "qa": [],
+  "is_error": false,
+  "num_turns": 5,
+  "total_cost_usd": 0.15751040000000002
+}

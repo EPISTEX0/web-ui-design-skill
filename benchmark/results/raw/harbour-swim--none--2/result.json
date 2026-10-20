@@ -1,0 +1,12 @@
+{
+  "brief": "harbour-swim",
+  "arm": "none",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 54,
+  "delivered": true,
+  "client_rounds": 0,
+  "qa": [],
+  "is_error": false,
+  "num_turns": 13,
+  "total_cost_usd": 0.22125409999999998
+}

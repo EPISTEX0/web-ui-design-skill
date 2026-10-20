@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Front desk · Kestrel Physio</title>
+<meta name="color-scheme" content="light">
+<style>
+:root {
+  /* neutrals: one cool slate hue, the colour of a kestrel's head feathers */
+  --bg: oklch(97.4% 0.005 235);
+  --surface: oklch(100% 0 0);
+  --sunk: oklch(95% 0.007 235);
+  --text: oklch(24% 0.025 245);
+  --text-2: oklch(40% 0.025 245);
+  --text-3: oklch(48% 0.022 245);
+  --border: oklch(90% 0.008 235);
+  --border-strong: oklch(78% 0.014 235);
+  --ring: oklch(24% 0.025 245 / 0.08);
+
+  /* accent: deep slate-teal, actions only */
+  --accent: oklch(45% 0.09 215);
+  --accent-hover: oklch(39% 0.09 215);
+  --accent-tint: oklch(94.5% 0.03 215);
+  --on-accent: oklch(99% 0 0);
+
+  /* status ramps: each is also paired with an icon and a word */
+  --wait-bg: oklch(95.5% 0.055 85);
+  --wait-line: oklch(76% 0.14 80);
+  --wait-text: oklch(38% 0.08 65);
+  --late-bg: oklch(95.5% 0.03 25);
+  --late-line: oklch(58% 0.19 27);
+  --late-text: oklch(45% 0.17 27);
+  --live-bg: oklch(94.5% 0.045 160);
+  --live-line: oklch(60% 0.12 160);
+  --live-text: oklch(36% 0.09 160);
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px; --s10: 40px;
+  --r-sm: 4px; --r-md: 8px; --r-lg: 12px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --hour: 92px;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 16px/1.5 var(--font); font-variant-numeric: tabular-nums;
+  overflow-x: clip; -webkit-tap-highlight-color: transparent;
+}
+button, input { font: inherit; color: inherit; touch-action: manipulation; }
+button { cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; letter-spacing: -0.01em; }
+p { text-wrap: pretty; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- header ---------- */
+.top {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3) var(--s6);
+  padding: var(--s3) var(--s6); padding-left: max(var(--s6), env(safe-area-inset-left)); padding-right: max(var(--s6), env(safe-area-inset-right));
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: var(--s2); font-weight: 650; font-size: 18px; letter-spacing: -0.015em; }
+.brand svg { color: var(--accent); }
+.brand small { font-weight: 400; color: var(--text-3); font-size: 14px; letter-spacing: 0; }
+.when { display: flex; align-items: baseline; gap: var(--s3); }
+.when .clock { font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
+.when .date { color: var(--text-2); }
+.sample { font-size: 12px; color: var(--text-2); background: var(--sunk); border-radius: 999px; padding: 2px var(--s3); }
+.search { margin-left: auto; position: relative; flex: 1 1 280px; max-width: 420px; }
+.search input {
+  width: 100%; height: 44px; padding: 0 var(--s10) 0 40px; border-radius: var(--r-md);
+  border: 1px solid var(--border-strong); background: var(--surface); font-size: 16px;
+}
+.search input::placeholder { color: var(--text-3); }
+.search svg { position: absolute; left: 12px; top: 13px; color: var(--text-3); pointer-events: none; }
+.search kbd {
+  position: absolute; right: 10px; top: 10px; font: 12px/1 var(--font); color: var(--text-3);
+  border: 1px solid var(--border-strong); border-radius: var(--r-sm); padding: 4px 6px; pointer-events: none;
+}
+
+/* ---------- key numbers ---------- */
+.stats {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right);
+}
+.stat { padding: var(--s3) var(--s6); border-left: 1px solid var(--border); }
+.stat:first-child { border-left: 0; }
+.stat dt { font-size: 14px; color: var(--text-2); }
+.stat dd { margin: 0; display: flex; align-items: baseline; gap: var(--s2); flex-wrap: wrap; }
+.stat b { font-size: 28px; line-height: 1.2; font-weight: 600; letter-spacing: -0.02em; }
+.stat span { font-size: 14px; color: var(--text-3); }
+.stat.hot b { color: var(--wait-text); }
+.stat.alert b { color: var(--late-text); }
+
+/* ---------- layout ---------- */
+.main {
+  display: grid; grid-template-columns: minmax(360px, 420px) minmax(0, 1fr); gap: var(--s4);
+  padding: var(--s4) var(--s6) var(--s6);
+  padding-left: max(var(--s6), env(safe-area-inset-left)); padding-right: max(var(--s6), env(safe-area-inset-right));
+  align-items: start;
+}
+.panel { background: var(--surface); border-radius: var(--r-lg); box-shadow: 0 0 0 1px var(--ring), 0 1px 2px oklch(24% 0.025 245 / 0.05); }
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding: var(--s4) var(--s4) var(--s3); flex-wrap: wrap; }
+.panel-head h2 { font-size: 20px; line-height: 1.3; }
+
+.chips { display: flex; gap: var(--s2); flex-wrap: wrap; }
+.chip {
+  min-height: 44px; padding: 0 var(--s4); border-radius: 999px; border: 1px solid var(--border-strong);
+  background: var(--surface); font-size: 15px; transition: background-color 120ms, border-color 120ms, transform 120ms var(--ease-out);
+}
+.chip[aria-pressed="true"] { background: var(--accent-tint); border-color: var(--accent); color: var(--accent-hover); font-weight: 600; }
+.chip:active { transform: scale(0.97); }
+@media (hover: hover) { .chip:hover { background: var(--sunk); } .chip[aria-pressed="true"]:hover { background: var(--accent-tint); } }
+
+/* ---------- queue ---------- */
+.queue { position: sticky; top: var(--s4); max-height: calc(100dvh - var(--s8)); overflow: auto; overscroll-behavior: contain; }
+.queue:focus { outline: none; }
+.group { padding: var(--s2) 0 var(--s3); }
+.group + .group { border-top: 1px solid var(--border); }
+.group h3 { font-size: 14px; font-weight: 600; color: var(--text-2); padding: var(--s3) var(--s4) var(--s1); display: flex; align-items: center; gap: var(--s2); }
+.group h3 .n { background: var(--sunk); border-radius: 999px; padding: 0 var(--s2); min-width: 24px; text-align: center; color: var(--text); }
+.group.waiting h3 .n { background: var(--wait-bg); color: var(--wait-text); }
+.group.late h3 .n { background: var(--late-bg); color: var(--late-text); }
+.empty { padding: var(--s2) var(--s4) var(--s3); color: var(--text-3); font-size: 15px; }
+
+.row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: var(--s2) var(--s3); padding: var(--s2) var(--s4); }
+.row + .row { border-top: 1px solid var(--border); }
+.who { text-align: left; background: none; border: 0; padding: var(--s1) 0; min-height: 44px; min-width: 0; display: block; border-radius: var(--r-sm); }
+.who .nm { display: block; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.who .meta { display: block; font-size: 14px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.flags { grid-column: 1 / -1; display: flex; gap: var(--s2); flex-wrap: wrap; margin-top: calc(var(--s1) * -1); }
+.flag { font-size: 13px; line-height: 20px; padding: 0 var(--s2); border-radius: var(--r-sm); background: var(--sunk); color: var(--text-2); display: inline-flex; align-items: center; gap: var(--s1); }
+.flag.warn { background: var(--wait-bg); color: var(--wait-text); }
+.flag.bad { background: var(--late-bg); color: var(--late-text); }
+.wait { font-weight: 600; color: var(--wait-text); }
+.late .wait { color: var(--late-text); }
+
+.btn {
+  min-height: 44px; padding: 0 var(--s4); border-radius: var(--r-md); border: 1px solid transparent; font-weight: 600; white-space: nowrap;
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  transition: background-color 120ms, transform 120ms var(--ease-out), border-color 120ms;
+}
+.btn:active { transform: scale(0.97); }
+.btn.tonal { background: var(--accent-tint); color: var(--accent-hover); }
+.btn.fill { background: var(--accent); color: var(--on-accent); }
+.btn.line { background: var(--surface); border-color: var(--border-strong); color: var(--text); }
+.btn.quiet { background: none; color: var(--late-text); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (hover: hover) {
+  .btn.tonal:hover { background: oklch(90% 0.045 215); }
+  .btn.fill:hover { background: var(--accent-hover); }
+  .btn.line:hover { background: var(--sunk); }
+  .btn.quiet:hover { background: var(--late-bg); }
+}
+.who:focus-visible { outline-offset: 0; }
+
+/* ---------- schedule ---------- */
+.sched-wrap { min-width: 0; }
+.sched { overflow: auto; max-height: calc(100dvh - 232px); min-height: 420px; border-top: 1px solid var(--border); position: relative; overscroll-behavior: contain; }
+.sched-grid { display: grid; grid-template-columns: 56px repeat(var(--cols), minmax(148px, 1fr)); min-width: min-content; position: relative; }
+.col-head {
+  position: sticky; top: 0; z-index: 4; background: var(--surface); padding: var(--s2) var(--s3);
+  border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); min-width: 0;
+}
+.col-head b { display: block; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.col-head span { font-size: 13px; color: var(--text-2); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.corner { position: sticky; top: 0; left: 0; z-index: 6; background: var(--surface); border-bottom: 1px solid var(--border); }
+.axis { position: sticky; left: 0; z-index: 3; background: var(--surface); height: calc(var(--hour) * 10); }
+.axis span { position: absolute; right: var(--s2); font-size: 12px; color: var(--text-3); transform: translateY(-50%); }
+.axis span:first-child { transform: none; }
+.lane {
+  position: relative; height: calc(var(--hour) * 10); border-left: 1px solid var(--border); min-width: 0;
+  background-image: repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px var(--hour));
+}
+.blk {
+  position: absolute; left: 3px; right: 3px; padding: 3px var(--s2); text-align: left; overflow: hidden; border-radius: var(--r-sm);
+  border: 1px solid var(--border-strong); background: var(--surface); border-left-width: 4px; line-height: 1.25;
+  transition: opacity 150ms, box-shadow 150ms; font-size: 14px;
+}
+.blk .l1 { display: flex; align-items: center; gap: var(--s1); font-weight: 600; min-width: 0; }
+.blk .l1 .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.blk .l1 svg { flex: none; }
+.blk .l2 { display: block; font-size: 12px; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.blk.short .l2 { display: none; }
+.blk.s-done { background: var(--sunk); border-color: var(--border); border-left-color: var(--border-strong); color: var(--text-2); }
+.blk.s-session { background: var(--live-bg); border-color: var(--live-line); color: var(--live-text); }
+.blk.s-session .l2 { color: var(--live-text); }
+.blk.s-arrived { background: var(--wait-bg); border-color: var(--wait-line); color: var(--wait-text); }
+.blk.s-arrived .l2 { color: var(--wait-text); }
+.blk.s-late { background: var(--late-bg); border-color: var(--late-line); color: var(--late-text); }
+.blk.s-late .l2 { color: var(--late-text); }
+.blk.s-noshow, .blk.s-cancelled { background: repeating-linear-gradient(135deg, var(--sunk) 0 6px, var(--surface) 6px 12px); color: var(--text-3); border-style: dashed; }
+.blk.s-noshow .t, .blk.s-cancelled .t { text-decoration: line-through; }
+.blk.dim { opacity: 0.28; }
+.blk.hit { box-shadow: 0 0 0 2px var(--accent); }
+@media (hover: hover) { .blk:hover { box-shadow: 0 0 0 2px var(--border-strong); } .blk.hit:hover { box-shadow: 0 0 0 2px var(--accent); } }
+.free {
+  position: absolute; left: 3px; right: 3px; border: 1px dashed var(--border-strong); border-radius: var(--r-sm);
+  font-size: 12px; color: var(--text-3); padding: 2px var(--s2); pointer-events: none; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.nowline { position: absolute; left: 56px; right: 0; height: 0; border-top: 2px solid var(--late-line); z-index: 2; pointer-events: none; }
+.nowtag {
+  position: absolute; left: 0; width: 56px; z-index: 5; text-align: center; font-size: 12px; font-weight: 600; line-height: 20px;
+  background: var(--late-line); color: oklch(100% 0 0); border-radius: 0 var(--r-sm) var(--r-sm) 0; transform: translateY(-50%);
+  pointer-events: none;
+}
+.legend { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s4); padding: var(--s3) var(--s4); border-top: 1px solid var(--border); font-size: 13px; color: var(--text-2); }
+.legend span { display: inline-flex; align-items: center; gap: var(--s1); }
+
+/* ---------- drawer ---------- */
+dialog { border: 0; padding: 0; background: var(--surface); color: var(--text); max-width: none; max-height: none; }
+dialog::backdrop { background: oklch(24% 0.025 245 / 0.4); }
+#drawer {
+  margin: 0 0 0 auto; height: 100dvh; width: min(440px, 100vw); border-radius: var(--r-lg) 0 0 var(--r-lg);
+  box-shadow: 0 0 0 1px var(--ring), -12px 0 40px oklch(24% 0.025 245 / 0.18);
+}
+#drawer[open] { animation: slide-in 260ms var(--ease-out); }
+@keyframes slide-in { from { transform: translateX(24px); opacity: 0; } }
+.dr { display: flex; flex-direction: column; height: 100%; }
+.dr-head { padding: var(--s5) var(--s5) var(--s3); display: flex; gap: var(--s3); justify-content: space-between; align-items: flex-start; }
+.dr-head h2 { font-size: 22px; line-height: 1.25; overflow-wrap: anywhere; }
+.dr-head p { color: var(--text-2); font-size: 15px; }
+.dr-body { padding: 0 var(--s5) var(--s4); overflow: auto; flex: 1; }
+.badge { display: inline-flex; align-items: center; gap: var(--s1); font-size: 14px; font-weight: 600; padding: 2px var(--s3); border-radius: 999px; background: var(--sunk); margin-bottom: var(--s2); }
+.badge.s-arrived { background: var(--wait-bg); color: var(--wait-text); }
+.badge.s-late { background: var(--late-bg); color: var(--late-text); }
+.badge.s-session { background: var(--live-bg); color: var(--live-text); }
+.facts { display: grid; grid-template-columns: 112px 1fr; gap: var(--s2) var(--s3); margin: var(--s4) 0; font-size: 15px; }
+.facts dt { color: var(--text-2); }
+.facts dd { margin: 0; overflow-wrap: anywhere; }
+.note { background: var(--sunk); border-radius: var(--r-md); padding: var(--s3) var(--s4); font-size: 15px; }
+.note b { display: block; font-size: 14px; margin-bottom: var(--s1); }
+.dr-foot { padding: var(--s4) var(--s5) calc(var(--s4) + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); display: grid; gap: var(--s2); }
+.dr-foot .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+.iconbtn { width: 44px; height: 44px; border-radius: var(--r-md); border: 0; background: none; flex: none; display: grid; place-items: center; }
+@media (hover: hover) { .iconbtn:hover { background: var(--sunk); } }
+
+/* ---------- toast ---------- */
+.toasts { position: fixed; left: var(--s4); bottom: var(--s4); z-index: 50; display: grid; gap: var(--s2); max-width: calc(100vw - 32px); padding-bottom: env(safe-area-inset-bottom); }
+.toast {
+  display: flex; align-items: center; gap: var(--s3); background: oklch(24% 0.025 245); color: oklch(98% 0 0);
+  border-radius: var(--r-md); padding: var(--s2) var(--s2) var(--s2) var(--s4); font-size: 15px; box-shadow: 0 8px 24px oklch(24% 0.025 245 / 0.3);
+  animation: toast-in 220ms var(--ease-out);
+}
+.toast.out { opacity: 0; transform: translateY(8px); transition: opacity 160ms, transform 160ms; }
+.toast button { min-height: 44px; padding: 0 var(--s4); border: 0; border-radius: var(--r-sm); background: oklch(98% 0 0 / 0.14); color: oklch(98% 0 0); font-weight: 600; }
+@keyframes toast-in { from { opacity: 0; transform: scale(0.95) translateY(8px); } }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px) {
+  .main { grid-template-columns: minmax(0, 1fr); }
+  .queue { position: static; max-height: none; }
+  .sched { max-height: 640px; }
+}
+@media (max-width: 600px) {
+  .top { padding: var(--s3) var(--s4); gap: var(--s3); }
+  .main { padding: var(--s3) var(--s3) var(--s6); }
+  .stat { padding: var(--s3) var(--s4); }
+  .stat:nth-child(odd) { border-left: 0; }
+  .search { flex-basis: 100%; max-width: none; }
+  .search kbd { display: none; }
+  .row { grid-template-columns: 1fr; }
+  .row .btn { width: 100%; }
+  #drawer { width: 100vw; border-radius: 0; }
+  .when .clock { font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #drawer[open], .toast { animation: none; }
+  .chip, .btn { transition: background-color 120ms; }
+  .chip:active, .btn:active { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-live" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.2" fill="currentColor"/><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5V8l2.4 1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 16 16"><path d="M8 2l6.5 11.5h-13z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 6.5v3M8 11.6v.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-dot" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="brand">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M2 9c5 0 8 2 12 7 4-5 7-7 12-7-2 5-5 8-9 9l-3 5-3-5C7 17 4 14 2 9z" fill="currentColor"/></svg>
+    <span>Kestrel Physio <small>Front desk</small></span>
+  </div>
+  <div class="when"><span class="clock" id="clock">10:12</span><span class="date">Tuesday 20 October</span></div>
+  <span class="sample">Sample data</span>
+  <div class="search">
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12.5 12.5L16 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    <label class="sr" for="q">Find a patient</label>
+    <input id="q" type="search" placeholder="Find a patient" autocomplete="off" enterkeyhint="search">
+    <kbd aria-hidden="true">/</kbd>
+  </div>
+</header>
+
+<dl class="stats" id="stats"></dl>
+
+<main class="main">
+  <section class="panel queue" id="queue" tabindex="-1" aria-labelledby="queue-h">
+    <div class="panel-head"><h2 id="queue-h">Needs you now</h2></div>
+    <div id="queue-body"></div>
+  </section>
+
+  <section class="panel sched-wrap" aria-labelledby="sched-h">
+    <div class="panel-head">
+      <h2 id="sched-h">Today’s schedule</h2>
+      <div class="chips" id="chips" role="group" aria-label="Show therapist"></div>
+    </div>
+    <div class="sched" id="sched" tabindex="0" role="region" aria-label="Appointments by therapist, scrolls"></div>
+    <div class="legend" aria-hidden="true">
+      <span><svg width="14" height="14"><use href="#i-dot"/></svg> Booked</span>
+      <span style="color:var(--wait-text)"><svg width="14" height="14"><use href="#i-clock"/></svg> Waiting</span>
+      <span style="color:var(--late-text)"><svg width="14" height="14"><use href="#i-alert"/></svg> Late</span>
+      <span style="color:var(--live-text)"><svg width="14" height="14"><use href="#i-live"/></svg> In session</span>
+      <span><svg width="14" height="14"><use href="#i-check"/></svg> Finished</span>
+      <span><svg width="14" height="14"><use href="#i-x"/></svg> No-show or cancelled</span>
+    </div>
+  </section>
+</main>
+
+<dialog id="drawer" aria-labelledby="dr-title"></dialog>
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const OPEN = 8 * 60, CLOSE = 18 * 60;
+  const HOUR = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hour'));
+
+  const THERAPISTS = [
+    { id: 'maya',    name: 'Maya Okafor',    role: 'Physiotherapist',        room: 'Room 1' },
+    { id: 'tom',     name: 'Tom Lindqvist',  role: 'Sports physiotherapist', room: 'Room 2' },
+    { id: 'priya',   name: 'Priya Raman',    role: 'Hand therapist',         room: 'Room 3' },
+    { id: 'callum',  name: 'Callum Reeves',  role: 'Rehab physiotherapist',  room: 'Gym' },
+  ];
+  const T = Object.fromEntries(THERAPISTS.map(t => [t.id, t]));
+  const m = (h, min = 0) => h * 60 + min;
+
+  // Sample day. status: done | session | arrived | booked | noshow | cancelled
+  let APPTS = [
+    // Maya
+    { th: 'maya', s: m(8), d: 30, name: 'Arthur Penhaligon', type: 'Follow-up', status: 'done', fund: 'Self-pay', phone: '07700 900141', bal: 0, notes: 'Lower back, week 5. Progressing well on hip hinge work.' },
+    { th: 'maya', s: m(8,45), d: 45, name: 'Grace Whitlock', type: 'Initial assessment', status: 'done', fund: 'Self-pay', phone: '07700 900142', bal: 75, notes: 'Right shoulder impingement after decorating.' },
+    { th: 'maya', s: m(9,45), d: 30, name: 'Daniel Osei', type: 'Follow-up', status: 'session', startedAt: m(9,46), fund: 'Self-pay', phone: '07700 900143', bal: 55, notes: 'Achilles tendinopathy, week 3.' },
+    { th: 'maya', s: m(10,15), d: 45, name: 'Nguyễn Thị Hồng Ngọc', type: 'Initial assessment', status: 'arrived', arrivedAt: m(10,4), fund: 'Bupa', phone: '07700 900144', bal: 0, forms: true, notes: 'First visit. Neck and shoulder pain from desk work. Bupa authorisation code BP-48213 on file.' },
+    { th: 'maya', s: m(11,15), d: 30, name: 'Margaret Ellison-Fitzgerald-Hargreaves', type: 'Follow-up', status: 'booked', fund: 'AXA Health', phone: '07700 900145', bal: 0, notes: 'Hip replacement rehab, week 8. Uses a stick; book the ground-floor room.' },
+    { th: 'maya', s: m(13,30), d: 45, name: 'Imran Qureshi', type: 'Rehab session', status: 'booked', fund: 'Self-pay', phone: '07700 900146', bal: 60, notes: '' },
+    { th: 'maya', s: m(14,30), d: 30, name: 'Sophie Marchetti', type: 'Follow-up', status: 'booked', fund: 'Vitality', phone: '07700 900147', bal: 0, notes: '' },
+    { th: 'maya', s: m(15,30), d: 60, name: 'Hannah Boateng', type: 'Initial assessment', status: 'booked', fund: 'Self-pay', phone: '07700 900148', bal: 75, forms: true, notes: 'Referred by GP for chronic knee pain.' },
+    { th: 'maya', s: m(16,45), d: 30, name: 'Lena Fischer', type: 'Follow-up', status: 'booked', fund: 'Self-pay', phone: '07700 900149', bal: 55, notes: '' },
+    // Tom
+    { th: 'tom', s: m(8,30), d: 45, name: 'Jack Thornbury', type: 'Rehab session', status: 'done', fund: 'Self-pay', phone: '07700 900151', bal: 0, notes: 'ACL reconstruction, week 14.' },
+    { th: 'tom', s: m(9,30), d: 45, name: 'Oliver Banerjee', type: 'Sports injury assessment', status: 'session', startedAt: m(9,32), fund: 'AXA Health', phone: '07700 900152', bal: 0, notes: 'Hamstring strain, club cricketer.' },
+    { th: 'tom', s: m(10,30), d: 30, name: 'Zoe Castellanos', type: 'Follow-up', status: 'booked', fund: 'Self-pay', phone: '07700 900153', bal: 55, notes: '' },
+    { th: 'tom', s: m(11,15), d: 45, name: 'Kwame Asante', type: 'Rehab session', status: 'booked', fund: 'Vitality', phone: '07700 900154', bal: 0, notes: '' },
+    { th: 'tom', s: m(13), d: 45, name: 'Rhys Llewellyn', type: 'Follow-up', status: 'booked', fund: 'Self-pay', phone: '07700 900155', bal: 55, notes: 'Missed last appointment. Confirm by text.' },
+    { th: 'tom', s: m(14), d: 30, name: 'Emma Doyle', type: 'Follow-up', status: 'cancelled', fund: 'Self-pay', phone: '07700 900156', bal: 0, notes: 'Cancelled yesterday by phone.' },
+    { th: 'tom', s: m(15), d: 45, name: 'Tariq Mahmood', type: 'Sports injury assessment', status: 'booked', fund: 'Self-pay', phone: '07700 900157', bal: 75, forms: true, notes: '' },
+    { th: 'tom', s: m(16), d: 45, name: 'Chloe Sutherland', type: 'Rehab session', status: 'booked', fund: 'Bupa', phone: '07700 900158', bal: 0, notes: '' },
+    // Priya
+    { th: 'priya', s: m(8), d: 60, name: 'Beatrice Nakamura', type: 'Hand therapy', status: 'done', fund: 'Self-pay', phone: '07700 900161', bal: 0, notes: 'Splint fitting, carpal tunnel.' },
+    { th: 'priya', s: m(9,15), d: 45, name: 'Samuel Adeyemi', type: 'Hand therapy', status: 'done', fund: 'AXA Health', phone: '07700 900162', bal: 25, notes: 'Policy excess £25 payable at desk.' },
+    { th: 'priya', s: m(10), d: 30, name: 'Frank Holloway', type: 'Follow-up', status: 'booked', fund: 'Self-pay', phone: '07700 900163', bal: 55, notes: 'Usually punctual. Worth a call.' },
+    { th: 'priya', s: m(10,30), d: 45, name: 'Alicia Romero', type: 'Hand therapy', status: 'booked', fund: 'Vitality', phone: '07700 900164', bal: 0, notes: '' },
+    { th: 'priya', s: m(12), d: 45, name: 'Peter Vandenberg', type: 'Follow-up', status: 'booked', fund: 'Self-pay', phone: '07700 900165', bal: 55, notes: '' },
+    { th: 'priya', s: m(13,30), d: 60, name: 'Ingrid Solberg', type: 'Initial assessment', status: 'booked', fund: 'Self-pay', phone: '07700 900166', bal: 75, forms: true, notes: '' },
+    { th: 'priya', s: m(15), d: 45, name: 'Mohammed Al-Rashid', type: 'Hand therapy', status: 'booked', fund: 'Bupa', phone: '07700 900167', bal: 0, notes: '' },
+    // Callum
+    { th: 'callum', s: m(8,15), d: 45, name: 'Nadia Petrova', type: 'Rehab session', status: 'done', fund: 'Self-pay', phone: '07700 900171', bal: 0, notes: '' },
+    { th: 'callum', s: m(9,30), d: 45, name: 'Liam O’Connell', type: 'Rehab session', status: 'session', startedAt: m(9,31), fund: 'Self-pay', phone: '07700 900172', bal: 60, notes: 'Rotator cuff, week 6.' },
+    { th: 'callum', s: m(10,15), d: 45, name: 'Fiona McAllister', type: 'Rehab session', status: 'arrived', arrivedAt: m(10,9), fund: 'Vitality', phone: '07700 900173', bal: 0, notes: 'Marathon training block, calf strain.' },
+    { th: 'callum', s: m(11), d: 30, name: 'Theo Papadakis', type: 'Follow-up', status: 'booked', fund: 'Self-pay', phone: '07700 900174', bal: 55, notes: '' },
+    { th: 'callum', s: m(11,45), d: 45, name: 'Ruth Abara', type: 'Rehab session', status: 'booked', fund: 'Self-pay', phone: '07700 900175', bal: 60, notes: '' },
+    { th: 'callum', s: m(13,15), d: 45, name: 'George Whitfield', type: 'Rehab session', status: 'booked', fund: 'AXA Health', phone: '07700 900176', bal: 0, notes: '' },
+    { th: 'callum', s: m(14,15), d: 45, name: 'Aisha Khan', type: 'Rehab session', status: 'booked', fund: 'Self-pay', phone: '07700 900177', bal: 60, notes: '' },
+    { th: 'callum', s: m(15,15), d: 45, name: 'Marcus Webb', type: 'Follow-up', status: 'booked', fund: 'Self-pay', phone: '07700 900178', bal: 55, notes: '' },
+    { th: 'callum', s: m(17), d: 30, name: 'Elena Kovač', type: 'Follow-up', status: 'booked', fund: 'Vitality', phone: '07700 900179', bal: 0, notes: '' },
+  ].map((a, i) => ({ id: i, ...a }));
+
+  // The sample clock starts at 10:12 and then runs in real time.
+  const t0 = performance.now(), START = m(10, 12);
+  const now = () => START + (performance.now() - t0) / 60000;
+  const fmt = min => { const x = Math.floor(min); return String(Math.floor(x / 60)).padStart(2, '0') + ':' + String(x % 60).padStart(2, '0'); };
+  const dur = min => { const x = Math.round(min); return x < 60 ? x + ' min' : Math.floor(x / 60) + 'h' + (x % 60 ? ' ' + (x % 60) : ''); };
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const gbp = n => '£' + n;
+
+  const st = a => (a.status === 'booked' && now() > a.s + 5) ? 'late' : a.status;
+  const LABEL = { done: 'Finished', session: 'In session', arrived: 'Waiting', late: 'Late', booked: 'Booked', noshow: 'No-show', cancelled: 'Cancelled' };
+  const ICON = { done: 'i-check', session: 'i-live', arrived: 'i-clock', late: 'i-alert', booked: 'i-dot', noshow: 'i-x', cancelled: 'i-x' };
+  const ic = (s, size = 14) => `<svg width="${size}" height="${size}" aria-hidden="true"><use href="#${ICON[s]}"/></svg>`;
+
+  // ---- state in the URL: ?t=maya
+  const params = new URLSearchParams(location.search);
+  let filter = T[params.get('t')] ? params.get('t') : 'all';
+  let query = '';
+  let openId = null;
+
+  const $ = id => document.getElementById(id);
+  const visible = () => APPTS.filter(a => filter === 'all' || a.th === filter);
+  const matches = a => !query || a.name.toLowerCase().includes(query);
+
+  // ---- rendering
+  function renderStats() {
+    const n = now(), all = APPTS;
+    const waiting = all.filter(a => a.status === 'arrived');
+    const longest = waiting.length ? Math.round(n - Math.min(...waiting.map(a => a.arrivedAt))) : 0;
+    const late = all.filter(a => st(a) === 'late').length;
+    const toCome = all.filter(a => a.status === 'booked').length;
+    const live = all.filter(a => a.status === 'session').length;
+    const owed = all.filter(a => ['done', 'session', 'arrived'].includes(a.status)).reduce((x, a) => x + a.bal, 0);
+    const owedN = all.filter(a => ['done', 'session', 'arrived'].includes(a.status) && a.bal > 0).length;
+    let gaps = 0;
+    THERAPISTS.forEach(t => freeGaps(t.id).forEach(() => gaps++));
+    $('stats').innerHTML = `
+      <div class="stat ${waiting.length ? 'hot' : ''}"><dt>In the waiting room</dt><dd><b>${waiting.length}</b><span>${waiting.length ? 'longest ' + longest + ' min' : 'nobody waiting'}</span></dd></div>
+      <div class="stat ${late ? 'alert' : ''}"><dt>Late, not arrived</dt><dd><b>${late}</b><span>${late ? 'check the list' : 'all on time'}</span></dd></div>
+      <div class="stat"><dt>Still to arrive</dt><dd><b>${toCome}</b><span>${live} in session</span></dd></div>
+      <div class="stat"><dt>To collect at desk</dt><dd><b>${gbp(owed)}</b><span>${owedN} ${owedN === 1 ? 'patient' : 'patients'}</span></dd></div>
+      <div class="stat"><dt>Open gaps, 30 min+</dt><dd><b>${gaps}</b><span>for walk-ins</span></dd></div>`;
+  }
+
+  function row(a) {
+    const s = st(a), n = now(), t = T[a.th];
+    let when, action;
+    if (s === 'arrived') {
+      when = `<span class="wait">Waiting ${Math.max(0, Math.round(n - a.arrivedAt))} min</span> · due ${fmt(a.s)}`;
+      action = `<button class="btn tonal" data-act="send" data-id="${a.id}">Send to ${esc(t.room)}</button>`;
+    } else if (s === 'late') {
+      when = `<span class="wait">${Math.round(n - a.s)} min late</span> · was ${fmt(a.s)}`;
+      action = `<button class="btn tonal" data-act="checkin" data-id="${a.id}">Check in</button>`;
+    } else {
+      const d = Math.round(a.s - n);
+      when = `${d <= 0 ? 'Due now' : 'In ' + d + ' min'} · ${fmt(a.s)}`;
+      action = `<button class="btn tonal" data-act="checkin" data-id="${a.id}">Check in</button>`;
+    }
+    const flags = [];
+    if (a.forms) flags.push('<span class="flag warn">Intake form not done</span>');
+    if (a.bal > 0 && s !== 'booked' && s !== 'late') flags.push(`<span class="flag">Collect ${gbp(a.bal)}</span>`);
+    if (a.type === 'Initial assessment') flags.push('<span class="flag">First visit</span>');
+    return `<div class="row ${s === 'late' ? 'late' : ''}">
+      <button class="who" data-open="${a.id}" title="${esc(a.name)}">
+        <span class="nm">${esc(a.name)}</span>
+        <span class="meta">${when}</span>
+        <span class="meta">${esc(t.name)} · ${esc(t.room)}</span>
+      </button>${action}
+      ${flags.length ? `<div class="flags">${flags.join('')}</div>` : ''}
+    </div>`;
+  }
+
+  function renderQueue() {
+    const n = now();
+    const list = visible().filter(matches);
+    const waiting = list.filter(a => a.status === 'arrived').sort((a, b) => a.arrivedAt - b.arrivedAt);
+    const late = list.filter(a => st(a) === 'late').sort((a, b) => a.s - b.s);
+    const soon = list.filter(a => a.status === 'booked' && st(a) !== 'late' && a.s - n <= 30).sort((a, b) => a.s - b.s);
+    const later = visible().filter(a => a.status === 'booked' && a.s - n > 30).length;
+    const empty = { w: 'Nobody is waiting. New arrivals show here once checked in.', l: 'Everyone due so far has arrived.', s: 'Nobody is due in the next 30 minutes.' };
+    const grp = (cls, title, items, e) => `<section class="group ${cls}" aria-label="${title}">
+      <h3>${title} <span class="n">${items.length}</span></h3>
+      ${items.length ? items.map(row).join('') : `<p class="empty">${query ? 'No match in this group.' : e}</p>`}</section>`;
+    let html = grp('waiting', 'Waiting room', waiting, empty.w) + grp('late', 'Late, not arrived', late, empty.l) + grp('soon', 'Arriving in the next 30 minutes', soon, empty.s);
+    html += `<p class="empty" style="padding-bottom:var(--s4)">${later} more booked later today. Find them in the schedule or search.</p>`;
+    if (query && !list.length) html = `<p class="empty" style="padding:var(--s4)">No patient called “${esc(query)}” today. Check the spelling or search a shorter name.</p>`;
+    $('queue-body').innerHTML = html;
+  }
+
+  function freeGaps(thId) {
+    const n = now(), from = Math.max(OPEN, Math.ceil(n / 15) * 15);
+    const busy = APPTS.filter(a => a.th === thId && a.status !== 'cancelled' && a.status !== 'noshow').sort((a, b) => a.s - b.s);
+    const gaps = []; let cur = from;
+    busy.forEach(a => { if (a.s + a.d <= cur) return; if (a.s - cur >= 30) gaps.push([cur, a.s]); cur = Math.max(cur, a.s + a.d); });
+    if (CLOSE - cur >= 30) gaps.push([cur, CLOSE]);
+    return gaps;
+  }
+
+  function renderSchedule(keepScroll) {
+    const el = $('sched'), prev = el.scrollTop, prevL = el.scrollLeft, H = HOUR(), n = now();
+    const cols = THERAPISTS.filter(t => filter === 'all' || t.id === filter);
+    const top = min => (min - OPEN) / 60 * H;
+    let axis = '';
+    for (let h = 8; h < 18; h++) axis += `<span style="top:${(h - 8) * H}px">${String(h).padStart(2, '0')}:00</span>`;
+    let html = `<div class="sched-grid" style="--cols:${cols.length}"><div class="corner"></div>`;
+    cols.forEach(t => { html += `<div class="col-head"><b>${esc(t.name)}</b><span>${esc(t.role)} · ${esc(t.room)}</span></div>`; });
+    html += `<div class="axis">${axis}</div>`;
+    cols.forEach(t => {
+      let lane = '';
+      freeGaps(t.id).forEach(([a, b]) => { lane += `<div class="free" style="top:${top(a) + 2}px;height:${(b - a) / 60 * H - 4}px">Free ${fmt(a)}–${fmt(b)}</div>`; });
+      APPTS.filter(a => a.th === t.id).forEach(a => {
+        const s = st(a), short = a.d < 45, hit = query && matches(a), dim = query && !matches(a);
+        const label = `${fmt(a.s)}, ${a.name}, ${a.type}, ${LABEL[s]}, ${t.name}`;
+        lane += `<button class="blk s-${s} ${short ? 'short' : ''} ${hit ? 'hit' : ''} ${dim ? 'dim' : ''}" style="top:${top(a.s) + 1}px;height:${a.d / 60 * H - 2}px" data-open="${a.id}" aria-label="${esc(label)}" title="${esc(a.name)} · ${esc(a.type)} · ${LABEL[s]}">
+          <span class="l1">${ic(s, 13)}<span class="t">${esc(a.name)}</span></span>
+          <span class="l2">${fmt(a.s)} · ${esc(a.type)}</span></button>`;
+      });
+      html += `<div class="lane">${lane}</div>`;
+    });
+    // now line, spanning every lane
+    const ny = top(n);
+    html += `<div class="nowline"></div><div class="nowtag">${fmt(n)}</div></div>`;
+    el.innerHTML = html;
+    const head = el.querySelector('.col-head').offsetHeight;
+    el.querySelectorAll('.nowline, .nowtag').forEach(x => { x.style.top = (head + ny) + 'px'; });
+    if (keepScroll) { el.scrollTop = prev; el.scrollLeft = prevL; }
+  }
+
+  function renderChips() {
+    $('chips').innerHTML = [{ id: 'all', name: 'Everyone' }, ...THERAPISTS.map(t => ({ id: t.id, name: t.name.split(' ')[0] }))]
+      .map(c => `<button class="chip" data-filter="${c.id}" aria-pressed="${filter === c.id}">${esc(c.name)}</button>`).join('');
+  }
+
+  function renderDrawer() {
+    const d = $('drawer'), a = APPTS.find(x => x.id === openId);
+    if (!a) return;
+    const s = st(a), t = T[a.th], n = now();
+    let primary = '';
+    if (s === 'booked' || s === 'late') primary = `<button class="btn fill" data-act="checkin" data-id="${a.id}">Check in ${esc(a.name.split(' ')[0])}</button>`;
+    else if (s === 'arrived') primary = `<button class="btn fill" data-act="send" data-id="${a.id}">Send to ${esc(t.room)}</button>`;
+    else if (s === 'session') primary = `<button class="btn fill" data-act="finish" data-id="${a.id}">Mark session finished</button>`;
+    else if (s === 'done' && a.bal > 0) primary = `<button class="btn fill" data-act="pay" data-id="${a.id}">Take payment ${gbp(a.bal)}</button>`;
+    const second = [];
+    if (a.bal > 0 && !(s === 'done')) second.push(`<button class="btn line" data-act="pay" data-id="${a.id}">Take payment ${gbp(a.bal)}</button>`);
+    if (s === 'booked' || s === 'late') second.push(`<button class="btn quiet" data-act="noshow" data-id="${a.id}">Mark as no-show</button>`);
+    const timing = s === 'arrived' ? `Waiting ${Math.max(0, Math.round(n - a.arrivedAt))} min since ${fmt(a.arrivedAt)}`
+      : s === 'late' ? `${Math.round(n - a.s)} min late` : s === 'session' ? `Started ${fmt(a.startedAt)}` : '';
+    d.innerHTML = `<div class="dr">
+      <div class="dr-head"><div>
+        <span class="badge s-${s}">${ic(s)} ${LABEL[s]}</span>
+        <h2 id="dr-title">${esc(a.name)}</h2>
+        <p>${fmt(a.s)}–${fmt(a.s + a.d)} · ${esc(a.type)}${timing ? ' · ' + timing : ''}</p>
+      </div><button class="iconbtn" data-close aria-label="Close patient details"><svg width="20" height="20" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+      <div class="dr-body">
+        <dl class="facts">
+          <dt>Therapist</dt><dd>${esc(t.name)}, ${esc(t.room)}</dd>
+          <dt>Cover</dt><dd>${esc(a.fund)}</dd>
+          <dt>Phone</dt><dd><a href="tel:${esc(a.phone.replace(/\s/g, ''))}">${esc(a.phone)}</a></dd>
+          <dt>Intake form</dt><dd>${a.forms ? '<span class="flag warn">Not completed. Offer the tablet.</span>' : 'Complete'}</dd>
+          <dt>Desk payment</dt><dd>${a.bal > 0 ? gbp(a.bal) + ' due' : (a.fund === 'Self-pay' ? 'Paid' : 'Nothing to pay')}</dd>
+        </dl>
+        ${a.notes ? `<div class="note"><b>Front desk note</b>${esc(a.notes)}</div>` : ''}
+      </div>
+      <div class="dr-foot">${primary}${second.length ? `<div class="row2">${second.join('')}</div>` : ''}</div>
+    </div>`;
+  }
+
+  function renderAll(keepScroll = true) {
+    renderStats(); renderQueue(); renderSchedule(keepScroll); renderChips();
+    if (openId !== null && $('drawer').open) renderDrawer();
+  }
+
+  // ---- actions with undo
+  function toast(msg, undo) {
+    const t = document.createElement('div'); t.className = 'toast';
+    t.innerHTML = `<span>${esc(msg)}</span>` + (undo ? '<button>Undo</button>' : '');
+    const kill = () => { t.classList.add('out'); setTimeout(() => t.remove(), 180); };
+    if (undo) t.querySelector('button').onclick = () => { undo(); kill(); };
+    $('toasts').appendChild(t);
+    setTimeout(kill, 7000);
+  }
+
+  function act(kind, id) {
+    const a = APPTS.find(x => x.id === id); if (!a) return;
+    const before = { ...a }, t = T[a.th], first = a.name.split(' ')[0], n = now();
+    let msg;
+    if (kind === 'checkin') { a.status = 'arrived'; a.arrivedAt = n; msg = `${first} checked in. ${t.name.split(' ')[0]} can see them in the waiting room.`; }
+    else if (kind === 'send') { a.status = 'session'; a.startedAt = n; msg = `${first} sent through to ${t.room}.`; }
+    else if (kind === 'finish') { a.status = 'done'; msg = `${first}’s session marked finished.`; }
+    else if (kind === 'noshow') { a.status = 'noshow'; msg = `${first} marked as a no-show.`; }
+    else if (kind === 'pay') { a.bal = 0; msg = `Payment of ${gbp(before.bal)} recorded for ${first}.`; }
+    renderAll();
+    toast(msg, () => { Object.keys(a).forEach(k => delete a[k]); Object.assign(a, before); renderAll(); });
+    if (openId === id && $('drawer').open) { if (kind === 'noshow' || kind === 'pay' || kind === 'finish') $('drawer').close(); else renderDrawer(); }
+    if (!$('drawer').open) $('queue').focus({ preventScroll: true });
+  }
+
+  // ---- events
+  document.addEventListener('click', e => {
+    const o = e.target.closest('[data-open]');
+    const b = e.target.closest('[data-act]');
+    const f = e.target.closest('[data-filter]');
+    if (b) { act(b.dataset.act, +b.dataset.id); return; }
+    if (f) {
+      filter = f.dataset.filter;
+      const u = new URL(location); filter === 'all' ? u.searchParams.delete('t') : u.searchParams.set('t', filter);
+      history.replaceState(null, '', u); renderAll(false); return;
+    }
+    if (o) { openId = +o.dataset.open; renderDrawer(); $('drawer').showModal(); return; }
+    if (e.target.closest('[data-close]') || e.target === $('drawer')) $('drawer').close();
+  });
+  $('q').addEventListener('input', e => { query = e.target.value.trim().toLowerCase(); renderQueue(); renderSchedule(true); });
+  $('q').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && query) { const hit = visible().find(matches); if (hit) { openId = hit.id; renderDrawer(); $('drawer').showModal(); } }
+    if (e.key === 'Escape') { e.target.value = ''; query = ''; renderQueue(); renderSchedule(true); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && !/input|textarea/i.test(document.activeElement.tagName) && !$('drawer').open) { e.preventDefault(); $('q').focus(); }
+  });
+
+  function tick() { $('clock').textContent = fmt(now()); renderAll(); }
+  renderAll(false);
+  $('clock').textContent = fmt(now());
+  const sc = $('sched');
+  sc.scrollTop = Math.max(0, (now() - OPEN) / 60 * HOUR() - 140);
+  setInterval(tick, 15000);
+})();
+</script>
+</body>
+</html>

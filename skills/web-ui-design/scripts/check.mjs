@@ -1,13 +1,18 @@
 #!/usr/bin/env node
-// Renders a page at several widths in headless Chrome, audits layout, contrast and fonts, saves full-page JPEG tiles.
+// Renders a page at several widths in headless Chrome, audits layout, contrast, fonts, tap targets and wide tables, saves full-page JPEG tiles.
+// Extra checks: tap targets (WCAG 2.5.8 24px FAIL, 44px height WARN under 600px wide) and sideways-scrolling tables run at every width.
+// Keyboard focus (up to 40 Tab presses, FAIL when a focused element shows no visible change) runs at the widest width.
+// Performance (LCP, CLS, bytes by type, WARN over budget) runs on a cache-free load at the narrowest width.
+// Exit codes: 0 no FAIL, 1 any FAIL, 2 setup error. --dark repeats layout checks in dark mode but not focus or performance.
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const USAGE = 'Usage: node check.mjs <file-path-or-url> [--widths 390,768,1440] [--out <dir>] [--dark]';
 const TILE = 1600;
+const MAX_TABS = 40;
 const MAX_H = 9600;
 
 class SetupError extends Error {}
@@ -31,9 +36,30 @@ async function settle() {
 	await sleep(400);
 }
 
-// In-page: returns { vw, pageH, pageOverflow, offenders, clipped, scrollers, contrast, unknown, fonts }.
-// offenders {sel,right}; clipped/scrollers {sel,content,box}; contrast {sel,text,fg,bg,ratio,need}; unknown {sel,text}; fonts [name].
-function audit() {
+// In-page, also passed to the other in-page functions: names an element for output. label is a readable path, pat is the pattern shared by repeats.
+function selectorTools() {
+	const LANDMARK = new Set(['HEADER', 'NAV', 'MAIN', 'ASIDE', 'FOOTER', 'SECTION']);
+	const classes = el => (el.getAttribute('class') || '').split(/\s+/).filter(Boolean).slice(0, 2).map(c => '.' + c).join('');
+	const nameOf = el => {
+		const cls = classes(el);
+		const tag = el.localName === 'div' && (el.id || cls) ? '' : el.localName;
+		return tag + (el.id ? '#' + el.id : cls);
+	};
+	const label = el => {
+		for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+			if (p.id || LANDMARK.has(p.tagName)) return nameOf(p) + ' ' + nameOf(el);
+		}
+		return nameOf(el);
+	};
+	const role = el => el.getAttribute('role');
+	const pat = el => el.localName + (el.localName === 'input' ? `[type=${el.type}]` : role(el) ? `[role=${role(el)}]` : '') + classes(el);
+	return { nameOf, label, pat };
+}
+
+// In-page: returns { vw, pageH, pageOverflow, offenders, clipped, scrollers, contrast, unknown, taps, tables, fonts }.
+// offenders {sel,right}; clipped/scrollers {sel,content,box}; contrast {sel,text,fg,bg,ratio,need}; unknown {sel,text};
+// taps {sel,pat,text,w,h,fail}; tables {sel,content,box,sticky} (phone widths only); fonts [name].
+function audit(selectorTools) {
 	const vw = innerWidth;
 	const root = document.documentElement;
 	const styles = new Map();
@@ -44,18 +70,7 @@ function audit() {
 		const r = rect(el), s = cs(el);
 		return r.width > 0 && r.height > 0 && s.display !== 'none' && s.visibility !== 'hidden' && s.opacity !== '0';
 	};
-	const LANDMARK = new Set(['HEADER', 'NAV', 'MAIN', 'ASIDE', 'FOOTER', 'SECTION']);
-	const nameOf = el => {
-		const cls = (el.getAttribute('class') || '').split(/\s+/).filter(Boolean).slice(0, 2).map(c => '.' + c).join('');
-		const tag = el.localName === 'div' && (el.id || cls) ? '' : el.localName;
-		return tag + (el.id ? '#' + el.id : cls);
-	};
-	const label = el => {
-		for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
-			if (p.id || LANDMARK.has(p.tagName)) return nameOf(p) + ' ' + nameOf(el);
-		}
-		return nameOf(el);
-	};
+	const { nameOf, label, pat } = selectorTools();
 	const directText = el => [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.nodeValue).join(' ').replace(/\s+/g, ' ').trim();
 
 	const canvas = Object.assign(document.createElement('canvas'), { width: 1, height: 1 });
@@ -146,7 +161,7 @@ function audit() {
 	const SYSTEM = /^(helvetica( neue)?|arial|georgia|times( new roman)?|segoe[\w ]*|sf pro[\w ]*|san francisco|menlo|monaco|consolas|courier( new)?|verdana|tahoma|trebuchet ms|palatino[\w ]*|cambria|calibri|avenir[\w ]*|optima|gill sans|baskerville|didot|futura|lucida[\w ]*|impact|ubuntu|cantarell|noto[\w ]*|droid[\w ]*)$/i;
 	const clean = f => f.trim().replace(/^["']|["']$/g, '');
 
-	const res = { vw, viewportMeta: !!document.querySelector('meta[name=viewport]'), pageH: root.scrollHeight, pageOverflow: root.scrollWidth - vw, offenders: [], clipped: [], scrollers: [], contrast: [], unknown: [], fonts: [] };
+	const res = { vw, viewportMeta: !!document.querySelector('meta[name=viewport]'), pageH: root.scrollHeight, pageOverflow: root.scrollWidth - vw, offenders: [], clipped: [], scrollers: [], contrast: [], unknown: [], taps: [], tables: [], fonts: [] };
 	const families = new Set();
 	for (const el of document.body.querySelectorAll('*')) {
 		if (!visible(el)) continue;
@@ -172,6 +187,63 @@ function audit() {
 		if (m.ratio < need) res.contrast.push({ sel, text: shown, fg: m.fg, bg: m.bg, ratio: Math.floor(m.ratio * 10) / 10, need });
 	}
 
+	const NATIVE = 'a[href],button,input:not([type=hidden]),select,textarea,summary,[role=button],[role=link]';
+	const proseCache = new Map();
+	// Letters and digits in a block outside its own links and buttons. A link inside real sentence text is exempt from the 24px minimum.
+	const prose = block => {
+		if (!proseCache.has(block)) {
+			let n = 0;
+			const walk = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+			for (let t; (t = walk.nextNode());) {
+				const c = t.parentElement?.closest('a,button,script,style,noscript');
+				if (!c || !block.contains(c)) n += (t.nodeValue.match(/[\p{L}\p{N}]/gu) ?? []).length;
+			}
+			proseCache.set(block, n);
+		}
+		return proseCache.get(block);
+	};
+	const inlineLink = el => {
+		if (el.localName !== 'a' || cs(el).display !== 'inline') return false;
+		let block = el.parentElement;
+		while (block && cs(block).display === 'inline') block = block.parentElement;
+		return !!block && prose(block) >= 3;
+	};
+	const clippedAway = el => {
+		for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+			if ((cs(p).overflowX !== 'visible' || cs(p).overflowY !== 'visible') && tiny(rect(p))) return true;
+		}
+		return false;
+	};
+	for (const el of document.body.querySelectorAll(`${NATIVE},[tabindex]`)) {
+		if (el.matches(':disabled') || el.closest('[inert]')) continue;
+		if (!el.matches(NATIVE) && el.tabIndex < 0) continue;
+		if (!visible(el) || !el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) || clippedAway(el)) continue;
+		let r = rect(el);
+		// a native checkbox or radio is clicked through its label
+		if (el.matches('input[type=checkbox],input[type=radio]')) for (const l of el.labels) { const m = rect(l); if (m.width * m.height > r.width * r.height) r = m; }
+		if (tiny(r) || r.right <= 0 || r.bottom <= 0 || inlineLink(el)) continue;
+		const [w, h] = [Math.round(r.width), Math.round(r.height)];
+		const fail = w < 24 || h < 24;
+		if (!fail && !(vw < 600 && h < 44)) continue;
+		const text = (el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+		res.taps.push({ sel: label(el), pat: pat(el), text, w, h, fail });
+	}
+
+	if (vw < 600) {
+		const FIRST = 'tr > :first-child,[role=row] > :first-child';
+		for (const t of document.body.querySelectorAll('table,[role=table],[role=grid]')) {
+			if (!visible(t)) continue;
+			const own = cs(t).display !== 'table' && /auto|scroll|hidden|clip/.test(cs(t).overflowX);
+			let box = own ? t : t.parentElement;
+			while (box && box !== root && box !== document.body && !/auto|scroll|hidden|clip/.test(cs(box).overflowX)) box = box.parentElement;
+			const boxW = box && box !== root && box !== document.body ? box.clientWidth : vw;
+			const content = Math.max(rect(t).width, t.scrollWidth);
+			if (content <= boxW + 1) continue;
+			const firsts = [...t.querySelectorAll(FIRST)].filter(c => c.closest('table,[role=table],[role=grid]') === t).slice(0, 8);
+			res.tables.push({ sel: label(t), content: Math.round(content), box: boxW, sticky: firsts.length > 0 && firsts.every(c => cs(c).position === 'sticky') });
+		}
+	}
+
 	const declared = new Set(), errored = new Set();
 	document.fonts.forEach(f => {
 		declared.add(clean(f.family));
@@ -186,6 +258,74 @@ function audit() {
 	}
 	res.fonts = [...errored];
 	return res;
+}
+
+// In-page: returns { start, step, done } for the Tab walk. Only changes that paint count: an outline, border or underline that is off in both states cannot differ visibly.
+function focusKit(selectorTools) {
+	const { label, pat } = selectorTools();
+	const CHAIN = 3;
+	const stops = [];
+	const snapshot = el => {
+		const s = getComputedStyle(el);
+		const out = [s.backgroundColor, s.boxShadow];
+		out.push(s.outlineStyle === 'none' || parseFloat(s.outlineWidth) === 0 ? 'no outline' : [s.outlineStyle, s.outlineWidth, s.outlineColor].join(' '));
+		for (const side of ['Top', 'Right', 'Bottom', 'Left']) out.push(s[`border${side}Style`] === 'none' || parseFloat(s[`border${side}Width`]) === 0 ? 'no border' : s[`border${side}Color`]);
+		out.push(s.textDecorationLine === 'none' ? 'no underline' : [s.textDecorationLine, s.textDecorationStyle, s.textDecorationColor].join(' '));
+		return out;
+	};
+	// Before the first Tab: stop transitions from skewing the focused-versus-blurred comparison and start from the top.
+	const start = () => {
+		document.head.append(Object.assign(document.createElement('style'), { textContent: '*,*::before,*::after{transition:none!important}' }));
+		document.activeElement?.blur();
+		scrollTo({ top: 0, behavior: 'instant' });
+	};
+	// After each Tab: records the focused element, whether it can be seen, and its styles, and those of its nearest ancestors for :focus-within rings.
+	const step = () => {
+		const el = document.activeElement;
+		if (!el || el === document.body || el === document.documentElement) return { end: 'focus left the page' };
+		if (stops.some(s => s.el === el)) return { end: 'focus wrapped around' };
+		const chain = [el];
+		for (let p = el.parentElement; p && p !== document.body && chain.length <= CHAIN; p = p.parentElement) chain.push(p);
+		const r = el.getBoundingClientRect();
+		const x = r.left + scrollX, y = r.top + scrollY;
+		let hidden = null;
+		if (r.width <= 1 || r.height <= 1) hidden = 'zero size';
+		else if (!el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true })) hidden = 'display, visibility or opacity hides it';
+		else if (x + r.width <= 0 || y + r.height <= 0 || x >= document.documentElement.scrollWidth) hidden = 'off-screen';
+		stops.push({ el, chain, hidden, focused: chain.map(snapshot) });
+		return { n: stops.length };
+	};
+	// After the last Tab: blurs, then reports each stop as visible or not and whether anything about it changed.
+	const done = () => {
+		document.activeElement?.blur();
+		return stops.map(({ el, chain, hidden, focused }) => {
+			const blurred = chain.map(snapshot);
+			const changed = chain.some((_, i) => focused[i].some((v, j) => v !== blurred[i][j]));
+			const text = (el.getAttribute('aria-label') || el.innerText || el.value || el.title || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+			return { sel: label(el), pat: pat(el), text, hidden, changed };
+		});
+	};
+	return { start, step, done };
+}
+
+// In-page: LCP and CLS, read after the page has settled. Resolves after the buffered observers have delivered.
+async function perfProbe() {
+	const collect = type => new Promise(res => {
+		const got = [];
+		new PerformanceObserver(list => got.push(...list.getEntries())).observe({ type, buffered: true });
+		setTimeout(() => res(got), 120);
+	});
+	const [lcp, shifts] = await Promise.all([collect('largest-contentful-paint'), collect('layout-shift')]);
+	// CLS is the worst session window: shifts less than 1s apart, a window at most 5s long
+	let cls = 0, win = 0, first = 0, prev = 0;
+	for (const e of shifts) {
+		if (e.hadRecentInput) continue;
+		if (win && e.startTime - prev < 1000 && e.startTime - first < 5000) win += e.value;
+		else { win = e.value; first = e.startTime; }
+		prev = e.startTime;
+		cls = Math.max(cls, win);
+	}
+	return { lcp: lcp.length ? Math.round(lcp.at(-1).startTime) : null, cls };
 }
 
 function parseArgs(argv) {
@@ -303,18 +443,92 @@ function sink() {
 	return { add, lines, count };
 }
 
-async function runWidth(cdp, o, width, dark, errors) {
+async function evalValue(cdp, expression) {
+	const ev = await cdp.send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true });
+	if (ev.exceptionDetails) throw new Error(`Audit failed: ${ev.exceptionDetails.exception?.description ?? ev.exceptionDetails.text}`);
+	return ev.result.value;
+}
+
+const kb = b => `${(b / 1024).toFixed(b < 10240 ? 1 : 0)} KB`;
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+// Presses Tab up to MAX_TABS times and judges every stop.
+async function checkFocus(cdp, rows) {
+	await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: true });
+	await evalValue(cdp, `window.__focus = (${focusKit})(${selectorTools}); window.__focus.start()`);
+	let stops = 0, end = `stopped at the ${MAX_TABS} Tab limit`;
+	for (let i = 0; i < MAX_TABS; i++) {
+		for (const type of ['keyDown', 'keyUp']) await cdp.send('Input.dispatchKeyEvent', { type, key: 'Tab', code: 'Tab', windowsVirtualKeyCode: 9, nativeVirtualKeyCode: 9 });
+		const r = await evalValue(cdp, 'window.__focus.step()');
+		if (r.end) { end = r.end; break; }
+		stops = r.n;
+	}
+	for (const x of await evalValue(cdp, 'window.__focus.done()')) {
+		if (x.hidden) rows.add('WARN', 'focus', x.pat + x.hidden, `${x.pat}  Tab lands on an element you cannot see (${x.hidden}), e.g. ${x.sel} "${x.text}"`);
+		else if (!x.changed) rows.add('FAIL', 'focus', x.pat, `${x.pat}  no visible focus indicator, e.g. ${x.sel} "${x.text}"`);
+	}
+	rows.add('NOTE', 'focus', 'stops', `Tab reached ${plural(stops, 'stop')} (${end})`);
+}
+
+const NET_KINDS = { Script: 'script', Stylesheet: 'stylesheet', Font: 'font', Image: 'image' };
+
+// Resource Timing is empty for file:// subresources, so sizes come from the Network domain. Its byte count
+// is unreliable for file://, so a local file is measured on disk. Cache is off so the load is a fresh one.
+async function watchNetwork(cdp) {
+	const seen = new Map();
+	const offs = [
+		cdp.on('Network.responseReceived', p => { if (!p.response.url.startsWith('data:')) seen.set(p.requestId, { name: p.response.url, type: p.type, bytes: 0 }); }),
+		cdp.on('Network.loadingFinished', p => { if (seen.has(p.requestId)) seen.get(p.requestId).bytes = p.encodedDataLength; }),
+	];
+	await cdp.send('Network.enable');
+	await cdp.send('Network.setCacheDisabled', { cacheDisabled: true });
+	return async () => {
+		for (const off of offs) off();
+		await cdp.send('Network.setCacheDisabled', { cacheDisabled: false });
+		await cdp.send('Network.disable');
+		return [...seen.values()].map(e => {
+			if (e.name.startsWith('file:')) { try { e.bytes = fs.statSync(fileURLToPath(e.name)).size; } catch { /* missing file */ } }
+			return e;
+		});
+	};
+}
+
+function perfRows(rows, p) {
+	const kinds = { script: [], stylesheet: [], font: [], image: [] };
+	const unknown = p.files.filter(e => NET_KINDS[e.type] && !e.bytes);
+	for (const e of p.files) if (NET_KINDS[e.type]) kinds[NET_KINDS[e.type]].push({ name: e.name.split(/[?#]/)[0], bytes: e.bytes });
+	const sum = list => list.reduce((n, x) => n + x.bytes, 0);
+	const doc = p.files.find(e => e.type === 'Document')?.bytes ?? 0;
+	const big = kinds.image.reduce((m, x) => Math.max(m, x.bytes), 0);
+	const parts = [
+		p.lcp === null ? 'LCP none' : `LCP ${p.lcp} ms`,
+		`CLS ${p.cls.toFixed(3)}`,
+		`JS ${kb(sum(kinds.script))} (${plural(kinds.script.length, 'file')})`,
+		`CSS ${kb(sum(kinds.stylesheet))} (${plural(kinds.stylesheet.length, 'file')})`,
+		`fonts ${kb(sum(kinds.font))} (${plural(kinds.font.length, 'file')})`,
+		`images ${kb(sum(kinds.image))} (${plural(kinds.image.length, 'file')}${big ? `, largest ${kb(big)}` : ''})`,
+		`document ${kb(doc)}`,
+	];
+	rows.add('NOTE', 'perf', 'numbers', parts.join(', ') + (unknown.length ? `; ${plural(unknown.length, 'file')} of unknown size` : ''));
+	if (p.cls > 0.1) rows.add('WARN', 'perf', 'cls', `CLS ${p.cls.toFixed(3)}, over 0.1; give images and embeds a width and height, and keep late content from pushing text down`);
+	if (p.lcp > 2500) rows.add('WARN', 'perf', 'lcp', `LCP ${p.lcp} ms, over 2500 ms; shrink or preload the largest image or text block`);
+	if (sum(kinds.script) > 300 * 1024) rows.add('WARN', 'perf', 'js', `JS ${kb(sum(kinds.script))}, over 300 KB`);
+	if (kinds.font.length > 4 || sum(kinds.font) > 250 * 1024) rows.add('WARN', 'perf', 'fonts', `${plural(kinds.font.length, 'font file')} totalling ${kb(sum(kinds.font))}, over 4 files or 250 KB; subset them or drop weights`);
+	for (const x of kinds.image) if (x.bytes > 500 * 1024) rows.add('WARN', 'perf', x.name, `image ${path.basename(x.name)} ${kb(x.bytes)}, over 500 KB`);
+}
+
+async function runWidth(cdp, o, width, dark, errors, { perf, focus }) {
 	// mobile:true would stretch the layout viewport to fit overflowing content, hiding the very overflow we look for
 	await cdp.send('Emulation.setDeviceMetricsOverride', { width, height: width < 600 ? 844 : 900, deviceScaleFactor: 1, mobile: false });
 	await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-color-scheme', value: dark ? 'dark' : 'light' }] });
 	errors.length = 0;
+	const stopNet = perf ? await watchNetwork(cdp) : null;
 	const loaded = cdp.once('Page.loadEventFired');
 	const nav = await cdp.send('Page.navigate', { url: o.url });
 	if (nav.errorText) throw new SetupError(`Could not load ${o.url}: ${nav.errorText}`);
 	await loaded;
-	const ev = await cdp.send('Runtime.evaluate', { expression: `(async () => { await (${settle})(); return (${audit})(); })()`, awaitPromise: true, returnByValue: true });
-	if (ev.exceptionDetails) throw new Error(`Audit failed: ${ev.exceptionDetails.exception?.description ?? ev.exceptionDetails.text}`);
-	const a = ev.result.value;
+	const a = await evalValue(cdp, `(async () => { await (${settle})(); return (${audit})(${selectorTools}); })()`);
+	const p = perf ? { ...await evalValue(cdp, `(${perfProbe})()`), files: await stopNet() } : null;
 	const rows = sink();
 	if (width < 600 && !a.viewportMeta) rows.add('FAIL', 'viewport', 'vp', 'no <meta name="viewport">, phones lay this page out at 980px');
 	if (a.pageOverflow > 1) rows.add('FAIL', 'overflow', 'page', `page scrolls sideways by ${a.pageOverflow}px`);
@@ -327,8 +541,18 @@ async function runWidth(cdp, o, width, dark, errors) {
 	// One row per color pair: the fix is usually one token, not each element.
 	for (const x of a.contrast) rows.add('FAIL', 'contrast', x.fg + x.bg + x.need, `${x.fg} on ${x.bg}  ${x.ratio.toFixed(1)}:1, needs ${x.need}:1, e.g. ${x.sel} "${x.text}"`);
 	for (const x of a.unknown) rows.add('NOTE', 'contrast', x.sel, `${x.sel} "${x.text}"  text over image or gradient, check visually`, 5);
+	for (const x of a.taps) {
+		if (x.fail) rows.add('FAIL', 'tap', x.pat + (x.w < 24 ? ` w${x.w}` : '') + (x.h < 24 ? ` h${x.h}` : ''), `${x.pat}  ${x.w}x${x.h}px, WCAG 2.5.8 needs at least 24x24, e.g. ${x.sel} "${x.text}"`);
+		else rows.add('WARN', 'tap', x.pat, `${x.pat}  ${x.h}px tall, under 44px for phones; likely fix is padding or an ::after pseudo-element that enlarges the hit area (not measurable here), e.g. ${x.sel} "${x.text}"`);
+	}
+	for (const x of a.tables) {
+		const how = `table scrolls sideways at ${a.vw}px; stack rows as label and value, or pin the first column (content ${x.content}px in a ${x.box}px box)`;
+		if (x.sticky) rows.add('NOTE', 'table', x.sel, `${x.sel}  table scrolls sideways at ${a.vw}px with a sticky first column (content ${x.content}px in a ${x.box}px box)`);
+		else rows.add('WARN', 'table', x.sel, `${x.sel}  ${how}`);
+	}
 	for (const f of a.fonts) rows.add('FAIL', 'font', f, `"${f}" not loaded, text renders in fallback`);
 	for (const e of [...new Set(errors)].slice(0, 5)) rows.add('FAIL', 'js', e, e);
+	if (p) perfRows(rows, p);
 
 	const height = Math.min(a.pageH, MAX_H);
 	const tag = `${width}${dark ? '-dark' : ''}`;
@@ -339,6 +563,7 @@ async function runWidth(cdp, o, width, dark, errors) {
 		fs.writeFileSync(file, Buffer.from(shot.data, 'base64'));
 		files.push(file);
 	}
+	if (focus) await checkFocus(cdp, rows);
 	const capped = a.pageH > MAX_H ? ` (page is ${a.pageH}px tall, tiles stop at ${MAX_H}px)` : '';
 	const span = files.length > 1 ? `${files[0]} … ${path.basename(files.at(-1))}` : files[0];
 	return { rows, files, tag, text: [`${width}px${dark ? ' dark' : ''}  page ${width}x${a.pageH}, ${files.length} tile${files.length > 1 ? 's' : ''}${capped}`, ...rows.lines(), `  tiles ${span}`].join('\n') };
@@ -381,7 +606,10 @@ async function main() {
 
 		const blocks = [];
 		for (const width of o.widths) {
-			for (const dark of o.dark ? [false, true] : [false]) blocks.push(await runWidth(cdp, o, width, dark, errors));
+			for (const dark of o.dark ? [false, true] : [false]) {
+				const first = !dark;
+				blocks.push(await runWidth(cdp, o, width, dark, errors, { perf: first && width === Math.min(...o.widths), focus: first && width === Math.max(...o.widths) }));
+			}
 		}
 		const fails = blocks.reduce((n, b) => n + b.rows.count('FAIL'), 0);
 		const warns = blocks.reduce((n, b) => n + b.rows.count('WARN'), 0);
