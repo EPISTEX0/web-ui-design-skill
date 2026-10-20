@@ -9,7 +9,7 @@ import { gunzipSync } from 'node:zlib'
 const here = import.meta.dirname
 const R = join(here, 'results')
 const RR = join(R, process.env.ROUND ?? '')
-const ARM_ORDER = ['none', 'frontend-design', 'web-ui-design', 'web-ui-design-0.2', 'web-ui-design-0.3', 'web-ui-design-0.3-silent', 'web-ui-design-0.3-wired']
+const ARM_ORDER = ['none', 'frontend-design', 'web-ui-design', 'web-ui-design-0.2', 'web-ui-design-0.3', 'web-ui-design-0.3-silent', 'web-ui-design-0.3-wired', 'web-ui-design-0.4', 'web-ui-design-0.4-silent', 'web-ui-design-0.4-wired']
 const skillOf = (arm) => arm.replace(/-\d+\.\d+(-silent|-wired)?$/, '')
 const readJson = (p) => JSON.parse(readFileSync(p, 'utf8'))
 const maybe = (p) => (existsSync(p) ? readJson(p) : null)
@@ -252,6 +252,7 @@ for (const kind of ['new', 'extend', 'improve']) {
 			s.reusesComponents = count(xs, (b) => b.extend?.reusesComponents)
 			s.collateral = count(xs, (b) => b.extend?.collateralChanged)
 			s.functionalPass = count(xs, (b) => b.extend?.functionalPass)
+			s.actionsReachable = count(xs, (b) => b.extend?.actionsReachableMobile)
 		}
 		for (const judge of judges) {
 			const sc = xs.filter((b) => b.scores[judge]).map((b) => b.scores[judge])
@@ -288,7 +289,7 @@ for (const [kind, K] of Object.entries(summary.kinds)) {
 		kind === 'improve'
 			? [['Defects left, mean', (s) => f(s.defectsLeft, 1)], ['Content and flows kept', (s) => `${s.functionalPass}/${s.n}`], ['Brand kept', (s) => `${s.brandKept}/${s.n}`]]
 			: kind === 'extend'
-				? [['App builds', (s) => `${s.buildPass}/${s.n}`], ['New color literals, median', (s) => f(s.colorLiterals, 0)], ['Reuses components', (s) => `${s.reusesComponents}/${s.n}`], ['Changed existing pages', (s) => `${s.collateral}/${s.n}`], ['Flow works', (s) => `${s.functionalPass}/${s.n}`]]
+				? [['App builds', (s) => `${s.buildPass}/${s.n}`], ['New color literals, median', (s) => f(s.colorLiterals, 0)], ['Reuses components', (s) => `${s.reusesComponents}/${s.n}`], ['Changed existing pages', (s) => `${s.collateral}/${s.n}`], ['Flow works', (s) => `${s.functionalPass}/${s.n}`], ['Actions reachable at 390 px', (s) => `${s.actionsReachable}/${s.n}`]]
 				: []
 	// Extend builds are scored by extend-checks.mjs, not render.mjs, so the render-only columns would read as zeros.
 	const RENDER_ONLY = ['Contrast failures', 'Targets under 24px, median', 'Tab stops without focus style, median']

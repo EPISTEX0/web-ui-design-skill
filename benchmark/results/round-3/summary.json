@@ -695,7 +695,8 @@
             "colorLiterals": 0,
             "reusesComponents": 3,
             "collateral": 0,
-            "functionalPass": 3
+            "functionalPass": 3,
+            "actionsReachable": 0
           },
           "web-ui-design-0.2": {
             "n": 3,
@@ -752,7 +753,8 @@
             "colorLiterals": 0,
             "reusesComponents": 3,
             "collateral": 0,
-            "functionalPass": 3
+            "functionalPass": 3,
+            "actionsReachable": 0
           },
           "web-ui-design-0.3": {
             "n": 3,
@@ -809,7 +811,8 @@
             "colorLiterals": 0,
             "reusesComponents": 3,
             "collateral": 0,
-            "functionalPass": 3
+            "functionalPass": 3,
+            "actionsReachable": 0
           },
           "web-ui-design-0.3-wired": {
             "n": 3,
@@ -866,7 +869,8 @@
             "colorLiterals": 0,
             "reusesComponents": 3,
             "collateral": 0,
-            "functionalPass": 3
+            "functionalPass": 3,
+            "actionsReachable": 2
           }
         },
         "pairwise": {
@@ -5168,6 +5172,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": false,
+        "actionsReachableMobile": true,
         "functionalPass": true
       },
       "scores": {
@@ -5263,6 +5268,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": true,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -5360,6 +5366,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": false,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -5457,6 +5464,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": true,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -5557,6 +5565,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": false,
+        "actionsReachableMobile": true,
         "functionalPass": true
       },
       "scores": {
@@ -5656,6 +5665,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": false,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -5752,6 +5762,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": true,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -5849,6 +5860,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": false,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -5946,6 +5958,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": true,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -6042,6 +6055,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": false,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -6138,6 +6152,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": true,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {
@@ -6235,6 +6250,7 @@
         "dependenciesAdded": [],
         "collateralChanged": false,
         "mobileOverflow": false,
+        "actionsReachableMobile": false,
         "functionalPass": true
       },
       "scores": {

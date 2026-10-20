@@ -1,0 +1,1 @@
+I run Parc Le Goff, my family's oyster farm in Cancale, and we want to sell our oyster boxes online instead of only at the Saturday market. Can you make us a page for that? Put it in this folder as index.html (plain HTML, CSS and JS, no build step).

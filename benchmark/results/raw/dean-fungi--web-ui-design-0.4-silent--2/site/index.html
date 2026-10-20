@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Species guide · Dean Fungus Group</title>
+<meta name="description" content="Look up the fungi found on Dean Fungus Group forays in the Forest of Dean: identification features, habitat, season and edibility.">
+<style>
+:root {
+  /* colour: woodland sources noted in DESIGN.md */
+  --ground: #E8EBE2;          /* lichen on a wall */
+  --surface: #F5F6F1;
+  --ink: #1B241E;             /* peat */
+  --ink-2: #404C44;
+  --ink-3: #56625A;
+  --rule: #C3CBBD;
+  --rule-strong: #8F9B8E;
+  --moss: #2A5638;            /* accent: actions and focus only */
+  --moss-dark: #1E4029;
+  --season: #3F6B4B;
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
+  --r-sm: 4px; --r-md: 8px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font: 400 1rem/1.5 var(--font-body);
+  overflow-x: clip; -webkit-tap-highlight-color: transparent;
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+button, select, input { font: inherit; color: inherit; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--moss); outline-offset: 2px; }
+.wrap { width: min(1200px, 100% - 2 * var(--s5)); margin-inline: auto; }
+
+/* header */
+.site-head { padding-block: var(--s4); border-bottom: 1px solid var(--rule); }
+.site-head .wrap { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s4); flex-wrap: wrap; }
+.group-name { font-family: var(--font-display); font-weight: 600; font-size: 1.125rem; }
+.site-head span { color: var(--ink-3); font-size: .875rem; }
+
+.hero { padding-block: var(--s12) var(--s8); }
+.hero h1 { font-size: clamp(2.25rem, 6vw + .5rem, 4.25rem); line-height: 1.04; letter-spacing: -0.025em; max-width: 14ch; }
+.hero .lead { margin-top: var(--s5); max-width: 56ch; font-size: 1.125rem; color: var(--ink-2); }
+.hero .now { margin-top: var(--s4); color: var(--ink-2); font-size: 1rem; }
+.hero .now strong { color: var(--ink); font-weight: 650; }
+
+.warn {
+  margin-top: var(--s8); padding: var(--s4) var(--s5); background: var(--surface);
+  border: 1px solid var(--rule); border-left: 6px solid #7F1D1D; border-radius: var(--r-sm);
+  max-width: 78ch;
+}
+.warn h2 { font-size: 1.125rem; margin-bottom: var(--s1); }
+.warn p { color: var(--ink-2); }
+
+/* controls */
+.controls { padding-block: var(--s6) var(--s5); border-top: 1px solid var(--rule-strong); }
+.search-row { display: grid; gap: var(--s4); }
+.field { display: grid; gap: var(--s1); min-width: 0; }
+.field label { font-size: .875rem; font-weight: 600; color: var(--ink-2); }
+.field input, .field select {
+  min-height: 44px; padding: var(--s2) var(--s3); width: 100%;
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-sm);
+  font-size: 1rem;
+}
+.field select { appearance: none; padding-right: var(--s10);
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 55%, calc(100% - 14px) 55%; background-size: 6px 6px; background-repeat: no-repeat; }
+.filters { display: grid; grid-template-columns: 1fr; gap: var(--s4); }
+@media (min-width: 600px) { .filters { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 960px) {
+  .search-row { grid-template-columns: minmax(260px, 1.2fr) 3fr; align-items: end; }
+  .filters { grid-template-columns: repeat(4, 1fr); }
+}
+.result-bar { display: flex; justify-content: space-between; align-items: center; gap: var(--s4); margin-top: var(--s5); flex-wrap: wrap; }
+#count { color: var(--ink-2); }
+.link-btn {
+  min-height: 44px; padding: 0 var(--s3); background: none; border: 0; color: var(--moss-dark);
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font-weight: 600;
+}
+.link-btn[hidden] { display: none; }
+
+/* list */
+.list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; column-gap: var(--s10); border-bottom: 1px solid var(--rule); margin-bottom: var(--s16); }
+@media (min-width: 900px) { .list { grid-template-columns: 1fr 1fr; } }
+.list > li { border-top: 1px solid var(--rule); }
+.entry {
+  display: grid; grid-template-columns: 72px 1fr; gap: var(--s4); width: 100%; text-align: left;
+  padding: var(--s5) var(--s2); background: none; border: 0; cursor: pointer;
+  transition: background-color 160ms ease-out, transform 120ms ease-out;
+}
+.entry:active { transform: scale(0.99); }
+@media (hover: hover) { .entry:hover { background: var(--surface); } }
+.entry .art { width: 72px; height: 72px; background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-md); display: grid; place-items: center; }
+.art svg { width: 64px; height: 64px; display: block; }
+.entry h3 { font-size: 1.375rem; line-height: 1.15; letter-spacing: -0.01em; }
+.latin { font-style: italic; color: var(--ink-3); font-size: .9375rem; margin-top: 2px; overflow-wrap: anywhere; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s4); margin-top: var(--s3); }
+.kind { font-size: .875rem; color: var(--ink-2); }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; font-size: .875rem; font-weight: 650; line-height: 1.5; white-space: nowrap; }
+.chip::before { content: attr(data-mark); font-weight: 800; }
+.e-choice { background: #D3E7CF; color: #1B4720; }
+.e-edible { background: #E1ECD2; color: #2C4A17; }
+.e-care { background: #F5E1AA; color: #5A3C00; }
+.e-poor { background: #DEE2DB; color: #38433D; }
+.e-poison { background: #F4CDBB; color: #7A2808; }
+.e-deadly { background: #7F1D1D; color: #fff; }
+
+/* season strip: the signature */
+.season { display: flex; align-items: center; gap: var(--s2); }
+.months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; width: 108px; flex: none; }
+.months i { height: 12px; background: transparent; border: 1px solid var(--rule-strong); border-radius: 2px; }
+.months i.on { background: var(--season); border-color: var(--season); }
+.months i.now { box-shadow: 0 0 0 2px var(--ground), 0 0 0 3.5px var(--ink); }
+.season-text { font-size: .875rem; color: var(--ink-2); }
+.big .months { width: 100%; max-width: 360px; }
+.big .months i { height: 24px; }
+.month-names { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; width: 100%; max-width: 360px; font-size: .75rem; color: var(--ink-3); text-align: center; margin-top: 2px; }
+
+.empty { padding: var(--s12) var(--s2); max-width: 52ch; }
+.empty h2 { font-size: 1.5rem; }
+.empty p { margin-top: var(--s2); color: var(--ink-2); }
+.empty .btn { margin-top: var(--s5); }
+.btn {
+  min-height: 44px; padding: 0 var(--s5); border-radius: var(--r-sm); border: 1px solid var(--moss);
+  background: var(--moss); color: #fff; font-weight: 650; cursor: pointer;
+  transition: background-color 150ms ease-out, transform 120ms ease-out;
+}
+.btn:active { transform: scale(0.97); }
+@media (hover: hover) { .btn:hover { background: var(--moss-dark); } }
+
+/* detail dialog */
+dialog {
+  width: min(760px, 100% - 24px); max-height: min(92dvh, 900px); padding: 0; border: 1px solid var(--rule-strong);
+  border-radius: var(--r-md); background: var(--surface); color: var(--ink); overflow: auto; overscroll-behavior: contain;
+}
+dialog[open] { animation: pop 240ms var(--ease-out); }
+dialog::backdrop { background: rgba(27, 36, 30, .55); }
+@keyframes pop { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: none; } }
+.d-top { display: grid; grid-template-columns: 96px 1fr auto; gap: var(--s4); padding: var(--s6) var(--s6) var(--s4); align-items: start; }
+.d-top .art { width: 96px; height: 96px; background: var(--ground); border: 1px solid var(--rule); border-radius: var(--r-md); display: grid; place-items: center; }
+.d-top .art svg { width: 84px; height: 84px; }
+.d-top h2 { font-size: clamp(1.625rem, 4vw, 2.25rem); line-height: 1.1; letter-spacing: -0.02em; }
+.close { width: 44px; height: 44px; border: 1px solid var(--rule-strong); border-radius: var(--r-sm); background: var(--surface); cursor: pointer; font-size: 1.25rem; line-height: 1; }
+@media (hover: hover) { .close:hover { background: var(--ground); } }
+.d-body { padding: 0 var(--s6) var(--s8); display: grid; gap: var(--s6); }
+.verdict { padding: var(--s3) var(--s4); border-radius: var(--r-sm); border: 1px solid var(--rule); background: var(--ground); display: grid; gap: var(--s2); justify-items: start; }
+.verdict p { color: var(--ink-2); }
+.verdict.v-deadly, .verdict.v-poison { border-left: 6px solid #7F1D1D; }
+dl.feat { margin: 0; display: grid; grid-template-columns: 1fr; gap: var(--s3) var(--s5); }
+@media (min-width: 560px) { dl.feat { grid-template-columns: 110px 1fr; } dl.feat dt { padding-top: 1px; } }
+dl.feat dt { font-weight: 650; color: var(--ink-2); }
+dl.feat dd { margin: 0; max-width: 62ch; }
+.d-body h3 { font-size: 1.125rem; margin-bottom: var(--s2); }
+.tags { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.tags span { padding: 2px 10px; border: 1px solid var(--rule-strong); border-radius: 999px; font-size: .875rem; }
+
+.site-foot { border-top: 1px solid var(--rule-strong); padding-block: var(--s8) calc(var(--s10) + env(safe-area-inset-bottom)); color: var(--ink-2); font-size: .9375rem; }
+.site-foot p { max-width: 70ch; }
+.site-foot p + p { margin-top: var(--s2); }
+
+/* one orchestrated moment: the list settles in on first load */
+@media (prefers-reduced-motion: no-preference) {
+  .first .list > li { animation: rise 420ms var(--ease-out) both; animation-delay: calc(min(var(--i, 0), 12) * 40ms); }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+}
+@media (prefers-reduced-motion: reduce) { dialog[open] { animation: fade 150ms linear; } @keyframes fade { from { opacity: 0; } } }
+@media (max-width: 480px) {
+  .d-top { grid-template-columns: 72px 1fr auto; padding: var(--s5) var(--s4) var(--s3); gap: var(--s3); }
+  .d-top .art { width: 72px; height: 72px; } .d-top .art svg { width: 60px; height: 60px; }
+  .d-body { padding: 0 var(--s4) var(--s6); }
+}
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>
+</head>
+<body class="first">
+
+<header class="site-head">
+  <div class="wrap">
+    <span class="group-name">Dean Fungus Group</span>
+    <span>Forest of Dean, Gloucestershire</span>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <h1>Fungi of the Forest of Dean</h1>
+    <p class="lead">Found something on a foray? Search by name, or narrow the list by type, habitat, season and edibility, then open an entry to see how to tell it apart from its look-alikes.</p>
+    <p class="now" id="now"></p>
+    <div class="warn" role="note">
+      <h2>Do not eat a fungus on the strength of this page</h2>
+      <p>Several of the most dangerous species here look like good edibles. Have anything you plan to eat identified in person by an experienced member, and check Forestry England’s rules before you collect.</p>
+    </div>
+  </section>
+
+  <section class="controls wrap" aria-label="Find a species">
+    <form class="search-row" role="search" onsubmit="return false">
+      <div class="field">
+        <label for="q">Search by name</label>
+        <input id="q" type="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Try “penny bun” or “Amanita”">
+      </div>
+      <div class="filters">
+        <div class="field"><label for="kind">Type</label><select id="kind"></select></div>
+        <div class="field"><label for="edi">Edibility</label><select id="edi"></select></div>
+        <div class="field"><label for="hab">Where found</label><select id="hab"></select></div>
+        <div class="field"><label for="mon">Fruiting in</label><select id="mon"></select></div>
+      </div>
+    </form>
+    <div class="result-bar">
+      <p id="count" aria-live="polite"></p>
+      <button type="button" class="link-btn" id="clear" hidden>Clear search and filters</button>
+    </div>
+  </section>
+
+  <section class="wrap" aria-label="Species">
+    <ul class="list" id="list"></ul>
+    <div class="empty" id="empty" hidden>
+      <h2>Nothing matches that</h2>
+      <p>Try fewer filters, or part of a name. Common and Latin names both work, and small typos are forgiven. If it is a genuine find that is not listed, bring it to the next foray and tell the recorder.</p>
+      <button type="button" class="btn" id="empty-clear">Clear search and filters</button>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <p>This guide covers a selection of the fungi most often met on Dean Fungus Group forays. It is an aid to naming what you found, not a licence to eat it. Many species are variable, and some deadly ones are small and plain.</p>
+    <p>Seen something that is not here? Tell the group’s recorder at the next foray.</p>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-labelledby="d-title">
+  <div id="d-content"></div>
+</dialog>
+
+<script>
+/* ---------- data ----------
+   One object per species. Edit or add entries here; the page rebuilds itself.
+   edi: choice | edible | care | poor | poison | deadly
+   m:   months fruiting, e.g. "8-11" or "4-7,10-11"
+   shape: cap | bolete | bracket | puffball | club | cup | jelly | stinkhorn
+   c / s: cap and stem colours for the drawing                                  */
+const KINDS = ["Gilled mushroom", "Bolete", "Ridges or spines", "Bracket", "Puffball or earthball", "Jelly or cup fungus", "Club or stinkhorn"];
+const HABITATS = ["Oak and beech", "Birch", "Conifer plantation", "Dead wood", "Grass and verges", "Heath and bare ground", "Damp ground"];
+const EDI = {
+  choice: { label: "Choice edible", mark: "✓", line: "Well regarded at the table, once it is correctly identified and properly cooked." },
+  edible: { label: "Edible", mark: "✓", line: "Edible when correctly identified and cooked. Try a small amount the first time." },
+  care:   { label: "Edible with care", mark: "!", line: "Edible only with conditions (cooking, picking young) or with a real risk of confusion. Read the notes." },
+  poor:   { label: "Not worth eating", mark: "–", line: "Tough, bitter, tiny or known to upset some people. Leave it for the forest." },
+  poison: { label: "Poisonous", mark: "✕", line: "Will make you ill. Some can do lasting harm." },
+  deadly: { label: "Deadly poisonous", mark: "✕", line: "Can kill. Cooking does not help. If eaten, go to hospital at once and take a specimen." }
+};
+
+const SPECIES = [
+ { id: "fly-agaric", common: "Fly agaric", latin: "Amanita muscaria", kind: 0, shape: "cap", c: "#C8321F", s: "#F1EEE4", edi: "poison", hab: [1, 2], m: "8-11",
+   cap: "Bright red, 8–20 cm, covered in white warts. Rain can wash the warts off and fade the red to orange.",
+   under: "White, crowded gills. A white skirt-like ring on the stem.", stem: "White, with a swollen base ringed with scaly bands.",
+   look: "Red brittle-fleshed russulas such as the sickener have no ring and no swollen base.",
+   note: "Causes sweating, vomiting, confusion and drowsiness. Grows with birch and pine and is a sign of acid soil." },
+ { id: "death-cap", common: "Death cap", latin: "Amanita phalloides", kind: 0, shape: "cap", c: "#8E9A52", s: "#EDEBDD", edi: "deadly", hab: [0], m: "8-11", aka: "amanita",
+   cap: "Olive-green to yellowish, smooth with fine radiating fibres, 5–15 cm. Sometimes has a white patch left from the veil.",
+   under: "White gills, never pink or brown. A skirt-like ring hangs on the stem.", stem: "White, with a bulb at the base held in a loose, bag-like sac. Dig the whole base up to see it.",
+   look: "Greenish russulas (no ring, no sac, flesh snaps like chalk), the false death cap, and young specimens mistaken for puffballs or edible field mushrooms.",
+   note: "Responsible for most fatal fungus poisonings. Symptoms start 6–24 hours after eating, then seem to ease before the liver fails. Treat any suspected case as an emergency. Usually found near oak." },
+ { id: "panther-cap", common: "Panther cap", latin: "Amanita pantherina", kind: 0, shape: "cap", c: "#7A5A3A", s: "#EEE9DD", edi: "poison", hab: [0, 2], m: "7-11",
+   cap: "Dark brown to olive-brown with neat rings of small white warts, 5–10 cm.", under: "White gills. A ring on the upper stem.",
+   stem: "White. The swollen base ends in a distinct rolled rim, like a collar or a sock top.",
+   look: "The blusher: its flesh turns pink-red when cut or bruised and the panther cap’s does not. Do not rely on warts and colour alone.",
+   note: "More toxic than the fly agaric. Causes confusion, hallucinations and vomiting." },
+ { id: "blusher", common: "The blusher", latin: "Amanita rubescens", kind: 0, shape: "cap", c: "#B28A78", s: "#E4CFC4", edi: "care", hab: [0, 1], m: "6-11",
+   cap: "Pinkish-brown with greyish-white warts, 6–15 cm.", under: "White gills, spotting reddish where damaged. The ring is finely grooved on top.",
+   stem: "Pale, flushed pink-brown, with a swollen base.",
+   look: "The panther cap and the death cap. A blusher’s flesh stains wine-pink when cut, especially in the stem base and under insect holes.",
+   note: "Poisonous raw and edible only when thoroughly cooked. Because of the lethal look-alikes, many experienced foragers will not pick it at all." },
+ { id: "penny-bun", common: "Penny bun", latin: "Boletus edulis", aka: "cep porcini", kind: 1, shape: "bolete", c: "#8A5A32", s: "#E6D9BF", edi: "choice", hab: [0, 2], m: "7-11",
+   cap: "Bun-shaped, brown, 8–25 cm, smooth and slightly sticky when wet.", under: "Pores white when young, aging to yellow then olive. They do not stain when pressed.",
+   stem: "Stout, pale brown, with a fine white net near the top.",
+   look: "The bitter bolete: pores turn pink and the stem net is dark brown. It tastes foul and ruins a meal.",
+   note: "Firm, nutty and among the best of the woodland fungi. Pick young, firm specimens. Maggots are common in older ones." },
+ { id: "bay-bolete", common: "Bay bolete", latin: "Imleria badia", kind: 1, shape: "bolete", c: "#6B3E22", s: "#B58A5A", edi: "edible", hab: [2, 0], m: "8-11",
+   cap: "Chestnut to bay-brown, velvety when dry and tacky when wet, 4–14 cm.", under: "Cream to yellow pores that bruise blue-green within seconds.",
+   stem: "Brown, finely streaked, with no net.", look: "The bitter bolete (pink pores) and other boletes. Avoid any bolete with red pores or a red stem.",
+   note: "Good flavour, but frequently maggoty. Rapid blue bruising is normal for this species. It is common in conifer plantations." },
+ { id: "bitter-bolete", common: "Bitter bolete", latin: "Tylopilus felleus", kind: 1, shape: "bolete", c: "#B08A5E", s: "#D9C6A5", edi: "poor", hab: [2, 0], m: "7-11",
+   cap: "Tan to brown, cushion-shaped, 6–15 cm.", under: "White pores, becoming dirty pink with age.", stem: "Pale brown with a coarse, dark brown net.",
+   look: "The penny bun, which has white pores that never turn pink and a pale net.",
+   note: "Not poisonous, but intensely bitter. One specimen in a pan spoils the lot." },
+ { id: "chanterelle", common: "Chanterelle", latin: "Cantharellus cibarius", kind: 2, shape: "cap", c: "#E3A21B", s: "#EBB43F", edi: "choice", hab: [0], m: "6-11",
+   cap: "Egg-yolk yellow, funnel-shaped with a wavy edge, 3–10 cm.", under: "Blunt, forked ridges running down the stem, the same colour as the cap. These are not true gills.",
+   stem: "Yellow, tapering, solid.", look: "The false chanterelle: deeper orange, with thin, crowded true gills and a darker centre.",
+   note: "Smells of apricots. Pulls apart like string cheese. Take only what you need and cut cleanly." },
+ { id: "false-chanterelle", common: "False chanterelle", latin: "Hygrophoropsis aurantiaca", kind: 0, shape: "cap", c: "#D9772B", s: "#C9742E", edi: "poor", hab: [2, 5], m: "8-11",
+   cap: "Dull orange with a darker, brownish centre, velvety, with an inrolled margin, 2–6 cm.", under: "True gills, thin, crowded and repeatedly forked, deep orange.",
+   stem: "Orange-brown, slender, no ring.", look: "The chanterelle, which has blunt, ridge-like folds and a paler, firmer body.",
+   note: "Once called edible, now regarded as bland and can upset the stomach. Common in conifer plantations." },
+ { id: "hedgehog", common: "Hedgehog fungus", latin: "Hydnum repandum", kind: 2, shape: "cap", c: "#D9AF84", s: "#EADAC4", edi: "choice", hab: [0, 2], m: "8-11",
+   cap: "Pale buff to apricot, irregular and often lobed, 3–10 cm.", under: "Soft, brittle, dangling spines instead of gills or pores. They rub off easily.",
+   stem: "Short, thick, whitish, often off-centre.", look: "The wood hedgehog (Hydnum rufescens) is smaller and more orange. It is also edible. No dangerous species has spines like this.",
+   note: "One of the safest fungi to identify. Firm and mild, with a slightly peppery edge when raw." },
+ { id: "wood-blewit", common: "Wood blewit", latin: "Lepista nuda", kind: 0, shape: "cap", c: "#7F6AA8", s: "#A08CC0", edi: "care", hab: [0, 2], m: "9-12",
+   cap: "Violet-lilac, fading to buff-brown with age, smooth, 6–15 cm.", under: "Lilac, crowded gills, notched at the stem.", stem: "Stout and fibrous, lilac at first.",
+   look: "Violet webcaps and other Cortinarius species, some of which are deadly. Take a spore print: blewits print pale pinkish, webcaps print rusty brown and have a cobweb veil when young.",
+   note: "Fruity, perfumed smell. Must be cooked. Some people react, so eat a small portion first." },
+ { id: "common-puffball", common: "Common puffball", latin: "Lycoperdon perlatum", kind: 4, shape: "puffball", c: "#E8E1D0", s: "#E8E1D0", edi: "care", hab: [0, 2], m: "8-11",
+   cap: "Pear-shaped, 2–6 cm, white, covered in small spines that rub off leaving a net-like pattern.", under: "No gills. Inside, pure white and solid when young.",
+   stem: "A short, stalk-like base.", look: "Young death caps and other Amanita “eggs”. Always slice every puffball lengthwise: you must see plain white flesh with no cap or gills inside. Also the earthball, which is dark inside.",
+   note: "Edible only while the flesh is pure white all the way through. Once yellow or brown, leave it." },
+ { id: "common-earthball", common: "Common earthball", latin: "Scleroderma citrinum", kind: 4, shape: "puffball", c: "#A98A3A", s: "#A98A3A", edi: "poison", hab: [5, 0], m: "8-12",
+   cap: "Yellowish-brown, 4–10 cm, with a thick, hard, warty skin.", under: "No gills. When cut, the flesh is firm and purplish-black, marbled with white.",
+   stem: "None, or a small root-like base.", look: "True puffballs, which are soft and white inside.",
+   note: "Smells of rubber or old potatoes. Causes stomach upset. It is often parasitised by the bolete Pseudoboletus parasiticus." },
+ { id: "sulphur-tuft", common: "Sulphur tuft", latin: "Hypholoma fasciculare", kind: 0, shape: "cap", c: "#D2C027", s: "#CBBB2F", edi: "poison", hab: [3], m: "1-12",
+   cap: "Sulphur-yellow with an orange-brown centre, 2–7 cm, growing in dense clusters.", under: "Yellow gills turning olive-green and then purple-black.",
+   stem: "Yellow, fibrous, slender, with no proper ring.", look: "Honey fungus (cream ring) and the sheathed woodtuft (ringed). A bitter taste is the clue, but do not taste unknown fungi.",
+   note: "Toxic, causing vomiting and diarrhoea. Found on stumps and logs in every month." },
+ { id: "honey-fungus", common: "Honey fungus", latin: "Armillaria mellea (and relatives)", kind: 0, shape: "cap", c: "#B88A3E", s: "#D6BE86", edi: "care", hab: [3, 0], m: "8-11", aka: "armillaria",
+   cap: "Honey-yellow to brown with darker scales at the centre, 3–10 cm, in clusters.", under: "White to cream gills, spotting brown with age. A white spore print.",
+   stem: "Yellowish with a cream, cottony ring. Black “bootlace” strands run under the bark of the host.",
+   look: "The funeral bell and sulphur tuft. Check for a white (not rusty) spore print and the bootlaces.",
+   note: "Edible only after prolonged cooking, and many people are ill from it. Kills living trees. Several similar species exist." },
+ { id: "beefsteak", common: "Beefsteak fungus", latin: "Fistulina hepatica", kind: 3, shape: "bracket", c: "#A8352B", s: "#A8352B", edi: "edible", hab: [0], m: "8-11",
+   cap: "A tongue-shaped bracket, 10–25 cm, liver-red and rough, sometimes sticky.", under: "Fine, pale pores that bruise reddish.",
+   stem: "None, or a very short stalk, on living oak or sweet chestnut.", look: "No close look-alike when cut: the flesh bleeds red juice and is marbled like raw meat.",
+   note: "Tart, lemony flavour. Eat young, slice thinly and cook." },
+ { id: "chicken-of-the-woods", common: "Chicken of the woods", latin: "Laetiporus sulphureus", kind: 3, shape: "bracket", c: "#F0A21C", s: "#F0A21C", edi: "care", hab: [0, 3], m: "5-10",
+   cap: "Overlapping shelves in sulphur yellow and orange, 10–40 cm across.", under: "Sulphur-yellow pores with no gills.",
+   stem: "None. Grows from oak and other hardwoods.", look: "Few. Old, bleached specimens are brittle and should be left.",
+   note: "Pick only soft, bright young edges and cook thoroughly. Some people react, and growths on yew, eucalyptus or conifers should be avoided." },
+ { id: "birch-polypore", common: "Birch polypore", latin: "Fomitopsis betulina", kind: 3, shape: "bracket", c: "#CBB9A0", s: "#F0EADC", edi: "poor", hab: [1, 3], m: "1-12", aka: "razor strop",
+   cap: "A rounded, kidney-shaped bracket, 10–20 cm, smooth and pale brown, growing on birch only.", under: "White, fine pores.",
+   stem: "None, or a tiny stalk.", look: "None of note. It is the only bracket of this kind on birch.",
+   note: "Tough and bitter. Present all year, and a long-lived sign of a dying birch." },
+ { id: "turkey-tail", common: "Turkey tail", latin: "Trametes versicolor", kind: 3, shape: "bracket", c: "#7A6A58", s: "#F0EADC", edi: "poor", hab: [3], m: "1-12",
+   cap: "Thin, leathery fans, 2–6 cm, in overlapping tiers with concentric bands of brown, grey, blue and cream.", under: "White, with tiny but visible pores.",
+   stem: "None.", look: "False turkey tail (Stereum): smooth underside with no pores.",
+   note: "Too tough to eat. Common on dead hardwood in every month." },
+ { id: "dryads-saddle", common: "Dryad’s saddle", latin: "Cerioporus squamosus", kind: 3, shape: "bracket", c: "#D2B88A", s: "#F0E8D2", edi: "edible", hab: [3], m: "4-7,10-11", aka: "pheasant back",
+   cap: "A big fan, 10–50 cm, cream with feathery brown scales.", under: "Large, angular, cream pores.", stem: "A short stalk with a blackish base.",
+   look: "No dangerous look-alike.", note: "Smells of watermelon rind. Edible only while young and soft. Older ones are like leather." },
+ { id: "jelly-ear", common: "Jelly ear", latin: "Auricularia auricula-judae", kind: 5, shape: "jelly", c: "#7A4A32", s: "#7A4A32", edi: "edible", hab: [3], m: "1-12", aka: "wood ear",
+   cap: "Ear-shaped, rubbery and brown, 3–8 cm, velvety outside and ribbed inside.", under: "Smooth to veined, with no gills.",
+   stem: "None. Usually on elder.", look: "Other jellies are not ear-shaped and brown.",
+   note: "Bland, with a crunchy texture. Used in Chinese cooking. Best after rain." },
+ { id: "yellow-brain", common: "Yellow brain", latin: "Tremella mesenterica", kind: 5, shape: "jelly", c: "#F2C318", s: "#F2C318", edi: "poor", hab: [3], m: "1-12",
+   cap: "Golden-yellow, gelatinous, brain-like lobes, 2–7 cm.", under: "Smooth.", stem: "None. On dead broadleaf wood and gorse.",
+   look: "Yellow club fungi are not jelly-like.", note: "Shrivels to a hard orange crust in dry spells and swells up again in rain. Edible but flavourless." },
+ { id: "scarlet-elf-cup", common: "Scarlet elf cup", latin: "Sarcoscypha austriaca (and S. coccinea)", kind: 5, shape: "cup", c: "#D8281E", s: "#EFEAD8", edi: "poor", hab: [6, 3], m: "12,1-3",
+   cap: "A vivid scarlet cup, 2–5 cm, paler and finely downy outside.", under: "Smooth red inside.", stem: "A short, thin stalk. On damp, rotting sticks of hazel, willow and sycamore.",
+   look: "Orange peel fungus (orange, stalkless, on bare soil).", note: "Two near-identical species. Telling them apart takes a microscope." },
+ { id: "candlesnuff", common: "Candlesnuff fungus", latin: "Xylaria hypoxylon", kind: 6, shape: "club", c: "#2B2B2B", s: "#F2F2F2", edi: "poor", hab: [3, 0], m: "1-12",
+   cap: "Flattened, antler-like black stems with white, powdery tips, 3–8 cm.", under: "Not applicable.", stem: "Tough and charcoal-like. On dead stumps, especially beech.",
+   look: "Dead man’s fingers (Xylaria polymorpha) is thicker and blunt.", note: "Visible all year, but easiest to spot in winter." },
+ { id: "stinkhorn", common: "Stinkhorn", latin: "Phallus impudicus", kind: 6, shape: "stinkhorn", c: "#6B6A2E", s: "#F1EDE0", edi: "poor", hab: [0, 1], m: "6-11",
+   cap: "A thimble-like cap coated in olive-green slime, on a hollow white shaft 10–20 cm tall.", under: "Not applicable.", stem: "Spongy white, rising from a white egg in the litter.",
+   look: "The dog stinkhorn (Mutinus caninus) is smaller and orange-tipped.", note: "Smell of carrion draws flies, which spread the spores. The buried egg is technically edible, but not recommended." },
+ { id: "amethyst-deceiver", common: "Amethyst deceiver", latin: "Laccaria amethystina", kind: 0, shape: "cap", c: "#7B4FA0", s: "#8A62AF", edi: "care", hab: [0], m: "8-11",
+   cap: "Deep violet when damp, fading to buff, 1–5 cm.", under: "Thick, widely spaced violet gills.", stem: "Fibrous, the same colour as the cap.",
+   look: "Violet webcaps (rusty-brown spores) and the lilac bonnet (Mycena pura, poisonous). Amethyst deceiver prints white.",
+   note: "Small and bland. Can take up arsenic from some soils, so keep to a few." },
+ { id: "fairy-ring-champignon", common: "Fairy ring champignon", latin: "Marasmius oreades", kind: 0, shape: "cap", c: "#D9BF94", s: "#E7D9BC", edi: "care", hab: [4], m: "5-11",
+   cap: "Buff-brown, bell-shaped then flat with a central bump, 2–5 cm. Dries pale and revives in rain.", under: "Widely spaced cream gills.",
+   stem: "Tough and elastic, and twists without snapping.",
+   look: "Fool’s funnel (Clitocybe rivulosa) and ivory funnel, both deadly poisonous: crowded gills, no central bump and a frosted whitish cap.",
+   note: "Grows in rings in short grass. Cook the caps only." },
+ { id: "sickener", common: "The sickener", latin: "Russula emetica", kind: 0, shape: "cap", c: "#D23A3A", s: "#F4F1EA", edi: "poison", hab: [2, 6], m: "7-11",
+   cap: "Cherry-red, shiny, with a grooved edge, 4–8 cm.", under: "Pure white gills.", stem: "White, brittle, with no ring or bulb.",
+   look: "Fly agaric (warts and ring) and other red russulas.", note: "Hot and peppery to taste. Causes vomiting." },
+ { id: "shaggy-ink-cap", common: "Shaggy ink cap", latin: "Coprinus comatus", kind: 0, shape: "cap", c: "#EEE9DE", s: "#F4F1EA", edi: "edible", hab: [4], m: "5-11", aka: "lawyer's wig",
+   cap: "A tall white cylinder, 5–15 cm, with shaggy scales.", under: "White gills that turn pink, then black and ink-like.", stem: "White, with a loose ring that can slide.",
+   look: "The common ink cap (Coprinopsis atramentaria) is poisonous with alcohol. It is smaller, smooth and grey.",
+   note: "Eat only while the gills are white, and cook on the day you pick it. It turns to ink within hours." },
+ { id: "verdigris-agaric", common: "Verdigris agaric", latin: "Stropharia aeruginosa", kind: 0, shape: "cap", c: "#5FA58E", s: "#BFD8C0", edi: "poor", hab: [0, 2], m: "8-11",
+   cap: "Slimy, blue-green, aging yellow, 3–7 cm, with white flecks when young.", under: "Grey gills turning purple-brown.", stem: "With a fine ring and flaky scales below.",
+   look: "No close look-alike.", note: "Unpalatable and reported to cause mild illness. A striking find." },
+ { id: "brown-roll-rim", common: "Brown roll-rim", latin: "Paxillus involutus", kind: 0, shape: "cap", c: "#8C6B3E", s: "#9A7A4A", edi: "poison", hab: [1], m: "7-11",
+   cap: "Brown, funnel-shaped with a strongly inrolled margin, 5–15 cm.", under: "Yellow-brown gills running down the stem, bruising brown and peeling away from the flesh.",
+   stem: "Short, brown and plain.", look: "Milkcaps and other brownish funnels. The inrolled, woolly edge is the clue.",
+   note: "Long thought edible when cooked, but can cause a delayed immune reaction that destroys red blood cells, and has killed. Found under birch." },
+ { id: "funeral-bell", common: "Funeral bell", latin: "Galerina marginata", kind: 0, shape: "cap", c: "#B07A3A", s: "#A67F4A", edi: "deadly", hab: [3, 2], m: "8-12",
+   cap: "Honey-brown, drying pale, 1–4 cm, in clusters.", under: "Rusty-brown gills, with a thin ring that is often absent.", stem: "Slender, brown, on rotting conifer wood.",
+   look: "Honey fungus and the sheathed woodtuft. Take a spore print: rusty brown means danger.",
+   note: "Contains the same lethal toxins as the death cap. Never collect small brown tufts from wood for the pot." },
+ { id: "parasol", common: "Parasol mushroom", latin: "Macrolepiota procera", kind: 0, shape: "cap", c: "#B59877", s: "#D8C7AD", edi: "edible", hab: [4, 0], m: "7-11",
+   cap: "Egg-shaped, opening flat, 15–30 cm, with a dark central bump and shaggy brown scales.", under: "Free white gills.",
+   stem: "Tall, with a snakeskin pattern and a double ring that slides freely.", look: "Small Lepiota species (some deadly) and the shaggy parasol, which stains orange. Only collect large, tall specimens with the snakeskin stem.",
+   note: "Cook the cap only, and as fresh as possible." },
+ { id: "orange-peel", common: "Orange peel fungus", latin: "Aleuria aurantia", kind: 5, shape: "cup", c: "#F08A1A", s: "#F5A23A", edi: "poor", hab: [5, 4], m: "8-12",
+   cap: "A bright orange, irregular cup, 2–10 cm, stalkless and looking like discarded peel.", under: "Pale and finely mealy on the outside.", stem: "None. On bare soil, tracks and paths.",
+   look: "Scarlet elf cup (red, stalked, on sticks).", note: "Edible but bland. Not worth the risk of grit." }
+];
+
+/* ---------- helpers ---------- */
+const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MN_FULL = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const NOW = new Date().getMonth(); // 0-11
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[’']/g, "");
+
+function parseMonths(str) {
+  const set = new Set();
+  str.split(",").forEach(part => {
+    const [a, b = a] = part.split("-").map(Number);
+    for (let m = a; m <= b; m++) set.add(m - 1);
+  });
+  return set;
+}
+function monthText(set) {
+  if (set.size === 12) return "All year";
+  const on = [...Array(12).keys()].map(i => set.has(i));
+  const start = on.findIndex((v, i) => v && !on[(i + 11) % 12]);
+  const runs = [];
+  let first = null, last = null;
+  for (let n = 0; n <= 12; n++) {
+    const i = (start + n) % 12;
+    if (n < 12 && on[i]) { if (first === null) first = i; last = i; }
+    else if (first !== null) { runs.push(first === last ? MN[first] : MN[first] + "–" + MN[last]); first = null; }
+  }
+  return runs.join(", ");
+}
+SPECIES.forEach(sp => {
+  sp.months = parseMonths(sp.m);
+  const edi = EDI[sp.edi];
+  sp.hay = norm([sp.common, sp.latin, sp.aka || "", KINDS[sp.kind]].join(" "));
+  sp.words = sp.hay.split(/[^a-z]+/).filter(Boolean);
+});
+SPECIES.sort((a, b) => a.common.localeCompare(b.common, "en"));
+
+function lev1(a, b) { // true when edit distance <= 1
+  if (a === b) return true;
+  if (Math.abs(a.length - b.length) > 1) return false;
+  let i = 0, j = 0, diff = 0;
+  while (i < a.length && j < b.length) {
+    if (a[i] === b[j]) { i++; j++; continue; }
+    if (++diff > 1) return false;
+    if (a.length > b.length) i++; else if (a.length < b.length) j++; else { i++; j++; }
+  }
+  return diff + (a.length - i) + (b.length - j) <= 1;
+}
+function matchesQuery(sp, q) {
+  return q.split(/\s+/).filter(Boolean).every(t =>
+    sp.hay.includes(t) || (t.length >= 4 && sp.words.some(w => lev1(t, w.slice(0, t.length)) || lev1(t, w))));
+}
+
+/* drawings */
+function art(sp) {
+  const o = 'stroke="rgba(27,36,30,.38)" stroke-width="1.5" stroke-linejoin="round"';
+  const c = sp.c, s = sp.s;
+  const parts = {
+    cap: `<path d="M34 44H46L47 70H33Z" fill="${s}" ${o}/><path d="M12 42Q12 14 40 14Q68 14 68 42Z" fill="${c}" ${o}/><path d="M12 42H68L63 46H17Z" fill="${s}" ${o}/>`,
+    bolete: `<path d="M27 46H53Q55 60 51 71H29Q25 60 27 46Z" fill="${s}" ${o}/><path d="M10 44Q10 12 40 12Q70 12 70 44Z" fill="${c}" ${o}/><path d="M10 44H70L66 49H14Z" fill="#E8DC9A" ${o}/>`,
+    bracket: `<path d="M16 26A24 18 0 0 1 64 26Z" fill="${c}" ${o}/><path d="M24 46A24 16 0 0 1 72 46Z" fill="${c}" ${o}/><path d="M8 66A24 15 0 0 1 56 66Z" fill="${c}" ${o}/><path d="M16 26H64M24 46H72M8 66H56" stroke="${s}" stroke-width="3" stroke-linecap="round"/>`,
+    puffball: `<ellipse cx="40" cy="64" rx="12" ry="7" fill="${s}" ${o}/><circle cx="40" cy="42" r="24" fill="${c}" ${o}/><circle cx="40" cy="22" r="3" fill="rgba(27,36,30,.45)"/>`,
+    club: `<g stroke-linecap="round" fill="none"><path d="M24 72L28 30" stroke="${c}" stroke-width="8"/><path d="M40 72L40 14" stroke="${c}" stroke-width="8"/><path d="M56 72L52 32" stroke="${c}" stroke-width="8"/><path d="M28 30L28.6 22M40 14L40 9M52 32L51.4 24" stroke="${s}" stroke-width="8"/></g>`,
+    cup: `<path d="M38 56H42V72H38Z" fill="${s}" ${o}/><path d="M12 32Q40 84 68 32Z" fill="${c}" ${o}/><ellipse cx="40" cy="32" rx="28" ry="7" fill="${c}" ${o}/><ellipse cx="40" cy="32" rx="22" ry="4.5" fill="rgba(255,255,255,.28)"/>`,
+    jelly: `<path d="M14 46Q8 20 34 20Q50 12 62 26Q76 44 58 58Q44 72 26 62Q14 58 14 46Z" fill="${c}" ${o}/><path d="M28 34Q38 28 46 36M26 46Q38 40 54 48" stroke="rgba(255,255,255,.35)" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
+    stinkhorn: `<ellipse cx="40" cy="68" rx="14" ry="8" fill="${s}" ${o}/><path d="M33 24H47V62H33Z" fill="${s}" ${o}/><path d="M30 30Q30 8 40 8Q50 8 50 30Z" fill="${c}" ${o}/>`
+  };
+  return `<svg viewBox="0 0 80 80" aria-hidden="true" focusable="false">${parts[sp.shape]}</svg>`;
+}
+const chip = key => `<span class="chip e-${key}" data-mark="${EDI[key].mark}">${EDI[key].label}</span>`;
+function strip(sp, big) {
+  const cells = MN.map((m, i) => `<i class="${sp.months.has(i) ? "on" : ""} ${i === NOW ? "now" : ""}"></i>`).join("");
+  const label = `Fruits ${monthText(sp.months)}` + (sp.months.has(NOW) ? `, including this month` : "");
+  const names = big ? `<div class="month-names" aria-hidden="true">${MN.map(m => `<span>${m[0]}</span>`).join("")}</div>` : "";
+  return `<div class="season ${big ? "big" : ""}" ${big ? "" : `title="${esc(label)}"`}>
+    <div><div class="months" role="img" aria-label="${esc(label)}">${cells}</div>${names}</div>
+    ${big ? "" : `<span class="season-text">${monthText(sp.months)}</span>`}</div>`;
+}
+
+/* ---------- filters ---------- */
+const state = { q: "", kind: "", edi: "", hab: "", mon: "" };
+function fillSelect(el, first, items) {
+  el.innerHTML = `<option value="">${first}</option>` + items.map(([v, t]) => `<option value="${v}">${esc(t)}</option>`).join("");
+}
+fillSelect($("kind"), "All types", KINDS.map((k, i) => [i, k]));
+fillSelect($("edi"), "Any", Object.entries(EDI).map(([k, v]) => [k, v.label]));
+fillSelect($("hab"), "Anywhere", HABITATS.map((h, i) => [i, h]));
+fillSelect($("mon"), "Any month", [["now", `This month (${MN_FULL[NOW]})`], ...MN_FULL.map((m, i) => [i, m])]);
+
+function readURL() {
+  const p = new URLSearchParams(location.search);
+  Object.keys(state).forEach(k => { state[k] = p.get(k) || ""; });
+  Object.keys(state).forEach(k => { if (k !== "q") { const el = $(k); el.value = state[k]; if (el.value !== state[k]) state[k] = el.value = ""; } });
+  $("q").value = state.q;
+}
+function writeURL() {
+  const p = new URLSearchParams();
+  Object.entries(state).forEach(([k, v]) => { if (v !== "") p.set(k, v); });
+  const qs = p.toString();
+  history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+}
+function filtered() {
+  const q = norm(state.q).trim();
+  const mon = state.mon === "now" ? NOW : state.mon === "" ? null : Number(state.mon);
+  return SPECIES.filter(sp =>
+    (!q || matchesQuery(sp, q)) &&
+    (state.kind === "" || sp.kind === Number(state.kind)) &&
+    (state.edi === "" || sp.edi === state.edi) &&
+    (state.hab === "" || sp.hab.includes(Number(state.hab))) &&
+    (mon === null || sp.months.has(mon)));
+}
+function render() {
+  const rows = filtered();
+  const active = Object.values(state).some(v => v !== "");
+  $("list").innerHTML = rows.map((sp, i) => `
+    <li style="--i:${i}"><button type="button" class="entry" data-id="${sp.id}">
+      <span class="art">${art(sp)}</span>
+      <span>
+        <h3>${esc(sp.common)}</h3>
+        <p class="latin">${esc(sp.latin)}</p>
+        <span class="meta">${chip(sp.edi)}<span class="kind">${esc(KINDS[sp.kind])}</span></span>
+        <span class="meta">${strip(sp)}</span>
+      </span>
+    </button></li>`).join("");
+  $("empty").hidden = rows.length > 0;
+  $("count").textContent = rows.length === SPECIES.length && !active
+    ? `All ${SPECIES.length} species, A to Z`
+    : `${rows.length} of ${SPECIES.length} species`;
+  $("clear").hidden = !active;
+  writeURL();
+}
+function clearAll() {
+  Object.keys(state).forEach(k => state[k] = "");
+  $("q").value = ""; ["kind", "edi", "hab", "mon"].forEach(k => $(k).value = "");
+  render(); $("q").focus();
+}
+$("q").addEventListener("input", e => { state.q = e.target.value; document.body.classList.remove("first"); render(); });
+["kind", "edi", "hab", "mon"].forEach(k => $(k).addEventListener("change", e => { state[k] = e.target.value; document.body.classList.remove("first"); render(); }));
+$("clear").addEventListener("click", clearAll);
+$("empty-clear").addEventListener("click", clearAll);
+
+/* ---------- detail ---------- */
+const dlg = $("dlg");
+let opener = null;
+function openSpecies(id, fromHash) {
+  const sp = SPECIES.find(s => s.id === id);
+  if (!sp) return;
+  const e = EDI[sp.edi];
+  $("d-content").innerHTML = `
+    <div class="d-top">
+      <div class="art">${art(sp)}</div>
+      <div><h2 id="d-title">${esc(sp.common)}</h2><p class="latin">${esc(sp.latin)}</p></div>
+      <button type="button" class="close" aria-label="Close">✕</button>
+    </div>
+    <div class="d-body">
+      <div class="verdict v-${sp.edi}">${chip(sp.edi)}<p>${esc(e.line)}</p></div>
+      <dl class="feat">
+        <dt>Cap</dt><dd>${esc(sp.cap)}</dd>
+        <dt>Underside</dt><dd>${esc(sp.under)}</dd>
+        <dt>Stem</dt><dd>${esc(sp.stem)}</dd>
+        <dt>Easily confused with</dt><dd>${esc(sp.look)}</dd>
+        <dt>Notes</dt><dd>${esc(sp.note)}</dd>
+      </dl>
+      <div><h3>Where found</h3><div class="tags">${sp.hab.map(h => `<span>${esc(HABITATS[h])}</span>`).join("")}</div></div>
+      <div><h3>When it fruits</h3>${strip(sp, true)}<p class="season-text" style="margin-top:8px">${monthText(sp.months)}</p></div>
+    </div>`;
+  $("d-content").querySelector(".close").addEventListener("click", () => dlg.close());
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+  if (!fromHash) history.pushState(null, "", location.pathname + location.search + "#" + id);
+}
+$("list").addEventListener("click", e => {
+  const b = e.target.closest(".entry"); if (!b) return;
+  opener = b; openSpecies(b.dataset.id);
+});
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+dlg.addEventListener("close", () => {
+  if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+  if (opener && document.contains(opener)) opener.focus();
+});
+window.addEventListener("popstate", () => {
+  const id = location.hash.slice(1);
+  if (id) openSpecies(id, true); else if (dlg.open) dlg.close();
+});
+
+/* ---------- start ---------- */
+const inSeason = SPECIES.filter(s => s.months.has(NOW)).length;
+$("now").innerHTML = `It is ${MN_FULL[NOW]}: <strong>${inSeason} of the ${SPECIES.length} species</strong> in this guide are fruiting now.`;
+readURL(); render();
+if (location.hash) openSpecies(location.hash.slice(1), true);
+</script>
+</body>
+</html>

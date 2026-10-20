@@ -130,12 +130,12 @@
 
 ## extend: shiftboard
 
-| Arm | n | Mean cost | Median time | Asked the client | Delivered | Arm skill used | Ran check.mjs | DESIGN.md | Mobile overflow | App builds | New color literals, median | Reuses components | Changed existing pages | Flow works |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| none | 3 | $0.17 | 35s | 0/3 | 3/3 | 0/3 | 0/3 | 0/3 | 2/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 |
-| web-ui-design-0.2 | 3 | $0.17 | 34s | 0/3 | 3/3 | 0/3 | 0/3 | 0/3 | 3/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 |
-| web-ui-design-0.3 | 3 | $0.16 | 32s | 0/3 | 3/3 | 0/3 | 0/3 | 0/3 | 0/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 |
-| web-ui-design-0.3-wired | 3 | $0.40 | 358s | 0/3 | 3/3 | 3/3 | 3/3 | 3/3 | 0/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 |
+| Arm | n | Mean cost | Median time | Asked the client | Delivered | Arm skill used | Ran check.mjs | DESIGN.md | Mobile overflow | App builds | New color literals, median | Reuses components | Changed existing pages | Flow works | Actions reachable at 390 px |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| none | 3 | $0.17 | 35s | 0/3 | 3/3 | 0/3 | 0/3 | 0/3 | 2/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | 0/3 |
+| web-ui-design-0.2 | 3 | $0.17 | 34s | 0/3 | 3/3 | 0/3 | 0/3 | 0/3 | 3/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | 0/3 |
+| web-ui-design-0.3 | 3 | $0.16 | 32s | 0/3 | 3/3 | 0/3 | 0/3 | 0/3 | 0/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | 0/3 |
+| web-ui-design-0.3-wired | 3 | $0.40 | 358s | 0/3 | 3/3 | 3/3 | 3/3 | 3/3 | 0/3 | 3/3 | 0 | 3/3 | 0/3 | 3/3 | 2/3 |
 
 ### extend, judge: gemini-4-argon
 

@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Species guide | Dean Fungus Group, Forest of Dean</title>
+<meta name="description" content="Look up what you found on a Dean Fungus Group foray in the Forest of Dean: months, habitat, spore print and how to tell lookalikes apart.">
+<style>
+@font-face {
+  font-family: "Guide Serif";
+  src: local("Iowan Old Style"), local("Palatino Linotype"), local("Palatino"), local("Book Antiqua"), local("Georgia"), local("DejaVu Serif"), local("Liberation Serif"), local("Times New Roman");
+  font-display: swap;
+}
+:root {
+  /* Colours: moss and cream are the group's own. Red is reserved for Deadly. */
+  --paper: #f3ecd8;       /* cream ground (group colour) */
+  --litter: #ebe2c8;      /* leaf-litter panel tone */
+  --ink: #2b2a1f;         /* bark */
+  --ink-2: #575342;
+  --ink-3: #625e4c;
+  --rule: #cfc5a6;       /* hairline */
+  --edge: #8a8368;       /* control outlines, 3:1 on paper */
+  --moss: #4a5d23;        /* accent (group colour) */
+  --moss-deep: #3a4a1b;
+  --bracken: #7a4b0c;     /* Poisonous: October bracken */
+  --bracken-tint: #f0dfb8;
+  --deadly: #b3261e;      /* Deadly only (group colour) */
+  --deadly-tint: #f4ddd6;
+
+  --serif: "Guide Serif", Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
+  --r-sm: 2px; --r-md: 4px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--s5); }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.55 var(--serif);
+  overflow-x: clip;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
+p, li { text-wrap: pretty; }
+p { margin: 0; }
+a { color: var(--moss-deep); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a, button, select, input { touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--moss); outline-offset: 2px; border-radius: var(--r-sm); }
+
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 max(var(--s4), env(safe-area-inset-left)) 0 max(var(--s4), env(safe-area-inset-right)); }
+
+/* Header */
+.masthead { border-bottom: 3px double var(--moss); padding: var(--s5) 0 var(--s5); }
+.group { font: 700 1.0625rem/1.2 var(--serif); color: var(--moss-deep); margin-bottom: var(--s3); }
+h1 { font-size: clamp(2.5rem, 7vw, 4rem); letter-spacing: -0.025em; color: var(--ink); }
+.masthead .lede { margin-top: var(--s3); font-size: 1.1875rem; color: var(--ink-2); max-width: 40rem; }
+.masthead .count { margin-top: var(--s3); font: 600 0.9375rem/1.4 var(--sans); color: var(--moss-deep); font-variant-numeric: tabular-nums; }
+
+/* Safety note */
+.safety { margin: var(--s5) 0 0; padding: var(--s4) var(--s5) var(--s5); background: var(--litter); border: 1.5px solid var(--ink); border-radius: var(--r-sm); position: relative; }
+.safety h2 { font-size: 1.375rem; margin-bottom: var(--s3); }
+.safety ul { margin: 0; padding-left: 1.25em; display: grid; gap: var(--s2); max-width: 46rem; }
+.safety .strong { font-weight: 700; }
+
+/* Draft marks (shown only while details are unconfirmed) */
+.draft-banner { margin-top: var(--s5); padding: var(--s3) var(--s4); border: 1.5px dashed var(--bracken); background: var(--bracken-tint); color: #3d2604; font: 0.9375rem/1.45 var(--sans); border-radius: var(--r-sm); }
+.draft-banner strong { font-weight: 700; }
+.tag-draft { display: inline-block; font: 600 0.8125rem/1.2 var(--sans); padding: 2px 8px; border: 1.5px dashed var(--bracken); color: #3d2604; background: var(--bracken-tint); border-radius: var(--r-sm); }
+
+/* Find panel */
+.find { margin-top: var(--s6); }
+.find h2 { font-size: 1.75rem; }
+.search-form { margin-top: var(--s4); display: grid; gap: var(--s3); }
+.field { display: grid; gap: var(--s1); min-width: 0; }
+.field label { font: 600 0.875rem/1.3 var(--sans); color: var(--ink-2); }
+.field input, .field select {
+  width: 100%; min-height: 48px; padding: 0 var(--s3);
+  font: 400 1rem/1.2 var(--sans); color: var(--ink);
+  background: #fbf7ea; border: 1.5px solid var(--edge); border-radius: var(--r-md);
+}
+.field select { padding-right: var(--s5); }
+.field input::placeholder { color: var(--ink-3); opacity: 1; }
+.filters { display: grid; gap: var(--s3); grid-template-columns: 1fr; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; }
+.btn {
+  min-height: 44px; padding: 0 var(--s4); font: 600 0.9375rem/1 var(--sans);
+  border: 1.5px solid var(--moss); border-radius: var(--r-md); background: transparent; color: var(--moss-deep); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 140ms var(--ease-out), background-color 160ms, color 160ms;
+}
+.btn:active { transform: scale(0.97); }
+.btn-solid { background: var(--moss); color: var(--paper); }
+@media (hover: hover) {
+  .btn:hover { background: var(--moss); color: var(--paper); }
+  .btn-solid:hover { background: var(--moss-deep); border-color: var(--moss-deep); }
+}
+.btn[disabled] { opacity: 0.5; cursor: default; }
+.count-line { font: 600 0.9375rem/1.4 var(--sans); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+/* Species list */
+.list { margin-top: var(--s5); border-top: 1px solid var(--ink); }
+.entry { padding: var(--s6) 0; border-bottom: 1px solid var(--rule); scroll-margin-top: var(--s5); }
+.entry:focus { outline: none; }
+.entry:target, .entry.is-target { box-shadow: -12px 0 0 -8px var(--moss); }
+.entry-grid { display: grid; gap: var(--s5); }
+.entry-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--s2) var(--s4); }
+.entry-head h3 { font-size: clamp(1.75rem, 4vw, 2.25rem); overflow-wrap: anywhere; }
+.latin { font-style: italic; color: var(--ink-2); font-size: 1.125rem; overflow-wrap: anywhere; }
+.aka { font: 0.9375rem/1.4 var(--sans); color: var(--ink-3); margin-top: var(--s1); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s3); align-items: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px;
+  font: 700 0.875rem/1.2 var(--sans); border: 1.5px solid currentColor; border-radius: var(--r-sm);
+}
+.chip svg { width: 16px; height: 16px; flex: none; }
+.chip-eaten { color: var(--moss-deep); background: transparent; }
+.chip-not { color: var(--ink-2); background: var(--litter); }
+.chip-poison { color: var(--bracken); background: var(--bracken-tint); }
+.chip-deadly { color: var(--paper); background: var(--deadly); border-color: var(--deadly); }
+
+.entry-main { display: grid; gap: var(--s4); min-width: 0; }
+.entry-body { display: flex; flex-wrap: wrap; gap: var(--s4) var(--s5); align-items: flex-start; }
+.photo { margin: 0; width: 112px; flex: none; }
+.photo .slot { aspect-ratio: 1; display: grid; place-items: center; border: 1px dashed var(--edge); background: var(--litter); color: var(--ink-3); }
+.photo svg { width: 72px; height: 72px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.photo img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; outline: 1px solid rgba(0,0,0,0.1); outline-offset: -1px; }
+.photo figcaption { font: 0.8125rem/1.3 var(--sans); color: var(--ink-3); margin-top: var(--s1); }
+.facts { flex: 1 1 14rem; min-width: 0; display: grid; gap: var(--s3); margin: 0; }
+.facts dt { font: 700 0.875rem/1.3 var(--sans); color: var(--ink-2); }
+.facts dd { margin: 2px 0 0; }
+.strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; margin-top: var(--s2); max-width: 15rem; }
+.strip span { font: 600 0.6875rem/18px var(--sans); text-align: center; background: var(--litter); color: var(--ink-3); border-radius: 1px; }
+.strip span.on { background: var(--moss); color: var(--paper); }
+.swatch { display: inline-block; width: 14px; height: 14px; border-radius: 50%; border: 1px solid var(--ink-2); vertical-align: -1px; margin-right: 6px; }
+.tell h4 { font: 700 0.875rem/1.3 var(--sans); color: var(--ink-2); margin-bottom: var(--s2); }
+.tell ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--s2); max-width: 40rem; }
+
+.emergency { padding: var(--s3) var(--s4); border: 1.5px solid var(--bracken); border-left-width: 6px; background: var(--bracken-tint); font: 700 1rem/1.45 var(--sans); max-width: 40rem; border-radius: var(--r-sm); }
+.emergency.deadly { border-color: var(--deadly); background: var(--deadly-tint); }
+.warn-note { font: 0.9375rem/1.45 var(--sans); color: var(--ink-2); max-width: 40rem; }
+
+/* Lookalike pair panel (the page's signature) */
+.pair { background: var(--litter); border: 1px solid var(--rule); border-top: 4px solid var(--ink); padding: var(--s4); display: grid; gap: var(--s3); align-content: start; border-radius: 0 0 var(--r-sm) var(--r-sm); min-width: 0; }
+.pair h4 { font: 700 0.9375rem/1.3 var(--sans); color: var(--ink-2); }
+.pair .other { display: grid; gap: var(--s2); }
+.pair .other a { font-size: 1.375rem; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; display: inline-block; padding: 9px 0; margin: -9px 0; }
+.pair .other .latin { font-size: 1rem; }
+.pair ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--s2); font-size: 1rem; }
+.pair .how { font: 700 0.875rem/1.3 var(--sans); color: var(--ink-2); margin-top: var(--s1); }
+.pair.none { border-top-style: dashed; background: transparent; }
+.pair.none p { font: 0.9375rem/1.45 var(--sans); color: var(--ink-2); }
+
+.empty { padding: var(--s6) 0; border-bottom: 1px solid var(--rule); max-width: 40rem; display: grid; gap: var(--s3); justify-items: start; }
+.empty h3 { font-size: 1.5rem; }
+
+/* Forays */
+.forays { margin-top: var(--s8); padding-top: var(--s6); border-top: 3px double var(--moss); display: grid; gap: var(--s5); }
+.forays h2 { font-size: 1.75rem; }
+.dates { list-style: none; margin: var(--s3) 0 0; padding: 0; border-top: 1px solid var(--rule); max-width: 28rem; }
+.dates li { padding: var(--s3) 0; border-bottom: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: var(--s2) var(--s3); align-items: baseline; font-size: 1.1875rem; }
+.dates .next { font: 700 0.8125rem/1.2 var(--sans); color: var(--paper); background: var(--moss); padding: 3px 8px; border-radius: var(--r-sm); }
+.rule-box { border-left: 6px solid var(--moss); padding: var(--s2) 0 var(--s2) var(--s4); max-width: 36rem; }
+.rule-box h3 { font-size: 1.25rem; margin-bottom: var(--s2); }
+
+footer { margin-top: var(--s8); padding: var(--s5) 0 var(--s7); border-top: 1px solid var(--ink); font: 0.9375rem/1.5 var(--sans); color: var(--ink-2); }
+
+.noscript { padding: var(--s4); border: 1.5px solid var(--ink); margin-top: var(--s5); }
+
+@media (min-width: 640px) {
+  .filters { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 960px) {
+  .filters { grid-template-columns: repeat(4, 1fr); }
+  .entry-grid.has-pair { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; gap: var(--s6); }
+  .forays { grid-template-columns: 1fr 1fr; gap: var(--s7); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn { transition: background-color 160ms, color 160ms; }
+  .btn:active { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <!-- A beech woodcut can sit here once the group sends it: <img src="images/beech.png" width="" height="" alt=""> -->
+    <p class="group">Dean Fungus Group</p>
+    <h1>Species guide</h1>
+    <p class="lede">Look up what you found on a foray in the Forest of Dean: when it grows, where, its spore print, and how to tell it from its lookalike.</p>
+    <p class="count"><span id="species-count">16</span> species in this guide so far. The group has recorded 1,140 species in the Forest of Dean since 1987.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="safety" aria-labelledby="safety-h">
+    <h2 id="safety-h">Read this before you use the guide</h2>
+    <ul>
+      <li>This guide helps members look up what they found. <span class="strong">It cannot tell you whether a fungus is safe to eat.</span> A description or a photo is never enough, and several of our deadliest species look like harmless ones.</li>
+      <li>Never eat anything because of what you read here. If you are not certain, do not eat it. Ask an experienced member to check your find in person first.</li>
+      <li>“Eaten by members” records what some of our members do. It is not advice and not a guarantee.</li>
+      <li class="strong">If someone may have eaten a poisonous or unknown fungus, call 999 or NHS 111 now and keep a piece of it.</li>
+    </ul>
+    <p id="safety-draft" hidden style="margin-top:12px"><span class="tag-draft">Wording awaiting the recorder’s approval</span></p>
+  </section>
+
+  <div id="draft-banner" class="draft-banner" hidden></div>
+
+  <noscript><p class="noscript">The species list needs JavaScript to load. Please turn it on, or ask the recorder for a printed copy.</p></noscript>
+
+  <section class="find" aria-labelledby="find-h">
+    <h2 id="find-h">Find a species</h2>
+    <form class="search-form" id="form" role="search" autocomplete="off">
+      <div class="field">
+        <label for="q">Name, or a word from the description</label>
+        <input id="q" name="q" type="search" placeholder="For example: chanterelle, oak, orange, pores" enterkeyhint="search">
+      </div>
+      <div class="filters">
+        <div class="field">
+          <label for="month">Month found</label>
+          <select id="month" name="month"><option value="">Any month</option></select>
+        </div>
+        <div class="field">
+          <label for="habitat">Habitat</label>
+          <select id="habitat" name="habitat"><option value="">Any habitat</option></select>
+        </div>
+        <div class="field">
+          <label for="spore">Spore print</label>
+          <select id="spore" name="spore"><option value="">Any colour</option></select>
+        </div>
+        <div class="field">
+          <label for="label">Label</label>
+          <select id="label" name="label"><option value="">All labels</option></select>
+        </div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn" id="this-month">Found this month</button>
+        <button type="button" class="btn" id="clear">Clear search</button>
+        <p class="count-line" id="result-count" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </section>
+
+  <section class="list" id="list" aria-label="Species"></section>
+
+  <section class="forays" id="forays" aria-labelledby="forays-h">
+    <div>
+      <h2 id="forays-h">2027 forays</h2>
+      <p style="margin-top:12px;max-width:28rem">We meet at 10:00 at the Speech House car park, on the first Sunday of the month.</p>
+      <ol class="dates" id="dates">
+        <li data-date="2027-09-05"><time datetime="2027-09-05">Sunday 5 September 2027</time></li>
+        <li data-date="2027-10-03"><time datetime="2027-10-03">Sunday 3 October 2027</time></li>
+        <li data-date="2027-11-07"><time datetime="2027-11-07">Sunday 7 November 2027</time></li>
+      </ol>
+    </div>
+    <div class="rule-box">
+      <h3>Our picking rule</h3>
+      <p>Take only what you will eat that day, and nothing from the fenced survey plots at Nagshead.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Dean Fungus Group, Forest of Dean. This guide is for members and does not replace identification in person.</p>
+  </div>
+</footer>
+
+<script>
+/* ==========================================================================
+   SPECIES DATA — to add a species, copy a block in SPECIES and, if it has a
+   lookalike, add one entry to PAIRS. Nothing else needs to change.
+
+   label:    "Eaten by members" | "Not worth eating" | "Poisonous" | "Deadly"
+   months:   numbers 1-12
+   habitats: "broadleaf" | "conifer" | "open" | "deadwood"
+   spore:    group is "white" | "pink" | "brown" | "dark"
+   photo:    null for now. Later: "images/chanterelle.jpg" (add photoAlt too).
+   labelOk / detailsOk: set to true once the recorder has checked them. The
+   "to check" marks and the banner at the top disappear on their own.
+   ========================================================================== */
+const SPECIES = [
+  {
+    id: "chanterelle", name: "Chanterelle", latin: "Cantharellus cibarius", aka: ["girolle"],
+    label: "Eaten by members", months: [7, 8, 9, 10, 11], habitats: ["broadleaf"],
+    habitatText: "Beech and oak woodland, on mossy ground and banks.",
+    spore: { group: "white", text: "Pale cream", color: "#efe3c2" },
+    tell: [
+      "Egg-yolk yellow all over, with a wavy, funnel-shaped cap.",
+      "Under the cap are blunt, forked ridges that run down the stem. They are not true gills.",
+      "Smells faintly of apricots. The flesh pulls apart in white, stringy strips."
+    ],
+    shape: "funnel", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "false-chanterelle", name: "False chanterelle", latin: "Hygrophoropsis aurantiaca",
+    label: "Not worth eating", months: [8, 9, 10, 11, 12], habitats: ["conifer"],
+    habitatText: "Conifer plantations and heathy ground, in needle litter and moss.",
+    spore: { group: "white", text: "White", color: "#fbf8ee" },
+    tell: [
+      "Deeper orange than a chanterelle, darker towards the middle of the cap, with an inrolled edge when young.",
+      "Under the cap are true, thin, crowded gills that fork. They are not blunt ridges.",
+      "No apricot smell. The flesh is soft and thin."
+    ],
+    shape: "funnel", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "penny-bun", name: "Penny bun", latin: "Boletus edulis", aka: ["cep", "porcini"],
+    label: "Eaten by members", months: [7, 8, 9, 10, 11], habitats: ["broadleaf", "conifer"],
+    habitatText: "Beech and oak woods, and sometimes under spruce, on moss and leaf litter.",
+    spore: { group: "brown", text: "Olive-brown", color: "#7d7233" },
+    tell: [
+      "Deep brown, bun-shaped cap, often paler at the edge.",
+      "Pores under the cap are white when young, ageing to yellow-olive.",
+      "A fine white net across the top of the stem. The flesh stays white when cut."
+    ],
+    shape: "bolete", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "bitter-bolete", name: "Bitter bolete", latin: "Tylopilus felleus",
+    label: "Not worth eating", months: [7, 8, 9, 10], habitats: ["broadleaf", "conifer"],
+    habitatText: "Acid soil near conifers, birch and oak, often by old stumps.",
+    spore: { group: "pink", text: "Pink", color: "#e4b9ac" },
+    tell: [
+      "Pores are white at first, then dull pink with age.",
+      "A coarse, dark brown net across the stem.",
+      "The flesh is very bitter, which spoils any dish it is cooked in."
+    ],
+    shape: "bolete", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "giant-puffball", name: "Giant puffball", latin: "Calvatia gigantea",
+    label: "Eaten by members", months: [8, 9, 10], habitats: ["open"],
+    habitatText: "Grassy rides, verges and field edges, often near nettles on rich soil.",
+    spore: { group: "brown", text: "Olive-brown (a powder, not a print)", color: "#7d7233" },
+    tell: [
+      "Smooth, white to cream and suede-like, usually 20 cm across or more.",
+      "Cut it open from top to bottom. The flesh must be pure white and firm all the way through.",
+      "If the flesh is yellow, green, brown or has a shape inside, it is not a giant puffball."
+    ],
+    shape: "ball", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "common-earthball", name: "Common earthball", latin: "Scleroderma citrinum",
+    label: "Poisonous", months: [8, 9, 10, 11, 12], habitats: ["open", "broadleaf"],
+    habitatText: "Acid soil in woodland, on heaths and beside rides, often under birch and oak.",
+    spore: { group: "dark", text: "Purple-black", color: "#3a2a3a" },
+    tell: [
+      "Thick, tough, yellow-brown skin that looks scaly or warty.",
+      "The flesh is firm and turns dark purple-black from an early stage, with pale marbling.",
+      "Rarely more than 10 cm across."
+    ],
+    shape: "ball", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "amethyst-deceiver", name: "Amethyst deceiver", latin: "Laccaria amethystina",
+    label: "Eaten by members", months: [8, 9, 10, 11], habitats: ["broadleaf"],
+    habitatText: "Beech and oak woodland, in leaf litter and on damp, mossy banks.",
+    spore: { group: "white", text: "White", color: "#fbf8ee" },
+    tell: [
+      "Purple all over when fresh: cap, gills and stem. In dry weather it fades to buff and is hard to name.",
+      "Gills are thick, waxy and widely spaced, and stay purple.",
+      "Tough, stringy stem."
+    ],
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "lilac-fibrecap", name: "Lilac fibrecap", latin: "Inocybe geophylla var. lilacina",
+    label: "Poisonous", months: [8, 9, 10, 11], habitats: ["broadleaf"],
+    habitatText: "Beech and oak woodland, on bare soil and path edges.",
+    spore: { group: "brown", text: "Dull brown", color: "#8a6e4b" },
+    tell: [
+      "Small, cone-shaped cap with a pointed bump in the middle, silky with fine fibres.",
+      "Pale lilac, fading to whitish.",
+      "Gills are crowded and pale at first, then clay-brown."
+    ],
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "hedgehog-fungus", name: "Hedgehog fungus", latin: "Hydnum repandum",
+    label: "Eaten by members", months: [8, 9, 10, 11, 12], habitats: ["broadleaf", "conifer"],
+    habitatText: "Beech, oak and conifer woods, on moss and in leaf litter.",
+    spore: { group: "white", text: "White to pale cream", color: "#f6efd9" },
+    tell: [
+      "Pale buff to apricot cap, often wavy and irregular.",
+      "Under the cap are soft, brittle spines instead of gills or pores.",
+      "The spines snap off easily."
+    ],
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "beefsteak-fungus", name: "Beefsteak fungus", latin: "Fistulina hepatica", aka: ["ox tongue"],
+    label: "Eaten by members", months: [8, 9, 10, 11], habitats: ["broadleaf"],
+    habitatText: "On living oak and sweet chestnut, usually near the base of the trunk.",
+    spore: { group: "pink", text: "Pale pink", color: "#ecc9bd" },
+    tell: [
+      "A tongue-shaped bracket, blood-red and rough on top.",
+      "Cut it and the flesh is marbled like raw steak and weeps red juice.",
+      "Tiny cream to pink pores underneath."
+    ],
+    shape: "bracket", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "death-cap", name: "Death cap", latin: "Amanita phalloides",
+    label: "Deadly", months: [8, 9, 10, 11], habitats: ["broadleaf"],
+    habitatText: "Oak and beech woodland, close to tree roots.",
+    spore: { group: "white", text: "White", color: "#fbf8ee" },
+    tell: [
+      "Olive-green to yellow-green cap, silky with fine streaks.",
+      "White gills, a skirt-like ring on the stem and a white sac (the volva) at the base. The sac can lie buried, so dig up the whole fungus to see it.",
+      "Even a small amount can be fatal."
+    ],
+    delayed: "Symptoms can start many hours after eating and may seem to ease before getting worse, so do not wait for them.",
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "destroying-angel", name: "Destroying angel", latin: "Amanita virosa",
+    label: "Deadly", months: [7, 8, 9, 10], habitats: ["broadleaf", "conifer"],
+    habitatText: "Damp woodland, mostly on acid soil, under broadleaves and conifers.",
+    spore: { group: "white", text: "White", color: "#fbf8ee" },
+    tell: [
+      "Pure white all over, with a cap that is often pointed in the middle.",
+      "White gills, a ring on the stem and a sac-like volva at the base, which can lie buried.",
+      "The stem is covered in fine shaggy scales."
+    ],
+    delayed: "Symptoms can start many hours after eating and may seem to ease before getting worse, so do not wait for them.",
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "deadly-webcap", name: "Deadly webcap", latin: "Cortinarius rubellus",
+    label: "Deadly", months: [9, 10, 11], habitats: ["conifer"],
+    habitatText: "Acid soil among moss under conifers, especially spruce and pine.",
+    spore: { group: "brown", text: "Rust-brown", color: "#9a5a28" },
+    tell: [
+      "Orange-brown, dry cap with a prominent pointed bump in the middle.",
+      "Rusty-brown gills. A wispy, cobweb-like veil leaves yellowish bands on the stem.",
+      "Slight smell of radish."
+    ],
+    delayed: "Poisoning can be delayed by days, so a person can seem well after eating it. It damages the kidneys.",
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "fly-agaric", name: "Fly agaric", latin: "Amanita muscaria",
+    label: "Poisonous", months: [8, 9, 10, 11], habitats: ["conifer", "broadleaf"],
+    habitatText: "Under birch, pine and spruce, on acid soil.",
+    spore: { group: "white", text: "White", color: "#fbf8ee" },
+    tell: [
+      "Red cap, fading to orange, with white warty flecks that rain can wash off.",
+      "White gills and a ring on the stem.",
+      "Swollen, scaly base."
+    ],
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "sulphur-tuft", name: "Sulphur tuft", latin: "Hypholoma fasciculare",
+    label: "Poisonous", months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], habitats: ["deadwood"],
+    habitatText: "Dense clusters on stumps and dead wood, broadleaf and conifer.",
+    spore: { group: "brown", text: "Purple-brown", color: "#5e3d4a" },
+    tell: [
+      "Sulphur-yellow cap with an orange-brown middle, growing in tight clusters.",
+      "Gills are yellow at first, then olive-green, then purple-black.",
+      "The flesh tastes bitter."
+    ],
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  },
+  {
+    id: "yellow-stainer", name: "Yellow stainer", latin: "Agaricus xanthodermus",
+    label: "Poisonous", months: [6, 7, 8, 9, 10, 11], habitats: ["open", "broadleaf"],
+    habitatText: "Grassy rides, verges and woodland edges.",
+    spore: { group: "brown", text: "Chocolate-brown", color: "#4b2e1e" },
+    tell: [
+      "Scratch or cut the base of the stem: it turns bright chrome yellow within seconds.",
+      "Smells of ink or carbolic, strongest at the base and when cooked.",
+      "White cap with a greyish-brown tinge. Gills are pink, then dark brown."
+    ],
+    shape: "cap", photo: null, labelOk: false, detailsOk: false
+  }
+];
+
+/* Lookalike pairs given by the group. "a" is the species members eat, "b" its lookalike.
+   Do not add pairs that the group has not stated. */
+const PAIRS = [
+  { a: "chanterelle", b: "false-chanterelle", how: [
+    "Under the cap: blunt, forked ridges running down the stem (chanterelle) or true, thin, crowded gills (false chanterelle).",
+    "Colour: even egg-yolk yellow (chanterelle) or deeper orange, darker in the middle (false chanterelle).",
+    "Smell: apricots (chanterelle) or none (false chanterelle)."
+  ]},
+  { a: "penny-bun", b: "bitter-bolete", how: [
+    "Pores: white, ageing yellow-olive (penny bun) or white, ageing dull pink (bitter bolete).",
+    "Stem net: fine and white (penny bun) or coarse and dark brown (bitter bolete).",
+    "A pink tinge under the cap means put it down."
+  ]},
+  { a: "giant-puffball", b: "common-earthball", how: [
+    "Size: 20 cm or more (giant puffball) or rarely over 10 cm (common earthball).",
+    "Skin: smooth and suede-like (giant puffball) or thick, tough and scaly (common earthball).",
+    "Cut it open: pure white all through (giant puffball) or dark purple-black (common earthball)."
+  ]},
+  { a: "amethyst-deceiver", b: "lilac-fibrecap", how: [
+    "Colour: purple all over when fresh (amethyst deceiver) or pale lilac, fading to whitish (lilac fibrecap).",
+    "Gills: thick, widely spaced and purple (amethyst deceiver) or crowded, pale then clay-brown (lilac fibrecap).",
+    "Cap: flat or wavy (amethyst deceiver) or cone-shaped with a pointed bump (lilac fibrecap).",
+    "Spore print: white (amethyst deceiver) or dull brown (lilac fibrecap)."
+  ]}
+];
+
+const EMERGENCY = "If someone may have eaten this, call 999 or NHS 111 now and keep a piece of the mushroom.";
+
+const LABELS = {
+  "Eaten by members": { cls: "chip-eaten", icon: '<circle cx="8" cy="8" r="6"/><circle cx="8" cy="8" r="2" fill="currentColor"/>' },
+  "Not worth eating": { cls: "chip-not", icon: '<circle cx="8" cy="8" r="6"/><path d="M5 8h6"/>' },
+  "Poisonous":        { cls: "chip-poison", icon: '<path d="M8 2 15 14H1z"/><path d="M8 6.5v3.5M8 12v.01"/>' },
+  "Deadly":           { cls: "chip-deadly", icon: '<path d="M5 1h6l4 4v6l-4 4H5l-4-4V5z" fill="currentColor" stroke="none"/><path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="#b3261e"/>' }
+};
+const HABITATS = { broadleaf: "Broadleaf woodland", conifer: "Conifer plantation", open: "Grassy rides and verges", deadwood: "Stumps and dead wood" };
+const SPORES = { white: "White or cream", pink: "Pink", brown: "Brown (olive, rust, chocolate, purple)", dark: "Purple-black" };
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+const SHAPES = {
+  cap: '<path d="M14 46c0-18 15-30 34-30s34 12 34 30c0 3-4 4-8 4H22c-4 0-8-1-8-4z"/><path d="M40 50v28c0 4 3 6 8 6s8-2 8-6V50"/>',
+  bolete: '<path d="M12 44c0-16 16-26 36-26s36 10 36 26c0 4-6 6-10 6H22c-4 0-10-2-10-6z"/><path d="M34 50c-2 14-4 24-2 30 1 4 8 6 16 6s15-2 16-6c2-6 0-16-2-30"/>',
+  ball: '<circle cx="48" cy="48" r="30"/><path d="M36 82c5 3 19 3 24 0"/>',
+  bracket: '<path d="M20 14v68M28 14v68"/><path d="M28 28c20-8 46 2 50 22 2 10-6 18-18 18-12 0-26-6-30-16"/>',
+  funnel: '<path d="M10 34c10 8 20 10 38 10s28-2 38-10c-4 18-22 26-30 30v12c0 3-4 5-8 5s-8-2-8-5V64C32 60 14 52 10 34z"/>'
+};
+
+/* ---------- helpers ---------- */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const norm = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+const byId = Object.fromEntries(SPECIES.map((s) => [s.id, s]));
+
+function monthsText(m) {
+  if (m.length === 12) return "All year";
+  const sorted = [...m].sort((a, b) => a - b), runs = [];
+  sorted.forEach((n) => {
+    const last = runs[runs.length - 1];
+    if (last && n === last[1] + 1) last[1] = n; else runs.push([n, n]);
+  });
+  return runs.map(([a, b]) => (a === b ? MONTHS[a - 1] : MONTHS[a - 1] + " to " + MONTHS[b - 1])).join(", ");
+}
+
+function chip(label) {
+  const l = LABELS[label];
+  return `<span class="chip ${l.cls}"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${l.icon}</svg>${esc(label)}</span>`;
+}
+
+function pairFor(id) {
+  for (const p of PAIRS) {
+    if (p.a === id) return { role: "a", other: byId[p.b], how: p.how };
+    if (p.b === id) return { role: "b", other: byId[p.a], how: p.how };
+  }
+  return null;
+}
+
+function photoHTML(s) {
+  if (s.photo) return `<figure class="photo"><img src="${esc(s.photo)}" width="224" height="224" loading="lazy" alt="${esc(s.photoAlt || s.name)}"></figure>`;
+  return `<figure class="photo"><div class="slot"><svg viewBox="0 0 96 96" aria-hidden="true">${SHAPES[s.shape]}</svg></div><figcaption>No photo yet</figcaption></figure>`;
+}
+
+function pairHTML(s) {
+  const p = pairFor(s.id);
+  if (!p) {
+    if (s.label === "Eaten by members") {
+      return `<aside class="pair none" aria-label="Lookalikes"><h4>Lookalike</h4><p>No lookalike has been entered for this species yet. That does not mean it has none.</p></aside>`;
+    }
+    return "";
+  }
+  const o = p.other;
+  const title = p.role === "a" ? "Lookalike to rule out" : "Often mistaken for";
+  const draft = !(s.detailsOk && o.detailsOk) ? ` <span class="tag-draft">Draft, to check</span>` : "";
+  return `<aside class="pair" aria-label="${esc(title)}: ${esc(o.name)}">
+    <h4>${title}${draft}</h4>
+    <div class="other">
+      <a href="#sp-${esc(o.id)}" data-goto="${esc(o.id)}">${esc(o.name)}</a>
+      <span class="latin">${esc(o.latin)}</span>
+      <div class="chips" style="margin-top:0">${chip(o.label)}</div>
+    </div>
+    <p class="how">How to tell them apart</p>
+    <ul>${p.how.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+  </aside>`;
+}
+
+function entryHTML(s) {
+  const hasPair = !!pairHTML(s);
+  const poisonous = s.label === "Poisonous" || s.label === "Deadly";
+  const labelDraft = s.labelOk ? "" : `<span class="tag-draft">Label to confirm</span>`;
+  const detailsDraft = s.detailsOk ? "" : `<span class="tag-draft">Months, habitat, spore print and notes: draft, to check</span>`;
+  const sp = s.spore;
+  return `<article class="entry" id="sp-${esc(s.id)}" tabindex="-1" aria-labelledby="h-${esc(s.id)}">
+    <div class="entry-grid ${hasPair ? "has-pair" : ""}">
+      <div class="entry-main">
+        <div>
+          <div class="entry-head">
+            <h3 id="h-${esc(s.id)}">${esc(s.name)}</h3>
+            <span class="latin">${esc(s.latin)}</span>
+          </div>
+          ${s.aka ? `<p class="aka">Also called ${esc(s.aka.join(", "))}</p>` : ""}
+          <div class="chips">${chip(s.label)}${labelDraft}</div>
+        </div>
+        <div class="entry-body">
+          ${photoHTML(s)}
+          <dl class="facts">
+            <div>
+              <dt>Months</dt>
+              <dd>${esc(monthsText(s.months))}
+                <div class="strip" aria-hidden="true">${MONTHS.map((m, i) => `<span class="${s.months.includes(i + 1) ? "on" : ""}">${m[0]}</span>`).join("")}</div>
+              </dd>
+            </div>
+            <div><dt>Habitat</dt><dd>${esc(s.habitatText)}</dd></div>
+            <div><dt>Spore print</dt><dd><span class="swatch" style="background:${esc(sp.color)}"></span>${esc(sp.text)}</dd></div>
+          </dl>
+        </div>
+        ${detailsDraft ? `<p>${detailsDraft}</p>` : ""}
+        <div class="tell">
+          <h4>Telling it apart</h4>
+          <ul>${s.tell.map((t) => `<li>${esc(t)}</li>`).join("")}</ul>
+        </div>
+        ${poisonous ? `<p class="emergency ${s.label === "Deadly" ? "deadly" : ""}">${esc(EMERGENCY)}</p>` : ""}
+        ${s.delayed ? `<p class="warn-note">${esc(s.delayed)}</p>` : ""}
+      </div>
+      ${pairHTML(s)}
+    </div>
+  </article>`;
+}
+
+/* ---------- filters ---------- */
+const form = $("#form");
+const fields = { q: $("#q"), month: $("#month"), habitat: $("#habitat"), spore: $("#spore"), label: $("#label") };
+
+MONTHS.forEach((m, i) => fields.month.add(new Option(m, i + 1)));
+Object.entries(HABITATS).forEach(([k, v]) => fields.habitat.add(new Option(v, k)));
+Object.entries(SPORES).forEach(([k, v]) => fields.spore.add(new Option(v, k)));
+Object.keys(LABELS).forEach((k) => fields.label.add(new Option(k, k)));
+$("#species-count").textContent = SPECIES.length;
+
+function state() {
+  return Object.fromEntries(Object.entries(fields).map(([k, el]) => [k, el.value.trim()]));
+}
+
+function matches(s, f) {
+  if (f.label && s.label !== f.label) return false;
+  if (f.month && !s.months.includes(+f.month)) return false;
+  if (f.habitat && !s.habitats.includes(f.habitat)) return false;
+  if (f.spore && s.spore.group !== f.spore) return false;
+  if (f.q) {
+    const hay = norm([s.name, s.latin, ...(s.aka || []), s.habitatText, s.spore.text, s.label, ...s.tell].join(" "));
+    return norm(f.q).split(" ").every((w) => hay.includes(w));
+  }
+  return true;
+}
+
+function syncUrl(f) {
+  const qs = new URLSearchParams(Object.entries(f).filter(([, v]) => v)).toString();
+  try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) { /* file:// */ }
+}
+
+function render() {
+  const f = state();
+  syncUrl(f);
+  const list = SPECIES.filter((s) => matches(s, f)).sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+  const filtered = Object.values(f).some(Boolean);
+  $("#result-count").textContent = `Showing ${list.length} of ${SPECIES.length} species`;
+  $("#clear").disabled = !filtered;
+  $("#list").innerHTML = list.length ? list.map(entryHTML).join("") : `<div class="empty">
+      <h3>Nothing in the guide matches that</h3>
+      <p>Try fewer filters, or a different word. The guide only covers ${SPECIES.length} species so far, so a find that is not here tells you nothing about whether it is safe. Bring it to a foray.</p>
+      <button type="button" class="btn btn-solid" id="empty-clear">Clear search</button>
+    </div>`;
+}
+
+function reset() {
+  Object.values(fields).forEach((el) => (el.value = ""));
+  render();
+}
+
+function goTo(id) {
+  reset();
+  const el = document.getElementById("sp-" + id);
+  if (!el) return;
+  document.querySelectorAll(".is-target").forEach((n) => n.classList.remove("is-target"));
+  el.classList.add("is-target");
+  try { history.replaceState(null, "", location.pathname + location.search + "#sp-" + id); } catch (e) { /* file:// */ }
+  el.scrollIntoView({ block: "start" });
+  el.focus({ preventScroll: true });
+}
+
+form.addEventListener("input", render);
+form.addEventListener("submit", (e) => e.preventDefault());
+$("#clear").addEventListener("click", reset);
+$("#this-month").addEventListener("click", () => { fields.month.value = new Date().getMonth() + 1; render(); });
+$("#list").addEventListener("click", (e) => {
+  const link = e.target.closest("[data-goto]");
+  if (link) { e.preventDefault(); goTo(link.dataset.goto); }
+  if (e.target.id === "empty-clear") { reset(); fields.q.focus(); }
+});
+
+/* ---------- start-up ---------- */
+const params = new URLSearchParams(location.search);
+Object.entries(fields).forEach(([k, el]) => { const v = params.get(k); if (v) el.value = v; });
+render();
+if (location.hash.startsWith("#sp-")) {
+  const id = location.hash.slice(4);
+  if (byId[id]) {
+    const el = document.getElementById("sp-" + id);
+    if (el) { el.classList.add("is-target"); el.scrollIntoView({ block: "start" }); }
+  }
+}
+
+/* Draft marks: shown only while something is unconfirmed. */
+const SAFETY_WORDING_APPROVED = false;
+const unchecked = SPECIES.filter((s) => !s.labelOk || !s.detailsOk).length;
+if (unchecked || !SAFETY_WORDING_APPROVED) {
+  const b = $("#draft-banner");
+  b.hidden = false;
+  b.innerHTML = "<strong>Draft for the recorder.</strong> " +
+    (unchecked ? `${unchecked} of ${SPECIES.length} entries have labels, months, habitats, spore prints and notes that were drafted for checking, marked “to check” below. ` : "") +
+    (SAFETY_WORDING_APPROVED ? "" : "The safety wording at the top also needs approval. ") +
+    "Do not publish until these are confirmed.";
+}
+if (!SAFETY_WORDING_APPROVED) $("#safety-draft").hidden = false;
+
+/* Mark the next foray. */
+(function () {
+  const today = new Date().toISOString().slice(0, 10);
+  const next = [...document.querySelectorAll("#dates li")].find((li) => li.dataset.date >= today);
+  if (next) next.insertAdjacentHTML("beforeend", '<span class="next">Next foray</span>');
+})();
+</script>
+</body>
+</html>

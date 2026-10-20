@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Species guide · Dean Fungus Group</title>
+<meta name="description" content="Look up the fungi you found on a Dean Fungus Group foray in the Forest of Dean: filter by what is under the cap, colour, habitat and month.">
+<style>
+:root {
+  /* colour: lichen ground, oak-gall ink, moss accent; red is kept for danger only */
+  --ground: oklch(95.5% 0.012 125);
+  --surface: oklch(98.6% 0.006 125);
+  --tile: oklch(91.5% 0.02 130);
+  --ink: oklch(24% 0.03 155);
+  --ink-2: oklch(39% 0.03 155);
+  --ink-3: oklch(47% 0.025 155);
+  --rule: oklch(86% 0.02 135);
+  --rule-strong: oklch(70% 0.03 140);
+  --accent: oklch(40% 0.085 155);
+  --accent-hover: oklch(33% 0.08 155);
+  --accent-wash: oklch(91% 0.045 140);
+  --on-accent: oklch(98% 0.01 130);
+  --focus: oklch(45% 0.16 255);
+
+  --deadly: oklch(40% 0.17 28);
+  --on-deadly: oklch(98% 0.01 30);
+  --poison: oklch(45% 0.16 35);
+  --poison-wash: oklch(95% 0.03 40);
+  --none: oklch(42% 0.02 150);
+  --none-wash: oklch(93% 0.01 150);
+  --care: oklch(43% 0.1 75);
+  --care-wash: oklch(95% 0.05 90);
+  --ok: oklch(38% 0.09 150);
+  --ok-wash: oklch(94% 0.04 150);
+
+  --font-display: ui-serif, Georgia, "Palatino Linotype", Palatino, serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px;
+  --r-sm: 4px; --r-md: 8px; --r-lg: 12px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: var(--s4); }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font: 400 1rem/1.5 var(--font-body);
+  overflow-x: clip;
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; }
+p, li { text-wrap: pretty; }
+button, input, select { font: inherit; color: inherit; }
+button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.wrap { width: min(100% - 2 * var(--s5), 74rem); margin-inline: auto; }
+
+/* masthead */
+.mast { padding-block: var(--s4); border-bottom: 1px solid var(--rule); }
+.mast .wrap { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s4); flex-wrap: wrap; }
+.brand { font: 600 1.0625rem/1.2 var(--font-display); letter-spacing: 0.005em; }
+.brand span { color: var(--ink-3); font-family: var(--font-body); font-weight: 400; font-size: 0.9375rem; }
+.now { font-size: 0.9375rem; color: var(--ink-2); }
+
+.intro { padding-block: var(--s10) var(--s8); display: grid; gap: var(--s6); }
+.intro h1 { font-size: clamp(2rem, 1.4rem + 2.8vw, 3.5rem); line-height: 1.05; letter-spacing: -0.02em; max-width: 16ch; }
+.intro .lede { max-width: 60ch; color: var(--ink-2); font-size: 1.125rem; }
+
+.warn {
+  display: grid; grid-template-columns: auto 1fr; gap: var(--s3);
+  padding: var(--s4); max-width: 60rem;
+  background: var(--surface);
+  border: 1px solid var(--rule-strong); border-left: 6px solid var(--deadly);
+  border-radius: var(--r-sm);
+}
+.warn svg { width: 28px; height: 28px; color: var(--deadly); margin-top: 2px; }
+.warn strong { display: block; font-family: var(--font-display); font-size: 1.125rem; margin-bottom: var(--s1); }
+.warn p { color: var(--ink-2); }
+
+/* tool */
+.tool { display: grid; gap: var(--s6); padding-bottom: var(--s16); align-items: start; }
+@media (min-width: 60rem) { .tool { grid-template-columns: 21rem minmax(0, 1fr); gap: var(--s10); } }
+
+.panel { display: grid; gap: var(--s4); }
+@media (min-width: 60rem) {
+  .panel { position: sticky; top: var(--s4); max-height: calc(100dvh - 2 * var(--s4)); overflow-y: auto; padding-right: var(--s2); scrollbar-width: thin; }
+}
+.field { display: grid; gap: var(--s1); }
+.field > label, legend { font-weight: 600; font-size: 0.9375rem; padding: 0; }
+.input {
+  min-height: 44px; width: 100%;
+  padding: var(--s2) var(--s3);
+  background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--r-md);
+}
+.input:focus-visible { outline-offset: 0; }
+select.input { appearance: auto; }
+.row2 { display: grid; grid-template-columns: 1fr auto; gap: var(--s2); align-items: end; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 44px; padding: var(--s2) var(--s4);
+  border: 1px solid var(--rule-strong); border-radius: var(--r-md);
+  background: var(--surface); cursor: pointer; font-weight: 500;
+  transition: transform 140ms var(--ease-out), background-color 150ms, border-color 150ms;
+}
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.link { border-color: transparent; background: none; text-decoration: underline; text-underline-offset: 3px; padding-inline: var(--s2); }
+@media (hover: hover) {
+  .btn:hover:not(:disabled) { background: var(--accent-wash); border-color: var(--accent); }
+  .btn.primary:hover:not(:disabled) { background: var(--accent-hover); }
+}
+
+details.filters { border-top: 1px solid var(--rule); }
+details.filters > summary {
+  list-style: none; cursor: pointer; min-height: 44px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-weight: 600; padding-block: var(--s2);
+}
+details.filters > summary::-webkit-details-marker { display: none; }
+details.filters > summary::after { content: "Show"; font-weight: 400; color: var(--ink-3); }
+details.filters[open] > summary::after { content: "Hide"; }
+.count-badge { background: var(--accent); color: var(--on-accent); border-radius: 99px; font-size: 0.8125rem; padding: 0 var(--s2); margin-left: var(--s2); min-width: 1.5rem; text-align: center; }
+.filters-body { display: grid; gap: var(--s5); padding-block: var(--s2) var(--s2); }
+@media (min-width: 60rem) {
+  details.filters > summary { display: none; }
+  details.filters { border-top: 0; }
+}
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; gap: var(--s2); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.chip { display: inline-flex; }
+.chip label, label.chip {
+  display: inline-flex; align-items: center; gap: var(--s2); cursor: pointer;
+  min-height: 36px; padding: var(--s1) var(--s3) var(--s1) var(--s2);
+  border: 1px solid var(--rule-strong); border-radius: 99px;
+  background: var(--surface); font-size: 0.9375rem;
+  transition: background-color 150ms, border-color 150ms, transform 140ms var(--ease-out);
+}
+@media (pointer: coarse) { label.chip { min-height: 44px; } }
+.chip input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); flex: none; }
+.chip span { display: inline-flex; align-items: center; gap: var(--s2); }
+label.chip:has(input:checked) { background: var(--accent-wash); border-color: var(--accent); font-weight: 600; }
+label.chip:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+label.chip:active { transform: scale(0.97); }
+@media (hover: hover) { label.chip:hover { background: var(--accent-wash); } }
+.sw { width: 14px; height: 14px; border-radius: 50%; border: 1px solid oklch(0% 0 0 / 0.35); flex: none; }
+.hint { font-size: 0.875rem; color: var(--ink-3); }
+
+/* results */
+.bar { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); flex-wrap: wrap; padding-bottom: var(--s3); border-bottom: 2px solid var(--ink); }
+.bar h2 { font-size: 1.5rem; letter-spacing: -0.01em; }
+.bar p { color: var(--ink-2); }
+.list { list-style: none; margin: 0; padding: 0; }
+.list > li { border-bottom: 1px solid var(--rule); }
+.item {
+  display: grid; width: 100%; text-align: left; cursor: pointer;
+  grid-template-columns: 72px minmax(0, 1fr);
+  grid-template-areas: "art main" "art tag" "art season";
+  gap: var(--s1) var(--s4); align-items: start;
+  background: none; border: 0; padding: var(--s4) var(--s2);
+  transition: background-color 150ms;
+}
+@media (min-width: 48rem) {
+  .item { grid-template-columns: 72px minmax(0, 1fr) 11.5rem 9.5rem; grid-template-areas: "art main season tag"; align-items: center; column-gap: var(--s5); }
+}
+@media (hover: hover) { .item:hover { background: var(--surface); } }
+.item:active { background: var(--accent-wash); }
+.item:focus-visible { outline-offset: -3px; }
+.art { grid-area: art; width: 72px; height: 72px; border-radius: var(--r-md); background: var(--tile); box-shadow: inset 0 0 0 1px oklch(0% 0 0 / 0.1); overflow: hidden; }
+.art svg { display: block; width: 100%; height: 100%; }
+.main { grid-area: main; min-width: 0; }
+.name { font: 600 1.25rem/1.2 var(--font-display); letter-spacing: -0.005em; overflow-wrap: anywhere; }
+.latin { font-style: italic; color: var(--ink-3); overflow-wrap: anywhere; }
+.gist { color: var(--ink-2); font-size: 0.9375rem; margin-top: var(--s1); }
+.item .tagwrap { grid-area: tag; }
+.item .season { grid-area: season; }
+
+.tag {
+  display: inline-flex; align-items: center; gap: var(--s2);
+  padding: 2px var(--s3) 2px var(--s2); border-radius: 99px; border: 1px solid;
+  font-size: 0.875rem; font-weight: 600; white-space: nowrap;
+}
+.tag svg { width: 16px; height: 16px; flex: none; }
+.tag.deadly svg { --tile-bg: var(--deadly); }
+.tag.deadly { background: var(--deadly); border-color: var(--deadly); color: var(--on-deadly); }
+.tag.poisonous { background: var(--poison-wash); border-color: var(--poison); color: var(--poison); }
+.tag.inedible { background: var(--none-wash); border-color: var(--none); color: var(--none); }
+.tag.caution { background: var(--care-wash); border-color: var(--care); color: var(--care); }
+.tag.edible { background: var(--ok-wash); border-color: var(--ok); color: var(--ok); }
+
+.strip { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; max-width: 11.5rem; }
+.strip i { display: block; height: 14px; background: var(--rule); border-radius: 1px; position: relative; }
+.strip i.on { background: var(--accent); }
+.strip i.cur::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 3px; background: var(--ink); border-radius: 1px; }
+.strip.big { max-width: none; gap: 3px; }
+.strip.big i { height: 28px; }
+.strip.big i b { position: absolute; inset: 0; display: grid; place-items: center; font: 600 0.75rem var(--font-body); color: var(--ink-2); }
+.strip.big i.on b { color: var(--on-accent); }
+.seasontext { font-size: 0.875rem; color: var(--ink-3); margin-top: var(--s2); }
+
+.empty { padding: var(--s12) var(--s4); display: grid; gap: var(--s3); justify-items: start; max-width: 36rem; }
+.empty h3 { font-size: 1.5rem; }
+.empty p { color: var(--ink-2); }
+
+/* detail sheet */
+dialog.sheet {
+  width: min(100% - 2 * var(--s4), 52rem); max-height: calc(100dvh - 2 * var(--s4));
+  margin: auto; padding: 0; border: 0; border-radius: var(--r-lg);
+  background: var(--ground); color: var(--ink);
+  box-shadow: 0 0 0 1px oklch(0% 0 0 / 0.12), 0 24px 60px oklch(0% 0 0 / 0.25);
+  overflow: auto; overscroll-behavior: contain;
+}
+dialog.sheet::backdrop { background: oklch(20% 0.03 155 / 0.55); }
+dialog.sheet[open] { animation: sheet-in 260ms var(--ease-out); }
+@keyframes sheet-in { from { opacity: 0; transform: scale(0.97); } }
+@media (max-width: 40rem) {
+  dialog.sheet { width: 100%; max-width: none; max-height: 100dvh; height: 100dvh; border-radius: 0; margin: 0; }
+}
+.sheet-in { padding: var(--s6); display: grid; gap: var(--s6); padding-bottom: calc(var(--s6) + env(safe-area-inset-bottom)); }
+.sheet-top { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); }
+.sheet-head { display: grid; grid-template-columns: 1fr; gap: var(--s5); }
+@media (min-width: 40rem) { .sheet-head { grid-template-columns: 11rem 1fr; align-items: center; } }
+.sheet-head .art { grid-area: auto; width: 100%; max-width: 11rem; height: auto; aspect-ratio: 1; }
+.sheet-head h2 { font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem); line-height: 1.1; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+.sheet-head .latin { font-size: 1.125rem; margin: var(--s1) 0 var(--s3); }
+.facts { display: grid; gap: var(--s3); }
+.alert { padding: var(--s4); border-radius: var(--r-sm); border: 1px solid var(--rule-strong); border-left-width: 6px; background: var(--surface); }
+.alert.deadly { background: var(--deadly); border-color: var(--deadly); color: var(--on-deadly); font-weight: 500; }
+.alert.poisonous { border-left-color: var(--poison); background: var(--poison-wash); }
+.alert.caution { border-left-color: var(--care); background: var(--care-wash); }
+.cols { display: grid; gap: var(--s6); }
+@media (min-width: 44rem) { .cols { grid-template-columns: 1fr 1fr; gap: var(--s8); } }
+.sec { display: grid; gap: var(--s2); align-content: start; }
+.sec h3 { font-size: 1.25rem; padding-top: var(--s2); border-top: 1px solid var(--rule-strong); }
+.sec p, .sec li { max-width: 62ch; }
+.sec ul { margin: 0; padding-left: var(--s5); display: grid; gap: var(--s1); }
+dl.meta { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: var(--s1) var(--s4); }
+dl.meta dt { color: var(--ink-3); }
+dl.meta dd { margin: 0; }
+.sheet-nav { display: flex; justify-content: space-between; gap: var(--s3); border-top: 1px solid var(--rule); padding-top: var(--s4); }
+.sheet-nav .btn { max-width: 48%; text-align: left; }
+.sheet-nav .btn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* footer */
+.foot { border-top: 2px solid var(--ink); padding-block: var(--s10) var(--s16); display: grid; gap: var(--s8); }
+@media (min-width: 52rem) { .foot { grid-template-columns: repeat(3, 1fr); gap: var(--s10); } }
+.foot h2 { font-size: 1.25rem; margin-bottom: var(--s2); }
+.foot p, .foot li { color: var(--ink-2); }
+.foot ul { margin: 0; padding-left: var(--s5); display: grid; gap: var(--s1); }
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.sheet[open] { animation: sheet-fade 200ms linear; }
+  .btn, label.chip { transition: background-color 150ms, border-color 150ms; }
+  .btn:active, label.chip:active { transform: none; }
+}
+@keyframes sheet-fade { from { opacity: 0; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-deadly" viewBox="0 0 16 16"><path d="M5.2 1h5.6L15 5.2v5.6L10.8 15H5.2L1 10.8V5.2z" fill="currentColor"/><path d="M5.5 5.5l5 5m0-5l-5 5" stroke="var(--tile-bg, #fff)" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-poisonous" viewBox="0 0 16 16"><path d="M8 1.5l7 12.5H1z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 6v3.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="11.8" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-inedible" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4.5 8h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-caution" viewBox="0 0 16 16"><path d="M8 1.2l6.8 6.8L8 14.8 1.2 8z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 5v3.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="10.8" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-edible" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M5 8.2l2.1 2.1L11.2 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand">Dean Fungus Group <span>· Forest of Dean</span></div>
+    <div class="now" id="now"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro" aria-labelledby="h1">
+    <h1 id="h1">What did you find on the foray?</h1>
+    <p class="lede">Describe it by what you can see: what is under the cap, the colour, where it grew and when. The list narrows to the species we most often meet in the Forest. Open one to see how to tell it from its lookalikes.</p>
+    <div class="warn" role="note">
+      <svg aria-hidden="true"><use href="#i-deadly"/></svg>
+      <div>
+        <strong>Do not eat a fungus on the strength of this guide.</strong>
+        <p>Several of the deadliest fungi in Britain grow in the Forest of Dean, and they look like edible ones. Identification here is a starting point for the group’s recorder and experienced members, not a licence to cook.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="tool">
+    <form class="panel" id="panel" aria-label="Find a species" onsubmit="return false">
+      <div class="field">
+        <label for="q">Search by name or feature</label>
+        <input class="input" id="q" type="search" autocomplete="off" spellcheck="false" placeholder="e.g. death cap, bootlace, bruises blue">
+      </div>
+
+      <details class="filters" id="filters">
+        <summary><span>Filters <span class="count-badge" id="badge" hidden>0</span></span></summary>
+        <div class="filters-body">
+          <div class="row2">
+            <div class="field">
+              <label for="month">Found in</label>
+              <select class="input" id="month"></select>
+            </div>
+            <button type="button" class="btn" id="thismonth">This month</button>
+          </div>
+          <fieldset><legend>What is under the cap?</legend><div class="chips" id="f-u"></div></fieldset>
+          <fieldset><legend>Colour</legend><div class="chips" id="f-c"></div></fieldset>
+          <fieldset><legend>Where it grew</legend><div class="chips" id="f-h"></div></fieldset>
+          <fieldset><legend>Safety</legend><div class="chips" id="f-s"></div>
+            <p class="hint">“Edible” still means certain identification and proper cooking.</p>
+          </fieldset>
+          <button type="button" class="btn" id="clear">Clear all filters</button>
+        </div>
+      </details>
+    </form>
+
+    <section aria-labelledby="rh">
+      <div class="bar">
+        <h2 id="rh">Species</h2>
+        <p id="count" role="status" aria-live="polite"></p>
+      </div>
+      <ul class="list" id="list"></ul>
+      <div class="empty" id="empty" hidden>
+        <h3>Nothing matches those filters</h3>
+        <p>Try removing a filter, or loosen the month. If you are sure of the colour but not the rest, start with the colour alone. This guide covers a selection of common species, so yours may not be listed. Photograph it and take it to the recorder.</p>
+        <button type="button" class="btn primary" id="clear2">Clear all filters</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="wrap foot">
+  <section>
+    <h2>Recording a find</h2>
+    <ul>
+      <li>Photograph the cap from above, the underside, and the whole stem.</li>
+      <li>Dig up the base rather than cutting it. A cup or sac down there can be the deciding feature.</li>
+      <li>Note the tree it was under, or the wood it grew on.</li>
+      <li>Write down the date and where you were. A grid reference helps.</li>
+      <li>For gilled species, lay the cap on paper overnight for a spore print.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Picking in the Forest</h2>
+    <p>Forestry England sets the rules on picking fungi in the Forest of Dean, and some places are protected. Check their current guidance before you take anything. On group forays, leave what you do not need: fungi are the fruit of a much larger organism, and other wildlife depends on them.</p>
+  </section>
+  <section>
+    <h2>About this guide</h2>
+    <p>A selection of species commonly met on forays, not a full flora. Drawings are schematic, made to show shape and colour, and are not portraits. Colours vary a lot with age and weather. Check against a printed field guide, and ask the recorder if you are unsure.</p>
+  </section>
+</footer>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sh-name"></dialog>
+
+<noscript><div class="wrap"><p class="warn" style="margin-block:2rem">The species guide needs JavaScript to filter and search.</p></div></noscript>
+
+<script>
+"use strict";
+
+/* ---------- data ----------
+   n name · l Latin · u underside (gills|pores|spines|ridges|none) · c cap colours
+   h habitat (wood|broadleaf|conifer|open) · m months "a-b[,a-b]" · s safety
+   sz size · id recognition · lk lookalikes · nt note · a drawing
+*/
+const SPECIES = [
+{ n:"Fly agaric", l:"Amanita muscaria", u:"gills", c:["red"], h:["broadleaf","conifer"], m:"8-11", s:"poisonous",
+  sz:"Cap 8–20 cm",
+  id:"Scarlet to orange-red cap dotted with white warts, though rain can wash them off. White gills, a white ring on the stem, and a bulbous base ringed with scaly bands.",
+  lk:"The Blusher (brownish-pink, flesh turns reddish).",
+  nt:"Almost always under birch or pine on acid soil, so very much a Forest of Dean species. Poisonous, and not a safe wild food.",
+  a:{f:"cap",s:"dome",c:"#c8321e",st:"#f1efe6",un:"#f4f1ea",w:1,r:1,v:1} },
+{ n:"Panthercap", l:"Amanita pantherina", u:"gills", c:["brown"], h:["broadleaf","conifer"], m:"7-11", s:"poisonous",
+  sz:"Cap 5–12 cm",
+  id:"Brown cap with small, crisp white warts and a faintly grooved edge. White gills. The stem base is swollen with a distinct collar-like rim.",
+  lk:"The Blusher, whose flesh blushes pink when cut and whose ring is grooved on top. Warts alone are not enough to tell them apart.",
+  nt:"Can cause serious poisoning, with confusion and drowsiness within a few hours.",
+  a:{f:"cap",s:"dome",c:"#7a5a3e",st:"#efe9dc",un:"#f2eee5",w:1,r:1,v:1} },
+{ n:"Death cap", l:"Amanita phalloides", u:"gills", c:["green","yellow"], h:["broadleaf"], m:"8-11", s:"deadly",
+  sz:"Cap 5–15 cm",
+  id:"Olive-green to yellowish cap, paler at the edge, with fine radiating silky fibres. Rarely almost white. White gills, a skirt-like ring, and a white sac (volva) at the base, often buried, so dig up the whole stem. A sweetish, sickly smell with age.",
+  lk:"Greenish Russulas (no ring or sac), young puffballs and ‘eggs’, and white Agaricus mushrooms, whose gills turn pink then brown.",
+  nt:"Responsible for most fatal fungus poisonings. Symptoms are delayed by 6–24 hours, by which time organ damage has begun. If anyone may have eaten one, get emergency medical help straight away and keep a sample.",
+  a:{f:"cap",s:"dome",c:"#8a8a3a",st:"#ece8d4",un:"#f0eddc",r:1,v:1} },
+{ n:"Destroying angel", l:"Amanita virosa and relatives", u:"gills", c:["white"], h:["broadleaf","conifer"], m:"8-11", s:"deadly",
+  sz:"Cap 5–12 cm",
+  id:"Entirely white. Conical to bell-shaped cap, white gills, a ragged ring that soon drops off, and a shaggy stem rising from a sac-like volva.",
+  lk:"Field mushrooms and other white Agaricus, and young puffballs. Agaricus gills turn pink then chocolate-brown. Amanita gills stay white.",
+  nt:"Contains the same toxins as the Death cap. Do not pick any white-gilled mushroom for the table.",
+  a:{f:"cap",s:"bell",c:"#f3f1ea",st:"#f3f1ea",un:"#f3f1ea",r:1,v:1,sw:"norm"} },
+{ n:"Blusher", l:"Amanita rubescens", u:"gills", c:["brown","purple"], h:["broadleaf","conifer"], m:"6-11", s:"caution",
+  sz:"Cap 5–15 cm",
+  id:"Dull brownish-pink cap with greyish-pink warts. White gills that become stained reddish. Flesh slowly turns pink-red where cut or nibbled by slugs. Grooved ring on the upper side.",
+  lk:"The Panthercap and the Death cap, both lethal or serious.",
+  nt:"Edible only when thoroughly cooked and poisonous raw, but so easily confused with deadly relatives that we do not recommend it.",
+  a:{f:"cap",s:"dome",c:"#b08a78",st:"#e5cfc6",un:"#f0e6df",w:1,r:1,v:1,wc:"#d8c7bd"} },
+{ n:"Sulphur tuft", l:"Hypholoma fasciculare", u:"gills", c:["yellow"], h:["wood"], m:"1-12", s:"poisonous",
+  sz:"Cap 2–7 cm",
+  id:"Dense clusters on stumps and dead wood. Sulphur-yellow cap with an orange-brown centre. Gills yellow, then olive-green, finally purple-brown. No proper ring.",
+  lk:"Honey fungus (paler gills, a ring, and usually honey-brown). Sheathed woodtuft.",
+  nt:"Fruits all year, most in autumn, on broadleaf and conifer wood. Poisonous and very bitter.",
+  a:{f:"cap",s:"dome",c:"#d8c43a",st:"#c9b84a",un:"#9fa14a",sw:"slim",sc:0.85} },
+{ n:"Honey fungus", l:"Armillaria mellea agg.", u:"gills", c:["yellow","brown"], h:["wood"], m:"8-11", s:"caution",
+  sz:"Cap 4–15 cm",
+  id:"Honey-yellow to brown caps, often with small dark scales at the centre, in clumps at the base of trees and stumps. Yellowish ring on the stem. Look for black ‘bootlace’ strands under bark and in the soil.",
+  lk:"Sulphur tuft, and the lethal Funeral bell, which is smaller, rusty-brown, and grows on rotting wood.",
+  nt:"Edible only after thorough cooking, and many people are upset by it. A serious parasite of trees.",
+  a:{f:"cap",s:"dome",c:"#b98a45",st:"#b79a6b",un:"#e6d8b0",r:1,w:1,wc:"#7a5a2a",sw:"slim"} },
+{ n:"Funeral bell", l:"Galerina marginata", u:"gills", c:["brown"], h:["wood"], m:"8-12", s:"deadly",
+  sz:"Cap 1–4 cm",
+  id:"Small honey- to rusty-brown cap that fades paler as it dries. A thin ring on the stem, rusty-brown gills and spore print. Grows in tufts on rotting wood, especially conifer.",
+  lk:"Honey fungus, Velvet shank and the Sheathed woodtuft, which is why picking small brown mushrooms off wood is dangerous.",
+  nt:"Contains the same toxins as the Death cap.",
+  a:{f:"cap",s:"dome",c:"#a8742f",st:"#8a6a3a",un:"#b56a2a",r:1,sw:"slim",sc:0.72} },
+{ n:"Brown roll-rim", l:"Paxillus involutus", u:"gills", c:["brown"], h:["broadleaf","conifer"], m:"7-11", s:"poisonous",
+  sz:"Cap 5–12 cm",
+  id:"Dull yellow-brown cap with a strongly inrolled, woolly margin when young, becoming funnel-shaped. Crowded gills run down the stem and bruise brown when touched.",
+  lk:"Milkcaps and other brown-gilled mushrooms. Bruising brown, and the inrolled edge, are the clues.",
+  nt:"Commonly eaten in the past. It can trigger a severe immune reaction that may be fatal, even in people who ate it safely before. Common under birch.",
+  a:{f:"cap",s:"flat",c:"#8a6a3c",st:"#9a7e4e",un:"#c9a870"} },
+{ n:"Verdigris agaric", l:"Stropharia aeruginosa", u:"gills", c:["green"], h:["broadleaf","conifer"], m:"8-11", s:"poisonous",
+  sz:"Cap 3–8 cm",
+  id:"Slimy blue-green cap, fading to yellowish with age, with white flecks at the edge. A ring on the stem. Gills pale, becoming purple-brown.",
+  lk:"Few. The colour fades, so look for traces of blue-green on the cap and stem.",
+  nt:"Thought to be poisonous. Avoid.",
+  a:{f:"cap",s:"dome",c:"#4fa89a",st:"#cfe0d0",un:"#7a5a7a",r:1,sw:"slim"} },
+{ n:"Lilac bonnet", l:"Mycena pura", u:"gills", c:["purple"], h:["broadleaf","conifer"], m:"8-12", s:"poisonous",
+  sz:"Cap 2–6 cm",
+  id:"Bell-shaped cap that flattens, lilac-pink to violet, fading with age. Pale pinkish-lilac gills. A strong smell of radish.",
+  lk:"Amethyst deceiver, which has thick, widely spaced violet gills and no radish smell.",
+  nt:"Contains muscarine. Poisonous.",
+  a:{f:"cap",s:"bell",c:"#c9a0c0",st:"#c9b2c4",un:"#e0cfdc",sw:"slim",sc:0.85} },
+{ n:"The sickener", l:"Russula emetica", u:"gills", c:["red"], h:["conifer","broadleaf"], m:"7-11", s:"poisonous",
+  sz:"Cap 4–9 cm",
+  id:"Shiny cherry-red cap whose skin peels easily. Brittle white gills and a white stem with no ring. Fruits in damp, mossy conifer woods and bogs.",
+  lk:"Other red Russulas, including the edible-looking Beechwood sickener. Treat every red Russula as inedible.",
+  nt:"Causes vomiting and diarrhoea.",
+  a:{f:"cap",s:"dome",c:"#c8283a",st:"#f4f0ec",un:"#f6f3ee"} },
+{ n:"Woolly milkcap", l:"Lactarius torminosus", u:"gills", c:["purple"], h:["broadleaf"], m:"8-11", s:"poisonous",
+  sz:"Cap 4–12 cm",
+  id:"Pale salmon-pink cap with darker concentric zones and a shaggy, inrolled margin. White milk that does not change colour.",
+  lk:"Other pink or orange milkcaps. Under birch, with a shaggy edge, is the clue.",
+  nt:"Irritates the gut. Eaten in parts of Eastern Europe only after lengthy treatment. Do not eat.",
+  a:{f:"cap",s:"flat",c:"#e0a89b",st:"#efe0d8",un:"#f1e3da"} },
+{ n:"Saffron milkcap", l:"Lactarius deliciosus", u:"gills", c:["orange"], h:["conifer"], m:"8-11", s:"edible",
+  sz:"Cap 4–12 cm",
+  id:"Carrot-orange cap with darker concentric rings, turning green with age and handling. Carrot-orange milk that stains the gills green. Under pine.",
+  lk:"Other orange milkcaps. The milk colour decides: carrot-orange milk, not white or watery.",
+  nt:"A good edible when cooked, and bruises green on handling.",
+  a:{f:"cap",s:"funnel",c:"#d98338",st:"#e49a4c",un:"#ee9a45",sw:"norm"} },
+{ n:"Charcoal burner", l:"Russula cyanoxantha", u:"gills", c:["purple","green","grey"], h:["broadleaf","conifer"], m:"7-11", s:"edible",
+  sz:"Cap 5–15 cm",
+  id:"Cap colour varies widely: violet, green, lilac, grey. The white gills are flexible, greasy and do not snap, unlike other Russulas. Stem is white and firm.",
+  lk:"Other Russulas, especially the red or purple poisonous ones. Check the gills bend.",
+  nt:"A reliable Russula, but only if the greasy, flexible gills are confirmed.",
+  a:{f:"cap",s:"dome",c:"#6e5c88",st:"#f4f1ec",un:"#f5f2ec"} },
+{ n:"Clouded funnel", l:"Clitocybe nebularis", u:"gills", c:["grey"], h:["broadleaf","conifer"], m:"9-12", s:"poisonous",
+  sz:"Cap 6–20 cm",
+  id:"Large grey-buff cap with a frosty bloom, a wavy margin and cream gills running down a swollen, club-shaped stem. Sweetish smell. Often in troops and rings in leaf litter.",
+  lk:"Several white funnels, some containing muscarine, and the grey Entoloma species.",
+  nt:"Upsets many people. Not recommended.",
+  a:{f:"cap",s:"funnel",c:"#a8a49a",st:"#cfc9bb",un:"#e6e0d0",sw:"thick"} },
+{ n:"Penny bun", l:"Boletus edulis", u:"pores", c:["brown"], h:["broadleaf","conifer"], m:"7-11", s:"edible",
+  sz:"Cap 7–25 cm",
+  id:"Bun-shaped brown cap. Pores white when young, maturing to yellow-green, never red, and not staining blue. Stout, swollen stem with a fine white net at the top.",
+  lk:"Bitter bolete, which has pink pores and a dark net on the stem. Avoid any bolete with red pores or blue-staining flesh.",
+  nt:"One of the most prized edibles. Check each one by cutting it through.",
+  a:{f:"cap",s:"dome",c:"#8a5a2e",st:"#e7d9bc",un:"#f0e8c8",sw:"thick"} },
+{ n:"Bay bolete", l:"Imleria badia", u:"pores", c:["brown"], h:["broadleaf","conifer"], m:"8-11", s:"edible",
+  sz:"Cap 4–14 cm",
+  id:"Chestnut-brown cap, suede-like and tacky when wet. Cream-yellow pores that quickly bruise blue-green. Brown-streaked stem with no net.",
+  lk:"Penny bun and Bitter bolete. Avoid any bolete with red pores.",
+  nt:"Good edible when cooked. Often under pine and spruce.",
+  a:{f:"cap",s:"dome",c:"#5e3a22",st:"#b88a58",un:"#e6d68a",sw:"norm"} },
+{ n:"Bitter bolete", l:"Tylopilus felleus", u:"pores", c:["brown"], h:["broadleaf","conifer"], m:"7-11", s:"inedible",
+  sz:"Cap 6–15 cm",
+  id:"Tan-brown cap. Pores white, turning pink with age. Stem with a dark, coarse net.",
+  lk:"Penny bun: pink pores and a dark net give this one away.",
+  nt:"Intensely bitter, and one fruit body can spoil a whole pan.",
+  a:{f:"cap",s:"dome",c:"#a77d4e",st:"#c9a77a",un:"#e4b5a0",sw:"thick"} },
+{ n:"Birch bolete", l:"Leccinum scabrum", u:"pores", c:["brown"], h:["broadleaf"], m:"6-11", s:"edible",
+  sz:"Cap 4–12 cm",
+  id:"Smooth brown-grey cap. White to grey pores. A slender stem covered in dark scales. Found only with birch.",
+  lk:"Other Leccinum species, and the Bitter bolete.",
+  nt:"Soft and watery. Cook well.",
+  a:{f:"cap",s:"dome",c:"#a08a6a",st:"#e6e0d0",un:"#e9e6dc",sw:"slim"} },
+{ n:"Slippery jack", l:"Suillus luteus", u:"pores", c:["brown"], h:["conifer"], m:"8-11", s:"edible",
+  sz:"Cap 5–12 cm",
+  id:"Chocolate-brown slimy cap. Yellow pores covered by a veil that leaves a purple-tinged ring on the stem. Under pine.",
+  lk:"Other Suillus species, which are harmless but of little value.",
+  nt:"Peel off the slimy skin before cooking.",
+  a:{f:"cap",s:"dome",c:"#5b3a20",st:"#efe0a0",un:"#e0c040",r:1} },
+{ n:"Chanterelle", l:"Cantharellus cibarius", u:"ridges", c:["yellow"], h:["broadleaf"], m:"6-11", s:"edible",
+  sz:"Cap 3–10 cm",
+  id:"Egg-yolk yellow throughout. Under the cap are blunt, forking ridges that run down the stem, not true gills. Flesh pulls apart like string. Smells of apricots.",
+  lk:"False chanterelle, which is orange, with thin crowded true gills, usually under conifers or on heath.",
+  nt:"Often under beech and oak.",
+  a:{f:"cap",s:"funnel",c:"#f0b429",st:"#f2c04a",un:"#eeb23a"} },
+{ n:"False chanterelle", l:"Hygrophoropsis aurantiaca", u:"gills", c:["orange"], h:["conifer","open"], m:"8-12", s:"inedible",
+  sz:"Cap 2–7 cm",
+  id:"Deeper orange than a Chanterelle, with a darker centre. Thin, crowded, repeatedly forking true gills that peel away from the cap. Slender stem of the same colour.",
+  lk:"Chanterelle. Look for true, thin gills rather than blunt ridges.",
+  nt:"Not poisonous in itself, but can upset the stomach.",
+  a:{f:"cap",s:"funnel",c:"#e2761b",st:"#e08a3a",un:"#f09a40",sw:"slim"} },
+{ n:"Horn of plenty", l:"Craterellus cornucopioides", u:"ridges", c:["grey"], h:["broadleaf"], m:"8-11", s:"edible",
+  sz:"Height 5–10 cm",
+  id:"Hollow trumpet in dark grey-black with a frilly rim. The underside is smooth to slightly wrinkled and ash-grey. Hard to spot in beech leaf litter.",
+  lk:"Few. Other dark trumpets are rare in the Forest.",
+  nt:"Dries well. Often grows in groups.",
+  a:{f:"trumpet",c:"#3b3a3a",st:"#2c2b2b"} },
+{ n:"Wood hedgehog", l:"Hydnum repandum", u:"spines", c:["orange","white"], h:["broadleaf","conifer"], m:"8-11", s:"edible",
+  sz:"Cap 3–10 cm",
+  id:"Pale apricot cap, irregular and wavy. The underside is covered in soft, brittle spines (teeth) that peel off easily. Off-centre white to cream stem.",
+  lk:"Few. Nothing else common has soft spines under a pale cap.",
+  nt:"A safe beginner’s edible once the spines are confirmed.",
+  a:{f:"cap",s:"dome",c:"#e6b57a",st:"#f3e6cf",un:"#f0d8b0",sw:"norm"} },
+{ n:"Wood blewit", l:"Lepista nuda", u:"gills", c:["purple"], h:["broadleaf","open"], m:"10-12", s:"caution",
+  sz:"Cap 6–15 cm",
+  id:"Violet-lilac gills and stem when fresh, fading to buff-brown cap. Pleasant perfumed smell. A pale pinkish spore print.",
+  lk:"Violet webcaps (Cortinarius), some of which are toxic. Their spore print is rusty-brown, and they have a cobweb veil.",
+  nt:"Edible cooked, and some people react. Take a spore print before eating.",
+  a:{f:"cap",s:"dome",c:"#8a78a8",st:"#a99ac0",un:"#7e6aa0",sw:"thick"} },
+{ n:"Amethyst deceiver", l:"Laccaria amethystina", u:"gills", c:["purple"], h:["broadleaf","conifer"], m:"8-11", s:"edible",
+  sz:"Cap 1–5 cm",
+  id:"Small, vivid violet when damp, fading to buff-lilac when dry. Thick, widely spaced, powdery violet gills. Slim, tough stem.",
+  lk:"Lilac bonnet, which is poisonous, thin-gilled, bell-shaped and smells of radish.",
+  nt:"Edible, but tiny and of little food value.",
+  a:{f:"cap",s:"dome",c:"#7a4a9a",st:"#8a5aa8",un:"#7a4a9a",sw:"slim",sc:0.85} },
+{ n:"Oyster mushroom", l:"Pleurotus ostreatus", u:"gills", c:["grey"], h:["wood"], m:"10-3", s:"edible",
+  sz:"Cap 5–15 cm",
+  id:"Overlapping shelves, grey-brown to blue-grey, with white gills running down onto a very short side stem or none. Mostly on dead beech, in cold damp weather.",
+  lk:"Angel’s wings (thin, pure white, on conifer wood), which is best avoided.",
+  nt:"Also grown commercially, so supermarket oysters will look similar.",
+  a:{f:"bracket",ly:2,c:"#8c8a88",c2:"#a3a09c",un:"#efece4"} },
+{ n:"Velvet shank", l:"Flammulina velutipes", u:"gills", c:["orange"], h:["wood"], m:"11-3", s:"caution",
+  sz:"Cap 2–6 cm",
+  id:"Slimy orange-brown cap in winter, on stumps and dead wood. Velvety dark brown-black stem. Pale spore print.",
+  lk:"The deadly Funeral bell, which has a rusty-brown spore print and a ring. Always take a spore print.",
+  nt:"A winter edible with a lethal lookalike. Experts only.",
+  a:{f:"cap",s:"dome",c:"#d9892b",st:"#3b2a1c",un:"#f0d29a",sw:"slim",sc:0.85} },
+{ n:"Shaggy inkcap", l:"Coprinus comatus", u:"gills", c:["white"], h:["open"], m:"5-11", s:"edible",
+  sz:"Height 8–25 cm",
+  id:"Tall white cylindrical cap with shaggy scales. It opens, then dissolves into black ink from the bottom up. Grows on tracks, verges and disturbed ground.",
+  lk:"Common inkcap (grey-brown, toxic with alcohol).",
+  nt:"Eat only when still white and cook within hours, as it digests itself.",
+  a:{f:"cap",s:"bell",c:"#f1eee6",st:"#f4f1ea",un:"#5a4a5a",sw:"norm",w:1,wc:"#c9bba3"} },
+{ n:"Parasol", l:"Macrolepiota procera", u:"gills", c:["brown"], h:["open","broadleaf"], m:"7-11", s:"edible",
+  sz:"Cap 10–25 cm",
+  id:"Large cap, domed then flat, with a dark central boss and shaggy brown scales on a paler ground. Tall stem with snakeskin patterning and a double ring that slides freely.",
+  lk:"Small Lepiota species with a fixed ring, some of which are deadly. Collect only large ones with a snakeskin stem.",
+  nt:"Grows on the open edges of woods. Check the stem pattern and ring.",
+  a:{f:"cap",s:"dome",c:"#a08060",st:"#cdb89a",un:"#f1e8da",sw:"slim",r:1,w:1,wc:"#7a5a3e"} },
+{ n:"Yellow stainer", l:"Agaricus xanthodermus", u:"gills", c:["white"], h:["open","broadleaf"], m:"6-11", s:"poisonous",
+  sz:"Cap 5–15 cm",
+  id:"White, squarish domed cap. Scratch the base of the stem and it stains chrome-yellow. Gills go pink then brown. Smells of ink or disinfectant, especially when cooked.",
+  lk:"Field mushroom and Horse mushroom, which don’t stain yellow.",
+  nt:"Causes severe stomach upset.",
+  a:{f:"cap",s:"dome",c:"#efece0",st:"#efece0",un:"#e8c9c0",r:1} },
+{ n:"Gem-studded puffball", l:"Lycoperdon perlatum", u:"none", c:["white"], h:["broadleaf","conifer","open"], m:"7-11", s:"edible",
+  sz:"Height 3–7 cm",
+  id:"Pear-shaped, covered in tiny pointed warts that rub off to leave a net pattern. The flesh is pure white all through when young, and turns brown and powdery when old, releasing spores through a hole at the top.",
+  lk:"Young Amanita ‘eggs’ (including the Death cap) and the Common earthball.",
+  nt:"Cut every one in half. Any outline of a mushroom inside means it is not a puffball.",
+  a:{f:"ball",c:"#efe6d2",dots:"#b9a98a",base:1} },
+{ n:"Common earthball", l:"Scleroderma citrinum", u:"none", c:["brown","yellow"], h:["broadleaf","open"], m:"7-12", s:"poisonous",
+  sz:"Width 3–10 cm",
+  id:"Round, hard, yellow-brown, with a cracked, scaly skin and hardly any stalk. Inside, firm and marbled purple-black with white. Never pure white.",
+  lk:"Puffballs, which are soft, white inside and not marbled.",
+  nt:"Poisonous. Often has a smell of rubber.",
+  a:{f:"ball",c:"#a48a3a",dots:"#6e5a24"} },
+{ n:"Common stinkhorn", l:"Phallus impudicus", u:"none", c:["white"], h:["broadleaf","conifer"], m:"6-11", s:"inedible",
+  sz:"Height 10–25 cm",
+  id:"Starts as a soft white ‘egg’ half buried in leaf litter. Erupts into a white stalk topped with a dark olive-green slimy cap that smells strongly of rotting meat and attracts flies.",
+  lk:"You will smell it before you see it.",
+  nt:"Smell it from many metres away. Not edible in practice.",
+  a:{f:"stink"} },
+{ n:"Scarlet elfcup", l:"Sarcoscypha austriaca", u:"none", c:["red"], h:["wood"], m:"12-3", s:"inedible",
+  sz:"Cup 2–5 cm",
+  id:"Bright scarlet cup, pale and finely downy outside. Grows on fallen sticks of hazel, willow and other broadleaf trees in damp, mossy places, in late winter.",
+  lk:"Orange peel fungus (orange, on bare ground).",
+  nt:"A sign of damp, old woodland. Harmless but not worth eating.",
+  a:{f:"cup",c:"#d1202a",out:"#e8c8b8"} },
+{ n:"Birch polypore", l:"Fomitopsis betulina", u:"pores", c:["white","brown"], h:["wood"], m:"1-12", s:"inedible",
+  sz:"Width 10–20 cm",
+  id:"Rubbery kidney or hoof-shaped bracket with a pale brown top and a whitish edge. The underside is white with fine pores. Attached by a short stub. Only on birch.",
+  lk:"Hoof fungus, which is rare in England and has a hard, grey, grooved crust.",
+  nt:"Fruits all year. Rubbery and bitter.",
+  a:{f:"bracket",ly:1,c:"#c8b79c",un:"#efe9dc"} },
+{ n:"Turkeytail", l:"Trametes versicolor", u:"pores", c:["brown","grey","purple"], h:["wood"], m:"1-12", s:"inedible",
+  sz:"Width 3–8 cm",
+  id:"Thin, flexible, velvety brackets in overlapping rosettes. Concentric bands of brown, grey, blue and cream. The underside is white with tiny pores.",
+  lk:"False turkeytail (Stereum ostrea) has a smooth underside with no pores.",
+  nt:"Among the most common fungi on dead wood.",
+  a:{f:"bracket",ly:3,c:"#6b5a48",c2:"#9aa0a6",un:"#f1ece0"} },
+{ n:"Dryad’s saddle", l:"Cerioporus squamosus", u:"pores", c:["brown","yellow"], h:["wood"], m:"4-7,10-11", s:"edible",
+  sz:"Width 10–50 cm",
+  id:"Large saddle or fan-shaped bracket, pale yellow with dark brown scales in rings. Large angular pores, and a short stalk with a black base. Smells of watermelon rind.",
+  lk:"Few. The scales and the stalk base are distinctive.",
+  nt:"Only young, soft growth is edible.",
+  a:{f:"bracket",ly:1,c:"#d9bf80",un:"#f3ead0",dots:"#6b4a2a"} },
+{ n:"Chicken of the woods", l:"Laetiporus sulphureus", u:"pores", c:["yellow","orange"], h:["wood"], m:"5-10", s:"caution",
+  sz:"Width 10–40 cm",
+  id:"Layered brackets, bright sulphur-yellow and orange, with a suede-like surface. Tiny sulphur-yellow pores underneath, no gills. Mostly on oak.",
+  lk:"Few, but the host matters.",
+  nt:"Eat only the young soft edge, thoroughly cooked. Some people are ill. Avoid anything from yew, conifers or eucalyptus.",
+  a:{f:"bracket",ly:3,c:"#f0a21c",c2:"#f2c23a",un:"#f3d44a"} },
+{ n:"Beefsteak fungus", l:"Fistulina hepatica", u:"pores", c:["red"], h:["wood"], m:"8-11", s:"edible",
+  sz:"Width 10–25 cm",
+  id:"Like a raw tongue: blood-red, moist, with a pale underside of separate tiny tubes. Bleeds red juice when cut, and the flesh is marbled like meat. On oak and sweet chestnut.",
+  lk:"None that grow on oak.",
+  nt:"Sour. Best young and sliced thin.",
+  a:{f:"bracket",ly:1,c:"#b0242c",un:"#f0c8b8"} },
+{ n:"Artist’s bracket", l:"Ganoderma applanatum", u:"pores", c:["brown"], h:["wood"], m:"1-12", s:"inedible",
+  sz:"Width 10–60 cm",
+  id:"Large, hard, woody bracket with a grey-brown, bumpy crust. The white underside bruises brown at a touch. Perennial, mainly on beech.",
+  lk:"Hoof fungus and other Ganoderma species.",
+  nt:"Scratch the underside with a stick and the mark turns brown.",
+  a:{f:"bracket",ly:1,c:"#7a5e48",un:"#efe9dd"} },
+{ n:"King Alfred’s cakes", l:"Daldinia concentrica", u:"none", c:["grey"], h:["wood"], m:"1-12", s:"inedible",
+  sz:"Width 2–7 cm",
+  id:"Hard, round, black lumps like burnt cakes, on dead ash. Cut one open and you will see concentric silver-grey and black rings.",
+  lk:"Other black, hard fungi on wood, but none show the concentric rings.",
+  nt:"Used in the past as tinder.",
+  a:{f:"ball",c:"#2c2a2a",rings:1} },
+{ n:"Candlesnuff", l:"Xylaria hypoxylon", u:"none", c:["grey"], h:["wood"], m:"1-12", s:"inedible",
+  sz:"Height 3–8 cm",
+  id:"Flattened, branched antler-shaped fingers, black with a white powdery tip when young. On dead stumps and wood.",
+  lk:"Yellow stagshorn (orange, gelatinous).",
+  nt:"Fruits all year.",
+  a:{f:"antler",c:"#2a2a2a",tip:"#f4f1ea"} },
+{ n:"Jelly ear", l:"Auricularia auricula-judae", u:"none", c:["brown"], h:["wood"], m:"1-12", s:"edible",
+  sz:"Width 3–10 cm",
+  id:"Rubbery, ear-shaped, red-brown, velvety outside and veined inside. Mostly on living or dead elder. Shrivels to a hard crust in dry weather and revives in the wet.",
+  lk:"Few. Other jelly fungi are yellow or orange.",
+  nt:"Eaten in Chinese cooking, but bland.",
+  a:{f:"ear",c:"#8a5a3e"} },
+{ n:"Yellow brain", l:"Tremella mesenterica", u:"none", c:["yellow"], h:["wood"], m:"1-12", s:"inedible",
+  sz:"Width 2–8 cm",
+  id:"Bright yellow, gelatinous, brain-like folds on dead twigs and gorse. Shrinks to a dried crust in dry weather, and swells again in the wet.",
+  lk:"Yellow stagshorn.",
+  nt:"Harmless but of no culinary value.",
+  a:{f:"brain",c:"#f2c21b"} },
+{ n:"Yellow stagshorn", l:"Calocera viscosa", u:"none", c:["yellow","orange"], h:["wood"], m:"7-12", s:"inedible",
+  sz:"Height 3–8 cm",
+  id:"Bright orange-yellow, gelatinous and rubbery. Antler or fork-shaped. It rises from rotting conifer stumps and looks as if it grows from the ground.",
+  lk:"Coral fungi (Ramaria), which are soft and brittle rather than rubbery.",
+  nt:"Common in conifer plantations.",
+  a:{f:"antler",c:"#f2a21b",thick:1} },
+{ n:"Porcelain fungus", l:"Mucidula mucida", u:"gills", c:["white"], h:["wood"], m:"8-11", s:"inedible",
+  sz:"Cap 3–8 cm",
+  id:"Translucent, porcelain-white and very slimy. White gills and a ring on the stem. On dead beech wood, often high up on fallen branches.",
+  lk:"Few. The slime and beech host are the clues.",
+  nt:"Edible but poor, and not worth the risk of confusion.",
+  a:{f:"cap",s:"dome",c:"#f2f4f1",st:"#e9ece6",un:"#ffffff",r:1,sw:"slim"} }
+];
+
+/* ---------- reference tables ---------- */
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const MONTHS_LONG = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const SAFETY = {
+  deadly:   { label:"Deadly",           long:"Deadly poisonous" },
+  poisonous:{ label:"Poisonous",        long:"Poisonous" },
+  inedible: { label:"Not edible",       long:"Not edible" },
+  caution:  { label:"Edible with care", long:"Edible with care" },
+  edible:   { label:"Edible",           long:"Edible" }
+};
+const UNDER = { gills:"Gills", pores:"Pores (a sponge)", spines:"Spines or teeth", ridges:"Ridges or smooth", none:"None: ball, jelly, cup, crust" };
+const UNDER_CHIP = { gills:"Gills", pores:"Pores", spines:"Spines", ridges:"Ridges or smooth", none:"None (ball, jelly, cup)" };
+const HABITAT_CHIP = { wood:"On wood", broadleaf:"Oak, beech, birch", conifer:"Conifers", open:"Grass, heath, tracks" };
+const HABITAT_SHORT = { wood:"on wood", broadleaf:"broadleaf woods", conifer:"conifers", open:"open ground" };
+const COLOURS = { white:"#f4f1ea", yellow:"#e8c22a", orange:"#e0802a", red:"#c8321e", purple:"#9a7ab0", brown:"#7a5a3e", grey:"#8a8a88", green:"#5a9a6a" };
+const COLOUR_LABEL = { white:"White", yellow:"Yellow", orange:"Orange", red:"Red", purple:"Pink or purple", brown:"Brown", grey:"Grey or black", green:"Green or blue" };
+const HABITAT = { wood:"On wood: stumps, logs, trunks", broadleaf:"Under oak, beech or birch", conifer:"Conifer plantation", open:"Grass, heath or tracks" };
+
+const slug = s => s.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+SPECIES.forEach(sp => { sp.id_ = slug(sp.n); sp.months = monthSet(sp.m); });
+SPECIES.sort((a, b) => a.n.localeCompare(b.n, "en-GB"));
+
+function monthSet(str) {
+  const set = new Set();
+  str.split(",").forEach(part => {
+    const [a, b] = part.split("-").map(Number);
+    let x = a;
+    for (;;) { set.add(x); if (x === b) break; x = x % 12 + 1; }
+  });
+  return set;
+}
+function monthText(str) {
+  if (str === "1-12") return "All year";
+  return str.split(",").map(p => {
+    const [a, b] = p.split("-").map(Number);
+    return a === b ? MONTHS[a - 1] : MONTHS[a - 1] + "–" + MONTHS[b - 1];
+  }).join(", ");
+}
+
+/* ---------- schematic drawings ---------- */
+let uid = 0;
+function shade(hex, amt) {
+  const n = parseInt(hex.slice(1), 16);
+  const f = v => Math.max(0, Math.min(255, Math.round(v + amt * (amt < 0 ? v : 255 - v))));
+  return "#" + [n >> 16, (n >> 8) & 255, n & 255].map(f).map(v => v.toString(16).padStart(2, "0")).join("");
+}
+function drawing(a, u) {
+  const id = "d" + (++uid);
+  const g = [];
+  const dark = "#2b2a22";
+  const sc = a.sc || 1;
+  const stemW = { slim: 8, norm: 14, thick: 24 }[a.sw || "norm"];
+  if (a.f === "cap") {
+    const sh = {
+      dome:  { p:"M14 58C14 22 40 10 60 10C80 10 106 22 106 58Q60 66 14 58Z", x1:14, x2:106, y:58 },
+      flat:  { p:"M8 56C28 38 92 38 112 56Q60 66 8 56Z", x1:8, x2:112, y:56 },
+      bell:  { p:"M32 62C30 24 46 8 60 8C74 8 90 24 88 62Q60 70 32 62Z", x1:32, x2:88, y:62 },
+      funnel:{ p:"M8 36Q10 58 50 66L70 66Q110 58 112 36Q60 54 8 36Z", x1:50, x2:70, y:66 }
+    }[a.s];
+    const stemTop = a.s === "funnel" ? 60 : sh.y;
+    g.push(`<rect x="${60 - stemW / 2}" y="${stemTop}" width="${stemW}" height="48" rx="${stemW / 3}" fill="${a.st}"/>`);
+    if (a.r) g.push(`<ellipse cx="60" cy="${stemTop + 18}" rx="${stemW / 2 + 7}" ry="4" fill="${shade(a.st, -0.06)}" stroke="${shade(a.st, -0.3)}" stroke-width="0.8"/>`);
+    if (a.v) g.push(`<ellipse cx="60" cy="102" rx="${stemW / 2 + 6}" ry="7" fill="${a.st}" stroke="${shade(a.st, -0.3)}" stroke-width="0.8"/>`);
+    if (a.s !== "funnel") {
+      const band = `M${sh.x1} ${sh.y}Q60 ${sh.y + 8} ${sh.x2} ${sh.y}Q60 ${sh.y + 22} ${sh.x1} ${sh.y}Z`;
+      g.push(`<clipPath id="${id}b"><path d="${band}"/></clipPath><path d="${band}" fill="${a.un}"/>`);
+      const lines = [];
+      if (u === "gills" || u === "ridges") for (let x = sh.x1 + 4; x < sh.x2; x += 5) lines.push(`<path d="M${x} ${sh.y - 2}L${60 + (x - 60) * 0.55} ${sh.y + 22}" stroke="${shade(a.un, -0.35)}" stroke-width="1" opacity="0.7"/>`);
+      if (u === "pores") for (let y = sh.y + 3; y < sh.y + 20; y += 4) lines.push(`<path d="M${sh.x1} ${y}H${sh.x2}" stroke="${shade(a.un, -0.45)}" stroke-width="2.4" stroke-dasharray="0.1 4" stroke-linecap="round"/>`);
+      if (u === "spines") for (let x = sh.x1 + 3; x < sh.x2; x += 4) lines.push(`<path d="M${x} ${sh.y}V${sh.y + 20}" stroke="${shade(a.un, -0.3)}" stroke-width="1.8"/>`);
+      g.push(`<g clip-path="url(#${id}b)">${lines.join("")}</g>`);
+    }
+    g.push(`<clipPath id="${id}c"><path d="${sh.p}"/></clipPath><path d="${sh.p}" fill="${a.c}"/>`);
+    if (a.s === "funnel") {
+      const ln = [];
+      for (let x = 14; x < 108; x += 6) ln.push(`<path d="M${x} 34L${60 + (x - 60) * 0.3} 70" stroke="${a.un}" stroke-width="1.3" opacity="0.65"/>`);
+      g.push(`<g clip-path="url(#${id}c)">${ln.join("")}</g><ellipse cx="60" cy="36" rx="52" ry="10" fill="${shade(a.c, -0.2)}"/><ellipse cx="60" cy="36" rx="44" ry="6" fill="${shade(a.c, 0.08)}"/>`);
+    } else {
+      g.push(`<path d="${sh.p}" fill="url(#${id}g)" opacity="0.5"/>`);
+    }
+    if (a.w) {
+      const pts = [[40,28],[58,20],[78,28],[30,44],[50,38],[70,42],[90,42],[96,52],[22,52],[60,30],[44,50],[80,52]];
+      g.push(`<g clip-path="url(#${id}c)" fill="${a.wc || "#fbfaf4"}">${pts.map(p => `<circle cx="${p[0]}" cy="${p[1]}" r="2.6"/>`).join("")}</g>`);
+    }
+    g.unshift(`<defs><linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.35"/><stop offset="0.6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.25"/></linearGradient></defs>`);
+    return wrap(`<g transform="translate(60 108) scale(${sc}) translate(-60 -108)">${g.join("")}</g>`);
+  }
+  if (a.f === "bracket") {
+    g.push(`<rect x="0" y="0" width="22" height="120" fill="#6e5a46"/><path d="M6 0V120M13 0V120" stroke="#4e3f30" stroke-width="1.5" opacity="0.6"/>`);
+    const n = a.ly || 1, span = n === 1 ? 0 : 1;
+    for (let i = 0; i < n; i++) {
+      const y = n === 1 ? 60 : 32 + i * (56 / Math.max(n - 1, 1));
+      const col = i % 2 ? (a.c2 || a.c) : a.c;
+      const s = n === 1 ? 1 : 0.9;
+      g.push(`<path d="M22 ${y + 8}C40 ${y + 30 * s} 80 ${y + 30 * s} 108 ${y + 8 * s}C100 ${y + 40 * s} 50 ${y + 46 * s} 22 ${y + 22}Z" fill="${a.un}" stroke="${shade(a.un, -0.25)}" stroke-width="0.8"/>`);
+      g.push(`<path d="M22 ${y + 8}C40 ${y - 22 * s} 90 ${y - 14 * s} 108 ${y + 8 * s}C80 ${y + 24 * s} 44 ${y + 22 * s} 22 ${y + 8}Z" fill="${col}"/>`);
+      g.push(`<path d="M30 ${y + 4}C52 ${y - 10 * s} 84 ${y - 6 * s} 98 ${y + 6 * s}" fill="none" stroke="${shade(col, -0.25)}" stroke-width="1.4" opacity="0.7"/>`);
+      if (a.dots) for (let k = 0; k < 6; k++) g.push(`<circle cx="${42 + k * 11}" cy="${y + 4 - (k % 2) * 6}" r="2.3" fill="${a.dots}"/>`);
+    }
+    return wrap(g.join(""));
+  }
+  if (a.f === "ball") {
+    if (a.base) g.push(`<path d="M52 92Q60 112 68 92Z" fill="${shade(a.c, -0.1)}"/>`);
+    g.push(`<circle cx="60" cy="68" r="32" fill="${a.c}" stroke="${shade(a.c, -0.2)}" stroke-width="0.8"/>`);
+    if (a.dots) for (let i = 0; i < 26; i++) g.push(`<circle cx="${60 + Math.cos(i * 2.4) * ((i * 7) % 26)}" cy="${68 + Math.sin(i * 2.4) * ((i * 7) % 26)}" r="1.7" fill="${a.dots}"/>`);
+    if (a.rings) for (let r = 8; r < 32; r += 8) g.push(`<circle cx="60" cy="68" r="${r}" fill="none" stroke="#9a9a98" stroke-width="1" opacity="0.7"/>`);
+    g.push(`<ellipse cx="48" cy="52" rx="12" ry="7" fill="#fff" opacity="0.2" transform="rotate(-30 48 52)"/>`);
+    return wrap(g.join(""));
+  }
+  if (a.f === "cup") {
+    g.push(`<path d="M22 50Q22 94 60 98Q98 94 98 50Z" fill="${a.out}" stroke="${shade(a.out, -0.25)}" stroke-width="0.8"/>`);
+    g.push(`<ellipse cx="60" cy="50" rx="38" ry="12" fill="${a.c}"/><ellipse cx="60" cy="52" rx="30" ry="7" fill="${shade(a.c, -0.12)}"/>`);
+    return wrap(g.join(""));
+  }
+  if (a.f === "antler") {
+    const w = a.thick ? 9 : 6;
+    const br = [["M60 108V62","M60 62L40 30","M60 62L80 28","M60 80L38 62","M60 84L84 64","M40 30L34 14","M80 28L86 12"]];
+    g.push(`<path d="${br[0].join("")}" fill="none" stroke="${a.c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`);
+    if (a.tip) g.push(`<path d="M40 30L34 16M80 28L86 14M60 62L54 54" stroke="${a.tip}" stroke-width="${w - 1}" stroke-linecap="round" opacity="0.9"/>`);
+    return wrap(g.join(""));
+  }
+  if (a.f === "ear") {
+    g.push(`<path d="M30 102C8 62 22 22 54 22C88 22 104 56 86 98C72 86 50 90 30 102Z" fill="${a.c}" stroke="${shade(a.c, -0.3)}" stroke-width="0.8"/>`);
+    g.push(`<path d="M42 90C34 66 40 44 56 38M58 86C54 66 62 48 74 44" fill="none" stroke="${shade(a.c, -0.3)}" stroke-width="1.6" opacity="0.7"/>`);
+    return wrap(g.join(""));
+  }
+  if (a.f === "brain") {
+    [[40,76,18],[66,70,20],[56,50,18],[82,84,14],[34,54,13],[76,52,13]].forEach(c => g.push(`<circle cx="${c[0]}" cy="${c[1]}" r="${c[2]}" fill="${a.c}" stroke="${shade(a.c, -0.25)}" stroke-width="1"/>`));
+    g.push(`<circle cx="56" cy="46" r="6" fill="#fff" opacity="0.25"/>`);
+    return wrap(g.join(""));
+  }
+  if (a.f === "trumpet") {
+    g.push(`<path d="M26 28Q60 44 94 28L76 108H44Z" fill="${a.c}"/>`);
+    g.push(`<ellipse cx="60" cy="28" rx="34" ry="10" fill="#1a1919"/><ellipse cx="60" cy="30" rx="24" ry="5" fill="#0d0d0d"/>`);
+    g.push(`<path d="M30 40L48 100M60 48V104M90 40L72 100" stroke="#8a8a88" stroke-width="1" opacity="0.4" fill="none"/>`);
+    return wrap(g.join(""));
+  }
+  if (a.f === "stink") {
+    g.push(`<ellipse cx="60" cy="100" rx="17" ry="11" fill="#f4f1ea" stroke="#cfc8b4" stroke-width="1"/>`);
+    g.push(`<rect x="51" y="34" width="18" height="68" rx="7" fill="#f4f1ea" stroke="#cfc8b4" stroke-width="1"/>`);
+    g.push(`<path d="M46 40C42 14 78 14 74 40Q60 46 46 40Z" fill="#4e5230"/><circle cx="52" cy="28" r="2" fill="#8a8d5a"/><circle cx="64" cy="22" r="2" fill="#8a8d5a"/><circle cx="68" cy="33" r="2" fill="#8a8d5a"/>`);
+    return wrap(g.join(""));
+  }
+  return wrap("");
+  function wrap(inner) {
+    return `<svg viewBox="0 0 120 120" aria-hidden="true" focusable="false"><path d="M0 108h120v12H0z" fill="#000" opacity="0.07"/>${inner}</svg>`;
+  }
+}
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const thisMonth = new Date().getMonth() + 1;
+
+function tag(s) {
+  return `<span class="tag ${s}"><svg aria-hidden="true"><use href="#i-${s}"/></svg>${SAFETY[s].label}</span>`;
+}
+function strip(sp, big) {
+  const cells = MONTHS.map((m, i) => {
+    const n = i + 1, on = sp.months.has(n);
+    return `<i class="${on ? "on" : ""}${n === thisMonth ? " cur" : ""}">${big ? `<b>${m[0]}</b>` : ""}</i>`;
+  }).join("");
+  return `<div class="strip${big ? " big" : ""}" aria-hidden="true">${cells}</div>`;
+}
+function gist(sp) {
+  return sp.sz + " · " + sp.h.map(h => HABITAT_SHORT[h]).join(", ");
+}
+
+/* ---------- state ---------- */
+const state = { q: "", m: 0, u: new Set(), c: new Set(), h: new Set(), s: new Set() };
+
+function buildChips(root, key, entries, swatch) {
+  root.innerHTML = entries.map(([v, label]) => `
+    <label class="chip"><input type="checkbox" data-k="${key}" value="${v}"><span>${swatch ? `<i class="sw" style="background:${COLOURS[v]}"></i>` : ""}${esc(label)}</span></label>`).join("");
+}
+buildChips($("#f-u"), "u", Object.entries(UNDER_CHIP));
+buildChips($("#f-c"), "c", Object.entries(COLOUR_LABEL), true);
+buildChips($("#f-h"), "h", Object.entries(HABITAT_CHIP));
+buildChips($("#f-s"), "s", Object.entries(SAFETY).map(([k, v]) => [k, v.long]));
+$("#month").innerHTML = `<option value="0">Any month</option>` + MONTHS_LONG.map((m, i) => `<option value="${i + 1}">${m}</option>`).join("");
+$("#now").textContent = "Today: " + new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+
+function matches(sp) {
+  if (state.m && !sp.months.has(state.m)) return false;
+  if (state.u.size && !state.u.has(sp.u)) return false;
+  if (state.s.size && !state.s.has(sp.s)) return false;
+  if (state.c.size && !sp.c.some(c => state.c.has(c))) return false;
+  if (state.h.size && !sp.h.some(h => state.h.has(h))) return false;
+  return true;
+}
+function score(sp, q) {
+  const n = sp.n.toLowerCase(), l = sp.l.toLowerCase();
+  if (n.startsWith(q) || l.startsWith(q)) return 3;
+  if (n.includes(q) || l.includes(q)) return 2;
+  if ((sp.id + " " + sp.lk + " " + sp.nt).toLowerCase().includes(q)) return 1;
+  return 0;
+}
+let shown = [];
+function render() {
+  const q = state.q.trim().toLowerCase();
+  let list = SPECIES.filter(matches);
+  if (q) {
+    const sc = new Map(list.map(sp => [sp, score(sp, q)]));
+    list = list.filter(sp => sc.get(sp) > 0).sort((a, b) => sc.get(b) - sc.get(a) || a.n.localeCompare(b.n, "en-GB"));
+  }
+  shown = list;
+  $("#list").innerHTML = list.map(sp => `
+    <li><button type="button" class="item" data-id="${sp.id_}">
+      <span class="art">${drawing(sp.a, sp.u)}</span>
+      <span class="main"><span class="name">${esc(sp.n)}</span><br><span class="latin">${esc(sp.l)}</span><span class="gist" style="display:block">${esc(gist(sp))}</span></span>
+      <span class="season">${strip(sp)}<span class="seasontext" style="display:block">${monthText(sp.m)}</span></span>
+      <span class="tagwrap">${tag(sp.s)}</span>
+    </button></li>`).join("");
+  $("#empty").hidden = list.length > 0;
+  $("#count").textContent = list.length === SPECIES.length ? `${list.length} species` : `${list.length} of ${SPECIES.length} species`;
+  const active = state.u.size + state.c.size + state.h.size + state.s.size + (state.m ? 1 : 0);
+  $("#badge").hidden = !active;
+  $("#badge").textContent = active;
+  $("#clear").disabled = !(active || state.q);
+  saveQuery();
+}
+
+/* ---------- URL state ---------- */
+function saveQuery() {
+  const p = new URLSearchParams();
+  if (state.q) p.set("q", state.q);
+  if (state.m) p.set("m", state.m);
+  ["u", "c", "h", "s"].forEach(k => { if (state[k].size) p.set(k, [...state[k]].join(",")); });
+  const qs = p.toString();
+  try { history.replaceState(history.state, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (e) { /* file:// sandboxes */ }
+}
+function loadQuery() {
+  const p = new URLSearchParams(location.search);
+  state.q = p.get("q") || "";
+  state.m = Math.max(0, Math.min(12, parseInt(p.get("m"), 10) || 0));
+  ["u", "c", "h", "s"].forEach(k => (p.get(k) || "").split(",").filter(Boolean).forEach(v => state[k].add(v)));
+}
+function syncControls() {
+  $("#q").value = state.q;
+  $("#month").value = String(state.m);
+  document.querySelectorAll(".chip input").forEach(i => { i.checked = state[i.dataset.k].has(i.value); });
+}
+function clearAll() {
+  state.q = ""; state.m = 0;
+  ["u", "c", "h", "s"].forEach(k => state[k].clear());
+  syncControls(); render();
+  $("#q").focus();
+}
+
+/* ---------- events ---------- */
+$("#q").addEventListener("input", e => { state.q = e.target.value; render(); });
+$("#month").addEventListener("change", e => { state.m = +e.target.value; render(); });
+$("#thismonth").addEventListener("click", () => { state.m = thisMonth; $("#month").value = String(thisMonth); render(); });
+$("#clear").addEventListener("click", clearAll);
+$("#clear2").addEventListener("click", clearAll);
+$("#panel").addEventListener("change", e => {
+  const i = e.target.closest(".chip input");
+  if (!i) return;
+  i.checked ? state[i.dataset.k].add(i.value) : state[i.dataset.k].delete(i.value);
+  render();
+});
+
+/* filters panel: always open on wide screens, collapsible on phones */
+const wide = matchMedia("(min-width: 60rem)");
+const fdet = $("#filters");
+function syncFilters() { if (wide.matches) fdet.open = true; }
+wide.addEventListener("change", syncFilters);
+syncFilters();
+
+/* ---------- detail sheet ---------- */
+const sheet = $("#sheet");
+let pushed = false;
+
+function alertFor(sp) {
+  if (sp.s === "deadly") return `<div class="alert deadly" role="note"><strong>Deadly poisonous.</strong> Eating even a small piece can kill. If anyone may have eaten this, get emergency medical help straight away and keep a sample.</div>`;
+  if (sp.s === "poisonous") return `<div class="alert poisonous" role="note"><strong>Poisonous.</strong> Do not eat.</div>`;
+  if (sp.s === "caution") return `<div class="alert caution" role="note"><strong>Edible with care.</strong> Needs certain identification, and has lookalikes that can make you ill. Read the notes below.</div>`;
+  return "";
+}
+function openSheet(id, push) {
+  const idx = shown.findIndex(s => s.id_ === id);
+  const sp = SPECIES.find(s => s.id_ === id);
+  if (!sp) return;
+  const list = idx >= 0 ? shown : SPECIES;
+  const at = idx >= 0 ? idx : list.indexOf(sp);
+  const prev = list[at - 1], next = list[at + 1];
+  sheet.innerHTML = `
+    <div class="sheet-in">
+      <div class="sheet-top"><span class="hint">${at + 1} of ${list.length}</span><button type="button" class="btn" data-close>Close</button></div>
+      <div class="sheet-head">
+        <div class="art" role="img" aria-label="Schematic drawing of ${esc(sp.n)}">${drawing(sp.a, sp.u)}</div>
+        <div>
+          <h2 id="sh-name">${esc(sp.n)}</h2>
+          <p class="latin">${esc(sp.l)}</p>
+          <div class="facts">${tag(sp.s)}${alertFor(sp)}</div>
+        </div>
+      </div>
+      <div class="cols">
+        <section class="sec"><h3>How to recognise it</h3><p>${esc(sp.id)}</p></section>
+        <section class="sec"><h3>Easily confused with</h3><p>${esc(sp.lk)}</p></section>
+      </div>
+      <div class="cols">
+        <section class="sec"><h3>When and where</h3>
+          ${strip(sp, true)}
+          <p class="seasontext">Fruits ${monthText(sp.m) === "All year" ? "all year" : monthText(sp.m)}. ${sp.months.has(thisMonth) ? "In season this month." : "Not usually seen this month."}</p>
+          <dl class="meta">
+            <dt>Size</dt><dd>${esc(sp.sz)}</dd>
+            <dt>Under</dt><dd>${esc(UNDER[sp.u].split(":")[0])}</dd>
+            <dt>Colour</dt><dd>${sp.c.map(c => COLOUR_LABEL[c]).join(", ")}</dd>
+            <dt>Grows</dt><dd>${sp.h.map(h => HABITAT_CHIP[h]).join("; ")}</dd>
+          </dl>
+        </section>
+        <section class="sec"><h3>Worth knowing</h3><p>${esc(sp.nt)}</p>
+          <p class="hint">Never eat on the strength of this page. Confirm with the recorder or an experienced member first.</p></section>
+      </div>
+      <nav class="sheet-nav" aria-label="Other species in this list">
+        ${prev ? `<button type="button" class="btn" data-go="${prev.id_}" aria-label="Previous: ${esc(prev.n)}"><span>← ${esc(prev.n)}</span></button>` : "<span></span>"}
+        ${next ? `<button type="button" class="btn" data-go="${next.id_}" aria-label="Next: ${esc(next.n)}"><span>${esc(next.n)} →</span></button>` : "<span></span>"}
+      </nav>
+    </div>`;
+  if (!sheet.open) sheet.showModal();
+  sheet.scrollTop = 0;
+  if (push) {
+    try {
+      if (pushed) history.replaceState(history.state, "", "#" + id);
+      else { history.pushState({ sheet: 1 }, "", "#" + id); pushed = true; }
+    } catch (e) { /* ignore */ }
+  }
+  sheet.querySelector("[data-close]").focus({ preventScroll: true });
+}
+$("#list").addEventListener("click", e => {
+  const b = e.target.closest(".item");
+  if (b) openSheet(b.dataset.id, true);
+});
+sheet.addEventListener("click", e => {
+  if (e.target === sheet || e.target.closest("[data-close]")) { sheet.close(); return; }
+  const go = e.target.closest("[data-go]");
+  if (go) openSheet(go.dataset.go, true);
+});
+let lastFocus = null;
+$("#list").addEventListener("click", e => { lastFocus = e.target.closest(".item"); }, true);
+sheet.addEventListener("close", () => {
+  if (location.hash) {
+    if (pushed) { pushed = false; history.back(); }
+    else { try { history.replaceState(history.state, "", location.pathname + location.search); } catch (e) { /* ignore */ } }
+  }
+  pushed = false;
+  if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+});
+window.addEventListener("popstate", () => {
+  const id = location.hash.slice(1);
+  if (id) { pushed = true; openSheet(id, false); }
+  else if (sheet.open) { pushed = false; sheet.close(); }
+});
+
+/* ---------- start ---------- */
+loadQuery();
+syncControls();
+render();
+if (location.hash.length > 1) openSheet(location.hash.slice(1), false);
+</script>
+</body>
+</html>

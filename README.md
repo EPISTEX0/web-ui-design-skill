@@ -4,9 +4,21 @@ A skill that makes coding agents design web UI that looks deliberate, not genera
 
 We read 34 design skills for Claude Code, Cursor and Codex, and every public benchmark of them we could find. The public studies found little or no gain over an agent with no skill. What the sources do agree on is a process: real references, a written design contract, a render-and-critique loop, and a stress test. This skill is that process, plus the rules three or more skills agree on, in about 400 lines split so each case loads only its own steps.
 
-Version 0.3 names the case first (a new site, a page added to an existing app, or a redesign), asks the user about the gaps that would change the design, and picks from a catalog of page types and style families instead of guessing. We tested it in three blind A/B rounds, 105 builds in all, scored by GPT, Gemini and Claude judges.
+Version 0.4 names the case first (a new site, a page added to an existing app, or a redesign), asks the user about the gaps that would change the design, and picks from a catalog of page types and style families instead of guessing. We tested it in four blind A/B rounds, 153 builds in all, scored by GPT, Gemini and Claude judges.
 
 ## Benchmark
+
+Round 4 ran 0.4 on three fresh new-site briefs, written by an agent that never saw the skill. Panel score, 1 to 10, 9 builds per arm:
+
+| | Claude Code defaults | `web-ui-design` 0.3 | `web-ui-design` 0.4 |
+| --- | --- | --- | --- |
+| The client answers | 2.89 | 4.93 | **6.41** (win rate 0.89 vs defaults, p = 0.001; 0.80 vs 0.3, p = 0.107) |
+| The client declines every question | n/a | n/a | 3.15 |
+
+- **0.4 asks every time.** It ran the question round in 15 of 15 eligible builds, 0.3 in 6 of 9 on these briefs. The gain over 0.3 is almost all fit to what the client wanted (6.74 against 4.74).
+- **A user who will not answer gets a cleaner page, not a better fit.** 0.4 with a declining client beat defaults on craft, hierarchy and mobile, showed no measurable gain overall, and left no "to confirm" text. It fills missing facts with sample values and lists them for the user to replace.
+- **Phones.** With the `CLAUDE.md` line, every Extend build kept its Approve and Decline buttons in reach at 390 px (0.3: 2 of 3).
+- 0.4 costs about $0.95 per new site and takes about 5 minutes, against $0.30 and 2 minutes for defaults.
 
 Round 3 gave every build a simulated client with private notes (brand colors, prices, audience, device) and judged each page against those notes. Panel score, 1 to 10:
 
@@ -24,7 +36,7 @@ Round 3 gave every build a simulated client with private notes (brand colors, pr
 
 Rounds 1 and 2 (36 builds, briefs without a client) found every design skill about 2 points above defaults, with 0.2 ahead on measurable defects: 0 contrast failures against 6 of 9 for 0.1.
 
-The method, every score, the integrity notes, the limits and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the blind galleries for [round 3](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-3/gallery/) and [round 2](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/).
+The method, every score, the integrity notes, the limits and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the blind galleries for [round 4](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-4/gallery/), [round 3](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-3/gallery/) and [round 2](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/).
 
 ## Install
 
@@ -66,7 +78,7 @@ Every case shares four parts:
 1. **The contract.** `DESIGN.md` and the project's stack (framework, styling system, components) outrank the skill's defaults.
 2. **The question round.** It asks only about gaps that change a choice: the primary action, the audience and device, existing brand assets, the feel, real content, and for Improve the scope. Each question has a recommended answer, and "your call" is always a valid reply. Answers go into a Brief in `DESIGN.md` with their source.
 3. **The pattern catalog.** 12 page types in 3 modes (*Persuade*, *Operate*, *Read*), each with its sections, UX patterns and a rendering and performance budget, and 8 style families with starting tokens.
-4. **The render loop.** `scripts/check.mjs` renders the full page at 390, 768 and 1440 px. It reports overflow, clipped content, contrast, unloaded fonts, script errors, tap targets under 24px, Tab stops with no visible focus, tables that scroll sideways on phones, and a performance budget (LCP, CLS, JS, fonts, images). The agent opens every screenshot tile, walks the main flow, and fixes in batches until the run after the last edit is clean.
+4. **The render loop.** `scripts/check.mjs` renders the full page at 390, 768 and 1440 px. It reports overflow, clipped content, controls out of reach on phones, contrast, unloaded fonts, script errors, tap targets under 24px, Tab stops with no visible focus, tables that scroll sideways on phones, placeholder text, and a performance budget (LCP, CLS, JS, fonts, images). The agent opens every screenshot tile, the 390 px ones first, walks the main flow, and fixes in batches until the run after the last edit is clean.
 
 ## What's inside
 
@@ -77,7 +89,7 @@ Every case shares four parts:
 | [`reference/patterns.md`](skills/web-ui-design/reference/patterns.md) | When picking patterns | Page types and style families |
 | [`reference/rules.md`](skills/web-ui-design/reference/rules.md) | While building and checking | Tells, layout, type, color, depth, motion, states, feedback and flows, performance, mobile, copy, stress test |
 | [`reference/design-md-template.md`](skills/web-ui-design/reference/design-md-template.md) | When writing `DESIGN.md` | YAML tokens, the Brief with sources, a decisions table |
-| [`scripts/check.mjs`](skills/web-ui-design/scripts/check.mjs) | Run in the render loop, never read | Full-page screenshot tiles plus layout, contrast, font, error, tap target, focus, table and performance checks. Needs Node 22 and Chrome or Chromium, and no npm install |
+| [`scripts/check.mjs`](skills/web-ui-design/scripts/check.mjs) | Run in the render loop, never read | Full-page screenshot tiles plus layout, reach, contrast, font, error, tap target, focus, table, placeholder and performance checks. Needs Node 22 and Chrome or Chromium, and no npm install |
 | [`research/`](research/) | Never | The reports this skill was distilled from, with sources |
 
 A New build reads about 25 KB of instructions (roughly 6k tokens): `SKILL.md`, its case file, the catalog, the rules and the template. Extend and Improve read about the same. The large design skills we read load 17k to 50k tokens per page build.
@@ -107,13 +119,14 @@ Every line can be overridden by your `DESIGN.md` or your brief.
 
 ## Status
 
-Version 0.3, benchmarked on 2026-10-20. Known gaps, for the next version:
+Version 0.4, benchmarked on 2026-10-20. It met three of four bars set before the round 4 builds ran. Known gaps, for the next version:
 
-- **The question round can be skipped.** On the clinic check-in brief it asked 0 of 3 times and wrote every gap as "assumed", once as "left to you" when the user had said nothing.
-- **A user who will not answer gets placeholders.** With a declining client, the skill left "to confirm" in place of facts. Plausible sample content, listed for the user to replace, would serve them better.
+- **A user who will not answer gets no measurable gain overall.** The bar was 1.0 above defaults, and 0.4 reached 0.26. The page is better built, but the facts that decide fit live only with the user.
+- **A redesign can rewrite existing facts.** Told to refresh a site's 2013 dates, one of 3 builds also moved an Easter closure to Christmas and invented four notices. It listed every change, but the sample-value rule should apply only to missing facts.
 - **Extend needs the `CLAUDE.md` line** to trigger at all.
-- **Redesigns cost 1.7 times 0.2 for no measured gain.**
-- **The render loop gets cut short.** One Extend build never opened its 390 px screenshot, and it was the one whose actions were hidden on phones.
+- **The render loop still gets cut short.** Some builds say in their reply that they did not open every screenshot or walk the main flow.
+- **The checker trusts positioned controls.** A control placed off screen with absolute or fixed positioning is treated as a deliberate off-canvas panel, so a misplaced one passes.
+- **New sites cost about 3 times defaults** ($0.95 against $0.30) and take about 5 minutes.
 
 If you run the skill against another design skill or no skill on your own briefs, open an issue with the screenshots. Results either way are welcome and will shape the next version.
 

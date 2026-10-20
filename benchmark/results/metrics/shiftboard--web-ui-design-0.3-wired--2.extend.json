@@ -9,5 +9,6 @@
   "dependenciesAdded": [],
   "collateralChanged": false,
   "mobileOverflow": false,
+  "actionsReachableMobile": true,
   "functionalPass": true
 }

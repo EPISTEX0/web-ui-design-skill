@@ -1,0 +1,53 @@
+{
+  "id": "salt-and-iron--web-ui-design-0.4-silent--2",
+  "desktop": {
+    "fullH": 3473,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 0,
+      "moderate": 0,
+      "minor": 1,
+      "rules": [
+        "aria-allowed-role:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 28,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 3473,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 5114,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

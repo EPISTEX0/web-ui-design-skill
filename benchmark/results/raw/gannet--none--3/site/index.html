@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MV Gannet · Vehicle deck loading</title>
+<style>
+  :root {
+    --bg: #0a1826;
+    --panel: #11293f;
+    --panel-2: #173650;
+    --line: #2a4a66;
+    --text: #eaf2f8;
+    --muted: #93adc2;
+    --accent: #4fc3d9;
+    --ok: #4cc38a;
+    --warn: #f2b84b;
+    --bad: #ff6b5e;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.35 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:disabled { cursor: not-allowed; opacity: .45; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- header ---------- */
+  header {
+    display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    padding: 10px 18px; background: #06111c; border-bottom: 1px solid var(--line);
+  }
+  .brand { display: flex; flex-direction: column; }
+  .brand small { color: var(--muted); letter-spacing: .08em; text-transform: uppercase; font-size: 11px; }
+  .brand strong { font-size: 22px; letter-spacing: .02em; }
+  .sailing { display: flex; flex-direction: column; }
+  .sailing b { font-size: 20px; }
+  .sailing span { color: var(--muted); font-size: 13px; }
+  .kpis { display: flex; gap: 10px; margin-left: auto; flex-wrap: wrap; }
+  .kpi { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 12px; min-width: 104px; }
+  .kpi span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .kpi b { font-size: 20px; font-variant-numeric: tabular-nums; }
+  .kpi b small { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .clock { font-size: 28px; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+  /* ---------- layout ---------- */
+  main {
+    flex: 1; display: grid; grid-template-columns: 370px 1fr; gap: 14px;
+    padding: 14px; min-height: 0;
+  }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); }
+  .card h2 { margin: 0; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+
+  /* ---------- queue ---------- */
+  .queue { display: flex; flex-direction: column; min-height: 0; max-height: calc(100vh - 100px); position: sticky; top: 14px; }
+  .queue-head { padding: 12px 12px 8px; display: flex; flex-direction: column; gap: 10px; }
+  .tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .tab { padding: 10px 4px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); font-weight: 600; }
+  .tab[aria-selected="true"] { background: var(--accent); color: #04202a; border-color: var(--accent); }
+  .tab .n { font-variant-numeric: tabular-nums; opacity: .8; }
+  #search {
+    width: 100%; padding: 11px 12px; border-radius: 8px; border: 1px solid var(--line);
+    background: #0a1c2d; color: var(--text); font: inherit; text-transform: uppercase;
+  }
+  #search::placeholder { text-transform: none; color: var(--muted); }
+  .list { overflow-y: auto; padding: 0 8px 10px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .row {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; align-items: center; text-align: left;
+    padding: 9px 10px; border-radius: 9px; border: 2px solid transparent; background: var(--panel-2); width: 100%;
+  }
+  .row[aria-pressed="true"] { border-color: var(--accent); background: #1c4260; }
+  .row .desc { color: var(--muted); font-size: 13px; grid-column: 2 / 3; }
+  .row .meta { text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; color: var(--muted); grid-row: 1 / 3; grid-column: 3; }
+  .row .tags { grid-column: 1 / 4; display: flex; gap: 5px; flex-wrap: wrap; }
+  .row .tags:empty { display: none; }
+  .empty { color: var(--muted); text-align: center; padding: 28px 12px; }
+
+  .plate {
+    display: inline-block; background: #f6e27a; color: #111; font: 700 15px/1 ui-monospace, "SF Mono", Consolas, monospace;
+    padding: 5px 8px; border-radius: 4px; border: 2px solid #111; letter-spacing: .04em; white-space: nowrap;
+  }
+  .tag { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; letter-spacing: .04em; border: 1px solid; white-space: nowrap; }
+  .tag.dg { color: var(--warn); border-color: var(--warn); }
+  .tag.reefer { color: #8fd8ff; border-color: #8fd8ff; }
+  .tag.priority { color: var(--ok); border-color: var(--ok); }
+  .tag.access { color: #c9b6ff; border-color: #c9b6ff; }
+
+  /* ---------- right column ---------- */
+  .right { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .deck { padding: 12px 14px 14px; }
+  .deck-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 12px; flex-wrap: wrap; }
+  .deck-head p { margin: 0; color: var(--muted); font-size: 13px; }
+  .ends { display: grid; grid-template-columns: 150px 1fr; margin-bottom: 4px; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--muted); }
+  .ends div:last-child { display: flex; justify-content: space-between; }
+  .lanes { display: flex; flex-direction: column; gap: 8px; }
+  .lane-wrap { display: grid; grid-template-columns: 150px 1fr; gap: 0; align-items: stretch; }
+  .lane-label { display: flex; flex-direction: column; justify-content: center; padding-right: 10px; }
+  .lane-label b { font-size: 20px; }
+  .lane-label span { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .lane {
+    position: relative; height: 78px; display: flex; flex-direction: row-reverse; /* first vehicle sits at the bow (right) */
+    background: repeating-linear-gradient(90deg, #0a1c2d 0, #0a1c2d calc(100% / 26 - 1px), #12304a calc(100% / 26 - 1px), #12304a calc(100% / 26));
+    border: 2px solid var(--line); border-radius: 8px; overflow: hidden;
+  }
+  .lane.fits { border-color: var(--ok); box-shadow: 0 0 0 3px rgba(76,195,138,.25); cursor: pointer; }
+  .lane.nofit { opacity: .45; }
+  .lane.over { border-color: var(--accent); }
+  .veh {
+    height: 100%; padding: 0 0 0 3px; background: none; border: 0; min-width: 0; flex: none;
+  }
+  .veh > span {
+    display: flex; flex-direction: column; justify-content: center; height: 100%; padding: 4px 6px;
+    background: #3d6d93; border-radius: 6px; border: 2px solid #0a1c2d; text-align: left; overflow: hidden;
+  }
+  .veh.hgv > span { background: #6a5a8c; }
+  .veh.van > span { background: #3f8277; }
+  .veh.bus > span, .veh.mh > span { background: #8a6b3c; }
+  .veh.moto > span { background: #7a4f5f; }
+  .veh.emerg > span { background: #b0413a; }
+  .veh[aria-pressed="true"] > span { border-color: #fff; }
+  .veh b { font: 700 13px/1.15 ui-monospace, Consolas, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .veh small { font-size: 11px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .veh .flag { color: #ffe08a; font-weight: 700; }
+  .lane-sum { font-size: 12px; color: var(--muted); }
+
+  .bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .panel { padding: 14px; display: flex; flex-direction: column; gap: 10px; min-height: 220px; }
+
+  /* selected vehicle */
+  .sel-title { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .sel-title span.d { font-size: 17px; font-weight: 600; }
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .facts div { background: var(--panel-2); border-radius: 8px; padding: 6px 8px; }
+  .facts span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .facts b { font-variant-numeric: tabular-nums; }
+  .note { margin: 0; background: #2a2a14; border-left: 4px solid var(--warn); padding: 6px 10px; border-radius: 4px; font-size: 14px; }
+  .lane-btns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .btn {
+    min-height: 52px; padding: 8px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel-2); font-weight: 600;
+  }
+  .btn small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+  .btn.primary { background: var(--accent); color: #04202a; border-color: var(--accent); }
+  .btn.primary small { color: #0b3a47; }
+  .btn.danger { border-color: var(--bad); color: #ffc2bc; }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hint { color: var(--muted); margin: 0; font-size: 14px; }
+
+  /* checks */
+  .checks { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+  .checks li { display: grid; grid-template-columns: 74px 1fr; gap: 10px; align-items: baseline; background: var(--panel-2); padding: 7px 10px; border-radius: 8px; }
+  .st { font-size: 12px; font-weight: 800; letter-spacing: .08em; text-align: center; padding: 3px 0; border-radius: 4px; }
+  .st.ok { background: rgba(76,195,138,.2); color: var(--ok); }
+  .st.warn { background: rgba(242,184,75,.2); color: var(--warn); }
+  .st.bad { background: rgba(255,107,94,.22); color: var(--bad); }
+  .checks b { display: block; }
+  .checks span.s { color: var(--muted); font-size: 13px; }
+  .gauge { position: relative; height: 10px; background: #0a1c2d; border-radius: 5px; margin: 6px 0 2px; border: 1px solid var(--line); }
+  .gauge i { position: absolute; top: -3px; width: 6px; height: 14px; background: #fff; border-radius: 3px; transform: translateX(-50%); }
+  .gauge::before { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 2px; background: var(--muted); }
+  .gauge .zone { position: absolute; top: 0; bottom: 0; background: rgba(76,195,138,.25); left: 30%; right: 30%; }
+
+  footer { display: flex; gap: 8px; padding: 0 14px 14px; flex-wrap: wrap; align-items: center; }
+  footer .spacer { flex: 1; }
+  footer .btn { min-height: 44px; }
+
+  #toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); background: #fff; color: #111;
+    padding: 12px 18px; border-radius: 10px; font-weight: 600; opacity: 0; pointer-events: none; transition: .2s; z-index: 9; max-width: 90vw;
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+  #toast.bad { background: var(--bad); }
+
+  #printSheet { display: none; }
+
+  @media (max-width: 1000px) {
+    main { grid-template-columns: 1fr; }
+    .queue { position: static; max-height: 420px; }
+    .bottom { grid-template-columns: 1fr; }
+    .lane-wrap, .ends { grid-template-columns: 90px 1fr; }
+    .kpis { margin-left: 0; }
+  }
+
+  @media print {
+    body { background: #fff; color: #000; display: block; }
+    header, main, footer, #toast { display: none !important; }
+    #printSheet { display: block; font: 12pt/1.4 system-ui, sans-serif; padding: 10mm; }
+    #printSheet h1 { margin: 0 0 4px; font-size: 18pt; }
+    #printSheet table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+    #printSheet th, #printSheet td { border: 1px solid #000; padding: 4px 6px; text-align: left; font-size: 10.5pt; }
+    #printSheet .sign { margin-top: 30px; display: flex; gap: 40px; }
+    #printSheet .sign div { flex: 1; border-top: 1px solid #000; padding-top: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><small>Skerra Ferry Company</small><strong>MV Gannet</strong></div>
+  <div class="sailing"><b>14:30 Skerra → Port Ellan</b><span id="dateLine"></span></div>
+  <div class="kpis" id="kpis"></div>
+  <div class="clock" id="clock" aria-label="Current time"></div>
+</header>
+
+<main>
+  <section class="card queue" aria-label="Vehicle bookings">
+    <div class="queue-head">
+      <h2>Bookings</h2>
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <input id="search" type="search" placeholder="Search registration or description" autocomplete="off" aria-label="Search bookings">
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+
+  <div class="right">
+    <section class="card deck" aria-label="Vehicle deck plan">
+      <div class="deck-head">
+        <h2>Vehicle deck</h2>
+        <p id="deckHelp"></p>
+      </div>
+      <div class="ends"><div></div><div><span>◀ STERN RAMP</span><span>BOW ▶</span></div></div>
+      <div class="lanes" id="lanes"></div>
+    </section>
+
+    <div class="bottom">
+      <section class="card panel" id="selPanel" aria-live="polite"></section>
+      <section class="card panel" aria-label="Safety and balance checks">
+        <h2>Checks</h2>
+        <ul class="checks" id="checks"></ul>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <button class="btn" id="undo">↶ Undo</button>
+  <span class="spacer"></span>
+  <button class="btn" id="print">Print load record</button>
+  <button class="btn danger" id="reset">Reset to start of loading</button>
+</footer>
+
+<div id="toast" role="status"></div>
+<div id="printSheet"></div>
+
+<script>
+/* ============ Sample data ============ */
+const LANES = [
+  { id: 'P1', name: 'Port outer',  side: 'port', outer: true },
+  { id: 'P2', name: 'Port inner',  side: 'port', outer: false },
+  { id: 'S2', name: 'Starboard inner', side: 'stbd', outer: false },
+  { id: 'S1', name: 'Starboard outer', side: 'stbd', outer: true },
+];
+const LANE_LEN = 26;      // metres, usable length of each lane
+const GAP = 0.6;          // metres between vehicles
+const MAX_TONNES = 110;   // maximum deck load
+const HEEL_WARN = 8, HEEL_STOP = 14; // port/starboard difference, tonnes
+
+// kind: car | van | hgv | mh (motorhome) | bus | moto | emerg ; len in m, t = tonnes
+const BOOKINGS = [
+  { id: 1,  reg: 'SA70 EMR', desc: 'Ambulance (Mercedes Sprinter)',     kind: 'emerg', len: 6.0,  t: 3.5,  pax: 2,  tags: ['priority'], note: 'Patient transfer to Port Ellan. Load first, off first.' },
+  { id: 2,  reg: 'MK68 LRN', desc: 'Scania rigid · Calor gas delivery', kind: 'hgv',   len: 10.0, t: 17.5, pax: 1,  tags: ['dg'],       note: 'LPG, UN 1965 class 2.1. Outer lane only.' },
+  { id: 3,  reg: 'DX22 FHB', desc: 'Iveco reefer · Skerra Seafoods',    kind: 'hgv',   len: 8.2,  t: 11.8, pax: 2,  tags: ['reefer'],   note: 'Keep reefer unit running. Driver stays with vehicle.' },
+  { id: 4,  reg: 'SN71 MAL', desc: 'Royal Mail van',                    kind: 'van',   len: 5.6,  t: 3.1,  pax: 1,  tags: ['priority'] },
+  { id: 5,  reg: 'YC19 TPW', desc: 'Ford Transit Custom · plumber',     kind: 'van',   len: 5.3,  t: 2.9,  pax: 2,  tags: [] },
+  { id: 6,  reg: 'BG20 HZV', desc: 'Auto-Trail motorhome',              kind: 'mh',    len: 7.4,  t: 4.4,  pax: 3,  tags: [] },
+  { id: 7,  reg: 'KY17 NDC', desc: 'Toyota Hilux + livestock trailer',  kind: 'van',   len: 9.4,  t: 3.8,  pax: 1,  tags: [],           note: 'Two sheep. Trailer brake released, check hitch.' },
+  { id: 8,  reg: 'SK64 CMB', desc: 'Community minibus (12 seats)',      kind: 'bus',   len: 7.0,  t: 3.9,  pax: 11, tags: ['access'],   note: 'Wheelchair lift on port side. Needs clear space beside the door.' },
+  { id: 9,  reg: 'PN21 GJD', desc: 'DAF flatbed · building supplies',   kind: 'hgv',   len: 9.5,  t: 14.2, pax: 1,  tags: [],           note: 'Load strapped, confirm with driver.' },
+  { id: 10, reg: 'SK23 DFD', desc: 'Land Rover Defender 110',           kind: 'car',   len: 4.8,  t: 2.3,  pax: 2,  tags: [] },
+  { id: 11, reg: 'WR22 KLO', desc: 'Volkswagen Golf',                   kind: 'car',   len: 4.3,  t: 1.4,  pax: 2,  tags: [] },
+  { id: 12, reg: 'DK18 BUF', desc: 'Toyota Yaris',                      kind: 'car',   len: 3.9,  t: 1.1,  pax: 1,  tags: [] },
+  { id: 13, reg: 'SF69 TZU', desc: 'Skoda Octavia estate',              kind: 'car',   len: 4.7,  t: 1.5,  pax: 4,  tags: [] },
+  { id: 14, reg: 'LV72 XPA', desc: 'Kia Sportage',                      kind: 'car',   len: 4.5,  t: 1.7,  pax: 2,  tags: ['access'],   note: 'Blue badge holder. Needs room to open driver door.' },
+  { id: 15, reg: 'HN20 RSE', desc: 'Nissan Qashqai',                    kind: 'car',   len: 4.4,  t: 1.5,  pax: 3,  tags: [] },
+  { id: 16, reg: 'SC73 EVY', desc: 'Tesla Model Y',                     kind: 'car',   len: 4.8,  t: 2.0,  pax: 2,  tags: [] },
+  { id: 17, reg: 'FJ15 MNO', desc: 'Mini Hatch',                        kind: 'car',   len: 3.8,  t: 1.2,  pax: 1,  tags: [] },
+  { id: 18, reg: 'SK19 ARH', desc: 'Volvo XC60',                        kind: 'car',   len: 4.7,  t: 1.9,  pax: 2,  tags: [] },
+  { id: 19, reg: 'GU66 WBT', desc: 'Triumph Tiger motorcycle',          kind: 'moto',  len: 2.2,  t: 0.25, pax: 1,  tags: [] },
+  { id: 20, reg: 'SJ21 HDM', desc: 'BMW R1250GS motorcycle',            kind: 'moto',  len: 2.2,  t: 0.27, pax: 2,  tags: [] },
+];
+const KIND = { car: 'Car', van: 'Van', hgv: 'HGV', mh: 'Motorhome', bus: 'Minibus', moto: 'Motorcycle', emerg: 'Ambulance' };
+const byId = Object.fromEntries(BOOKINGS.map(b => [b.id, b]));
+const fp = v => v.len + GAP;           // footprint on deck including gap
+
+/* ============ State ============ */
+const KEY = 'gannet-loading-v1';
+const fresh = () => ({ place: [], noshow: [] });   // place: [{id, lane}] in load order
+let S = load();
+let selected = null, tab = 'waiting', query = '', history = [];
+
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s && Array.isArray(s.place) && Array.isArray(s.noshow)) return s;
+  } catch (e) {}
+  return fresh();
+}
+function commit(label) {
+  history.push(JSON.stringify(S));
+  if (history.length > 60) history.shift();
+}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} render(); }
+
+/* ============ Derived ============ */
+const laneItems = id => S.place.filter(p => p.lane === id).map(p => byId[p.id]);
+const laneUsed = id => laneItems(id).reduce((a, v) => a + fp(v), 0);
+const laneFree = id => LANE_LEN - laneUsed(id);
+const laneWeight = id => laneItems(id).reduce((a, v) => a + v.t, 0);
+const sideWeight = side => LANES.filter(l => l.side === side).reduce((a, l) => a + laneWeight(l.id), 0);
+const totalWeight = () => LANES.reduce((a, l) => a + laneWeight(l.id), 0);
+const placement = id => S.place.find(p => p.id === id);
+const status = id => placement(id) ? 'deck' : S.noshow.includes(id) ? 'noshow' : 'waiting';
+const laneOf = id => LANES.find(l => l.id === placement(id).lane);
+const fmt = (n, d = 1) => n.toFixed(d);
+
+function whyNot(v, laneId) {
+  const lane = LANES.find(l => l.id === laneId);
+  if (fp(v) > laneFree(laneId) + 1e-9) return `Won't fit (${fmt(laneFree(laneId))} m free, needs ${fmt(fp(v))} m)`;
+  if (totalWeight() + v.t > MAX_TONNES + 1e-9) return `Would exceed ${MAX_TONNES} t deck limit`;
+  if (v.tags.includes('dg') && !lane.outer) return 'Dangerous goods: outer lane only';
+  return null;
+}
+function suggest(v) {
+  const opts = LANES.filter(l => !whyNot(v, l.id) && (!v.tags.includes('access') || l.outer));
+  const pool = opts.length ? opts : LANES.filter(l => !whyNot(v, l.id));
+  if (!pool.length) return null;
+  const pw = sideWeight('port'), sw = sideWeight('stbd');
+  const lighter = pw === sw ? null : pw < sw ? 'port' : 'stbd';
+  pool.sort((a, b) => ((b.side === lighter) - (a.side === lighter)) || (laneFree(a.id) - laneFree(b.id)));
+  return pool[0].id;
+}
+
+/* ============ Actions ============ */
+function toast(msg, bad) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show' + (bad ? ' bad' : '');
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.className = '', 3200);
+}
+function placeVehicle(id, laneId) {
+  const v = byId[id];
+  const why = whyNot(v, laneId);
+  if (why) return toast(`${v.reg}: ${why}`, true);
+  commit(); S.place.push({ id, lane: laneId }); selected = id; save();
+}
+function removeFromDeck(id) {
+  const p = placement(id), items = laneItems(p.lane);
+  if (items[items.length - 1].id !== id) return toast('Blocked in by vehicles behind it. Remove those first.', true);
+  commit(); S.place = S.place.filter(x => x.id !== id); save();
+}
+function setNoShow(id, on) {
+  commit();
+  S.noshow = on ? [...S.noshow, id] : S.noshow.filter(x => x !== id);
+  if (on) selected = null; save();
+}
+function laneTap(laneId) {
+  if (selected && status(selected) === 'waiting') placeVehicle(selected, laneId);
+}
+
+/* ============ Rendering ============ */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const tagHtml = v => v.tags.map(t => ({
+  dg: '<span class="tag dg">◆ DG</span>', reefer: '<span class="tag reefer">REEFER</span>',
+  priority: '<span class="tag priority">PRIORITY</span>', access: '<span class="tag access">♿ ACCESS</span>'
+}[t])).join('');
+
+function render() {
+  renderKpis(); renderTabs(); renderList(); renderLanes(); renderSelected(); renderChecks(); renderPrint();
+  document.getElementById('undo').disabled = !history.length;
+}
+
+function heelInfo() {
+  const p = sideWeight('port'), s = sideWeight('stbd'), d = p - s;
+  const lvl = Math.abs(d) >= HEEL_STOP ? 'bad' : Math.abs(d) >= HEEL_WARN ? 'warn' : 'ok';
+  return { p, s, d, lvl };
+}
+
+function renderKpis() {
+  const used = LANES.reduce((a, l) => a + laneUsed(l.id), 0), cap = LANE_LEN * LANES.length;
+  const onDeck = S.place.length, waiting = BOOKINGS.filter(b => status(b.id) === 'waiting').length;
+  const h = heelInfo();
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi"><span>On deck</span><b>${onDeck} <small>/ ${BOOKINGS.length}</small></b></div>
+    <div class="kpi"><span>Waiting</span><b>${waiting}</b></div>
+    <div class="kpi"><span>Deck length</span><b>${fmt(used)} <small>/ ${cap} m</small></b></div>
+    <div class="kpi"><span>Weight</span><b>${fmt(totalWeight())} <small>/ ${MAX_TONNES} t</small></b></div>
+    <div class="kpi"><span>Heel</span><b>${Math.abs(h.d) < 0.05 ? 'Level' : fmt(Math.abs(h.d)) + ' t ' + (h.d > 0 ? 'port' : 'stbd')}</b></div>`;
+}
+
+function renderTabs() {
+  const counts = { waiting: 0, deck: 0, noshow: 0 };
+  BOOKINGS.forEach(b => counts[status(b.id)]++);
+  const names = { waiting: 'Waiting', deck: 'On deck', noshow: 'No-show' };
+  document.getElementById('tabs').innerHTML = Object.keys(names).map(k =>
+    `<button class="tab" role="tab" data-tab="${k}" aria-selected="${tab === k}">${names[k]} <span class="n">${counts[k]}</span></button>`).join('');
+}
+
+function renderList() {
+  const q = query.trim().toLowerCase().replace(/\s+/g, '');
+  let items = BOOKINGS.filter(b => status(b.id) === tab)
+    .filter(b => !q || (b.reg + b.desc).toLowerCase().replace(/\s+/g, '').includes(q));
+  if (tab === 'deck') items.sort((a, b) => S.place.findIndex(p => p.id === a.id) - S.place.findIndex(p => p.id === b.id));
+  else items.sort((a, b) => (b.tags.includes('priority') - a.tags.includes('priority')) || a.id - b.id);
+  const el = document.getElementById('list');
+  if (!items.length) {
+    el.innerHTML = `<div class="empty">${q ? 'No bookings match that search.' : tab === 'waiting' ? 'Everyone is accounted for.' : 'Nothing here.'}</div>`;
+    return;
+  }
+  el.innerHTML = items.map(b => {
+    const loc = tab === 'deck' ? `<br>Lane ${placement(b.id).lane} · #${S.place.findIndex(p => p.id === b.id) + 1}` : '';
+    return `<button class="row" data-id="${b.id}" aria-pressed="${selected === b.id}" ${tab === 'waiting' ? 'draggable="true"' : ''}>
+      <span class="plate">${esc(b.reg)}</span>
+      <span class="desc">${esc(b.desc)}</span>
+      <span class="meta">${fmt(b.len)} m<br>${fmt(b.t)} t${loc}</span>
+      <span class="tags">${tagHtml(b)}</span></button>`;
+  }).join('');
+}
+
+function renderLanes() {
+  const sel = selected && status(selected) === 'waiting' ? byId[selected] : null;
+  document.getElementById('deckHelp').textContent = sel
+    ? `Tap a green lane to load ${sel.reg}. Vehicles stack from the bow end.`
+    : 'Pick a waiting vehicle, then tap a lane. First vehicle in goes to the bow end. Tap a vehicle for details.';
+  document.getElementById('lanes').innerHTML = LANES.map(l => {
+    const items = laneItems(l.id);
+    let cls = 'lane';
+    if (sel) cls += whyNot(sel, l.id) ? ' nofit' : ' fits';
+    const blocks = items.map(v => `
+      <button class="veh ${v.kind}" data-id="${v.id}" aria-pressed="${selected === v.id}"
+        style="width:${fp(v) / LANE_LEN * 100}%" title="${esc(v.reg)} · ${esc(v.desc)} · ${fmt(v.len)} m · ${fmt(v.t)} t">
+        <span><b>${esc(v.reg)}</b><small>${S.place.findIndex(p => p.id === v.id) + 1}. ${KIND[v.kind]}${v.tags.includes('dg') ? ' <i class="flag">◆DG</i>' : ''}${v.tags.includes('reefer') ? ' <i class="flag">❄</i>' : ''}${v.tags.includes('access') ? ' <i class="flag">♿</i>' : ''}</small></span>
+      </button>`).join('');
+    return `<div class="lane-wrap">
+      <div class="lane-label"><b>${l.id}</b><span>${l.name}${l.outer ? ' · outer' : ''}</span><span class="lane-sum">${fmt(laneFree(l.id))} m free · ${fmt(laneWeight(l.id))} t</span></div>
+      <div class="${cls}" data-lane="${l.id}" aria-label="Lane ${l.id}, ${l.name}">${blocks}</div></div>`;
+  }).join('');
+}
+
+function renderSelected() {
+  const el = document.getElementById('selPanel');
+  if (!selected) {
+    el.innerHTML = `<h2>Selected vehicle</h2><p class="hint">Select a booking from the list, or a vehicle on the deck, to see its details and load it.</p>`;
+    return;
+  }
+  const v = byId[selected], st = status(v.id);
+  let actions = '';
+  if (st === 'waiting') {
+    const sug = suggest(v);
+    actions = `<div class="lane-btns">${LANES.map(l => {
+      const why = whyNot(v, l.id);
+      return `<button class="btn ${sug === l.id ? 'primary' : ''}" data-place="${l.id}" ${why ? 'disabled' : ''} title="${esc(why || '')}">${l.id}<small>${why ? (why.startsWith('Won') ? 'No room' : why.startsWith('Dang') ? 'Not allowed' : 'Over limit') : (sug === l.id ? 'Suggested · ' : '') + fmt(laneFree(l.id)) + ' m free'}</small></button>`;
+    }).join('')}</div>
+    <div class="btn-row"><button class="btn" data-noshow="1">Mark no-show / standby</button></div>`;
+  } else if (st === 'deck') {
+    const items = laneItems(placement(v.id).lane), last = items[items.length - 1].id === v.id;
+    actions = `<p class="hint">On deck in lane ${placement(v.id).lane}, position ${items.indexOf(v) + 1} of ${items.length}${last ? '.' : '. Blocked in by vehicles behind it.'}</p>
+      <div class="btn-row"><button class="btn danger" data-remove="1" ${last ? '' : 'disabled'}>Take off deck</button></div>`;
+  } else {
+    actions = `<div class="btn-row"><button class="btn" data-noshow="0">Restore to waiting</button></div>`;
+  }
+  el.innerHTML = `<h2>Selected vehicle</h2>
+    <div class="sel-title"><span class="plate">${esc(v.reg)}</span><span class="d">${esc(v.desc)}</span></div>
+    <div class="facts"><div><span>Length</span><b>${fmt(v.len)} m</b></div><div><span>Weight</span><b>${fmt(v.t)} t</b></div><div><span>People</span><b>${v.pax}</b></div><div><span>Type</span><b>${KIND[v.kind]}</b></div></div>
+    <div>${tagHtml(v)}</div>
+    ${v.note ? `<p class="note">${esc(v.note)}</p>` : ''}
+    ${actions}`;
+}
+
+function computeChecks() {
+  const out = [];
+  const tw = totalWeight(), h = heelInfo();
+  out.push({ lvl: tw > MAX_TONNES * 0.95 ? 'warn' : 'ok', t: 'Deck load', s: `${fmt(tw)} t of ${MAX_TONNES} t limit` });
+  const gauge = `<div class="gauge"><div class="zone"></div><i style="left:${50 + Math.max(-1, Math.min(1, h.d / (HEEL_STOP * 1.4))) * 50}%"></i></div>`;
+  out.push({ lvl: h.lvl, t: 'Port / starboard balance', s: `Port ${fmt(h.p)} t · Starboard ${fmt(h.s)} t` + (h.lvl === 'ok' ? '' : ` · move weight to the ${h.d > 0 ? 'starboard' : 'port'} side`), extra: gauge });
+  const dgBad = S.place.map(p => byId[p.id]).filter(v => v.tags.includes('dg') && !laneOf(v.id).outer);
+  const dgAll = BOOKINGS.filter(b => b.tags.includes('dg') && status(b.id) === 'deck').length;
+  out.push({ lvl: dgBad.length ? 'bad' : 'ok', t: 'Dangerous goods', s: dgBad.length ? `${dgBad.map(v => v.reg).join(', ')} not in an outer lane` : dgAll ? 'All DG vehicles in outer lanes' : 'No DG vehicle on deck yet' });
+  const acc = S.place.map(p => byId[p.id]).filter(v => v.tags.includes('access') && !laneOf(v.id).outer);
+  out.push({ lvl: acc.length ? 'warn' : 'ok', t: 'Access vehicles', s: acc.length ? `${acc.map(v => v.reg).join(', ')} need door space: outer lane preferred` : 'Door space is clear' });
+  const pri = BOOKINGS.filter(b => b.tags.includes('priority') && status(b.id) === 'waiting');
+  out.push({ lvl: pri.length ? 'warn' : 'ok', t: 'Priority vehicles', s: pri.length ? `Still waiting: ${pri.map(v => v.reg).join(', ')}` : 'All priority vehicles dealt with' });
+  return out;
+}
+function renderChecks() {
+  const lab = { ok: 'OK', warn: 'CHECK', bad: 'STOP' };
+  document.getElementById('checks').innerHTML = computeChecks().map(c =>
+    `<li><span class="st ${c.lvl}">${lab[c.lvl]}</span><div><b>${c.t}</b><span class="s">${esc(c.s)}</span>${c.extra || ''}</div></li>`).join('');
+}
+
+function renderPrint() {
+  const now = new Date();
+  const rows = LANES.map(l => laneItems(l.id).map((v, i) =>
+    `<tr><td>${l.id}</td><td>${i + 1}</td><td>${esc(v.reg)}</td><td>${esc(v.desc)}</td><td>${fmt(v.len)}</td><td>${fmt(v.t)}</td><td>${v.tags.join(', ').toUpperCase()}</td></tr>`).join('')).join('');
+  const left = BOOKINGS.filter(b => status(b.id) !== 'deck').map(b => `${esc(b.reg)} (${status(b.id) === 'noshow' ? 'no-show' : 'not loaded'})`).join(', ');
+  const h = heelInfo();
+  document.getElementById('printSheet').innerHTML = `
+    <h1>MV Gannet · Vehicle deck load record</h1>
+    <div>14:30 Skerra → Port Ellan · ${now.toLocaleDateString('en-GB', { dateStyle: 'full' })} · printed ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</div>
+    <table><thead><tr><th>Lane</th><th>Pos</th><th>Reg</th><th>Vehicle</th><th>Length m</th><th>Weight t</th><th>Flags</th></tr></thead><tbody>${rows || '<tr><td colspan="7">Nothing loaded</td></tr>'}</tbody></table>
+    <div>Total ${S.place.length} vehicles · ${fmt(totalWeight())} t · Port ${fmt(h.p)} t / Starboard ${fmt(h.s)} t</div>
+    <div>Not loaded: ${left || 'none'}</div>
+    <div class="sign"><div>Loading officer</div><div>Master</div></div>`;
+}
+
+/* ============ Events ============ */
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('[data-tab]'); if (b) { tab = b.dataset.tab; render(); }
+});
+document.getElementById('search').addEventListener('input', e => { query = e.target.value; renderList(); });
+document.getElementById('list').addEventListener('click', e => {
+  const r = e.target.closest('[data-id]'); if (r) { selected = +r.dataset.id; render(); }
+});
+document.getElementById('list').addEventListener('dragstart', e => {
+  const r = e.target.closest('[data-id]'); if (!r) return;
+  selected = +r.dataset.id; e.dataTransfer.setData('text/plain', r.dataset.id); e.dataTransfer.effectAllowed = 'move';
+  setTimeout(render, 0);
+});
+const lanesEl = document.getElementById('lanes');
+lanesEl.addEventListener('click', e => {
+  const veh = e.target.closest('.veh'), lane = e.target.closest('[data-lane]');
+  if (selected && status(selected) === 'waiting' && lane) return laneTap(lane.dataset.lane);
+  if (veh) { selected = +veh.dataset.id; render(); }
+});
+lanesEl.addEventListener('dragover', e => { if (e.target.closest('[data-lane]')) e.preventDefault(); });
+lanesEl.addEventListener('drop', e => {
+  const lane = e.target.closest('[data-lane]'); if (!lane) return;
+  e.preventDefault();
+  const id = +e.dataTransfer.getData('text/plain');
+  if (byId[id] && status(id) === 'waiting') placeVehicle(id, lane.dataset.lane);
+});
+document.getElementById('selPanel').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || !selected) return;
+  if (b.dataset.place) placeVehicle(selected, b.dataset.place);
+  else if (b.dataset.remove) removeFromDeck(selected);
+  else if (b.dataset.noshow) setNoShow(selected, b.dataset.noshow === '1');
+});
+document.getElementById('undo').addEventListener('click', () => {
+  if (history.length) { S = JSON.parse(history.pop()); save(); toast('Last action undone'); }
+});
+document.getElementById('print').addEventListener('click', () => window.print());
+document.getElementById('reset').addEventListener('click', () => {
+  if (confirm('Clear the whole deck plan and start loading again?')) { commit(); S = fresh(); selected = null; save(); }
+});
+
+/* clock */
+function tick() {
+  const d = new Date();
+  document.getElementById('clock').textContent = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('dateLine').textContent = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) + ' · Ardmore Pier';
+}
+tick(); setInterval(tick, 15000);
+render();
+</script>
+</body>
+</html>

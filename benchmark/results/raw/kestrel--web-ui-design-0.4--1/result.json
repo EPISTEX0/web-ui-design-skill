@@ -1,0 +1,17 @@
+{
+  "brief": "kestrel",
+  "arm": "web-ui-design-0.4",
+  "model": "claude-sonnet-5-5",
+  "wall_s": 217,
+  "delivered": true,
+  "client_rounds": 1,
+  "qa": [
+    {
+      "asked": "Before I build, I need four answers. They change the layout, so I'd rather ask than guess.\n\n**1. What is the main job of this screen?**\n- **A. Today's schedule and check-in** (recommended). Reception sees the day's appointments by therapist, with arrived, in-session and done states. They check patients in with one tap. Most front desks spend the day doing this.\n- B. Walk-in and booking desk. The main action is booking or rescheduling, and the schedule sits to the side.\n- C. Waiting-room queue only. Just arrivals and wait times.\n\n**2. Which device does it run on?**\n- **A. Desktop monitor or a landscape tablet at the desk** (recommended). It gives a dense, multi-column layout.\n- B. Phone or portrait tablet first.\n- C. A wall display for the waiting room, read-only.\n\n**3. What should it feel like?**\n- **A. Calm clinical** (recommended). Off-white, one teal or green accent, soft rounded cards. It suits patients who may glance at the screen.\n- B. Dense and operational. It's compact, table-based and neutral, like a booking tool for staff who sit in it all day.\n- C. Warm and approachable. Softer colours, larger type and friendlier labels.\n\n**4. Do you have brand assets for Kestrel Physio?** For example a logo, brand colours or a font.\n- **A. No, pick for me** (recommended). I'll use a kestrel-inspired palette of slate, warm rust and cream, with a simple wordmark.\n- B. Yes. Tell me the colours, font or logo file and I'll use them.\n\nYou can reply with letters like \"1A 2A 3B 4A\", or \"your call\" and I'll take the recommended options. Either way I'll use realistic sample data for patients, therapists and appointments, and list every invented detail so you can replace it.",
+      "answer": "1A, 2A (a 10-inch touch tablet in landscape at the desk), 3A (calm and light, but with big text and big buttons), and 4B. Our brand colour is teal #2a7f7a. We don't have a logo or font, so those are your call. Please don't use dark mode."
+    }
+  ],
+  "is_error": false,
+  "num_turns": 19,
+  "total_cost_usd": 0.6695049
+}

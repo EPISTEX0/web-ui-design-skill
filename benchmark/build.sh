@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Usage: build.sh <brief> <arm> <rep>
-# arm: none | frontend-design | web-ui-design (0.1, frozen) | web-ui-design-0.2 (frozen)
-#      | web-ui-design-0.3 (this repo's skill) | web-ui-design-0.3-silent (same skill, the client declines to answer questions)
-#      | web-ui-design-0.3-wired (same skill plus the README's CLAUDE.md line)
+# arm: none | frontend-design | web-ui-design (0.1, frozen) | web-ui-design-0.2 | web-ui-design-0.3 (frozen, each with -silent and -wired)
+#      | web-ui-design-0.4 (this repo's skill)
+#      -silent: the client declines to answer questions. -wired: adds the README's CLAUDE.md line.
 # Runs one clean headless Claude Code session on the brief and saves the site and the transcript.
 # A brief with fixtures/<brief>/ starts from a copy of that project. A brief with profiles/<brief>.md has a
 # simulated client: when the builder ends a turn without delivering, the client answers from the notes and the
@@ -33,7 +33,8 @@ case $arm in
 	frontend-design) mkdir -p "$cfg/skills" && cp -r "$here/arms/frontend-design" "$cfg/skills/" ;;
 	web-ui-design) mkdir -p "$cfg/skills" && cp -r "$here/arms/web-ui-design-0.1" "$cfg/skills/web-ui-design" ;;
 	web-ui-design-0.2) mkdir -p "$cfg/skills" && cp -r "$here/arms/web-ui-design-0.2" "$cfg/skills/web-ui-design" ;;
-	web-ui-design-0.3 | web-ui-design-0.3-silent | web-ui-design-0.3-wired) mkdir -p "$cfg/skills" && cp -r "$here/../skills/web-ui-design" "$cfg/skills/web-ui-design" ;;
+	web-ui-design-0.3 | web-ui-design-0.3-silent | web-ui-design-0.3-wired) mkdir -p "$cfg/skills" && cp -r "$here/arms/web-ui-design-0.3" "$cfg/skills/web-ui-design" ;;
+	web-ui-design-0.4 | web-ui-design-0.4-silent | web-ui-design-0.4-wired) mkdir -p "$cfg/skills" && cp -r "$here/../skills/web-ui-design" "$cfg/skills/web-ui-design" ;;
 	*) echo "unknown arm $arm" >&2; exit 2 ;;
 esac
 # The -wired arm adds the one line the README asks users to put in their CLAUDE.md.

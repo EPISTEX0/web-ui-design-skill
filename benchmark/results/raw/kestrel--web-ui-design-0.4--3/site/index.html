@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Front desk · Kestrel Physio</title>
+<meta name="color-scheme" content="light">
+<style>
+:root {
+  /* Colour: ramps as semantic tokens. Accent is the clinic's teal #2a7f7a. */
+  --teal-700: oklch(0.43 0.07 191);
+  --teal-600: #2a7f7a;
+  --teal-100: oklch(0.94 0.03 190);
+  --teal-50: oklch(0.973 0.015 190);
+
+  --color-bg: oklch(0.972 0.008 200);
+  --color-surface: #fff;
+  --color-text: oklch(0.25 0.02 230);
+  --color-text-secondary: oklch(0.4 0.02 230);
+  --color-border: oklch(0.88 0.012 215);
+  --color-border-strong: oklch(0.62 0.02 215);
+  --color-accent: var(--teal-600);
+  --color-accent-hover: var(--teal-700);
+  --color-accent-tint: var(--teal-100);
+  --color-on-accent: #fff;
+  --color-warn-bg: oklch(0.955 0.06 85);
+  --color-warn-text: oklch(0.38 0.09 60);
+  --color-warn-edge: oklch(0.72 0.14 75);
+  --color-late-bg: oklch(0.95 0.04 55);
+  --color-late-text: oklch(0.4 0.1 45);
+  --color-gone-bg: oklch(0.94 0.012 215);
+  --color-gone-text: oklch(0.4 0.02 230);
+
+  /* Type: one humanist system sans, sized up for a 10-inch tablet at arm's length. */
+  --font: "Avenir Next", "Segoe UI", "Noto Sans", "Helvetica Neue", system-ui, sans-serif;
+  --fs-small: 19px;
+  --fs-body: 22px;
+  --fs-name: 26px;
+  --fs-h2: 30px;
+  --fs-time: 28px;
+
+  /* Space on a 4px scale; targets are 64px or more. */
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px; --s10: 40px;
+  --target: 64px;
+
+  --r-md: 14px; --r-lg: 20px; --r-pill: 999px;
+  --ring: 0 0 0 1px oklch(0.3 0.03 220 / 0.08), 0 2px 6px oklch(0.3 0.03 220 / 0.06), 0 8px 20px oklch(0.3 0.03 220 / 0.05);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font: 400 var(--fs-body)/1.4 var(--font);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+button, select, input { font: inherit; color: inherit; touch-action: manipulation; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+.num { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+svg.i { width: 1.1em; height: 1.1em; flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+:focus-visible { outline: 4px solid var(--teal-700); outline-offset: 3px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: var(--target); padding: 0 var(--s6);
+  border-radius: var(--r-md); border: 2px solid var(--color-border-strong);
+  background: var(--color-surface); font-weight: 600; cursor: pointer;
+  transition: transform 140ms var(--ease-out), background-color 150ms, border-color 150ms;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+.btn-outline { border-color: var(--color-accent); color: var(--teal-700); }
+.btn-quiet { border-color: transparent; background: transparent; color: var(--color-text-secondary); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (hover: hover) {
+  .btn-primary:hover { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+  .btn-outline:hover, .btn-quiet:hover, .btn:not(.btn-primary):hover { background: var(--color-accent-tint); }
+}
+
+/* Header */
+.top {
+  display: flex; align-items: center; gap: var(--s6); flex-wrap: wrap;
+  padding: var(--s4) var(--s8);
+  background: var(--color-surface); box-shadow: 0 1px 0 var(--color-border);
+}
+.brand { display: flex; align-items: center; gap: var(--s3); margin-right: auto; }
+.brand svg { width: 48px; height: 48px; }
+.brand b { font-size: var(--fs-h2); letter-spacing: -0.01em; font-weight: 700; line-height: 1.1; }
+.brand b span { color: var(--teal-700); font-weight: 500; }
+.when { text-align: right; line-height: 1.2; }
+.when strong { display: block; font-size: var(--fs-time); font-weight: 700; }
+.when span { font-size: var(--fs-small); color: var(--color-text-secondary); }
+
+/* Layout: two columns on the tablet, each scrolls on its own */
+.app { display: grid; grid-template-columns: minmax(360px, 440px) 1fr; gap: var(--s6); padding: var(--s6) var(--s8) var(--s8); align-items: start; }
+@media (min-width: 900px) {
+  body { height: 100dvh; display: grid; grid-template-rows: auto 1fr; }
+  .app { min-height: 0; align-items: stretch; }
+  .panel { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+}
+@media (max-width: 899px) { .app { grid-template-columns: 1fr; padding: var(--s4); } .top { padding: var(--s4); } }
+
+.panel { min-width: 0; background: var(--color-surface); border-radius: var(--r-lg); box-shadow: var(--ring); padding: var(--s6); }
+.panel-head { display: flex; align-items: baseline; gap: var(--s3); margin-bottom: var(--s4); }
+.panel h2 { font-size: var(--fs-h2); line-height: 1.15; letter-spacing: -0.01em; }
+.count { font-size: var(--fs-body); color: var(--color-text-secondary); font-weight: 600; }
+
+/* Waiting list */
+.waiting { display: grid; gap: var(--s3); list-style: none; margin: 0; padding: 0; }
+.wcard { border-radius: var(--r-md); background: var(--teal-50); border: 2px solid var(--color-accent-tint); padding: var(--s4); display: grid; gap: var(--s3); }
+.wcard.long { background: var(--color-warn-bg); border-color: var(--color-warn-edge); }
+.wtop { display: block; }
+.wfoot { display: flex; align-items: center; gap: var(--s4); }
+.wfoot .btn { flex: 1; padding: 0 var(--s3); white-space: nowrap; }
+.wname { font-size: var(--fs-name); font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.wmeta { font-size: var(--fs-small); color: var(--color-text-secondary); overflow-wrap: anywhere; }
+.wait { flex: none; line-height: 1.1; min-width: 84px; }
+.wait strong { display: block; font-size: 38px; font-weight: 700; }
+.wait span { font-size: var(--fs-small); color: var(--color-text-secondary); }
+.long .wait strong, .long .flag { color: var(--color-warn-text); }
+.flag { display: inline-flex; align-items: center; gap: var(--s2); font-size: var(--fs-small); font-weight: 700; color: var(--teal-700); }
+.bar { height: 10px; border-radius: var(--r-pill); background: oklch(1 0 0 / 0.8); box-shadow: inset 0 0 0 1px var(--color-border); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--color-accent); border-radius: inherit; }
+.long .bar i { background: var(--color-warn-edge); }
+
+/* Schedule */
+.chips { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s4); }
+.chip {
+  min-height: 56px; padding: 0 var(--s5); border-radius: var(--r-pill);
+  border: 2px solid var(--color-border-strong); background: var(--color-surface); cursor: pointer; font-weight: 600;
+  display: inline-flex; align-items: center; gap: var(--s2);
+  transition: transform 140ms var(--ease-out), background-color 150ms;
+}
+.chip:active { transform: scale(0.97); }
+.chip[aria-pressed="true"] { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+@media (hover: hover) { .chip[aria-pressed="false"]:hover { background: var(--color-accent-tint); } }
+
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { display: grid; grid-template-columns: 124px 1fr auto; gap: var(--s4); align-items: center; padding: var(--s4) 0; border-top: 1px solid var(--color-border); }
+.row:first-child { border-top: 0; }
+.time { font-size: var(--fs-time); font-weight: 700; line-height: 1.1; }
+.time small { display: block; margin-top: var(--s1); font-size: var(--fs-small); font-weight: 500; color: var(--color-text-secondary); }
+.time small.over { color: var(--color-late-text); font-weight: 700; }
+.who { min-width: 0; }
+.who b { display: block; font-size: var(--fs-name); line-height: 1.2; font-weight: 700; overflow-wrap: anywhere; }
+.who > span:not(.pill) { display: block; font-size: var(--fs-small); color: var(--color-text-secondary); overflow-wrap: anywhere; }
+.acts { display: flex; gap: var(--s2); justify-content: flex-end; flex-wrap: wrap; }
+.row.dim .who b, .row.dim .time { color: var(--color-text-secondary); }
+
+.pill { display: inline-flex; align-items: center; gap: var(--s2); min-height: 44px; padding: 0 var(--s4); border-radius: var(--r-pill); font-weight: 700; font-size: var(--fs-small); white-space: nowrap; }
+.pill.arrived { background: var(--color-accent-tint); color: var(--teal-700); }
+.pill.session { background: var(--color-gone-bg); color: var(--color-text); }
+.pill.late { background: var(--color-late-bg); color: var(--color-late-text); }
+.pill.gone { background: var(--color-gone-bg); color: var(--color-gone-text); }
+
+.empty { padding: var(--s6) var(--s4); text-align: center; color: var(--color-text-secondary); border: 2px dashed var(--color-border); border-radius: var(--r-md); }
+.empty b { display: block; color: var(--color-text); font-size: var(--fs-name); margin-bottom: var(--s1); }
+.earlier { margin-top: var(--s4); width: 100%; }
+
+@media (max-width: 700px) {
+  .row { grid-template-columns: 1fr; gap: var(--s3); }
+  .acts { justify-content: flex-start; }
+  .when { text-align: left; }
+  .brand { width: 100%; }
+  .wfoot { flex-wrap: wrap; }
+  .wfoot .btn { white-space: normal; min-width: 200px; }
+}
+
+/* Dialogs */
+dialog { border: 0; border-radius: var(--r-lg); padding: var(--s8); width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); box-shadow: 0 24px 60px oklch(0.2 0.03 220 / 0.3); color: var(--color-text); }
+dialog::backdrop { background: oklch(0.2 0.03 220 / 0.45); }
+dialog[open] { animation: pop 220ms var(--ease-out); }
+@keyframes pop { from { opacity: 0; transform: scale(0.95); } }
+dialog h2 { font-size: var(--fs-h2); line-height: 1.15; margin-bottom: var(--s2); }
+dialog .sub { color: var(--color-text-secondary); margin-bottom: var(--s5); font-size: var(--fs-body); overflow-wrap: anywhere; }
+.stack { display: grid; gap: var(--s3); }
+.field { display: grid; gap: var(--s2); margin-bottom: var(--s5); }
+.field > label, .field > legend { font-weight: 700; padding: 0; }
+fieldset.field { border: 0; margin-inline: 0; padding: 0; min-width: 0; }
+.input { width: 100%; min-height: var(--target); border: 2px solid var(--color-border-strong); border-radius: var(--r-md); padding: 0 var(--s4); background: #fff; }
+.input[aria-invalid="true"] { border-color: var(--color-late-text); }
+.err { color: var(--color-late-text); font-weight: 600; font-size: var(--fs-small); display: none; }
+.err.show { display: block; }
+.choices { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.choices input { position: absolute; opacity: 0; pointer-events: none; }
+.choices label { min-height: 56px; padding: 0 var(--s5); display: inline-flex; align-items: center; border-radius: var(--r-pill); border: 2px solid var(--color-border-strong); cursor: pointer; font-weight: 600; }
+.choices input:checked + label { background: var(--color-accent); border-color: var(--color-accent); color: #fff; }
+.choices input:focus-visible + label { outline: 4px solid var(--teal-700); outline-offset: 3px; }
+.dlg-actions { display: flex; gap: var(--s3); justify-content: flex-end; flex-wrap: wrap; margin-top: var(--s2); }
+.btn-danger { border-color: var(--color-late-text); color: var(--color-late-text); }
+@media (hover: hover) { .btn-danger:hover { background: var(--color-late-bg); } }
+
+/* Undo toast */
+.toast { position: fixed; left: 50%; bottom: var(--s8); transform: translate(-50%, 0); z-index: 10; display: flex; align-items: center; gap: var(--s4); background: oklch(0.27 0.025 230); color: #fff; border-radius: var(--r-lg); padding: var(--s3) var(--s3) var(--s3) var(--s6); box-shadow: 0 12px 32px oklch(0.2 0.03 220 / 0.35); max-width: calc(100vw - 32px); transition: transform 220ms var(--ease-out), opacity 220ms; }
+.toast[hidden] { display: flex; opacity: 0; transform: translate(-50%, 24px); pointer-events: none; visibility: hidden; }
+.toast .btn { background: #fff; border-color: #fff; color: var(--color-text); }
+
+@media (prefers-reduced-motion: reduce) {
+  dialog[open] { animation: none; }
+  .btn, .chip, .toast { transition-property: opacity, background-color; }
+  .btn:active, .chip:active { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17.5v.01"/></symbol>
+  <symbol id="i-door" viewBox="0 0 24 24"><path d="M6 21V4h12v17M4 21h16M14 12.5v.01"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 48 48" role="img" aria-label="Kestrel Physio logo"><rect width="48" height="48" rx="14" fill="#2a7f7a"/><path d="M8 29c6-1 10-5 13-11 1 4 3 6 6 7 4 1 8-1 13-5-2 8-8 14-16 14-4 0-6 3-8 6 0-5-3-9-8-10z" fill="#fff"/></svg>
+    <b>Kestrel <span>Physio</span></b>
+  </div>
+  <div class="when num"><strong id="clock">--:--</strong><span id="date">Front desk</span></div>
+  <button class="btn btn-outline" id="walkin-open" type="button"><svg class="i"><use href="#i-plus"/></svg>Add a walk-in</button>
+</header>
+
+<main class="app">
+  <section class="panel" aria-labelledby="wh">
+    <div class="panel-head"><h2 id="wh">Waiting now</h2><span class="count num" id="wcount"></span></div>
+    <ul class="waiting" id="waiting"></ul>
+  </section>
+
+  <section class="panel" aria-labelledby="sh">
+    <div class="panel-head"><h2 id="sh">Today’s appointments</h2><span class="count num" id="scount"></span></div>
+    <div class="chips" id="chips" role="group" aria-label="Show appointments for"></div>
+    <ul class="rows" id="rows"></ul>
+    <button class="btn earlier" id="earlier" type="button" aria-expanded="false"></button>
+  </section>
+</main>
+
+<!-- Running late / no-show -->
+<dialog id="late-dlg" aria-labelledby="late-title">
+  <h2 id="late-title">Not here yet</h2>
+  <p class="sub" id="late-sub"></p>
+  <div class="stack">
+    <button class="btn" type="button" data-late="10"><svg class="i"><use href="#i-clock"/></svg>Running late, about 10 minutes</button>
+    <button class="btn" type="button" data-late="20"><svg class="i"><use href="#i-clock"/></svg>Running late, about 20 minutes</button>
+    <button class="btn" type="button" data-late="30"><svg class="i"><use href="#i-clock"/></svg>Running late, about 30 minutes</button>
+    <button class="btn btn-danger" type="button" id="noshow"><svg class="i"><use href="#i-x"/></svg>Mark as no-show</button>
+    <button class="btn btn-quiet" type="button" id="late-cancel">Back</button>
+  </div>
+</dialog>
+
+<!-- Walk-in -->
+<dialog id="walkin-dlg" aria-labelledby="walkin-title">
+  <form id="walkin-form" novalidate>
+    <h2 id="walkin-title">Add a walk-in</h2>
+    <p class="sub">They’ll join the waiting list straight away.</p>
+    <div class="field">
+      <label for="w-name">Patient’s name</label>
+      <input class="input" id="w-name" name="name" autocomplete="off" required aria-describedby="w-err">
+      <p class="err" id="w-err">Type the patient’s name so we can call them.</p>
+    </div>
+    <fieldset class="field">
+      <legend>See which physio?</legend>
+      <div class="choices" id="w-physio"></div>
+    </fieldset>
+    <div class="field">
+      <label for="w-reason">What’s it for?</label>
+      <select class="input" id="w-reason" name="reason">
+        <option>Back or neck pain</option>
+        <option>Shoulder or arm</option>
+        <option>Knee, hip or leg</option>
+        <option>Sports injury</option>
+        <option>Something else</option>
+      </select>
+    </div>
+    <div class="dlg-actions">
+      <button class="btn btn-quiet" type="button" id="walkin-cancel">Cancel</button>
+      <button class="btn btn-primary" type="submit">Add to waiting list</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden>
+  <span id="toast-msg"></span>
+  <button class="btn" type="button" id="toast-undo">Undo</button>
+</div>
+
+<script>
+(() => {
+  /* Sample data. The desk clock starts at 10:20 on the sample day and then runs in real time. */
+  const PHYSIOS = [
+    { id: 'hannah', name: 'Hannah Okafor', first: 'Hannah', room: 'Room 1' },
+    { id: 'marcus', name: 'Marcus Lindqvist', first: 'Marcus', room: 'Room 2' },
+    { id: 'priya', name: 'Priya Raman', first: 'Priya', room: 'Room 3' },
+    { id: 'tom', name: 'Tom Beaumont', first: 'Tom', room: 'Room 4' },
+  ];
+  const t = (h, m) => h * 60 + m;
+  const appts = [
+    { id: 1, at: t(9, 0), name: 'Margaret Ellison', type: 'Follow-up', by: 'hannah', status: 'done' },
+    { id: 2, at: t(9, 15), name: 'Gary Pratt', type: 'Follow-up', by: 'tom', status: 'noshow' },
+    { id: 3, at: t(9, 30), name: 'Ravi Patel', type: 'Shockwave therapy', by: 'marcus', status: 'done' },
+    { id: 4, at: t(9, 40), name: 'Chloe Brennan', type: 'Post-op rehab', by: 'priya', status: 'session' },
+    { id: 5, at: t(9, 45), name: 'Walter Hughes', type: 'Follow-up', by: 'tom', status: 'session' },
+    { id: 6, at: t(10, 0), name: 'Aoife Gallagher', type: 'Initial assessment', by: 'hannah', status: 'arrived', arrivedAt: t(10, 4) },
+    { id: 7, at: t(10, 15), name: 'Dennis Okonkwo-Featherstonehaugh', type: 'Follow-up', by: 'marcus', status: 'arrived', arrivedAt: t(10, 12) },
+    { id: 8, at: t(10, 20), name: 'Sofia Marquez', type: 'Dry needling', by: 'priya', status: 'arrived', arrivedAt: t(10, 18) },
+    { id: 9, at: t(10, 20), name: 'Jim Thornton', type: 'Follow-up', by: 'tom', status: 'scheduled' },
+    { id: 10, at: t(10, 30), name: 'Beatrice Lowe', type: 'Follow-up', by: 'hannah', status: 'scheduled' },
+    { id: 11, at: t(10, 30), name: 'Kofi Mensah', type: 'Initial assessment', by: 'marcus', status: 'late', lateTo: t(10, 40) },
+    { id: 12, at: t(10, 45), name: 'Yuki Tanaka', type: 'Follow-up', by: 'priya', status: 'scheduled' },
+    { id: 13, at: t(10, 45), name: 'Alan Whitcombe', type: 'Shockwave therapy', by: 'tom', status: 'scheduled' },
+    { id: 14, at: t(11, 0), name: 'Emma Rowe', type: 'Post-op rehab', by: 'hannah', status: 'scheduled' },
+    { id: 15, at: t(11, 0), name: 'Omar Haddad', type: 'Follow-up', by: 'marcus', status: 'scheduled' },
+    { id: 16, at: t(11, 15), name: 'Lena Fischer', type: 'Initial assessment', by: 'priya', status: 'scheduled' },
+    { id: 17, at: t(11, 30), name: 'Patrick Doyle', type: 'Follow-up', by: 'tom', status: 'scheduled' },
+    { id: 18, at: t(11, 30), name: 'Grace Liu', type: 'Dry needling', by: 'hannah', status: 'scheduled' },
+  ];
+  let nextId = 100;
+
+  const start = Date.now(), base = t(10, 20);
+  const now = () => base + (Date.now() - start) / 60000;
+  const hhmm = m => { m = Math.floor(m); return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  const dur = m => { m = Math.max(0, Math.floor(m)); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h ' + (m % 60) + ' min'; };
+  const who = id => PHYSIOS.find(p => p.id === id);
+  const $ = id => document.getElementById(id);
+  const icon = n => `<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+  const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  let filter = 'all', showEarlier = false;
+
+  /* Header date: the sample day */
+  $('date').textContent = 'Tuesday 20 October';
+
+  /* ---------- Render ---------- */
+  function renderWaiting() {
+    const list = appts.filter(a => a.status === 'arrived').sort((a, b) => a.arrivedAt - b.arrivedAt);
+    $('wcount').textContent = list.length ? list.length + (list.length === 1 ? ' person' : ' people') : '';
+    if (!list.length) {
+      $('waiting').innerHTML = `<li class="empty"><b>Nobody is waiting</b>People appear here as soon as you check them in.</li>`;
+      return;
+    }
+    $('waiting').innerHTML = list.map((a, i) => {
+      const w = now() - a.arrivedAt, p = who(a.by);
+      const long = w >= 15;
+      const flag = long ? `<span class="flag">${icon('alert')}Waiting over 15 min</span>`
+        : (i === 0 && list.length > 1 ? `<span class="flag">${icon('clock')}Waiting longest</span>` : '');
+      return `<li class="wcard${long ? ' long' : ''}">
+        <div class="wtop">
+          <div class="wname">${esc(a.name)}</div><div class="wmeta">${esc(a.type)} with ${p.first}</div>
+        </div>
+        <div class="wfoot">
+          <div class="wait num"><strong>${Math.floor(w)}</strong><span>min waiting</span></div>
+          <button class="btn btn-outline" type="button" data-send="${a.id}">${icon('door')}Send to ${p.room}</button>
+        </div>
+        ${flag}
+        <div class="bar" aria-hidden="true"><i style="width:${Math.min(100, w / 30 * 100)}%"></i></div>
+      </li>`;
+    }).join('');
+  }
+
+  function rel(a) {
+    const d = a.at - now();
+    if (a.status === 'late') return { text: 'Now due ' + hhmm(a.lateTo), over: true };
+    if (a.status !== 'scheduled') return { text: a.walkin ? '' : '' };
+    if (d < -1) return { text: dur(-d) + ' overdue', over: true };
+    if (d < 1) return { text: 'Due now', over: false };
+    return { text: 'In ' + dur(d), over: false };
+  }
+
+  function actions(a) {
+    if (a.status === 'scheduled' || a.status === 'late')
+      return `<button class="btn btn-primary" type="button" data-checkin="${a.id}">${icon('check')}Check in</button>
+              <button class="btn" type="button" data-notyet="${a.id}">Not here</button>`;
+    if (a.status === 'arrived') return `<span class="pill arrived">${icon('check')}Waiting since ${hhmm(a.arrivedAt)}</span>`;
+    if (a.status === 'session') return `<span class="pill session">${icon('door')}In ${who(a.by).room}</span>`;
+    if (a.status === 'noshow') return `<span class="pill gone">${icon('x')}No-show</span>`;
+    return `<span class="pill gone">${icon('check')}Finished</span>`;
+  }
+
+  function rowHTML(a) {
+    const r = rel(a), dim = a.status === 'done' || a.status === 'noshow';
+    const lateTag = a.status === 'late' ? `<span class="pill late" style="margin-top:8px">${icon('clock')}Running late</span>` : '';
+    return `<li class="row${dim ? ' dim' : ''}">
+      <div class="time num">${a.walkin ? 'Walk-in' : hhmm(a.at)}${r.text ? `<small class="${r.over ? 'over' : ''}">${r.text}</small>` : ''}</div>
+      <div class="who"><b>${esc(a.name)}</b><span>${esc(a.type)} · ${who(a.by).name}</span>${lateTag}</div>
+      <div class="acts">${actions(a)}</div>
+    </li>`;
+  }
+
+  function renderSchedule() {
+    const mine = appts.filter(a => filter === 'all' || a.by === filter);
+    const active = mine.filter(a => a.status === 'scheduled' || a.status === 'late').sort((a, b) => a.at - b.at);
+    const past = mine.filter(a => !(a.status === 'scheduled' || a.status === 'late')).sort((a, b) => a.at - b.at);
+    $('scount').textContent = active.length + ' still to arrive';
+    let html = active.map(rowHTML).join('');
+    if (!active.length) html = `<li class="empty"><b>Nothing else today</b>${filter === 'all' ? 'Everyone has arrived or been seen.' : 'Nobody else is due for ' + who(filter).first + '.'}</li>`;
+    if (showEarlier) html += past.map(rowHTML).join('');
+    $('rows').innerHTML = html;
+    const eb = $('earlier');
+    eb.hidden = !past.length;
+    eb.setAttribute('aria-expanded', showEarlier);
+    eb.textContent = showEarlier ? 'Hide arrived and finished' : `Show arrived, in session and finished (${past.length})`;
+  }
+
+  function renderChips() {
+    const items = [{ id: 'all', label: 'Everyone' }, ...PHYSIOS.map(p => ({ id: p.id, label: p.first }))];
+    $('chips').innerHTML = items.map(c => `<button class="chip" type="button" data-f="${c.id}" aria-pressed="${filter === c.id}">${c.label}</button>`).join('');
+  }
+
+  function renderClock() { $('clock').textContent = hhmm(now()); }
+  function render() { renderClock(); renderWaiting(); renderSchedule(); }
+
+  /* ---------- Changes with undo ---------- */
+  let toastTimer, undoFn;
+  function toast(msg, undo) {
+    undoFn = undo; $('toast-msg').textContent = msg;
+    $('toast').hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { $('toast').hidden = true; undoFn = null; }, 9000);
+  }
+  function change(a, patch, msg) {
+    const prev = { ...a };
+    Object.assign(a, patch);
+    render();
+    toast(msg, () => { Object.keys(a).forEach(k => delete a[k]); Object.assign(a, prev); render(); });
+  }
+  const find = id => appts.find(a => a.id === +id);
+
+  document.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    const d = b.dataset;
+    if (d.checkin) { const a = find(d.checkin); change(a, { status: 'arrived', arrivedAt: Math.floor(now()), lateTo: undefined }, a.name + ' is checked in'); }
+    else if (d.send) { const a = find(d.send); change(a, { status: 'session' }, a.name + ' sent to ' + who(a.by).room); }
+    else if (d.notyet) { lateTarget = find(d.notyet); $('late-sub').textContent = lateTarget.name + ', ' + hhmm(lateTarget.at) + ' with ' + who(lateTarget.by).first; $('late-dlg').showModal(); }
+    else if (d.f) { filter = d.f; renderChips(); renderSchedule(); $('chips').querySelector('[aria-pressed="true"]').focus(); }
+  });
+
+  let lateTarget;
+  $('late-dlg').addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (e.target === $('late-dlg') || (b && b.id === 'late-cancel')) return $('late-dlg').close();
+    if (!b) return;
+    if (b.dataset.late) {
+      const mins = +b.dataset.late;
+      $('late-dlg').close();
+      change(lateTarget, { status: 'late', lateTo: Math.max(lateTarget.at, Math.floor(now())) + mins }, lateTarget.name + ' is running late');
+    } else if (b.id === 'noshow') {
+      $('late-dlg').close();
+      change(lateTarget, { status: 'noshow' }, lateTarget.name + ' marked as no-show');
+    }
+  });
+
+  $('toast-undo').addEventListener('click', () => { if (undoFn) undoFn(); undoFn = null; $('toast').hidden = true; });
+  $('earlier').addEventListener('click', () => { showEarlier = !showEarlier; renderSchedule(); });
+
+  /* ---------- Walk-in ---------- */
+  const wp = $('w-physio');
+  wp.innerHTML = [{ id: 'any', first: 'First free' }, ...PHYSIOS].map((p, i) =>
+    `<input type="radio" name="physio" id="wp-${p.id}" value="${p.id}"${i === 0 ? ' checked' : ''}><label for="wp-${p.id}">${p.first}</label>`).join('');
+
+  const nameEl = $('w-name');
+  const validate = () => {
+    const bad = !nameEl.value.trim();
+    nameEl.setAttribute('aria-invalid', bad); $('w-err').classList.toggle('show', bad);
+    return !bad;
+  };
+  nameEl.addEventListener('blur', () => { if (nameEl.value || nameEl.getAttribute('aria-invalid') === 'true') validate(); });
+  nameEl.addEventListener('input', () => { if (nameEl.getAttribute('aria-invalid') === 'true') validate(); });
+
+  $('walkin-open').addEventListener('click', () => { $('walkin-form').reset(); nameEl.removeAttribute('aria-invalid'); $('w-err').classList.remove('show'); $('walkin-dlg').showModal(); });
+  $('walkin-cancel').addEventListener('click', () => $('walkin-dlg').close());
+  $('walkin-dlg').addEventListener('click', e => { if (e.target === $('walkin-dlg')) $('walkin-dlg').close(); });
+
+  $('walkin-form').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!validate()) return nameEl.focus();
+    let by = document.querySelector('input[name=physio]:checked').value;
+    if (by === 'any') {
+      const load = id => appts.filter(a => a.by === id && ['arrived', 'session', 'scheduled', 'late'].includes(a.status) && a.at <= now() + 60).length;
+      by = PHYSIOS.slice().sort((a, b) => load(a.id) - load(b.id))[0].id;
+    }
+    const a = { id: nextId++, at: Math.floor(now()), name: nameEl.value.trim(), type: 'Walk-in: ' + $('w-reason').value, by, status: 'arrived', arrivedAt: Math.floor(now()), walkin: true };
+    appts.push(a);
+    $('walkin-dlg').close();
+    render();
+    toast(a.name + ' added, seeing ' + who(by).first, () => { appts.splice(appts.indexOf(a), 1); render(); });
+  });
+
+  renderChips();
+  render();
+  setInterval(() => { if (!document.querySelector('dialog[open]')) render(); }, 20000);
+})();
+</script>
+</body>
+</html>

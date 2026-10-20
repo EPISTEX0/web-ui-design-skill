@@ -17,6 +17,9 @@ const titles = {
 	'salt-and-iron': 'New. Salt and Iron exhibition guide',
 	shiftboard: 'Extend. Shiftboard app, add a Time off page',
 	'harbour-swim': 'Improve. Harbour swim club site',
+	'le-goff': 'New. Parc Le Goff oyster farm, order page',
+	gannet: 'New. MV Gannet ferry loading screen',
+	'dean-fungi': 'New. Dean Fungus Group species guide',
 }
 const md = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const sections = readdirSync(join(R, 'keys')).map((file) => {
@@ -70,6 +73,9 @@ writeFileSync(
 	.arm[data-arm="web-ui-design-0.3"] { background: #fce7f3; }
 	.arm[data-arm="web-ui-design-0.3-silent"] { background: #ede9fe; }
 	.arm[data-arm="web-ui-design-0.3-wired"] { background: #ffedd5; }
+	.arm[data-arm="web-ui-design-0.4"] { background: #cffafe; }
+	.arm[data-arm="web-ui-design-0.4-silent"] { background: #e0e7ff; }
+	.arm[data-arm="web-ui-design-0.4-wired"] { background: #fef9c3; }
 </style>
 </head>
 <body>

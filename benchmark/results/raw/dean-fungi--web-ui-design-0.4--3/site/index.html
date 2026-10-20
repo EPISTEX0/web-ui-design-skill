@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Species guide | Dean Fungus Group</title>
+<meta name="description" content="Look up the fungi found on Dean Fungus Group forays in the Forest of Dean.">
+<style>
+:root {
+  /* primitives */
+  --cream: #f3ecd8;
+  --cream-deep: #e9dfc2;
+  --moss: #4a5d23;
+  --bark: #2a2f1c;
+  --bark-2: #4a4e38;
+  --bark-3: #626148;
+  --signal-red: #b3261e;
+  --ochre: #7a4b00;
+
+  /* semantic */
+  --bg: var(--cream);
+  --surface: var(--cream-deep);
+  --text: var(--bark);
+  --text-2: var(--bark-2);
+  --text-3: var(--bark-3);
+  --accent: var(--moss);
+  --line: rgba(42, 47, 28, .24);
+  --line-soft: rgba(42, 47, 28, .12);
+  --deadly: var(--signal-red);
+  --poisonous: var(--ochre);
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s6: 24px; --s8: 32px; --s12: 48px; --s16: 64px;
+  --r-sm: 2px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 18px/1.55 var(--serif);
+  text-wrap: pretty;
+  overflow-x: clip;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3 { font-weight: 600; line-height: 1.15; letter-spacing: -0.02em; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; touch-action: manipulation; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-radius: var(--r-sm); }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 var(--s4); }
+.sans { font-family: var(--sans); }
+.skip { position: absolute; left: var(--s4); top: -100px; background: var(--text); color: var(--bg); padding: var(--s2) var(--s4); z-index: 10; }
+.skip:focus { top: var(--s2); }
+
+/* masthead */
+.mast { border-bottom: 2px solid var(--text); padding: var(--s8) 0 var(--s6); }
+.mast-grid { display: grid; gap: var(--s6); align-items: end; }
+.group { font: 600 14px/1.3 var(--sans); color: var(--accent); margin-bottom: var(--s3); }
+.mast h1 { font-size: clamp(2.25rem, 8vw, 3.75rem); }
+.lede { margin-top: var(--s4); color: var(--text-2); max-width: 36em; }
+.woodcut {
+  border: 1px dashed var(--text-3); aspect-ratio: 4 / 3; max-width: 240px; width: 100%;
+  display: grid; place-items: center; text-align: center; padding: var(--s4);
+  font: 14px/1.4 var(--sans); color: var(--text-3);
+}
+
+.notice { margin: var(--s6) 0 0; padding: var(--s3) var(--s4); border-left: 4px solid var(--accent); background: var(--surface); font: 15px/1.5 var(--sans); color: var(--text-2); }
+
+/* controls */
+.tools { padding: var(--s6) 0 var(--s4); display: grid; gap: var(--s4); font-family: var(--sans); }
+.field label, .field .lab { display: block; font-size: 14px; font-weight: 600; margin-bottom: var(--s1); }
+input[type=search], select {
+  font: 16px/1.4 var(--sans); color: var(--text); background: #fbf7ea;
+  border: 1px solid var(--text-3); border-radius: var(--r-sm); padding: var(--s3) var(--s3); width: 100%; min-height: 44px;
+}
+.selects { display: grid; gap: var(--s3); grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.chipbtn {
+  font: 500 15px/1.2 var(--sans); color: var(--text); background: transparent; cursor: pointer;
+  border: 1px solid var(--text-3); border-radius: var(--r-sm); padding: var(--s2) var(--s3); min-height: 44px;
+  touch-action: manipulation; transition: transform 140ms var(--ease-out), background-color 160ms;
+}
+.chipbtn[aria-pressed=true] { background: var(--text); color: var(--bg); border-color: var(--text); }
+.chipbtn:active { transform: scale(.97); }
+@media (hover: hover) { .chipbtn:hover { background: var(--surface); } .chipbtn[aria-pressed=true]:hover { background: var(--text); } }
+.count { font: 15px/1.4 var(--sans); color: var(--text-2); }
+.linkbtn { font: inherit; color: var(--accent); background: none; border: 0; padding: var(--s2) 0; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+
+/* label chips: colour plus glyph plus words */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; font: 600 14px/1.2 var(--sans);
+  padding: 4px 10px 4px 8px; border-radius: var(--r-sm); border: 1.5px solid currentColor; white-space: nowrap;
+}
+.chip svg { width: 12px; height: 12px; flex: none; }
+.chip-eaten { background: var(--accent); border-color: var(--accent); color: #fff; }
+.chip-not { color: var(--text-2); }
+.chip-poisonous { color: var(--poisonous); background: #f6e6c4; }
+.chip-deadly { background: var(--deadly); border-color: var(--deadly); color: #fff; }
+.chip-tbc { color: var(--text-3); border-style: dashed; font-weight: 500; }
+.tbc { font: italic 15px/1.4 var(--sans); color: var(--text-3); border-bottom: 1px dashed var(--text-3); }
+
+/* species rows */
+.list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--text); }
+.row { padding: var(--s4) 0; border-bottom: 1px solid var(--line); display: grid; gap: var(--s2) var(--s6); align-items: start; }
+.row h2 { font-size: 1.375rem; }
+.row h2 a { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+.row h2 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.latin { color: var(--text-2); }
+.lookline { font: 15px/1.5 var(--sans); color: var(--text-2); }
+.sos { font: 600 15px/1.45 var(--sans); margin-top: var(--s2); padding: var(--s2) var(--s3); border: 1.5px solid var(--text); border-radius: var(--r-sm); background: #fbf7ea; }
+.sos-deadly { border-color: var(--deadly); }
+.warn { font: 600 15px/1.45 var(--sans); margin-top: var(--s2); padding: var(--s2) var(--s3); border: 1.5px dashed var(--text); }
+.empty { padding: var(--s12) 0; text-align: left; border-bottom: 1px solid var(--line); }
+.empty p { margin-bottom: var(--s3); }
+@media (min-width: 720px) {
+  .row { grid-template-columns: minmax(0, 1.5fr) 190px minmax(0, 1fr); }
+  .row .sos, .row .warn { grid-column: 1 / -1; margin-top: 0; }
+}
+
+/* detail */
+.back { display: inline-flex; align-items: center; min-height: 44px; font: 600 15px/1 var(--sans); }
+.detail-head { padding: var(--s6) 0 var(--s4); }
+.detail-head h1 { font-size: clamp(2.25rem, 8vw, 3.5rem); }
+.detail-head .latin { font-size: 1.25rem; margin: var(--s2) 0 var(--s4); }
+.pair { display: grid; gap: var(--s4); margin: var(--s6) 0; }
+.pair h2 { font-size: 1rem; font-family: var(--sans); margin-bottom: var(--s2); color: var(--text-2); letter-spacing: 0; }
+.pcard { border: 1px solid var(--text); padding: var(--s4); background: #fbf7ea; display: grid; gap: var(--s2); align-content: start; }
+.pcard h3 { font-size: 1.375rem; }
+.pcard h3 a { color: var(--text); }
+.pcard.you { background: var(--surface); }
+@media (min-width: 720px) { .pair { grid-template-columns: 1fr 1fr; } }
+.cols { display: grid; gap: var(--s8); margin: var(--s8) 0; }
+@media (min-width: 720px) { .cols { grid-template-columns: 300px 1fr; } }
+.photo {
+  aspect-ratio: 4 / 3; width: 100%; border: 1px dashed var(--text-3); display: grid; place-items: center; text-align: center; padding: var(--s4);
+  font: 14px/1.4 var(--sans); color: var(--text-3);
+  background: repeating-linear-gradient(135deg, transparent 0 11px, var(--line-soft) 11px 12px);
+}
+dl { margin: 0; display: grid; gap: var(--s4); }
+.facts div { border-top: 1px solid var(--line); padding-top: var(--s3); }
+dt { font: 600 14px/1.3 var(--sans); color: var(--text-2); margin-bottom: var(--s1); }
+dd { margin: 0; }
+.link-lookalike { font-weight: 600; }
+
+/* footer */
+.foot { margin-top: var(--s16); background: var(--surface); border-top: 2px solid var(--text); padding: var(--s8) 0 calc(var(--s8) + env(safe-area-inset-bottom)); }
+.foot-grid { display: grid; gap: var(--s8); }
+.foot h2 { font-size: 1.375rem; margin-bottom: var(--s3); }
+.foot ul { list-style: none; margin: var(--s3) 0 0; padding: 0; font-family: var(--sans); }
+.foot li { padding: var(--s2) 0; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: var(--s4); }
+.foot li:last-child { border-bottom: 1px solid var(--line); }
+.foot .next { font-weight: 700; }
+@media (min-width: 720px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+
+@media (min-width: 720px) {
+  .mast-grid { grid-template-columns: 1fr 240px; }
+  body { font-size: 19px; }
+}
+.view-in { animation: in 200ms var(--ease-out); }
+@keyframes in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .view-in { animation: none; } .chipbtn { transition: none; } }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the guide</a>
+
+<header class="mast">
+  <div class="wrap mast-grid">
+    <div>
+      <p class="group">Dean Fungus Group</p>
+      <h1>Species guide</h1>
+      <p class="lede">Look up what you found on a foray in the Forest of Dean. 1,140 species have been recorded in the Forest since the group began in 1987.</p>
+    </div>
+    <div class="woodcut" role="img" aria-label="Placeholder for a woodcut of a beech tree">Beech woodcut to be added</div>
+  </div>
+  <div class="wrap">
+    <p class="notice">This guide helps you look up what you found. It does not confirm an identification.</p>
+  </div>
+</header>
+
+<main id="main" class="wrap" tabindex="-1">
+  <noscript><p class="notice">The species guide needs JavaScript switched on to show its list.</p></noscript>
+  <div id="view"></div>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-grid">
+    <section aria-labelledby="forays-h">
+      <h2 id="forays-h">Forays 2027</h2>
+      <p>First Sunday of the month. We meet at 10:00 at the Speech House car park.</p>
+      <ul id="forays"></ul>
+    </section>
+    <section aria-labelledby="pick-h">
+      <h2 id="pick-h">Picking rule</h2>
+      <p>Take only what you will eat that day, and nothing from the fenced survey plots at Nagshead.</p>
+    </section>
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ---------- Labels: the only four the group uses ---------- */
+const LABELS = ["Eaten by members", "Not worth eating", "Poisonous", "Deadly"];
+const LABEL_CLASS = {
+  "Eaten by members": "chip-eaten",
+  "Not worth eating": "chip-not",
+  "Poisonous": "chip-poisonous",
+  "Deadly": "chip-deadly"
+};
+const GLYPH = {
+  "Eaten by members": '<svg viewBox="0 0 12 12" aria-hidden="true"><circle cx="6" cy="6" r="4.5" fill="currentColor"/></svg>',
+  "Not worth eating": '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M1.5 6h9" stroke="currentColor" stroke-width="2"/></svg>',
+  "Poisonous": '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1.2 11 10.5H1z" fill="currentColor"/></svg>',
+  "Deadly": '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="2"/></svg>'
+};
+const SOS_LINE = "If someone may have eaten this, call 999 or NHS 111 now and keep a piece of the mushroom.";
+
+/* ---------- Species. Fields set to null show "To be confirmed".
+   label: one of LABELS.  months: ["Aug","Sep"].  habitat, spore, tell: text.
+   look: id of the lookalike entry (each lookalike is its own entry). ---------- */
+const RAW = [
+  { id: "chanterelle", name: "Chanterelle", latin: "Cantharellus cibarius", look: "false-chanterelle" },
+  { id: "false-chanterelle", name: "False chanterelle", latin: "Hygrophoropsis aurantiaca", look: "chanterelle" },
+  { id: "penny-bun", name: "Penny bun", latin: "Boletus edulis", look: "bitter-bolete" },
+  { id: "bitter-bolete", name: "Bitter bolete", latin: "Tylopilus felleus", look: "penny-bun" },
+  { id: "giant-puffball", name: "Giant puffball", latin: "Calvatia gigantea", look: "common-earthball" },
+  { id: "common-earthball", name: "Common earthball", latin: "Scleroderma citrinum", look: "giant-puffball" },
+  { id: "amethyst-deceiver", name: "Amethyst deceiver", latin: "Laccaria amethystina", look: "lilac-fibrecap" },
+  { id: "lilac-fibrecap", name: "Lilac fibrecap", latin: "Inocybe geophylla var. lilacina", look: "amethyst-deceiver" },
+  { id: "hedgehog-fungus", name: "Hedgehog fungus", latin: "Hydnum repandum" },
+  { id: "beefsteak-fungus", name: "Beefsteak fungus", latin: "Fistulina hepatica" },
+  { id: "death-cap", name: "Death cap", latin: "Amanita phalloides" },
+  { id: "destroying-angel", name: "Destroying angel", latin: "Amanita virosa" },
+  { id: "deadly-webcap", name: "Deadly webcap", latin: "Cortinarius rubellus" },
+  { id: "fly-agaric", name: "Fly agaric", latin: "Amanita muscaria" },
+  { id: "sulphur-tuft", name: "Sulphur tuft", latin: "Hypholoma fasciculare" },
+  { id: "yellow-stainer", name: "Yellow stainer", latin: "Agaricus xanthodermus" }
+];
+const SPECIES = RAW.map(s => Object.assign({ label: null, months: null, habitat: null, spore: null, tell: null, look: null }, s))
+  .sort((a, b) => a.name.localeCompare(b.name, "en-GB"));
+const BY_ID = Object.fromEntries(SPECIES.map(s => [s.id, s]));
+
+/* Data checks: log anything the page should not publish */
+SPECIES.forEach(s => {
+  if (s.label !== null && !LABELS.includes(s.label)) console.error(s.name + ": unknown label '" + s.label + "'. Use one of: " + LABELS.join(", "));
+  if (s.look && !BY_ID[s.look]) console.error(s.name + ": lookalike '" + s.look + "' has no entry");
+  if (s.label === "Eaten by members" && !s.look) console.error(s.name + ": 'Eaten by members' needs a lookalike entry");
+});
+
+/* ---------- Helpers ---------- */
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const validLabel = s => LABELS.includes(s.label) ? s.label : null;
+const tbc = '<span class="tbc">To be confirmed</span>';
+const latin = s => s.latin.split(" var. ").map(p => "<i>" + esc(p) + "</i>").join(" var. ");
+const chip = s => {
+  const l = validLabel(s);
+  return l ? '<span class="chip ' + LABEL_CLASS[l] + '">' + GLYPH[l] + esc(l) + "</span>"
+           : '<span class="chip chip-tbc">Label to be confirmed</span>';
+};
+const needsSos = s => validLabel(s) === "Poisonous" || validLabel(s) === "Deadly";
+const sos = s => needsSos(s) ? '<p class="sos' + (s.label === "Deadly" ? " sos-deadly" : "") + '">' + SOS_LINE + "</p>" : "";
+const missingLook = s => validLabel(s) === "Eaten by members" && !(s.look && BY_ID[s.look]);
+const warnMissing = s => missingLook(s) ? '<p class="warn">Labelled Eaten by members but no dangerous lookalike is entered. Add one before this goes live.</p>' : "";
+const val = v => v ? esc(v) : tbc;
+const monthsText = s => s.months && s.months.length ? esc(s.months.join(", ")) : tbc;
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+/* ---------- State and routing (filters live in the URL) ---------- */
+let state = { q: "", label: "", month: "", habitat: "", spore: "" };
+let lastListHash = "#/";
+let listScroll = 0;
+
+function parseHash() {
+  const h = location.hash.replace(/^#/, "");
+  const [path, query = ""] = h.split("?");
+  const p = new URLSearchParams(query);
+  return {
+    path: path || "/",
+    f: { q: p.get("q") || "", label: p.get("label") || "", month: p.get("month") || "", habitat: p.get("habitat") || "", spore: p.get("spore") || "" }
+  };
+}
+function listHash() {
+  const p = new URLSearchParams();
+  Object.entries(state).forEach(([k, v]) => v && p.set(k, v));
+  const q = p.toString();
+  return "#/" + (q ? "?" + q : "");
+}
+
+function matches(s) {
+  const q = state.q.trim().toLowerCase();
+  if (q && !(s.name + " " + s.latin).toLowerCase().includes(q)) return false;
+  if (state.label === "tbc") { if (validLabel(s)) return false; }
+  else if (state.label && validLabel(s) !== state.label) return false;
+  if (state.month && !(s.months || []).includes(state.month)) return false;
+  if (state.habitat && s.habitat !== state.habitat) return false;
+  if (state.spore && s.spore !== state.spore) return false;
+  return true;
+}
+
+/* ---------- List view ---------- */
+function rowHtml(s) {
+  const lk = s.look && BY_ID[s.look];
+  const look = lk
+    ? 'Lookalike: <a class="link-lookalike" href="#/s/' + lk.id + '">' + esc(lk.name) + "</a>"
+    : "No lookalike listed in the group’s notes";
+  const months = s.months && s.months.length ? "<br>Seen: " + esc(s.months.join(", ")) : "";
+  return '<li class="row"><div><h2><a href="#/s/' + s.id + '">' + esc(s.name) + '</a></h2><div class="latin">' + latin(s) + "</div></div>" +
+    "<div>" + chip(s) + '</div><p class="lookline">' + look + months + "</p>" + sos(s) + warnMissing(s) + "</li>";
+}
+
+function optionsFor(key) {
+  const set = new Set();
+  SPECIES.forEach(s => {
+    if (key === "month") (s.months || []).forEach(m => set.add(m));
+    else if (s[key]) set.add(s[key]);
+  });
+  const arr = [...set];
+  return key === "month" ? arr.sort((a, b) => MONTHS.indexOf(a) - MONTHS.indexOf(b)) : arr.sort((a, b) => a.localeCompare(b, "en-GB"));
+}
+
+function renderList() {
+  const labelCounts = {};
+  LABELS.forEach(l => labelCounts[l] = SPECIES.filter(s => validLabel(s) === l).length);
+  const tbcCount = SPECIES.filter(s => !validLabel(s)).length;
+  const chips = [["", "All (" + SPECIES.length + ")"]]
+    .concat(LABELS.filter(l => labelCounts[l]).map(l => [l, l + " (" + labelCounts[l] + ")"]))
+    .concat(tbcCount ? [["tbc", "Label to be confirmed (" + tbcCount + ")"]] : []);
+  const selects = [["month", "Month seen"], ["habitat", "Habitat"], ["spore", "Spore print colour"]]
+    .map(([k, name]) => [k, name, optionsFor(k)]).filter(x => x[2].length);
+
+  $("view").innerHTML =
+    '<section class="tools" aria-label="Find a species">' +
+      '<div class="field"><label for="q">Search by name</label><input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Common or Latin name"></div>' +
+      '<div class="field"><span class="lab" id="lab-l">Label</span><div class="chips" role="group" aria-labelledby="lab-l">' +
+        chips.map(([v, t]) => '<button type="button" class="chipbtn" data-label="' + v + '" aria-pressed="false">' + esc(t) + "</button>").join("") + "</div></div>" +
+      (selects.length ? '<div class="selects">' + selects.map(([k, name, opts]) =>
+        '<div class="field"><label for="f-' + k + '">' + name + '</label><select id="f-' + k + '" data-key="' + k + '"><option value="">Any</option>' +
+        opts.map(o => '<option value="' + esc(o) + '">' + esc(o) + "</option>").join("") + "</select></div>").join("") + "</div>" : "") +
+      '<div><span class="count" id="count" role="status" aria-live="polite"></span> <button type="button" class="linkbtn" id="clear" hidden>Clear filters</button></div>' +
+    "</section>" +
+    '<ul class="list" id="results"></ul>';
+
+  $("q").value = state.q;
+  document.querySelectorAll("select[data-key]").forEach(sel => { sel.value = state[sel.dataset.key]; });
+  $("q").addEventListener("input", e => { state.q = e.target.value; sync(); });
+  document.querySelectorAll(".chipbtn").forEach(b => b.addEventListener("click", () => { state.label = b.dataset.label; sync(); }));
+  document.querySelectorAll("select[data-key]").forEach(sel => sel.addEventListener("change", () => { state[sel.dataset.key] = sel.value; sync(); }));
+  $("clear").addEventListener("click", () => { state = { q: "", label: "", month: "", habitat: "", spore: "" }; $("q").value = ""; document.querySelectorAll("select[data-key]").forEach(s => s.value = ""); sync(); });
+  paintList();
+}
+
+function paintList() {
+  const res = SPECIES.filter(matches);
+  const active = Object.values(state).some(Boolean);
+  document.querySelectorAll(".chipbtn").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.label === state.label)));
+  $("count").textContent = res.length === SPECIES.length ? SPECIES.length + " species" : res.length + " of " + SPECIES.length + " species";
+  $("clear").hidden = !active;
+  $("results").innerHTML = res.length ? res.map(rowHtml).join("") :
+    '<li class="empty"><p><strong>No species match those filters.</strong></p><p class="lookline">Try a shorter name, or clear the filters to see all ' + SPECIES.length + ' species.</p></li>';
+}
+function sync() {
+  paintList();
+  lastListHash = listHash();
+  history.replaceState(null, "", lastListHash);
+}
+
+/* ---------- Detail view ---------- */
+function pairCard(s, you) {
+  return '<div class="pcard' + (you ? " you" : "") + '"><h3>' +
+    (you ? esc(s.name) : '<a href="#/s/' + s.id + '">' + esc(s.name) + "</a>") + '</h3><div class="latin">' + latin(s) + "</div>" +
+    "<div>" + chip(s) + "</div>" + sos(s) +
+    '<p class="lookline"><strong>How to tell it apart:</strong> ' + val(s.tell) + "</p></div>";
+}
+
+function renderDetail(id) {
+  const s = BY_ID[id];
+  if (!s) {
+    $("view").innerHTML = '<p class="back"><a href="' + lastListHash + '">All species</a></p><div class="empty"><h1>Species not found</h1><p>There is no entry at this address. Go back to the list to find it.</p></div>';
+    document.title = "Not found | Dean Fungus Group";
+    return;
+  }
+  const lk = s.look && BY_ID[s.look];
+  document.title = s.name + " | Species guide | Dean Fungus Group";
+  $("view").innerHTML =
+    '<p class="back"><a href="' + lastListHash + '">All species</a></p>' +
+    '<div class="detail-head"><h1>' + esc(s.name) + '</h1><p class="latin">' + latin(s) + "</p>" + chip(s) + sos(s) + warnMissing(s) + "</div>" +
+    '<section class="pair" aria-label="Lookalike"><div><h2>This species</h2>' + pairCard(s, true) + "</div>" +
+    '<div><h2>Lookalike</h2>' + (lk ? pairCard(lk, false) : '<div class="pcard"><p class="lookline">No lookalike listed in the group’s notes.</p></div>') + "</div></section>" +
+    '<div class="cols"><div class="photo" role="img" aria-label="Placeholder: photo of ' + esc(s.name) + ' to be added">Photo to be added</div>' +
+    '<dl class="facts"><div><dt>Months</dt><dd>' + monthsText(s) + "</dd></div><div><dt>Habitat</dt><dd>" + val(s.habitat) +
+    "</dd></div><div><dt>Spore print colour</dt><dd>" + val(s.spore) + "</dd></div><div><dt>How to tell it apart</dt><dd>" + val(s.tell) + "</dd></div></dl></div>";
+}
+
+/* ---------- Router ---------- */
+function route() {
+  const { path, f } = parseHash();
+  const view = $("view");
+  const wasList = !!document.getElementById("results");
+  if (wasList) listScroll = window.scrollY;
+  if (path.startsWith("/s/")) {
+    renderDetail(decodeURIComponent(path.slice(3)));
+    window.scrollTo(0, 0);
+  } else {
+    state = f;
+    lastListHash = listHash();
+    renderList();
+    window.scrollTo(0, wasList ? 0 : listScroll);
+  }
+  view.classList.remove("view-in"); void view.offsetWidth; view.classList.add("view-in");
+  if (path.startsWith("/s/")) { const h = view.querySelector("h1"); if (h) { h.tabIndex = -1; h.focus({ preventScroll: true }); } }
+  else document.title = "Species guide | Dean Fungus Group";
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- Forays ---------- */
+(function forays() {
+  const dates = ["2027-09-05", "2027-10-03", "2027-11-07"];
+  const today = new Date().toISOString().slice(0, 10);
+  const next = dates.find(d => d >= today);
+  $("forays").innerHTML = dates.map(d => {
+    const dt = new Date(d + "T12:00:00Z");
+    const txt = dt.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" });
+    return '<li' + (d === next ? ' class="next"' : "") + '><time datetime="' + d + '">' + txt + "</time>" + (d === next ? "<span>Next foray</span>" : "") + "</li>";
+  }).join("");
+})();
+
+route();
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+{
+  "id": "gannet--web-ui-design-0.4-silent--1",
+  "desktop": {
+    "fullH": 1159,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 14,
+      "moderate": 0,
+      "minor": 0,
+      "rules": [
+        "label-content-name-mismatch:14"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 1,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 30,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 1187,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 1,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 2436,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

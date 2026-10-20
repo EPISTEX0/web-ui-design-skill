@@ -131,7 +131,10 @@
       "timeoff-mobile": "~/.t3/scratch/2026-10-19-t-m-hi-u-v-4465e2cb/web-ui-design-skill/benchmark/results/shots/shiftboard--web-ui-design-0.3--1/timeoff-mobile.jpg"
     },
     "consoleErrors": [],
-    "mobileOverflowX": false
+    "mobileOverflowX": false,
+    "actionsFound": 14,
+    "actionsOutOfReach": 14,
+    "actionsReachableMobile": false
   },
   "functional": {
     "pendingListed": {

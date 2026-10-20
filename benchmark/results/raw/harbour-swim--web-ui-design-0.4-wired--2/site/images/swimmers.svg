@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <defs>
+    <linearGradient id="w2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4aa9cc"/><stop offset="1" stop-color="#17688f"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="200" fill="url(#w2)"/>
+  <g stroke="#ffffff" stroke-width="2" opacity="0.35" fill="none">
+    <path d="M0 40 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0"/>
+    <path d="M0 90 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0"/>
+    <path d="M0 140 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0"/>
+    <path d="M0 185 q25 -8 50 0 t50 0 t50 0 t50 0 t50 0 t50 0"/>
+  </g>
+  <g>
+    <path d="M60 60 q14 -14 34 -8 l40 9 q15 3 22 -6 l5 11 q-14 14 -38 9 l-40 -7 q-18 -3 -23 -8z" fill="#e3b58f"/>
+    <circle cx="160" cy="52" r="11" fill="#1b2a4a"/>
+    <path d="M38 76 q10 5 17 -2 q10 7 17 0 q10 7 17 0" stroke="#fff" stroke-width="3" fill="none" opacity="0.8"/>
+  </g>
+  <g>
+    <path d="M90 118 q14 -14 34 -8 l40 9 q15 3 22 -6 l5 11 q-14 14 -38 9 l-40 -7 q-18 -3 -23 -8z" fill="#cf9b74"/>
+    <circle cx="190" cy="110" r="11" fill="#f2c230"/>
+    <path d="M68 134 q10 5 17 -2 q10 7 17 0 q10 7 17 0" stroke="#fff" stroke-width="3" fill="none" opacity="0.8"/>
+  </g>
+</svg>

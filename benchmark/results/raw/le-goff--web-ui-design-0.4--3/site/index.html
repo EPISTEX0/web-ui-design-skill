@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parc Le Goff – Oyster boxes from Cancale, posted to your door</title>
+<meta name="description" content="Order oysters from Parc Le Goff in Cancale. Order by Monday 18:00 and we post on Wednesday or Thursday to mainland France, Belgium and Luxembourg.">
+<meta name="theme-color" content="#3e5363">
+<style>
+:root{
+  --shell:#f4efe6; --shell-raised:#faf7f1; --shell-sunk:#ebe4d6;
+  --slate:#3e5363; --slate-deep:#1f2b34; --slate-mid:#55697a;
+  --ochre:#c8a24a;
+  --error:#9a2f20;
+  --color-bg:var(--shell); --color-surface:var(--shell-raised); --color-sunk:var(--shell-sunk);
+  --color-text:var(--slate-deep); --color-text-secondary:var(--slate); --color-text-tertiary:var(--slate-mid);
+  --color-border:rgba(62,83,99,.22); --color-border-strong:rgba(62,83,99,.55);
+  --color-action:var(--slate); --color-action-hover:var(--slate-deep); --color-on-action:var(--shell);
+  --color-highlight:var(--ochre); --color-error:var(--error);
+  --font-display:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --font-body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;--s20:80px;--s24:96px;
+  --r-sm:2px;--r-md:4px;
+  --ease-out:cubic-bezier(.23,1,.32,1);--ease-io:cubic-bezier(.77,0,.175,1);
+  --wrap:1120px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:var(--s20)}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font:17px/1.55 var(--font-body);overflow-x:clip;-webkit-tap-highlight-color:transparent}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;line-height:1.1;margin:0;text-wrap:balance;letter-spacing:-.015em}
+h1{font-size:clamp(2.5rem,7vw,4.25rem);letter-spacing:-.025em}
+h2{font-size:clamp(1.875rem,4.5vw,2.75rem)}
+h3{font-size:1.5rem;letter-spacing:-.01em}
+p{margin:0;text-wrap:pretty}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit;touch-action:manipulation}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--s5)}
+.skip{position:absolute;left:var(--s4);top:-80px;background:var(--slate-deep);color:var(--shell);padding:var(--s3) var(--s4);z-index:50}
+.skip:focus{top:var(--s2)}
+:focus-visible{outline:3px solid var(--slate-deep);outline-offset:3px;border-radius:var(--r-sm)}
+.dark :focus-visible{outline-color:var(--ochre)}
+
+/* header */
+header.site{position:sticky;top:0;z-index:20;background:var(--color-bg);border-bottom:1px solid var(--color-border)}
+.bar{display:flex;align-items:center;gap:var(--s5);min-height:64px}
+.logo{display:flex;align-items:center;gap:var(--s3);text-decoration:none;margin-right:auto;min-height:44px}
+.logo-mark{display:grid;place-items:center;width:40px;height:40px;border:1px dashed var(--color-border-strong);border-radius:var(--r-sm);color:var(--slate)}
+.logo-mark svg{width:26px;height:26px}
+.logo-text{font-family:var(--font-display);font-size:1.25rem;font-weight:700;letter-spacing:-.01em;line-height:1}
+nav.main{display:flex;gap:var(--s1)}
+nav.main a{display:inline-flex;align-items:center;min-height:44px;padding:0 var(--s3);text-decoration:none;color:var(--color-text-secondary);font-size:.9375rem}
+.cart-link{display:inline-flex;align-items:center;gap:var(--s2);min-height:44px;padding:0 var(--s4);border:1px solid var(--color-border-strong);border-radius:var(--r-md);text-decoration:none;font-weight:600;font-size:.9375rem;background:transparent;transition:background-color 150ms,transform 140ms var(--ease-out)}
+.cart-link .count{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 6px;border-radius:12px;background:var(--color-action);color:var(--color-on-action);font-size:.8125rem;font-variant-numeric:tabular-nums}
+.cart-link:active{transform:scale(.97)}
+@media (hover:hover){nav.main a:hover{color:var(--color-text)}.cart-link:hover{background:var(--color-sunk)}}
+@media (max-width:760px){nav.main{display:none}.logo-text{font-size:1.125rem}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:48px;padding:0 var(--s6);border-radius:var(--r-md);border:1px solid var(--color-action);background:var(--color-action);color:var(--color-on-action);font-weight:600;text-decoration:none;cursor:pointer;transition:background-color 150ms,border-color 150ms,transform 140ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn[disabled],.btn[aria-disabled=true]{opacity:.45;cursor:not-allowed;transform:none}
+.btn.secondary{background:transparent;color:var(--color-text);border-color:var(--color-border-strong)}
+.dark .btn.secondary{color:var(--shell);border-color:rgba(244,239,230,.55)}
+@media (hover:hover){.btn:not([disabled]):hover{background:var(--color-action-hover);border-color:var(--color-action-hover)}.btn.secondary:not([disabled]):hover{background:var(--color-sunk)}.dark .btn.secondary:hover{background:rgba(244,239,230,.1)}}
+.dark .btn:not(.secondary){background:var(--shell);color:var(--slate-deep);border-color:var(--shell)}
+
+/* hero */
+.hero{padding:var(--s16) 0 var(--s20)}
+.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:var(--s16);align-items:end}
+.hero p.lead{font-size:1.25rem;color:var(--color-text-secondary);max-width:34em;margin-top:var(--s6)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s8)}
+.kicker{font-size:.9375rem;color:var(--color-text-secondary);margin-bottom:var(--s5);display:flex;align-items:center;gap:var(--s3)}
+.kicker::before{content:"";width:var(--s8);height:2px;background:var(--color-highlight)}
+.ticket{background:var(--slate);color:var(--shell);padding:var(--s8);border-radius:var(--r-md);border-top:6px solid var(--color-highlight)}
+.ticket h2{font-size:1.125rem;font-family:var(--font-body);font-weight:600;letter-spacing:0;color:var(--shell)}
+.ticket dl{margin:var(--s5) 0 0;display:grid;gap:var(--s4)}
+.ticket dt{font-size:.875rem;color:rgba(244,239,230,.82)}
+.ticket dd{margin:2px 0 0;font-family:var(--font-display);font-size:1.5rem;line-height:1.2}
+.ticket .left{display:inline-block;margin-top:var(--s5);padding-top:var(--s4);border-top:1px solid rgba(244,239,230,.3);font-size:.9375rem;width:100%}
+@media (max-width:860px){.hero{padding:var(--s10) 0 var(--s12)}.hero-grid{grid-template-columns:1fr;gap:var(--s10)}}
+
+/* sections */
+section{padding:var(--s20) 0}
+section.tone{background:var(--color-sunk)}
+.sec-head{max-width:40rem;margin-bottom:var(--s10)}
+.sec-head p{margin-top:var(--s4);color:var(--color-text-secondary)}
+@media (max-width:760px){section{padding:var(--s12) 0}}
+
+/* boxes */
+.boxes{border-top:2px solid var(--color-text)}
+.box{display:grid;grid-template-columns:260px 1fr auto;gap:var(--s8);align-items:center;padding:var(--s8) 0;border-bottom:1px solid var(--color-border)}
+.tray{width:260px;padding:var(--s3);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-md);color:var(--slate)}
+.tray svg{display:block;width:100%;height:auto}
+.box h3 small{display:block;font-family:var(--font-body);font-size:.9375rem;font-weight:400;letter-spacing:0;color:var(--color-text-secondary);margin-top:var(--s2)}
+.box .desc{margin-top:var(--s3);color:var(--color-text-secondary);max-width:30em}
+.season{display:inline-block;margin-top:var(--s3);padding:2px var(--s3);border:1px solid var(--color-border-strong);border-radius:var(--r-sm);font-size:.875rem}
+.buy{display:grid;justify-items:end;gap:var(--s3);min-width:150px}
+.price{font-family:var(--font-display);font-size:2rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+.price span{font-size:1.125rem;margin-right:2px}
+.step{display:inline-flex;align-items:center;border:1px solid var(--color-border-strong);border-radius:var(--r-md);background:var(--color-surface)}
+.step button{width:44px;height:44px;border:0;background:transparent;font-size:1.375rem;cursor:pointer;border-radius:var(--r-md);transition:background-color 150ms,transform 140ms var(--ease-out)}
+.step button:active{transform:scale(.92)}
+.step output{min-width:36px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums}
+@media (hover:hover){.step button:hover{background:var(--color-sunk)}}
+.unavailable{font-size:.9375rem;color:var(--color-text-secondary);text-align:right}
+@media (max-width:860px){.box{grid-template-columns:1fr;gap:var(--s5)}.tray{width:100%;max-width:320px}.buy{justify-items:start;grid-template-columns:auto auto;justify-content:space-between;align-items:center;min-width:0}}
+.boxes-note{margin-top:var(--s6);color:var(--color-text-secondary);font-size:.9375rem}
+
+/* week strip */
+.week{display:grid;grid-template-columns:repeat(7,1fr);border:1px solid var(--color-border-strong);border-radius:var(--r-md);overflow:hidden;background:var(--color-surface)}
+.day{padding:var(--s4) var(--s2);text-align:center;border-right:1px solid var(--color-border);min-height:96px;display:flex;flex-direction:column;justify-content:space-between;gap:var(--s2)}
+.day:last-child{border-right:0}
+.day b{font-family:var(--font-display);font-size:1.25rem;font-weight:600}
+.day i{font-style:normal;font-size:.8125rem;line-height:1.25;display:block}
+.day.cut{background:var(--ochre);color:var(--slate-deep)}
+.day.post{background:var(--slate);color:var(--shell)}
+.day:not(.cut):not(.post){color:var(--color-text-tertiary)}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s8);margin-top:var(--s10)}
+.legend h3{font-size:1.25rem}
+.legend p{margin-top:var(--s2);color:var(--color-text-secondary)}
+.legend .tag{display:inline-block;width:var(--s6);height:6px;margin-bottom:var(--s3)}
+@media (max-width:760px){.legend{grid-template-columns:1fr;gap:var(--s6)}.day{min-height:84px;padding:var(--s3) 2px}.day i{font-size:.6875rem}}
+
+/* order */
+.order-grid{display:grid;grid-template-columns:1fr 380px;gap:var(--s12);align-items:start}
+.panel{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-md);padding:var(--s8)}
+.summary{position:sticky;top:var(--s20)}
+.summary h3{font-size:1.5rem;margin-bottom:var(--s5)}
+.lines{list-style:none;margin:0;padding:0}
+.lines li{display:flex;justify-content:space-between;gap:var(--s4);padding:var(--s3) 0;border-bottom:1px solid var(--color-border)}
+.lines .nm{min-width:0;overflow-wrap:anywhere}
+.lines .amt,.tot dd{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tot{margin:var(--s4) 0 0;display:grid;gap:var(--s2)}
+.tot div{display:flex;justify-content:space-between;gap:var(--s4)}
+.tot dt,.tot dd{margin:0}
+.tot .grand{font-family:var(--font-display);font-size:1.5rem;font-weight:600;padding-top:var(--s3);border-top:2px solid var(--color-text);margin-top:var(--s2)}
+.free-hint{margin-top:var(--s4);padding:var(--s3) var(--s4);background:var(--color-sunk);border-left:4px solid var(--color-highlight);font-size:.9375rem}
+.empty{color:var(--color-text-secondary)}
+fieldset{border:0;margin:0 0 var(--s8);padding:0;min-width:0}
+legend{font-family:var(--font-display);font-size:1.375rem;font-weight:600;padding:0;margin-bottom:var(--s4)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:var(--s5)}
+.field{display:grid;gap:var(--s2);align-content:start}
+.field.full{grid-column:1/-1}
+label,.lbl{font-size:.9375rem;font-weight:600}
+.opt{font-weight:400;color:var(--color-text-secondary)}
+input,select,textarea{width:100%;min-height:48px;padding:var(--s3) var(--s4);border:1px solid var(--color-border-strong);border-radius:var(--r-md);background:#fff;font-size:1rem}
+textarea{min-height:96px;resize:vertical}
+input[aria-invalid=true],select[aria-invalid=true]{border-color:var(--color-error);border-width:2px}
+.err{color:var(--color-error);font-size:.9375rem;display:none}
+.err.show{display:block}
+.err::before{content:"Problem: ";font-weight:700}
+.hint{font-size:.875rem;color:var(--color-text-secondary)}
+.choices{display:grid;gap:var(--s2)}
+.choice{display:flex;align-items:center;gap:var(--s3);min-height:48px;padding:0 var(--s4);border:1px solid var(--color-border-strong);border-radius:var(--r-md);background:#fff;font-weight:400;cursor:pointer}
+.choice input{width:20px;min-height:20px;height:20px;accent-color:var(--slate);margin:0}
+.choice:has(input:checked){border-color:var(--slate);background:var(--shell-raised);box-shadow:inset 0 0 0 1px var(--slate)}
+.choice:has(input:focus-visible){outline:3px solid var(--slate-deep);outline-offset:3px}
+.form-error{display:none;margin-bottom:var(--s5);padding:var(--s3) var(--s4);border:2px solid var(--color-error);color:var(--color-error);border-radius:var(--r-md);font-weight:600}
+.form-error.show{display:block}
+.submit-row{display:grid;gap:var(--s3)}
+.submit-row .btn{width:100%}
+.sent{display:none}
+.sent.show{display:block}
+.sent h3{margin-bottom:var(--s3)}
+.sent pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;font-size:.9375rem;background:var(--color-sunk);padding:var(--s4);border-radius:var(--r-md);margin:var(--s4) 0;max-height:320px;overflow:auto}
+.sent .row{display:flex;flex-wrap:wrap;gap:var(--s3)}
+@media (max-width:960px){.order-grid{grid-template-columns:1fr;gap:var(--s8)}.summary{position:static;order:-1}}
+@media (max-width:560px){.fields{grid-template-columns:1fr}.panel{padding:var(--s5)}}
+
+/* shop */
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s16);align-items:start}
+.open-now{display:inline-flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s4);border:1px solid var(--color-border-strong);border-radius:var(--r-sm);font-weight:600;margin-top:var(--s5)}
+.open-now::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--slate-mid)}
+.open-now.is-open::before{background:var(--slate);box-shadow:0 0 0 3px var(--ochre)}
+.hours{margin:0;display:grid}
+.hours div{display:flex;justify-content:space-between;gap:var(--s4);padding:var(--s3) 0;border-bottom:1px solid var(--color-border)}
+.hours dt,.hours dd{margin:0}
+.hours dd{font-variant-numeric:tabular-nums}
+.hours .closed{color:var(--color-text-secondary)}
+.hours .today{font-weight:700}
+.shop-grid address{font-style:normal;margin-top:var(--s5)}
+.shop-grid .btn{margin-top:var(--s5)}
+.callout{margin-top:var(--s6);padding:var(--s4) var(--s5);border-left:4px solid var(--color-highlight);background:var(--color-surface)}
+@media (max-width:860px){.shop-grid{grid-template-columns:1fr;gap:var(--s10)}}
+
+/* faq */
+.faq{border-top:2px solid var(--color-text);max-width:48rem}
+details{border-bottom:1px solid var(--color-border)}
+summary{display:flex;justify-content:space-between;align-items:center;gap:var(--s4);min-height:56px;padding:var(--s3) 0;cursor:pointer;font-family:var(--font-display);font-size:1.25rem;font-weight:600;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-family:var(--font-body);font-size:1.5rem;font-weight:400;transition:transform 200ms var(--ease-out)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 var(--s5);color:var(--color-text-secondary);max-width:40em}
+
+/* footer */
+footer{background:var(--slate);color:var(--shell);padding:var(--s12) 0 var(--s16)}
+.foot{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:var(--s10)}
+footer h2{font-family:var(--font-body);font-size:.9375rem;font-weight:700;letter-spacing:0;margin-bottom:var(--s3)}
+footer p,footer li{font-size:.9375rem;color:rgba(244,239,230,.9)}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--s1)}
+footer a{display:inline-flex;align-items:center;min-height:44px}
+.foot .brand{font-family:var(--font-display);font-size:1.5rem;font-weight:700;margin-bottom:var(--s3)}
+@media (max-width:760px){.foot{grid-template-columns:1fr;gap:var(--s6)}}
+
+/* mobile bar */
+.mbar{display:none}
+@media (max-width:760px){
+  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:30;align-items:center;justify-content:space-between;gap:var(--s3);padding:var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom));background:var(--slate-deep);color:var(--shell);transform:translateY(110%);transition:transform 250ms var(--ease-out)}
+  .mbar.show{transform:none}
+  .mbar .t{font-variant-numeric:tabular-nums;line-height:1.25;font-size:.9375rem}
+  .mbar .t b{display:block;font-family:var(--font-display);font-size:1.25rem}
+  .mbar .btn{background:var(--shell);color:var(--slate-deep);border-color:var(--shell);min-height:48px}
+  .mbar:not(.show){visibility:hidden}
+  footer{padding-bottom:calc(var(--s24) + env(safe-area-inset-bottom))}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;scroll-behavior:auto!important}.mbar{transition:opacity 200ms}}
+</style>
+</head>
+<body>
+<a class="skip" href="#boxes">Skip to the boxes</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="shell" viewBox="0 0 40 44">
+    <path d="M21 2C31 2 38 11 37 22c-1 12-9 20-19 20C8 42 2 33 3 23 4 12 11 2 21 2Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M10 33c-1-9 3-19 11-24M17 36c-2-8-1-18 6-25M25 34c0-7 2-13 7-17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+  </symbol>
+</svg>
+
+<header class="site">
+  <div class="wrap bar">
+    <!-- LOGO PLACEHOLDER: replace .logo-mark and .logo-text with the real logo when it arrives -->
+    <a class="logo" href="#top" aria-label="Parc Le Goff, home">
+      <span class="logo-mark" aria-hidden="true"><svg><use href="#shell"/></svg></span>
+      <span class="logo-text">Parc Le Goff</span>
+    </a>
+    <nav class="main" aria-label="Main">
+      <a href="#boxes">Boxes</a>
+      <a href="#delivery">Delivery</a>
+      <a href="#shop">Farm shop</a>
+      <a href="#faq">Questions</a>
+    </nav>
+    <a class="cart-link" href="#order" id="cartLink">Your order <span class="count" id="cartCount" aria-label="0 boxes">0</span></a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker">Oyster farm, Cancale, Brittany</p>
+        <h1>Oysters from our farm in Cancale, posted to your door.</h1>
+        <p class="lead">Parc Le Goff is a family oyster farm. You can now order a box online and have it delivered in mainland France, Belgium and Luxembourg. Order by Monday 18:00, and we post it that week.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#boxes">Choose a box</a>
+          <a class="btn secondary" href="#shop">Visit the farm shop</a>
+        </div>
+      </div>
+      <aside class="ticket" aria-labelledby="tk">
+        <h2 id="tk">This week's order window</h2>
+        <dl>
+          <dt>Order by</dt>
+          <dd id="tkCut">Monday, 18:00</dd>
+          <dt>We post on</dt>
+          <dd id="tkPost">Wednesday or Thursday</dd>
+        </dl>
+        <p class="left" id="tkLeft">Times are Paris time.</p>
+      </aside>
+    </div>
+  </div>
+
+  <section class="tone" id="boxes" aria-labelledby="boxes-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="boxes-h">The boxes</h2>
+        <p>Every box is packed to order. Delivery is EUR 12, and free when your order is over EUR 80.</p>
+      </div>
+      <noscript><p class="boxes-note">Ordering needs JavaScript. To order without it, email us the box and quantity you want, with your delivery address.</p></noscript>
+      <div class="boxes" id="boxList"></div>
+      <p class="boxes-note">Creuses are the cupped oysters, sold in size No. 3. Plates are the flat ones, in season from September to April.</p>
+    </div>
+  </section>
+
+  <section id="order" aria-labelledby="order-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="order-h">Your order</h2>
+        <p>Tell us where to send it and we send you a confirmation. Your order is not with us until you send the email this form prepares.</p>
+      </div>
+      <div class="order-grid">
+        <div class="panel">
+          <form id="orderForm" novalidate>
+            <div class="form-error" id="formError" role="alert" tabindex="-1"></div>
+            <fieldset>
+              <legend>Delivery details</legend>
+              <div class="fields">
+                <div class="field full"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" required><span class="err" id="name-e"></span></div>
+                <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" inputmode="email" required><span class="err" id="email-e"></span></div>
+                <div class="field"><label for="phone">Phone <span class="opt">(optional, for the carrier)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel"></div>
+                <div class="field full"><label for="address">Street address</label><input id="address" name="address" autocomplete="street-address" required><span class="err" id="address-e"></span></div>
+                <div class="field"><label for="country">Country</label>
+                  <select id="country" name="country" autocomplete="country-name" required>
+                    <option value="France">France (mainland)</option>
+                    <option value="Belgium">Belgium</option>
+                    <option value="Luxembourg">Luxembourg</option>
+                  </select></div>
+                <div class="field"><label for="postcode">Postcode</label><input id="postcode" name="postcode" autocomplete="postal-code" inputmode="numeric" required><span class="err" id="postcode-e"></span></div>
+                <div class="field full"><label for="city">Town or city</label><input id="city" name="city" autocomplete="address-level2" required><span class="err" id="city-e"></span></div>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Posting day</legend>
+              <div class="choices" id="dispatch" role="radiogroup" aria-label="Posting day"></div>
+              <p class="hint" style="margin-top:12px">We post on Wednesday and Thursday only. We will confirm the day in our reply.</p>
+            </fieldset>
+            <fieldset>
+              <legend>Anything we should know?</legend>
+              <div class="field"><label for="note">Note <span class="opt">(optional)</span></label><textarea id="note" name="note" autocomplete="off"></textarea></div>
+            </fieldset>
+            <div class="submit-row">
+              <button class="btn" type="submit" id="submitBtn">Prepare my order email</button>
+              <p class="hint">Your email app opens with the order filled in. Press send to place it. We reply to confirm and to arrange payment.</p>
+            </div>
+          </form>
+          <div class="sent" id="sent" aria-live="polite" tabindex="-1">
+            <h3>Your order is ready to send</h3>
+            <p>Your email app should have opened with this order. <strong>Press send there</strong>. We only receive the order once you do.</p>
+            <pre id="sentText"></pre>
+            <div class="row">
+              <a class="btn" id="mailAgain" href="#">Open the email again</a>
+              <button class="btn secondary" type="button" id="copyBtn">Copy the order text</button>
+              <button class="btn secondary" type="button" id="editBtn">Change my order</button>
+            </div>
+            <p class="hint" id="copyNote" style="margin-top:12px"></p>
+          </div>
+        </div>
+        <aside class="panel summary" aria-labelledby="sum-h">
+          <h3 id="sum-h">Summary</h3>
+          <div id="sumBody"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="tone" id="delivery" aria-labelledby="del-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="del-h">Order by Monday 18:00. We post on Wednesday or Thursday.</h2>
+        <p>We post once a week, so the Monday cutoff matters. An order that arrives after Monday 18:00 (Paris time) goes out the following week.</p>
+      </div>
+      <div class="week" id="week" role="img" aria-label="The week: order by Monday 18:00, we post on Wednesday and Thursday"></div>
+      <div class="legend">
+        <div><span class="tag" style="background:var(--ochre)"></span><h3>Monday, 18:00</h3><p>Last moment to send your order for posting this week.</p></div>
+        <div><span class="tag" style="background:var(--slate)"></span><h3>Wednesday and Thursday</h3><p>We pack and post your box. Delivery by post to mainland France, Belgium and Luxembourg.</p></div>
+        <div><span class="tag" style="background:var(--color-border-strong)"></span><h3>EUR 12, or free over EUR 80</h3><p>The delivery fee is the same for every box and every country we serve.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop" aria-labelledby="shop-h">
+    <div class="wrap shop-grid">
+      <div>
+        <h2 id="shop-h">Prefer to pick them yourself? Come to the farm shop.</h2>
+        <address>Parc Le Goff farm shop<br>Port de la Houle<br>Cancale, Brittany</address>
+        <p class="open-now" id="openNow">Checking opening hours</p>
+        <div><a class="btn secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Port+de+la+Houle+Cancale" rel="noopener">Get directions</a></div>
+        <p class="callout">The farm shop sells over the counter. Online orders are posted and cannot be collected at the shop or at the market.</p>
+      </div>
+      <dl class="hours" id="hours" aria-label="Farm shop opening hours"></dl>
+    </div>
+  </section>
+
+  <section class="tone" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="faq-h">Questions</h2></div>
+      <div class="faq">
+        <details><summary>How do I pay?</summary><p>Send your order and we reply by email to confirm it and to arrange payment. Nothing is charged when you send the form.</p></details>
+        <details><summary>What if I miss the Monday cutoff?</summary><p>Your order is still welcome. It goes out in the next posting week, on Wednesday or Thursday. The summary tells you the exact dates.</p></details>
+        <details><summary>Where do you deliver?</summary><p>Mainland France, Belgium and Luxembourg. Delivery costs EUR 12 and is free when your order is over EUR 80.</p></details>
+        <details><summary>Can I collect my online order?</summary><p>No. Online orders are posted. You can buy in person at the farm shop at Port de la Houle, Wednesday to Sunday, 10:00 to 13:00.</p></details>
+        <details><summary>When are plates available?</summary><p>Plates, the flat oysters, are sold from September to April. The plates box is switched off the rest of the year.</p></details>
+        <details><summary>How should I keep them until I eat them?</summary><p>Keep the oysters somewhere cool, ideally in the fridge, with the cupped side down. Do not put them in water and do not freeze them. Open them just before eating.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="dark">
+  <div class="wrap foot">
+    <div>
+      <p class="brand">Parc Le Goff</p>
+      <p>Family oyster farm, Cancale, Brittany.</p>
+    </div>
+    <div>
+      <h2>Farm shop</h2>
+      <p>Port de la Houle, Cancale<br>Wednesday to Sunday, 10:00 to 13:00</p>
+    </div>
+    <div>
+      <h2>Online orders</h2>
+      <ul>
+        <li>Order by Monday 18:00</li>
+        <li>Posted Wednesday and Thursday</li>
+        <li id="footMail"></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<div class="mbar" id="mbar">
+  <div class="t"><b id="mbTotal">EUR 0</b><span id="mbCount">0 boxes</span></div>
+  <a class="btn" href="#order">Review order</a>
+</div>
+
+<script>
+(function(){
+'use strict';
+/* ---- settings the farm should confirm ---- */
+var ORDER_EMAIL = 'commandes@parclegoff.example'; // PLACEHOLDER: replace with the farm's real order address
+var BOXES = [
+  {id:'creuses24', name:'24 creuses No. 3', sub:'Cupped oysters, size No. 3', desc:'A box for a dinner for two to four. Cupped oysters in size No. 3, from our beds at Cancale.', price:32, shells:24, cols:8},
+  {id:'creuses48', name:'48 creuses No. 3', sub:'Cupped oysters, size No. 3', desc:'The big box for a table of eight or a long weekend. Same cupped oysters in size No. 3, and it comes with free delivery.', price:58, shells:48, cols:12},
+  {id:'plates12', name:'12 plates', sub:'Flat oysters', desc:'Flat oysters, with a finer, more mineral taste. In season September to April only.', price:39, shells:12, cols:6, seasonal:true}
+];
+var DELIVERY_FEE = 12, FREE_OVER = 80, MAX_QTY = 10;
+var PLATES_MONTHS = [8,9,10,11,0,1,2,3]; // Sep to Apr (0-based months)
+var SHOP_DAYS = [3,4,5,6,0], SHOP_OPEN = 600, SHOP_CLOSE = 780; // Wed..Sun, 10:00-13:00
+var STORE = 'parclegoff-cart-v1';
+
+/* ---- helpers ---- */
+function $(id){return document.getElementById(id)}
+function eur(n){return 'EUR '+(Number.isInteger(n)?n:n.toFixed(2))}
+var DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function parisNow(){
+  var parts={};
+  new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).forEach(function(p){parts[p.type]=p.value});
+  return {y:+parts.year,m:+parts.month-1,d:+parts.day,min:(+parts.hour)*60+(+parts.minute)};
+}
+function fmtDate(utcMs){return new Date(utcMs).toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',timeZone:'UTC'})}
+function schedule(){
+  var n=parisNow(), base=Date.UTC(n.y,n.m,n.d), dow=new Date(base).getUTCDay();
+  var toMon=(1-dow+7)%7;
+  if(toMon===0 && n.min>=18*60) toMon=7;
+  var DAY=86400000, mon=base+toMon*DAY;
+  var left=(mon+18*3600000)-(base+n.min*60000);
+  return {cutoff:mon, wed:mon+2*DAY, thu:mon+3*DAY, leftMs:left, month:n.m, dow:dow, min:n.min, base:base};
+}
+function leftText(ms){
+  var mins=Math.max(0,Math.round(ms/60000)), d=Math.floor(mins/1440), h=Math.floor((mins%1440)/60), m=mins%60;
+  if(d>0) return d+(d===1?' day ':' days ')+h+(h===1?' hour':' hours');
+  if(h>0) return h+(h===1?' hour ':' hours ')+m+' min';
+  return m+' min';
+}
+
+/* ---- cart ---- */
+var cart={};
+try{cart=JSON.parse(localStorage.getItem(STORE)||'{}')||{}}catch(e){cart={}}
+function save(){try{localStorage.setItem(STORE,JSON.stringify(cart))}catch(e){}}
+function platesOpen(){return PLATES_MONTHS.indexOf(schedule().month)>-1}
+function validate(){
+  BOXES.forEach(function(b){
+    var q=parseInt(cart[b.id],10);
+    if(!(q>0)||(b.seasonal&&!platesOpen())) delete cart[b.id]; else cart[b.id]=Math.min(q,MAX_QTY);
+  });
+}
+function totals(){
+  var sub=0,count=0,lines=[];
+  BOXES.forEach(function(b){var q=cart[b.id]||0;if(q){sub+=q*b.price;count+=q;lines.push({b:b,q:q})}});
+  var ship=count===0?0:(sub>FREE_OVER?0:DELIVERY_FEE);
+  return {sub:sub,count:count,lines:lines,ship:ship,total:sub+ship};
+}
+
+/* ---- boxes ---- */
+function trayHTML(b){
+  var cols=b.cols, rows=Math.ceil(b.shells/cols), w=40, h=44, g=6, x='';
+  for(var i=0;i<b.shells;i++){var cx=(i%cols)*(w+g), cy=Math.floor(i/cols)*(h+g);x+='<use href="#shell" x="'+cx+'" y="'+cy+'" width="'+w+'" height="'+h+'"/>'}
+  return '<svg viewBox="0 0 '+(cols*(w+g)-g)+' '+(rows*(h+g)-g)+'" aria-hidden="true" focusable="false">'+x+'</svg>';
+}
+function buyHTML(b){
+  var q=cart[b.id]||0;
+  if(b.seasonal&&!platesOpen()) return '<p class="unavailable">Back in September</p>';
+  if(!q) return '<button class="btn" type="button" data-add="'+b.id+'">Add to order</button>';
+  return '<div class="step" role="group" aria-label="Quantity of '+b.name+'"><button type="button" data-dec="'+b.id+'" aria-label="Remove one '+b.name+'">−</button><output aria-live="polite">'+q+'</output><button type="button" data-inc="'+b.id+'" aria-label="Add one '+b.name+'"'+(q>=MAX_QTY?' disabled':'')+'>+</button></div>';
+}
+function renderBoxes(){
+  var open=platesOpen();
+  $('boxList').innerHTML=BOXES.map(function(b){
+    var off=b.seasonal&&!open;
+    return '<article class="box" id="box-'+b.id+'"><div class="tray">'+trayHTML(b)+'</div><div><h3>'+b.name+'<small>'+b.sub+'</small></h3><p class="desc">'+b.desc+'</p>'+(b.seasonal?'<span class="season">'+(off?'Out of season until September':'In season until April')+'</span>':'')+'</div><div class="buy"><div class="price"><span>EUR</span>'+b.price+'</div><div data-buy="'+b.id+'">'+buyHTML(b)+'</div></div></article>';
+  }).join('');
+}
+function refreshBuy(id){
+  var b=BOXES.filter(function(x){return x.id===id})[0], el=document.querySelector('[data-buy="'+id+'"]');
+  var hadFocus=el.contains(document.activeElement)?(document.activeElement.getAttribute('data-inc')?'inc':document.activeElement.getAttribute('data-dec')?'dec':'add'):null;
+  el.innerHTML=buyHTML(b);
+  if(hadFocus){var t=el.querySelector('[data-inc]')||el.querySelector('[data-add]');if(hadFocus==='dec'&&cart[id]){t=el.querySelector('[data-dec]')}if(t&&!t.disabled)t.focus();else if(el.querySelector('[data-dec]'))el.querySelector('[data-dec]').focus()}
+}
+$('boxList').addEventListener('click',function(e){
+  var t=e.target.closest('button');if(!t)return;
+  var id=t.getAttribute('data-add')||t.getAttribute('data-inc')||t.getAttribute('data-dec');if(!id)return;
+  var q=cart[id]||0;
+  if(t.hasAttribute('data-add')) q=1; else if(t.hasAttribute('data-inc')) q=Math.min(MAX_QTY,q+1); else q=q-1;
+  if(q<=0) delete cart[id]; else cart[id]=q;
+  save();refreshBuy(id);renderSummary();
+});
+
+/* ---- summary ---- */
+function renderSummary(){
+  var t=totals(), s=schedule();
+  $('cartCount').textContent=t.count;$('cartCount').setAttribute('aria-label',t.count+(t.count===1?' box':' boxes'));
+  $('mbTotal').textContent=eur(t.total);$('mbCount').textContent=t.count+(t.count===1?' box':' boxes');
+  updateMbar();
+  if(!t.count){
+    $('sumBody').innerHTML='<p class="empty">Your order is empty. <a href="#boxes">Choose a box</a> to start.</p>';
+    $('submitBtn').disabled=false;return;
+  }
+  var hint='';
+  if(t.ship>0){var more=FREE_OVER-t.sub+1; hint='<p class="free-hint">Add '+eur(more)+' to get free delivery. Orders over '+eur(FREE_OVER)+' ship free.</p>'}
+  else hint='<p class="free-hint">Delivery is free on this order.</p>';
+  $('sumBody').innerHTML='<ul class="lines">'+t.lines.map(function(l){return '<li><span class="nm">'+l.q+' × '+l.b.name+'</span><span class="amt">'+eur(l.q*l.b.price)+'</span></li>'}).join('')+'</ul>'+
+    '<dl class="tot"><div><dt>Boxes</dt><dd>'+eur(t.sub)+'</dd></div><div><dt>Delivery</dt><dd>'+(t.ship?eur(t.ship):'Free')+'</dd></div><div class="grand"><dt>Total</dt><dd>'+eur(t.total)+'</dd></div></dl>'+hint+
+    '<p class="hint" style="margin-top:12px">Order by '+fmtDate(s.cutoff)+', 18:00 to be posted on '+fmtDate(s.wed)+' or '+fmtDate(s.thu)+'.</p>';
+}
+function fmtShort(ms){return new Date(ms).toLocaleDateString('en-GB',{day:'numeric',month:'long',timeZone:'UTC'})}
+
+/* ---- schedule UI ---- */
+function renderSchedule(){
+  var s=schedule();
+  $('tkCut').textContent=fmtDate(s.cutoff)+', 18:00';
+  $('tkPost').textContent=fmtShort(s.wed)+' or '+fmtShort(s.thu);
+  $('tkLeft').textContent=leftText(s.leftMs)+' left to order for this posting. Times are Paris time.';
+  var sel=document.querySelector('input[name=dispatch]:checked'), keep=sel?sel.value:'any';
+  $('dispatch').innerHTML=[['any','No preference'],['wed',DAYS[3]+' '+fmtShort(s.wed)],['thu',DAYS[4]+' '+fmtShort(s.thu)]].map(function(o){
+    return '<label class="choice"><input type="radio" name="dispatch" value="'+o[0]+'"'+(o[0]===keep?' checked':'')+'>'+o[1]+'</label>';
+  }).join('');
+  var d=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],lab={0:'Order by 18:00',2:'We post',3:'We post'};
+  $('week').innerHTML=d.map(function(n,i){
+    var cls=i===0?'cut':(i===2||i===3)?'post':'';
+    return '<div class="day '+cls+'"><b>'+n+'</b><i>'+(lab[i]||'')+'</i></div>';
+  }).join('');
+}
+
+/* ---- shop hours ---- */
+function renderShop(){
+  var s=schedule(), open=SHOP_DAYS.indexOf(s.dow)>-1 && s.min>=SHOP_OPEN && s.min<SHOP_CLOSE;
+  var el=$('openNow'), txt;
+  if(open){txt='Open now, until 13:00';}
+  else{
+    var i,day,nxt=null;
+    for(i=0;i<8;i++){day=(s.dow+i)%7;if(SHOP_DAYS.indexOf(day)>-1&&(i>0||s.min<SHOP_OPEN)){nxt=i;break}}
+    txt='Closed now. Opens '+(nxt===0?'today':nxt===1?'tomorrow':DAYS[(s.dow+nxt)%7])+' at 10:00';
+  }
+  el.textContent=txt;el.classList.toggle('is-open',open);
+  $('hours').innerHTML=[1,2,3,4,5,6,0].map(function(d){
+    var on=SHOP_DAYS.indexOf(d)>-1;
+    return '<div'+(d===s.dow?' class="today"':'')+'><dt>'+DAYS[d]+(d===s.dow?' (today)':'')+'</dt><dd'+(on?'':' class="closed"')+'>'+(on?'10:00 to 13:00':'Closed')+'</dd></div>';
+  }).join('');
+}
+
+/* ---- mobile bar ---- */
+var orderVisible=false;
+function updateMbar(){var t=totals();$('mbar').classList.toggle('show',t.count>0&&!orderVisible)}
+if('IntersectionObserver' in window){
+  new IntersectionObserver(function(en){orderVisible=en[0].isIntersecting;updateMbar()},{threshold:.05}).observe($('order'));
+}
+
+/* ---- form ---- */
+var PC={France:[/^\d{5}$/,'5 digits, for example 35260'],Belgium:[/^\d{4}$/,'4 digits, for example 1000'],Luxembourg:[/^\d{4}$/,'4 digits, for example 1009']};
+var F=['name','email','address','postcode','city'];
+function fieldError(id){
+  var el=$(id),v=el.value.trim();
+  if(!v) return {name:'Enter your full name.',email:'Enter your email address so we can reply.',address:'Enter your street address.',postcode:'Enter your postcode.',city:'Enter your town or city.'}[id];
+  if(id==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return 'This email address looks incomplete. Check it has an @ and a domain.';
+  if(id==='postcode'){var r=PC[$('country').value];if(r&&!r[0].test(v.replace(/\s/g,''))) return 'Postcode for '+$('country').value+': '+r[1]+'.'}
+  return '';
+}
+function showErr(id){
+  var m=fieldError(id),e=$(id+'-e'),el=$(id);
+  e.textContent=m||'';e.classList.toggle('show',!!m);
+  if(m){el.setAttribute('aria-invalid','true');el.setAttribute('aria-describedby',id+'-e')}else{el.removeAttribute('aria-invalid');el.removeAttribute('aria-describedby')}
+  return m;
+}
+F.forEach(function(id){$(id).addEventListener('blur',function(){showErr(id)});$(id).addEventListener('input',function(){if($(id).getAttribute('aria-invalid'))showErr(id)})});
+$('country').addEventListener('change',function(){if($('postcode').value)showErr('postcode')});
+
+function orderText(){
+  var t=totals(),s=schedule(),f=$('orderForm'),sel=document.querySelector('input[name=dispatch]:checked'),dv=sel?sel.value:'any';
+  var disp=dv==='wed'?'Wednesday '+fmtShort(s.wed):dv==='thu'?'Thursday '+fmtShort(s.thu):'No preference (Wednesday '+fmtShort(s.wed)+' or Thursday '+fmtShort(s.thu)+')';
+  var L=['Order request for Parc Le Goff','','Boxes'];
+  t.lines.forEach(function(l){L.push('- '+l.q+' x '+l.b.name+' ('+eur(l.b.price)+' each) = '+eur(l.q*l.b.price))});
+  L.push('','Boxes: '+eur(t.sub),'Delivery: '+(t.ship?eur(t.ship):'Free'),'Total: '+eur(t.total),'',
+    'Posting day: '+disp,'',
+    'Deliver to',f.name.value.trim(),f.address.value.trim(),f.postcode.value.trim()+' '+f.city.value.trim(),f.country.value,'',
+    'Email: '+f.email.value.trim(),'Phone: '+(f.phone.value.trim()||'not given'));
+  var note=f.note.value.trim();if(note)L.push('','Note: '+note);
+  return L.join('\n');
+}
+function mailHref(text){return 'mailto:'+ORDER_EMAIL+'?subject='+encodeURIComponent('Order request: '+$('name').value.trim())+'&body='+encodeURIComponent(text.replace(/\n/g,'\r\n'))}
+
+$('orderForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var box=$('formError'),bad=null,msgs=[];
+  box.classList.remove('show');
+  F.forEach(function(id){var m=showErr(id);if(m&&!bad)bad=id});
+  var t=totals();
+  if(!t.count){msgs.push('Your order is empty. Choose at least one box above.')}
+  if(bad||!t.count){
+    box.textContent=(bad?'Some details need fixing before we can prepare your order. ':'')+msgs.join(' ');
+    box.classList.add('show');
+    if(bad)$(bad).focus();else box.focus();
+    return;
+  }
+  var text=orderText(),href=mailHref(text);
+  $('sentText').textContent=text;$('mailAgain').href=href;
+  $('orderForm').style.display='none';$('sent').classList.add('show');$('sent').focus();
+  window.location.href=href;
+});
+$('editBtn').addEventListener('click',function(){$('sent').classList.remove('show');$('orderForm').style.display='';$('name').focus()});
+$('copyBtn').addEventListener('click',function(){
+  var txt=$('sentText').textContent,note=$('copyNote');
+  function ok(){note.textContent='Copied. Paste it into an email to '+ORDER_EMAIL+'.'}
+  function no(){var r=document.createRange();r.selectNodeContents($('sentText'));var sl=getSelection();sl.removeAllRanges();sl.addRange(r);note.textContent='Select and copy the text above, then send it to '+ORDER_EMAIL+'.'}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(ok,no);else no();
+});
+$('mailAgain').addEventListener('click',function(){});
+
+/* ---- init ---- */
+$('footMail').innerHTML='<a href="mailto:'+ORDER_EMAIL+'">'+ORDER_EMAIL+'</a>';
+validate();save();renderBoxes();renderSchedule();renderShop();renderSummary();
+setInterval(function(){renderShop();var s=schedule();$('tkLeft').textContent=leftText(s.leftMs)+' left to order for this posting. Times are Paris time.'},60000);
+})();
+</script>
+</body>
+</html>

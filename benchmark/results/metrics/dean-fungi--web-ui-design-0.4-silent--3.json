@@ -1,0 +1,53 @@
+{
+  "id": "dean-fungi--web-ui-design-0.4-silent--3",
+  "desktop": {
+    "fullH": 5518,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 0,
+      "moderate": 1,
+      "minor": 0,
+      "rules": [
+        "heading-order:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 30,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 5518,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 9696,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

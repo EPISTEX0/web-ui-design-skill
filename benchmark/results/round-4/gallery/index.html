@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>web-ui-design blind gallery</title>
+<style>
+	body { margin: 0; padding: 32px; font: 15px/1.5 system-ui, sans-serif; background: #f6f6f4; color: #1b1b1a; }
+	main { max-width: 1400px; margin: 0 auto; }
+	h1 { font-size: 28px; margin: 0 0 8px; }
+	.lede { max-width: 70ch; color: #55554f; }
+	button { font: inherit; padding: 8px 14px; border-radius: 8px; border: 1px solid #c9c9c3; background: white; cursor: pointer; }
+	section { margin-top: 48px; }
+	h2 { font-size: 20px; margin: 0 0 4px; }
+	.prompt { max-width: 90ch; color: #55554f; font-size: 14px; }
+	.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 20px; }
+	figure { margin: 0; background: white; border-radius: 10px; box-shadow: 0 0 0 1px rgb(0 0 0 / 0.08); overflow: hidden; }
+	img { display: block; width: 100%; aspect-ratio: 1440 / 900; object-fit: cover; object-position: top; }
+	figcaption { display: flex; gap: 12px; align-items: baseline; padding: 10px 14px; }
+	.arm { margin-left: auto; font-size: 13px; padding: 2px 8px; border-radius: 99px; background: #ececea; visibility: hidden; }
+	body.revealed .arm, .arm.shown { visibility: visible; }
+	details { max-width: 90ch; margin: 0 0 16px; font-size: 14px; }
+	pre { white-space: pre-wrap; background: white; padding: 12px; border-radius: 8px; }
+	.arm[data-arm="web-ui-design"] { background: #dbeafe; }
+	.arm[data-arm="frontend-design"] { background: #fef3c7; }
+	.arm[data-arm="web-ui-design-0.2"] { background: #dcfce7; }
+	.arm[data-arm="web-ui-design-0.3"] { background: #fce7f3; }
+	.arm[data-arm="web-ui-design-0.3-silent"] { background: #ede9fe; }
+	.arm[data-arm="web-ui-design-0.3-wired"] { background: #ffedd5; }
+	.arm[data-arm="web-ui-design-0.4"] { background: #cffafe; }
+	.arm[data-arm="web-ui-design-0.4-silent"] { background: #e0e7ff; }
+	.arm[data-arm="web-ui-design-0.4-wired"] { background: #fef9c3; }
+</style>
+</head>
+<body>
+<main>
+	<h1>Blind gallery</h1>
+	<p class="lede">Each page was built by Claude Sonnet 5.5 from the same prompt, either with Claude Code's defaults, with Anthropic's frontend-design skill, or with a version of web-ui-design. In round 3 a simulated client answers the builder's questions from private notes; the -silent arm's client declines to answer, and the -wired arm adds the README's CLAUDE.md line. Pick your favorite in each row before you reveal which is which.</p>
+	<button onclick="document.body.classList.toggle('revealed')">Reveal arms</button>
+	<section><h2>New. Dean Fungus Group species guide</h2><p class="prompt">I'm the recorder for the Dean Fungus Group in the Forest of Dean. We'd like a species guide on our website so members can look up what they found on a foray. Put it in this folder as index.html (plain HTML, CSS and JS, no build step).</p><details><summary>The simulated client's private notes</summary><pre># Dean Fungus Group, species guide (client notes)
+
+- Real goal: members can find a species fast by common or Latin name, or browse what fruits in a given month, and nobody ever mistakes a deadly species for one people eat.
+- Who uses it: about 140 members, many retired, mostly on a laptop at home with a printed field guide beside them. Some check it on their phone in the forest, where signal is poor.
+- Our wording rule, and it is not negotiable: we never write "edible". We use four labels only: "Eaten by members", "Not worth eating", "Poisonous", "Deadly". Every "Eaten by members" species must show its dangerous lookalike right next to it, not on another page.
+- The 16 species to start with (each lookalike is an entry of its own): Chanterelle (Cantharellus cibarius), lookalike False chanterelle (Hygrophoropsis aurantiaca); Penny bun (Boletus edulis), lookalike Bitter bolete (Tylopilus felleus); Giant puffball (Calvatia gigantea), lookalike Common earthball (Scleroderma citrinum); Amethyst deceiver (Laccaria amethystina), lookalike Lilac fibrecap (Inocybe geophylla var. lilacina); Hedgehog fungus (Hydnum repandum); Beefsteak fungus (Fistulina hepatica); Death cap (Amanita phalloides); Destroying angel (Amanita virosa); Deadly webcap (Cortinarius rubellus); Fly agaric (Amanita muscaria); Sulphur tuft (Hypholoma fasciculare); Yellow stainer (Agaricus xanthodermus).
+- Each species needs: names, months it fruits, habitat (beech, oak, conifer, grassland, dead wood), spore print colour, label, and a few lines on how to tell it apart.
+- On every Poisonous or Deadly species: "If someone may have eaten this, call 999 or NHS 111 now and keep a piece of the mushroom."
+- Forays 2027: first Sunday of the month, 5 September, 3 October and 7 November, meeting 10:00 at the Speech House car park. Our own picking rule: take only what you will eat that day, and nothing from the fenced survey plots at Nagshead.
+- Real numbers: 1,140 species recorded in the Forest of Dean since our group began in 1987.
+- Brand: we do not really have one. The printed newsletter is moss green #4a5d23 on cream #f3ecd8, with a woodcut of a beech tree we can send. Red #b3261e is used only for Deadly. No licensed photos yet, placeholders are fine if clearly marked.
+- Would hate: cartoon toadstools, mushroom emojis, anything that looks like a recipe site, mushrooms in a frying pan, a login wall.</pre></details><div class="grid"><figure>
+	<a href="../judging/dean-fungi/B4/desktop-full.jpg"><img src="../judging/dean-fungi/B4/desktop-fold.jpg" alt="B4 desktop" loading="lazy"></a>
+	<figcaption><strong>B4</strong> <a href="../judging/dean-fungi/B4/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/B4/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/R9/desktop-full.jpg"><img src="../judging/dean-fungi/R9/desktop-fold.jpg" alt="R9 desktop" loading="lazy"></a>
+	<figcaption><strong>R9</strong> <a href="../judging/dean-fungi/R9/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/R9/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/T8/desktop-full.jpg"><img src="../judging/dean-fungi/T8/desktop-fold.jpg" alt="T8 desktop" loading="lazy"></a>
+	<figcaption><strong>T8</strong> <a href="../judging/dean-fungi/T8/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/T8/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/G6/desktop-full.jpg"><img src="../judging/dean-fungi/G6/desktop-fold.jpg" alt="G6 desktop" loading="lazy"></a>
+	<figcaption><strong>G6</strong> <a href="../judging/dean-fungi/G6/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/G6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/W5/desktop-full.jpg"><img src="../judging/dean-fungi/W5/desktop-fold.jpg" alt="W5 desktop" loading="lazy"></a>
+	<figcaption><strong>W5</strong> <a href="../judging/dean-fungi/W5/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/W5/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/N3/desktop-full.jpg"><img src="../judging/dean-fungi/N3/desktop-fold.jpg" alt="N3 desktop" loading="lazy"></a>
+	<figcaption><strong>N3</strong> <a href="../judging/dean-fungi/N3/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/N3/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/D6/desktop-full.jpg"><img src="../judging/dean-fungi/D6/desktop-fold.jpg" alt="D6 desktop" loading="lazy"></a>
+	<figcaption><strong>D6</strong> <a href="../judging/dean-fungi/D6/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/D6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/Z2/desktop-full.jpg"><img src="../judging/dean-fungi/Z2/desktop-fold.jpg" alt="Z2 desktop" loading="lazy"></a>
+	<figcaption><strong>Z2</strong> <a href="../judging/dean-fungi/Z2/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/Z2/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/Q2/desktop-full.jpg"><img src="../judging/dean-fungi/Q2/desktop-fold.jpg" alt="Q2 desktop" loading="lazy"></a>
+	<figcaption><strong>Q2</strong> <a href="../judging/dean-fungi/Q2/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/Q2/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/A8/desktop-full.jpg"><img src="../judging/dean-fungi/A8/desktop-fold.jpg" alt="A8 desktop" loading="lazy"></a>
+	<figcaption><strong>A8</strong> <a href="../judging/dean-fungi/A8/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/A8/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/Y5/desktop-full.jpg"><img src="../judging/dean-fungi/Y5/desktop-fold.jpg" alt="Y5 desktop" loading="lazy"></a>
+	<figcaption><strong>Y5</strong> <a href="../judging/dean-fungi/Y5/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/Y5/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/dean-fungi/D3/desktop-full.jpg"><img src="../judging/dean-fungi/D3/desktop-fold.jpg" alt="D3 desktop" loading="lazy"></a>
+	<figcaption><strong>D3</strong> <a href="../judging/dean-fungi/D3/desktop-full.jpg">desktop</a> <a href="../judging/dean-fungi/D3/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure></div></section>
+<section><h2>New. MV Gannet ferry loading screen</h2><p class="prompt">We're the Skerra Ferry Company and our crew still loads cars onto the MV Gannet off a paper clipboard. Build them a loading screen to replace it. Use realistic sample data. Put it in this folder as index.html (plain HTML, CSS and JS, no build step).</p><details><summary>The simulated client's private notes</summary><pre># Skerra Ferry Company, MV Gannet loading screen (client notes)
+
+- Who uses it: the loading master and two deckhands, on a rugged Android tablet in a waterproof case, held in portrait. Outdoors on the slipway in rain, wind and low winter sun, usually wearing thick gloves. Signal at Port Ailig drops out, so it has to keep working and catch up later.
+- Main job: as each vehicle drives up, find its booking by number plate (they only want to type the last 3 characters), mark it loaded and give it a lane. See at a glance how much deck space is left.
+- The deck: 4 lanes, 22 car units in total. Lanes 1 and 4 hold 5 units, lanes 2 and 3 hold 6. A car is 1 unit, a van or car with trailer 2, a lorry or the island bus 4 and only in lanes 2 or 3.
+- The thing every new crew member gets wrong: lane 1 runs under the passenger lounge and has only 2.1 m headroom. Anything over 2.1 m, including cars with roof boxes, must never go in lane 1.
+- Boarding order: priority-badge island residents and the doctor's and vet's vans first, then other bookings, then standby. Standby cars wait in the shore lane in arrival order and can be called on once booked cars are loaded. Ten minutes before departure, booked no-shows lose their space to standby.
+- Route: Port Ailig to Skerra, 25 minutes. Winter departures from Port Ailig: 07:10, 08:30, 10:15, 12:40, 14:30, 16:20, 18:05. On Thursdays the 10:15 carries only the fuel tanker plus foot passengers.
+- Brand: navy #12304a and lifejacket yellow #f2b705. It needs strong contrast for glare. No logo file needed on this screen.
+- Hate: tiny checkboxes, typing full plates with gloves on, anything that freezes when signal drops, and the clipboard going soggy.</pre></details><div class="grid"><figure>
+	<a href="../judging/gannet/R2/desktop-full.jpg"><img src="../judging/gannet/R2/desktop-fold.jpg" alt="R2 desktop" loading="lazy"></a>
+	<figcaption><strong>R2</strong> <a href="../judging/gannet/R2/desktop-full.jpg">desktop</a> <a href="../judging/gannet/R2/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/A3/desktop-full.jpg"><img src="../judging/gannet/A3/desktop-fold.jpg" alt="A3 desktop" loading="lazy"></a>
+	<figcaption><strong>A3</strong> <a href="../judging/gannet/A3/desktop-full.jpg">desktop</a> <a href="../judging/gannet/A3/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/N9/desktop-full.jpg"><img src="../judging/gannet/N9/desktop-fold.jpg" alt="N9 desktop" loading="lazy"></a>
+	<figcaption><strong>N9</strong> <a href="../judging/gannet/N9/desktop-full.jpg">desktop</a> <a href="../judging/gannet/N9/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/A7/desktop-full.jpg"><img src="../judging/gannet/A7/desktop-fold.jpg" alt="A7 desktop" loading="lazy"></a>
+	<figcaption><strong>A7</strong> <a href="../judging/gannet/A7/desktop-full.jpg">desktop</a> <a href="../judging/gannet/A7/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/E9/desktop-full.jpg"><img src="../judging/gannet/E9/desktop-fold.jpg" alt="E9 desktop" loading="lazy"></a>
+	<figcaption><strong>E9</strong> <a href="../judging/gannet/E9/desktop-full.jpg">desktop</a> <a href="../judging/gannet/E9/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/Q7/desktop-full.jpg"><img src="../judging/gannet/Q7/desktop-fold.jpg" alt="Q7 desktop" loading="lazy"></a>
+	<figcaption><strong>Q7</strong> <a href="../judging/gannet/Q7/desktop-full.jpg">desktop</a> <a href="../judging/gannet/Q7/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/J2/desktop-full.jpg"><img src="../judging/gannet/J2/desktop-fold.jpg" alt="J2 desktop" loading="lazy"></a>
+	<figcaption><strong>J2</strong> <a href="../judging/gannet/J2/desktop-full.jpg">desktop</a> <a href="../judging/gannet/J2/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/Z6/desktop-full.jpg"><img src="../judging/gannet/Z6/desktop-fold.jpg" alt="Z6 desktop" loading="lazy"></a>
+	<figcaption><strong>Z6</strong> <a href="../judging/gannet/Z6/desktop-full.jpg">desktop</a> <a href="../judging/gannet/Z6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/W2/desktop-full.jpg"><img src="../judging/gannet/W2/desktop-fold.jpg" alt="W2 desktop" loading="lazy"></a>
+	<figcaption><strong>W2</strong> <a href="../judging/gannet/W2/desktop-full.jpg">desktop</a> <a href="../judging/gannet/W2/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/S7/desktop-full.jpg"><img src="../judging/gannet/S7/desktop-fold.jpg" alt="S7 desktop" loading="lazy"></a>
+	<figcaption><strong>S7</strong> <a href="../judging/gannet/S7/desktop-full.jpg">desktop</a> <a href="../judging/gannet/S7/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/R6/desktop-full.jpg"><img src="../judging/gannet/R6/desktop-fold.jpg" alt="R6 desktop" loading="lazy"></a>
+	<figcaption><strong>R6</strong> <a href="../judging/gannet/R6/desktop-full.jpg">desktop</a> <a href="../judging/gannet/R6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/gannet/P4/desktop-full.jpg"><img src="../judging/gannet/P4/desktop-fold.jpg" alt="P4 desktop" loading="lazy"></a>
+	<figcaption><strong>P4</strong> <a href="../judging/gannet/P4/desktop-full.jpg">desktop</a> <a href="../judging/gannet/P4/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure></div></section>
+<section><h2>New. Parc Le Goff oyster farm, order page</h2><p class="prompt">I run Parc Le Goff, my family's oyster farm in Cancale, and we want to sell our oyster boxes online instead of only at the Saturday market. Can you make us a page for that? Put it in this folder as index.html (plain HTML, CSS and JS, no build step).</p><details><summary>The simulated client's private notes</summary><pre># Parc Le Goff, oyster farm, Cancale (client notes)
+
+- Main goal of the page: people order a box of oysters for home delivery. The tide-flat visit is a secondary thing, one section lower down.
+- Who visits: food lovers in Paris, Rennes and Brussels ordering for a weekend dinner or a family lunch, many over 45. Mostly on their phone, often after seeing us at the market or on a restaurant menu. English is fine for now, a French version comes later.
+- Boxes: 24 creuses No. 3 EUR 32; 48 creuses No. 3 EUR 58; 12 plates (Cancale flat oysters) EUR 39. The plates are only available September to April. Delivery EUR 12, free over EUR 80. We deliver to mainland France, Belgium and Luxembourg.
+- The rule people need to see before they order: we ship only on Wednesdays and Thursdays so the oysters never sit in a depot over a weekend. Orders close Monday at 18:00 for that week. They keep 7 days in the fridge, flat side up.
+- Tide-flat visit with Maëlle: 2 hours on the oyster beds at low tide, EUR 25, children under 12 free, boots provided. Only on big tides, so 2027 dates are fixed: 10 April, 8 May, 5 June, 3 July, 31 July, 28 August.
+- Real proof: third generation on the same beds since 1961; we supply Le Bistrot du Port and two other restaurants in Saint-Malo. No reviews collected yet.
+- Brand: slate blue #3e5363, kelp ochre #c8a24a, shell white #f4efe6. My grandfather drew our oyster logo by hand; I will send it, use a placeholder for now. No photos yet.
+- Would hate: black and gold luxury look, champagne stock photos, the word "artisanal" everywhere, newsletter pop-ups.
+- Practical: farm shop at Port de la Houle, Cancale, open Wednesday to Sunday 10:00 to 13:00.</pre></details><div class="grid"><figure>
+	<a href="../judging/le-goff/Y4/desktop-full.jpg"><img src="../judging/le-goff/Y4/desktop-fold.jpg" alt="Y4 desktop" loading="lazy"></a>
+	<figcaption><strong>Y4</strong> <a href="../judging/le-goff/Y4/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/Y4/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/K2/desktop-full.jpg"><img src="../judging/le-goff/K2/desktop-fold.jpg" alt="K2 desktop" loading="lazy"></a>
+	<figcaption><strong>K2</strong> <a href="../judging/le-goff/K2/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/K2/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/N8/desktop-full.jpg"><img src="../judging/le-goff/N8/desktop-fold.jpg" alt="N8 desktop" loading="lazy"></a>
+	<figcaption><strong>N8</strong> <a href="../judging/le-goff/N8/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/N8/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/S6/desktop-full.jpg"><img src="../judging/le-goff/S6/desktop-fold.jpg" alt="S6 desktop" loading="lazy"></a>
+	<figcaption><strong>S6</strong> <a href="../judging/le-goff/S6/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/S6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/Y6/desktop-full.jpg"><img src="../judging/le-goff/Y6/desktop-fold.jpg" alt="Y6 desktop" loading="lazy"></a>
+	<figcaption><strong>Y6</strong> <a href="../judging/le-goff/Y6/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/Y6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/T2/desktop-full.jpg"><img src="../judging/le-goff/T2/desktop-fold.jpg" alt="T2 desktop" loading="lazy"></a>
+	<figcaption><strong>T2</strong> <a href="../judging/le-goff/T2/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/T2/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4-silent">web-ui-design-0.4-silent</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/U6/desktop-full.jpg"><img src="../judging/le-goff/U6/desktop-fold.jpg" alt="U6 desktop" loading="lazy"></a>
+	<figcaption><strong>U6</strong> <a href="../judging/le-goff/U6/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/U6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/Z3/desktop-full.jpg"><img src="../judging/le-goff/Z3/desktop-fold.jpg" alt="Z3 desktop" loading="lazy"></a>
+	<figcaption><strong>Z3</strong> <a href="../judging/le-goff/Z3/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/Z3/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/D3/desktop-full.jpg"><img src="../judging/le-goff/D3/desktop-fold.jpg" alt="D3 desktop" loading="lazy"></a>
+	<figcaption><strong>D3</strong> <a href="../judging/le-goff/D3/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/D3/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/C5/desktop-full.jpg"><img src="../judging/le-goff/C5/desktop-fold.jpg" alt="C5 desktop" loading="lazy"></a>
+	<figcaption><strong>C5</strong> <a href="../judging/le-goff/C5/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/C5/mobile-full.jpg">mobile</a> <span class="arm" data-arm="none">none</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/B6/desktop-full.jpg"><img src="../judging/le-goff/B6/desktop-fold.jpg" alt="B6 desktop" loading="lazy"></a>
+	<figcaption><strong>B6</strong> <a href="../judging/le-goff/B6/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/B6/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.3">web-ui-design-0.3</span></figcaption>
+</figure>
+<figure>
+	<a href="../judging/le-goff/A9/desktop-full.jpg"><img src="../judging/le-goff/A9/desktop-fold.jpg" alt="A9 desktop" loading="lazy"></a>
+	<figcaption><strong>A9</strong> <a href="../judging/le-goff/A9/desktop-full.jpg">desktop</a> <a href="../judging/le-goff/A9/mobile-full.jpg">mobile</a> <span class="arm" data-arm="web-ui-design-0.4">web-ui-design-0.4</span></figcaption>
+</figure></div></section>
+</main>
+</body>
+</html>

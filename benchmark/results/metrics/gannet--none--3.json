@@ -1,0 +1,55 @@
+{
+  "id": "gannet--none--3",
+  "desktop": {
+    "fullH": 900,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 8,
+      "moderate": 1,
+      "minor": 0,
+      "rules": [
+        "aria-prohibited-attr:4",
+        "color-contrast:4",
+        "page-has-heading-one:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 29,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 900,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 1503,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

@@ -244,6 +244,26 @@ async function pageChecks(browser, appDir, outDir, staffNames) {
   await mobile.screenshot({ ...jpeg, path: mfile })
   result.screenshots['timeoff-mobile'] = mfile
   result.mobileOverflowX = await mobile.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)
+  const actions = await mobile.evaluate(() => {
+    const out = []
+    let found = 0
+    for (const el of document.querySelectorAll('button, [role="button"]')) {
+      const label = `${el.innerText || ''} ${el.getAttribute('aria-label') || ''}`
+      if (!/\b(approve|decline)\b/i.test(label) || el.closest('dialog:not([open]), [hidden], [aria-hidden="true"]') || !el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true })) continue
+      const r = el.getBoundingClientRect()
+      if (r.width <= 1 || r.height <= 1) continue
+      found++
+      let reach = r.left < window.innerWidth
+      for (let p = el.parentElement; reach && p && p !== document.body && p !== document.documentElement; p = p.parentElement) {
+        if (getComputedStyle(p).overflowX !== 'visible' && r.left >= p.getBoundingClientRect().left + p.clientLeft + p.clientWidth) reach = false
+      }
+      if (!reach) out.push(label.trim().slice(0, 30))
+    }
+    return { found, out }
+  })
+  result.actionsFound = actions.found
+  result.actionsOutOfReach = actions.out.length
+  result.actionsReachableMobile = actions.found > 0 && actions.out.length === 0
   result.consoleErrors.push(...mobile.consoleErrors)
   await closePage(mobile)
   result.consoleErrors = [...new Set(result.consoleErrors)]

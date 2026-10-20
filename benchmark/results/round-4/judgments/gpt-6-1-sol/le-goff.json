@@ -1,0 +1,183 @@
+{
+  "scores": {
+    "A9": {
+      "craft": 9,
+      "fit": 10,
+      "hierarchy": 9,
+      "mobile": 8,
+      "overall": 9,
+      "defects": [
+        "Oversized mobile headings and tall illustration areas make reaching the delivery guidance a long scroll."
+      ],
+      "note": "The distinctive shell illustrations, accurate offer, prominent shipping rules and properly secondary dated visits make this the strongest expression of the family's business."
+    },
+    "B6": {
+      "craft": 8,
+      "fit": 8,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 8,
+      "defects": [
+        "A large empty photo placeholder takes substantial hero space, particularly on mobile.",
+        "The complete desktop page omits the tide-flat visit and its fixed dates."
+      ],
+      "note": "A warm, coherent storefront gets the boxes, delivery constraints and family credibility right, but leaves the secondary visit offer out."
+    },
+    "C5": {
+      "craft": 7,
+      "fit": 3,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 4,
+      "defects": [
+        "The displayed 12, 24 and 48 creuse boxes and their prices do not match the requested assortment, and the seasonal flat oysters are missing.",
+        "Generic 24/48-hour delivery guidance does not communicate the required shipping days and Monday 18:00 cutoff.",
+        "The green and rust palette replaces the specified slate blue and ochre.",
+        "The tide-flat visit, its dates and the named restaurant proof are absent."
+      ],
+      "note": "The spacious French storefront is visually competent and readable on a phone, but it sells a substantially different offer from the client's."
+    },
+    "D3": {
+      "craft": 7,
+      "fit": 7,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 7,
+      "defects": [
+        "The large hero photo placeholder contributes little useful information.",
+        "The lower visit section concerns the farm shop rather than Maelle's tide-flat tour, with no tour dates or booking offer.",
+        "The lengthy mobile ordering form pushes the family story and practical visiting information far down the page."
+      ],
+      "note": "Clear prices, advance scheduling guidance and a straightforward order form serve the core purchase well, although the secondary experience is not represented."
+    },
+    "K2": {
+      "craft": 4,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 5,
+      "overall": 3,
+      "defects": [
+        "An unexplained dark pill-shaped element floats over the product area and obscures text on mobile.",
+        "The hero contains a large unproductive empty region.",
+        "Box prices and the delivery fee and free-delivery threshold differ from the client notes.",
+        "The copy alternates between opened oysters and oysters ready to open.",
+        "The required shipping cutoff, seasonal flat-oyster offer and dated tide-flat visit are not presented."
+      ],
+      "note": "The basic buying direction is understandable, but rendering artifacts and invented commercial details prevent this from being a credible launch page."
+    },
+    "N8": {
+      "craft": 7,
+      "fit": 3,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 4,
+      "defects": [
+        "The product range and prices differ from the specified boxes, with no seasonal Cancale flat-oyster box.",
+        "Delivery pricing and scheduling do not match the client's required terms.",
+        "The calibre guide appears before ordering and adds a substantial mobile detour.",
+        "The tide-flat visit, fixed dates and actual restaurant proof are missing."
+      ],
+      "note": "An orderly editorial layout reads comfortably across sizes, but generic oyster-shop content overrides the actual products and delivery operation."
+    },
+    "S6": {
+      "craft": 6,
+      "fit": 6,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 6,
+      "defects": [
+        "The page says the oysters are opened, creating an inappropriate impression for boxes intended to keep in the fridge.",
+        "Wednesday and Thursday are presented as delivery choices rather than clearly distinguished shipping days.",
+        "The actual since-1961 and named-restaurant proof and the tide-flat visit are absent.",
+        "Placeholder contact details remain visible."
+      ],
+      "note": "The restrained layout makes the correct boxes and order sequence easy to understand, but important trust content and accurate handling language still need work."
+    },
+    "T2": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 4,
+      "defects": [
+        "The offer centers farm pickup and nearby delivery instead of home delivery across the specified countries.",
+        "The box quantities, prices and calibre choices replace the client's actual assortment, and flat oysters are missing.",
+        "The required Wednesday/Thursday shipping restriction and Monday 18:00 cutoff are not shown.",
+        "The actual restaurant proof and dated tide-flat visit are absent."
+      ],
+      "note": "A clean, usable local-order form has been designed for the wrong distribution model and would not serve the intended distant weekend customers."
+    },
+    "U6": {
+      "craft": 6,
+      "fit": 6,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 6,
+      "defects": [
+        "The 48-oyster box advertises free delivery despite costing EUR 58, below the stated EUR 80 threshold.",
+        "The seven-column delivery calendar has small, tightly packed mobile labels.",
+        "The page omits the real restaurant proof and Maelle's dated tide-flat visit.",
+        "Placeholder contact details remain visible."
+      ],
+      "note": "The correct products and conspicuous scheduling guidance give this a useful foundation, but the contradictory delivery promotion makes it unsafe to ship unchanged."
+    },
+    "Y4": {
+      "craft": 7,
+      "fit": 3,
+      "hierarchy": 8,
+      "mobile": 6,
+      "overall": 4,
+      "defects": [
+        "The fixed mobile order bar overlaps the hero action area.",
+        "Box prices and delivery pricing differ from the client notes.",
+        "The Monday/Tuesday dispatch schedule contradicts the required Wednesday/Thursday-only shipping rule.",
+        "The green and burgundy palette does not reflect the specified brand.",
+        "Implementation-facing CONFIG instructions remain visible in the footer, while the dated visit and actual restaurant proof are missing."
+      ],
+      "note": "Confident typography and a clear purchase path cannot compensate for incorrect commercial rules, missing client-specific content and the mobile overlay."
+    },
+    "Y6": {
+      "craft": 7,
+      "fit": 7,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 7,
+      "defects": [
+        "The ordering form labels Wednesday/Thursday as delivery dates while the hero describes those dates as dispatch dates.",
+        "The complete desktop page omits the tide-flat visit and the seven-day, flat-side-up storage guidance.",
+        "A large empty photo placeholder interrupts the family story.",
+        "The dense repeating hero pattern creates visual interference behind the copy."
+      ],
+      "note": "Accurate boxes, a strong brand palette and genuine family and restaurant proof support a convincing storefront, but delivery wording and missing practical content need correction."
+    },
+    "Z3": {
+      "craft": 3,
+      "fit": 2,
+      "hierarchy": 6,
+      "mobile": 5,
+      "overall": 2,
+      "defects": [
+        "Desktop and tablet add buttons overflow their product cards and collide with neighboring cards.",
+        "An unexplained dark pill-shaped element overlays content, covering a proof-card heading on mobile.",
+        "The four-box assortment and prices do not match the requested products, and flat oysters are absent.",
+        "Delivery fees, destination countries, shipping days and the Monday cutoff are missing.",
+        "The dated visit, real restaurant proof and farm-shop hours are absent, and an example email remains visible."
+      ],
+      "note": "Although the hero clearly introduces oyster ordering, broken product controls and almost entirely generic operational content make this the least launch-ready page."
+    }
+  },
+  "ranking": [
+    "A9",
+    "B6",
+    "D3",
+    "Y6",
+    "S6",
+    "U6",
+    "Y4",
+    "N8",
+    "C5",
+    "T2",
+    "K2",
+    "Z3"
+  ]
+}

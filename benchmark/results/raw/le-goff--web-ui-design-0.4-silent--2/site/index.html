@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parc Le Goff – Huîtres de Cancale, box à commander</title>
+<meta name="description" content="Commandez vos box d'huîtres de Cancale au Parc Le Goff : retrait au parc, au marché du samedi, ou expédition réfrigérée.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<meta name="theme-color" content="#0f2b2c">
+<style>
+:root{
+  /* palette: all from the bay and the table */
+  --nacre:#e8edea;          /* inside of a shell */
+  --nacre-hi:#f5f8f6;       /* lifted surface */
+  --bay:#0f2b2c;            /* deep water, main ink */
+  --bay-2:#3b5254;          /* secondary text */
+  --bay-3:#566a6b;          /* tertiary text */
+  --rule:rgba(15,43,44,.16);
+  --rule-strong:rgba(15,43,44,.42);
+  --mignonnette:#8a2a47;    /* shallot vinegar: the one action color */
+  --mignonnette-dk:#6f2038;
+  --lemon:#e6cd55;          /* wedge of lemon, only on the dark band */
+  --shell:#cdd7d2;          /* unselected shell silhouette */
+
+  --f-display:"Fraunces","Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --f-body:"Avenir Next","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:20px;--s6:24px;--s8:32px;--s10:40px;--s12:48px;--s16:64px;--s20:80px;--s24:96px;
+  --r-sm:2px;--r-md:4px;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --ease-io:cubic-bezier(.77,0,.175,1);
+  --wrap:1160px;
+  --gutter:clamp(20px,5vw,48px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:var(--s6)}
+body{margin:0;background:var(--nacre);color:var(--bay);font:400 1.0625rem/1.55 var(--f-body);text-wrap:pretty;overflow-x:clip;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body.lock{overflow:hidden}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.1;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.5rem,7vw,4.75rem)}
+h2{font-size:clamp(1.875rem,4.4vw,3rem)}
+h3{font-size:1.375rem;letter-spacing:-.01em}
+p{margin:0}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+img,svg{display:block;max-width:100%}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:var(--gutter)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--mignonnette);outline-offset:3px;border-radius:var(--r-sm)}
+.band :focus-visible,.dark :focus-visible{outline-color:var(--lemon)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:48px;padding:0 var(--s6);border:1px solid transparent;border-radius:var(--r-md);background:var(--mignonnette);color:#fff;font-weight:600;text-decoration:none;cursor:pointer;transition:background-color 160ms var(--ease-out),transform 120ms var(--ease-out),border-color 160ms var(--ease-out)}
+.btn:active{transform:scale(.97)}
+.btn[disabled]{background:var(--rule);color:var(--bay-3);cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--bay);border-color:var(--rule-strong)}
+.btn.block{width:100%}
+@media (hover:hover){.btn:hover{background:var(--mignonnette-dk)}.btn.ghost:hover{background:var(--nacre-hi);border-color:var(--bay)}}
+.textbtn{background:none;border:0;padding:0;min-height:44px;min-width:44px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;color:inherit}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:var(--s4);padding-block:var(--s4)}
+.brand{font-family:var(--f-display);font-size:1.375rem;font-weight:700;letter-spacing:-.01em;text-decoration:none;display:flex;align-items:center;gap:var(--s2);min-height:44px}
+.brand svg{width:28px;height:28px;color:var(--bay)}
+.nav{display:flex;align-items:center;gap:var(--s6)}
+.nav a.l{text-decoration:none;font-weight:500;color:var(--bay-2);min-height:44px;display:inline-flex;align-items:center}
+@media (hover:hover){.nav a.l:hover{color:var(--bay);text-decoration:underline;text-underline-offset:4px}}
+.tools{display:flex;align-items:center;gap:var(--s2)}
+.lang{display:inline-flex;border:1px solid var(--rule-strong);border-radius:var(--r-md);overflow:hidden}
+.lang button{min-width:44px;min-height:44px;background:transparent;border:0;cursor:pointer;font-weight:600;font-size:.875rem;color:var(--bay-2)}
+.lang button[aria-pressed="true"]{background:var(--bay);color:var(--nacre)}
+.cartbtn{display:inline-flex;align-items:center;gap:var(--s2);min-height:44px;padding:0 var(--s4);background:var(--bay);color:var(--nacre);border:0;border-radius:var(--r-md);font-weight:600;cursor:pointer;transition:transform 120ms var(--ease-out)}
+.cartbtn:active{transform:scale(.97)}
+.cartbtn .n{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:12px;background:var(--lemon);color:var(--bay);font-size:.8125rem;font-variant-numeric:tabular-nums}
+@media (max-width:820px){.nav a.l{display:none}}
+@media (max-width:420px){.cartbtn .lbl{display:none}.brand span{font-size:1.1875rem}}
+
+/* hero */
+.hero{padding-block:var(--s8) var(--s20);display:grid;grid-template-columns:1.15fr .85fr;gap:var(--s12);align-items:center}
+.hero h1{max-width:12ch}
+.hero .lede{font-size:1.25rem;color:var(--bay-2);max-width:34rem;margin-top:var(--s6)}
+.hero .acts{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:var(--s8)}
+.hero-art{position:relative;aspect-ratio:1/1;max-width:440px;justify-self:end;width:100%;color:var(--bay)}
+.hero-art svg{width:100%;height:100%;overflow:visible}
+.hero-art .cap{position:absolute;left:0;bottom:-4px;font-size:.9375rem;color:var(--bay-2);max-width:15rem;border-top:1px solid var(--rule-strong);padding-top:var(--s2)}
+.facts{border-block:1px solid var(--rule-strong);display:grid;grid-template-columns:repeat(3,1fr);margin-top:0}
+.facts p{padding:var(--s5) var(--s6);font-weight:500;border-left:1px solid var(--rule)}
+.facts p:first-child{border-left:0;padding-left:0}
+.facts b{display:block;font-family:var(--f-display);font-size:1.25rem;font-weight:600;letter-spacing:-.01em}
+.facts span{color:var(--bay-2);font-size:.9375rem;font-weight:400}
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;gap:var(--s8);padding-block:var(--s4) var(--s12)}
+  .hero-art{justify-self:start;max-width:260px;order:-1}
+  .hero-art .cap{display:none}
+  .facts{grid-template-columns:1fr}
+  .facts p,.facts p:first-child{border-left:0;padding:var(--s4) 0;border-top:1px solid var(--rule)}
+  .facts p:first-child{border-top:0}
+}
+
+/* sections */
+section{padding-block:var(--s20)}
+.sec-head{max-width:40rem;margin-bottom:var(--s10)}
+.sec-head p{color:var(--bay-2);margin-top:var(--s4);font-size:1.125rem}
+@media (max-width:820px){section{padding-block:var(--s12)}}
+
+/* configurator */
+.cfg{display:grid;grid-template-columns:1fr 360px;gap:var(--s12);align-items:start}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{font-family:var(--f-display);font-size:1.375rem;font-weight:600;letter-spacing:-.01em;padding:0;margin-bottom:var(--s4)}
+.step+.step{margin-top:var(--s10)}
+.opts{display:grid;gap:var(--s3);grid-template-columns:repeat(2,1fr)}
+.opt{position:relative}
+.opt input{position:absolute;top:var(--s3);right:var(--s3);width:20px;height:20px;margin:0;cursor:pointer;accent-color:var(--bay);z-index:1}
+.opt label{padding-right:var(--s10)!important;display:grid;grid-template-columns:auto 1fr;gap:var(--s4);align-items:center;padding:var(--s4);height:100%;border:1px solid var(--rule-strong);border-radius:var(--r-md);background:var(--nacre-hi);cursor:pointer;transition:border-color 160ms var(--ease-out),background-color 160ms var(--ease-out),box-shadow 160ms var(--ease-out)}
+.opt input:checked+label{border-color:var(--bay);box-shadow:inset 0 0 0 1px var(--bay);background:#fff}
+.opt input:focus-visible+label{outline:3px solid var(--mignonnette);outline-offset:3px}
+@media (hover:hover){.opt input:not(:checked)+label:hover{border-color:var(--bay)}}
+.glyph{width:64px;height:64px;display:grid;place-items:center;color:var(--shell)}
+.glyph svg{transition:color 160ms var(--ease-out)}
+.opt input:checked+label .glyph{color:var(--bay)}
+.opt .nm{font-weight:600;display:block;line-height:1.25}
+.opt .mt{display:block;color:var(--bay-2);font-size:.9375rem;margin-top:2px}
+.opt .pr{display:block;margin-top:var(--s2);font-variant-numeric:tabular-nums;font-weight:600}
+.opts.counts{grid-template-columns:repeat(3,1fr)}
+.opts.counts label{grid-template-columns:1fr;text-align:left;gap:2px}
+.counts .big{font-family:var(--f-display);font-size:2rem;font-weight:600;letter-spacing:-.02em;line-height:1}
+.hint{margin-top:var(--s3);color:var(--bay-2);font-size:.9375rem}
+.check{display:flex;gap:var(--s3);align-items:center;min-height:44px;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--mignonnette);margin:0}
+.sum{position:sticky;top:var(--s6);border:1px solid var(--rule-strong);border-radius:var(--r-md);background:var(--nacre-hi);padding:var(--s6)}
+.sum h3{margin-bottom:var(--s4)}
+.sum .what{font-size:1.125rem;font-weight:600}
+.sum .for{color:var(--bay-2);margin-top:2px;font-size:.9375rem}
+.sum .tot{display:flex;justify-content:space-between;align-items:baseline;margin-block:var(--s5);padding-top:var(--s4);border-top:1px solid var(--rule)}
+.sum .tot b{font-family:var(--f-display);font-size:2rem;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sum .note{margin-top:var(--s3);font-size:.875rem;color:var(--bay-2);min-height:1.3em}
+@media (max-width:960px){.cfg{grid-template-columns:1fr;gap:var(--s8)}.sum{position:static}}
+@media (max-width:560px){.opts{grid-template-columns:1fr}.opts.counts{grid-template-columns:repeat(3,1fr)}.opts.counts label{padding:var(--s3)}.counts .big{font-size:1.625rem}.opts.counts label{padding-right:var(--s8)!important}}
+
+/* how to get them */
+.ways{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule-strong)}
+.way{padding:var(--s6) var(--s6) 0 0;margin-right:var(--s6);border-right:1px solid var(--rule)}
+.way:last-child{border-right:0;margin-right:0}
+.way h3{margin-bottom:var(--s2)}
+.way p{color:var(--bay-2)}
+.way .when{color:var(--bay);font-weight:600;margin-top:var(--s4);display:block}
+.status{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s3);font-weight:600;font-size:.9375rem}
+.status i{width:10px;height:10px;border-radius:50%;background:var(--bay-3);display:inline-block}
+.status.open i{background:#1d7a4d}
+.status.open{color:#145a39}
+.status .t{font-weight:400;color:var(--bay-2)}
+@media (max-width:820px){
+  .ways{grid-template-columns:1fr}
+  .way,.way:last-child{padding:var(--s6) 0;margin:0;border-right:0;border-bottom:1px solid var(--rule)}
+}
+
+/* farm band */
+.band{background:var(--bay);color:var(--nacre);padding-block:var(--s24)}
+.band .grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s16);align-items:center}
+.band h2{max-width:14ch}
+.band p{color:#c5d3cf;margin-top:var(--s5);font-size:1.125rem;max-width:34rem}
+.band .scale{display:flex;align-items:flex-end;gap:var(--s4);padding-bottom:var(--s4);border-bottom:1px solid rgba(232,237,234,.4);color:var(--nacre)}
+.band .scale div{flex:1;text-align:center;font-size:.875rem;color:#c5d3cf;font-variant-numeric:tabular-nums}
+.band .scale svg{margin:0 auto var(--s2);color:var(--nacre)}
+.band .scale .hl svg{color:var(--lemon)}
+.band .scale .hl{color:var(--lemon)}
+.band .cap{margin-top:var(--s3);font-size:.9375rem;color:#c5d3cf;max-width:28rem}
+@media (max-width:820px){.band{padding-block:var(--s12)}.band .grid{grid-template-columns:1fr;gap:var(--s10)}}
+
+/* at home */
+.home{padding:0;margin:0;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s10);counter-reset:s}
+.home li{list-style:none;counter-increment:s;border-top:1px solid var(--rule-strong);padding-top:var(--s4)}
+.home li::before{content:counter(s);display:block;font-family:var(--f-display);font-size:2.5rem;line-height:1;color:var(--mignonnette);margin-bottom:var(--s3)}
+.home ul{margin:0;padding:0}
+.home h3{margin-bottom:var(--s2)}
+.home p{color:var(--bay-2)}
+@media (max-width:820px){.home{grid-template-columns:1fr;gap:var(--s6)}}
+
+/* faq */
+.faq{max-width:46rem;border-top:1px solid var(--rule-strong)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{list-style:none;cursor:pointer;min-height:56px;padding:var(--s4) var(--s10) var(--s4) 0;font-weight:600;font-size:1.125rem;position:relative;display:flex;align-items:center}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:var(--s2);font-size:1.5rem;font-weight:400;transition:transform 200ms var(--ease-out)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 var(--s10) var(--s5) 0;color:var(--bay-2)}
+
+/* footer */
+footer{border-top:1px solid var(--rule-strong);padding-block:var(--s12) calc(var(--s24) + env(safe-area-inset-bottom))}
+.foot{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:var(--s10)}
+.foot h3{font-size:1.125rem;margin-bottom:var(--s3)}
+.foot p,.foot a{color:var(--bay-2)}
+.foot a{display:inline-flex;align-items:center;min-height:44px}
+.foot address{font-style:normal;color:var(--bay-2)}
+.sample{margin-top:var(--s10);font-size:.875rem;color:var(--bay-3)}
+@media (max-width:820px){.foot{grid-template-columns:1fr;gap:var(--s6)}}
+
+/* sticky bar (phones) */
+.bar{position:fixed;inset:auto 0 0 0;z-index:20;padding:var(--s3) var(--gutter) calc(var(--s3) + env(safe-area-inset-bottom));background:var(--nacre-hi);border-top:1px solid var(--rule-strong);display:none}
+@media (max-width:820px){.bar{display:block}body.lock .bar{display:none}}
+.bar .btn{width:100%}
+
+/* basket dialog */
+dialog{border:0;padding:0;background:var(--nacre-hi);color:var(--bay);width:min(520px,100%);max-width:100%;height:100dvh;max-height:100dvh;margin:0 0 0 auto;overflow:hidden}
+dialog::backdrop{background:rgba(15,43,44,.5)}
+dialog[open]{animation:slide 300ms var(--ease-out);display:flex;flex-direction:column}
+@keyframes slide{from{transform:translateX(32px);opacity:0}to{transform:none;opacity:1}}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:var(--s4) var(--s6);border-bottom:1px solid var(--rule)}
+.dh h2{font-size:1.625rem}
+.x{width:44px;height:44px;display:grid;place-items:center;background:none;border:0;cursor:pointer;border-radius:var(--r-md);font-size:1.5rem;line-height:1}
+@media (hover:hover){.x:hover{background:var(--rule)}}
+.db{flex:1;overflow-y:auto;padding:var(--s6);overscroll-behavior:contain}
+.empty{text-align:left;padding-block:var(--s8)}
+.empty p{color:var(--bay-2);margin-bottom:var(--s6)}
+.line{display:grid;grid-template-columns:1fr auto;gap:var(--s2) var(--s4);padding-block:var(--s4);border-bottom:1px solid var(--rule)}
+.line .nm{font-weight:600}
+.line .sub{color:var(--bay-2);font-size:.9375rem}
+.line .p{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.qty{display:inline-flex;align-items:center;border:1px solid var(--rule-strong);border-radius:var(--r-md)}
+.qty button{width:44px;height:44px;background:none;border:0;cursor:pointer;font-size:1.25rem}
+.qty output{min-width:28px;text-align:center;font-variant-numeric:tabular-nums;font-weight:600}
+@media (hover:hover){.qty button:hover{background:var(--rule)}}
+.line .row2{display:flex;align-items:center;gap:var(--s3);grid-column:1/-1;justify-content:space-between}
+.blk{margin-top:var(--s8)}
+.blk h3{font-size:1.25rem;margin-bottom:var(--s3)}
+.radios{display:grid;gap:var(--s2)}
+.radios .opt label{grid-template-columns:1fr;padding:var(--s3) var(--s4);gap:0}
+.radios .opt .mt{margin-top:0}
+.field{display:grid;gap:var(--s2);margin-top:var(--s4)}
+.field label{font-weight:600;font-size:.9375rem}
+.field input,.field select{min-height:48px;padding:0 var(--s3);border:1px solid var(--rule-strong);border-radius:var(--r-md);background:#fff;font-size:1rem;width:100%}
+.field input[aria-invalid="true"],.field select[aria-invalid="true"]{border-color:var(--mignonnette);box-shadow:inset 0 0 0 1px var(--mignonnette)}
+.err{color:var(--mignonnette-dk);font-size:.9375rem;font-weight:500;min-height:0}
+.two{display:grid;grid-template-columns:1fr 2fr;gap:var(--s3)}
+.totals{margin-top:var(--s8);border-top:1px solid var(--rule-strong);padding-top:var(--s4)}
+.totals div{display:flex;justify-content:space-between;padding-block:2px;font-variant-numeric:tabular-nums;color:var(--bay-2)}
+.totals div.g{color:var(--bay);font-weight:700;font-size:1.25rem;padding-top:var(--s3)}
+.df{padding:var(--s4) var(--s6) calc(var(--s4) + env(safe-area-inset-bottom));border-top:1px solid var(--rule)}
+.df .small{font-size:.875rem;color:var(--bay-2);margin-top:var(--s2)}
+.done h3{font-size:1.75rem;margin-bottom:var(--s3)}
+.done .ref{font-family:var(--f-display);font-size:1.5rem;margin-block:var(--s3);font-variant-numeric:tabular-nums}
+.done p{color:var(--bay-2);margin-bottom:var(--s4)}
+.done pre{white-space:pre-wrap;font:inherit;font-size:.9375rem;background:var(--nacre);border:1px solid var(--rule);border-radius:var(--r-md);padding:var(--s4);margin:0 0 var(--s5);overflow-wrap:anywhere}
+.toast{position:fixed;left:50%;bottom:calc(var(--s24) + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:var(--bay);color:var(--nacre);padding:var(--s2) var(--s2) var(--s2) var(--s4);border-radius:var(--r-md);display:flex;align-items:center;gap:var(--s3);max-width:calc(100% - 32px)}
+.toast[hidden]{display:none}
+.toast button{background:none;border:0;color:var(--lemon);font-weight:700;min-height:44px;padding:0 var(--s3);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+@media (min-width:821px){.toast{bottom:var(--s8)}}
+
+@media (prefers-reduced-motion:reduce){
+  *{scroll-behavior:auto!important}
+  dialog[open]{animation:fade 200ms linear}
+  .btn,.cartbtn{transition:none}
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="shell" viewBox="0 0 100 100">
+      <path fill="currentColor" d="M45 97C29 90 15 73 17 54c1-10-4-19 4-29 5-7 13-6 19-12C48 6 58 3 68 9c7 4 8 9 13 15 6 7 3 17 2 28-2 18-20 39-38 45z"/>
+      <g fill="none" stroke="var(--ridge,#f5f8f6)" stroke-width="1.6" stroke-linecap="round" opacity=".5">
+        <path d="M28 74C23 56 31 36 48 28"/><path d="M36 84C32 64 42 44 62 34"/><path d="M45 90C44 72 54 54 74 46"/><path d="M26 56C25 44 30 33 40 25"/><path d="M22 40C23 33 27 28 31 25"/>
+      </g>
+    </symbol>
+    <symbol id="plate" viewBox="0 0 100 100">
+      <path fill="currentColor" d="M50 95C26 95 8 75 8 50S27 5 50 5s42 20 42 45-18 45-42 45z"/>
+      <g fill="none" stroke="var(--ridge,#f5f8f6)" stroke-width="1.6" opacity=".55">
+        <circle cx="50" cy="50" r="14"/><circle cx="50" cy="50" r="26"/><circle cx="50" cy="50" r="37"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="wrap top">
+  <a class="brand" href="#top" aria-label="Parc Le Goff">
+    <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#shell"/></svg><span>Parc Le Goff</span>
+  </a>
+  <nav class="nav" aria-label="Navigation">
+    <a class="l" href="#boxes" data-i18n="nav_boxes">Les box</a>
+    <a class="l" href="#retrait" data-i18n="nav_get">Retrait &amp; livraison</a>
+    <a class="l" href="#parc" data-i18n="nav_farm">Le parc</a>
+    <a class="l" href="#faq" data-i18n="nav_faq">Questions</a>
+    <div class="tools">
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <button type="button" data-lang="fr" aria-pressed="true" lang="fr">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false" lang="en">EN</button>
+      </div>
+      <button class="cartbtn" type="button" id="openCart" aria-haspopup="dialog">
+        <span class="lbl" data-i18n="cart">Panier</span><span class="n" id="cartN" aria-hidden="true">0</span><span class="sr" id="cartNsr"></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div>
+      <h1 data-i18n="h1">Les huîtres de Cancale, directement du parc.</h1>
+      <p class="lede" data-i18n="lede">Famille d'ostréiculteurs dans la baie du Mont-Saint-Michel, nous vendions jusqu'ici au marché du samedi. Composez maintenant votre box en ligne : nous la préparons pour le jour choisi.</p>
+      <div class="acts">
+        <a class="btn" href="#boxes" data-i18n="cta1">Composer ma box</a>
+        <a class="btn ghost" href="#retrait" data-i18n="cta2">Retrait au marché du samedi</a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 100 100" style="transform:rotate(-14deg)"><use href="#shell"/></svg>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="facts">
+      <p><b data-i18n="f1h">Préparées sur commande</b><span data-i18n="f1">Vous choisissez le jour, nous trions et emballons la veille ou le matin même.</span></p>
+      <p><b data-i18n="f2h">Parc ou marché</b><span data-i18n="f2">Retrait au parc en semaine, ou sur notre étal le samedi matin.</span></p>
+      <p><b data-i18n="f3h">Partout en France</b><span data-i18n="f3">Colis réfrigéré, expédié en début de semaine, livré le lendemain.</span></p>
+    </div>
+  </div>
+
+  <section id="boxes">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="boxes_h">Composez votre box</h2>
+        <p data-i18n="boxes_p">Deux choix : l'huître et la quantité. Le prix s'affiche en direct, sans surprise.</p>
+      </div>
+      <div class="cfg">
+        <div>
+          <fieldset class="step">
+            <legend data-i18n="step1">1. Quelle huître ?</legend>
+            <div class="opts" id="kinds"></div>
+            <p class="hint" data-i18n="hint_cal">Pour les creuses, plus le numéro est petit, plus l'huître est grosse.</p>
+          </fieldset>
+          <fieldset class="step">
+            <legend data-i18n="step2">2. Combien ?</legend>
+            <div class="opts counts" id="counts"></div>
+            <p class="hint" data-i18n="hint_qty">Comptez environ 6 huîtres par personne en entrée, 9 à 12 en plat.</p>
+          </fieldset>
+          <div class="step">
+            <label class="check"><input type="checkbox" id="knife"><span id="knifeLbl"></span></label>
+          </div>
+        </div>
+        <aside class="sum" aria-labelledby="sumH">
+          <h3 id="sumH" data-i18n="sum_h">Votre box</h3>
+          <p class="what" id="sumWhat"></p>
+          <p class="for" id="sumFor"></p>
+          <div class="tot"><span data-i18n="total">Total</span><b id="sumTot"></b></div>
+          <button class="btn block" type="button" id="add" data-i18n="add">Ajouter au panier</button>
+          <p class="note" id="addNote" role="status"></p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="retrait" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 data-i18n="get_h">Où et quand les récupérer</h2>
+        <p data-i18n="get_p">Choisissez le mode au moment de valider le panier. Commande possible jusqu'à deux jours avant la date souhaitée.</p>
+      </div>
+      <div class="ways">
+        <div class="way">
+          <h3 data-i18n="m_h">Marché du samedi</h3>
+          <p data-i18n="m_p">Retrouvez-nous sur notre étal. Votre box est prête à votre nom, sans attente.</p>
+          <span class="when" id="mWhen"></span>
+          <span class="status" id="mStatus"></span>
+        </div>
+        <div class="way">
+          <h3 data-i18n="p_h">Au parc</h3>
+          <p data-i18n="p_p">Passez directement à la ferme, en semaine, sur les créneaux d'ouverture.</p>
+          <span class="when" id="pWhen"></span>
+          <span class="status" id="pStatus"></span>
+        </div>
+        <div class="way">
+          <h3 data-i18n="d_h">Livraison en France</h3>
+          <p data-i18n="d_p">Colis isotherme réfrigéré, expédié le lundi ou le mardi pour arriver le lendemain.</p>
+          <span class="when" id="dWhen"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="band dark" id="parc">
+    <div class="wrap grid">
+      <div>
+        <h2 data-i18n="farm_h">Une ferme de famille à Cancale</h2>
+        <p data-i18n="farm_p">Le Parc Le Goff, c'est une affaire de famille. Le samedi, vous nous croisiez au marché ; cette page vous permet simplement de réserver votre box à l'avance, pour ne plus arriver trop tard.</p>
+      </div>
+      <div aria-hidden="true">
+        <div class="scale" id="scale"></div>
+        <p class="cap" data-i18n="scale_cap">Les calibres d'huîtres creuses, du n°5 au n°0 : à l'échelle, du plus petit au plus gros.</p>
+      </div>
+    </div>
+  </div>
+
+  <section id="maison">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="home_h">À la maison</h2></div>
+      <ul class="home">
+        <li><h3 data-i18n="h1h">Conserver</h3><p data-i18n="h1p">Gardez-les au frais, le côté creux vers le bas, sous un linge humide. Jamais dans l'eau douce ni dans un sac fermé.</p></li>
+        <li><h3 data-i18n="h2h">Ouvrir</h3><p data-i18n="h2p">Maintenez l'huître dans un torchon, glissez le couteau dans la charnière, tournez, puis coupez le muscle sans renverser l'eau.</p></li>
+        <li><h3 data-i18n="h3h">Déguster</h3><p data-i18n="h3p">Un trait de citron, ou du vinaigre à l'échalote, et une tranche de pain de seigle beurré. Rien de plus.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head"><h2 data-i18n="faq_h">Questions fréquentes</h2></div>
+      <div class="faq">
+        <details><summary data-i18n="q1">Combien de temps à l'avance dois-je commander ?</summary><p data-i18n="a1">Au moins deux jours avant la date de retrait ou d'expédition. Les dates proposées dans le panier tiennent déjà compte de ce délai.</p></details>
+        <details><summary data-i18n="q2">Comment se passe le paiement ?</summary><p data-i18n="a2">Vous envoyez votre demande de réservation, nous la confirmons par téléphone ou par e-mail. Le retrait se règle sur place ; pour une livraison, nous vous envoyons un lien de paiement.</p></details>
+        <details><summary data-i18n="q3">Combien de temps se conservent les huîtres ?</summary><p data-i18n="a3">Plusieurs jours au frais, selon la date indiquée sur l'étiquette. Pour le meilleur goût, ouvrez-les dans les deux ou trois jours.</p></details>
+        <details><summary data-i18n="q4">Livrez-vous partout en France ?</summary><p data-i18n="a4">Oui, en France métropolitaine, par colis réfrigéré. La livraison est offerte à partir d'un certain montant, indiqué dans le panier.</p></details>
+        <details><summary data-i18n="q5">Une huître est restée ouverte. Que faire ?</summary><p data-i18n="a5">Une huître vivante se referme au toucher ou lorsqu'on la tapote. Si elle reste ouverte, ou si la coquille est brisée ou l'odeur forte, ne la consommez pas.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <p class="brand" style="margin-bottom:8px;color:var(--bay)"><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#shell"/></svg><span>Parc Le Goff</span></p>
+        <address id="fAddr"></address>
+      </div>
+      <div>
+        <h3 data-i18n="ft_contact">Nous joindre</h3>
+        <p><a id="fTel" href="#"></a></p>
+        <p><a id="fMail" href="#"></a></p>
+      </div>
+      <div>
+        <h3 data-i18n="ft_hours">Horaires</h3>
+        <p id="fHours"></p>
+      </div>
+    </div>
+    <p class="sample" data-i18n="sample">Prix, horaires et coordonnées affichés sont des exemples à remplacer dans le bloc CONFIG du fichier.</p>
+  </div>
+</footer>
+
+<div class="bar" id="bar"><button class="btn" type="button" id="barBtn"></button></div>
+
+<div class="toast" id="toast" hidden role="status"><span id="toastMsg"></span><button type="button" id="undo"></button></div>
+
+<dialog id="basket" aria-labelledby="bH">
+  <div class="dh"><h2 id="bH" data-i18n="cart_h">Votre panier</h2><button class="x" type="button" id="closeCart" aria-label="Fermer">×</button></div>
+  <div class="db" id="bBody"></div>
+  <div class="df" id="bFoot"></div>
+</dialog>
+
+<script>
+/* ---- Edit this block: prices, hours, contact. Everything on the page reads from it. ---- */
+const CONFIG = {
+  phone: "02 99 00 00 00",
+  email: "contact@parc-legoff.example",
+  address: ["Parc Le Goff", "La Houle", "35260 Cancale"],
+  leadDays: 2,                 // minimum days between order and pickup / shipping
+  knifePrice: 6,
+  deliveryFee: 14,
+  freeDeliveryFrom: 80,
+  market:   { days: { 6: [[8, 13]] } },                                   // Saturday 8:00–13:00
+  farm:     { days: { 3: [[10, 12.5], [15, 18]], 4: [[10, 12.5], [15, 18]], 5: [[10, 12.5], [15, 18]] } },
+  shipDays: [1, 2],            // Monday, Tuesday
+  kinds: [
+    { id: "c4", size: 34, round: false, dozen: 9.5,  name: { fr: "Creuse n°4", en: "Pacific no. 4" }, meta: { fr: "46–65 g · fine, iodée", en: "46–65 g · fine, briny" } },
+    { id: "c3", size: 42, round: false, dozen: 11,   name: { fr: "Creuse n°3", en: "Pacific no. 3" }, meta: { fr: "66–85 g · la plus demandée", en: "66–85 g · the usual choice" } },
+    { id: "c2", size: 52, round: false, dozen: 13.5, name: { fr: "Creuse n°2", en: "Pacific no. 2" }, meta: { fr: "86–110 g · charnue", en: "86–110 g · plump" } },
+    { id: "p3", size: 44, round: true,  dozen: 19,   name: { fr: "Plate n°3", en: "Flat oyster no. 3" }, meta: { fr: "Notes de noisette, plus rare", en: "Hazelnut notes, scarcer" } }
+  ],
+  counts: [12, 24, 48],
+  scale: [ ["5", 26], ["4", 34], ["3", 42], ["2", 52], ["1", 62], ["0", 74] ]
+};
+
+/* ---- language ---- */
+const I18N = { fr: {}, en: {
+  nav_boxes:"Boxes", nav_get:"Pickup & delivery", nav_farm:"The farm", nav_faq:"Questions", cart:"Basket",
+  h1:"Cancale oysters, straight from the farm.",
+  lede:"We are a family of oyster farmers in the bay of Mont-Saint-Michel, and until now we only sold at the Saturday market. Build your box online and we will have it ready for the day you pick.",
+  cta1:"Build my box", cta2:"Pick up at the Saturday market",
+  f1h:"Prepared to order", f1:"You choose the day; we sort and pack the day before or that morning.",
+  f2h:"Farm or market", f2:"Collect at the farm on weekdays, or at our stall on Saturday morning.",
+  f3h:"Across France", f3:"Chilled parcel, shipped early in the week and delivered the next day.",
+  boxes_h:"Build your box", boxes_p:"Two choices: the oyster and the quantity. The price updates as you go, no surprises.",
+  step1:"1. Which oyster?", hint_cal:"For Pacific oysters, the lower the number, the bigger the oyster.",
+  step2:"2. How many?", hint_qty:"Allow about 6 per person as a starter, 9 to 12 as a main.",
+  sum_h:"Your box", total:"Total", add:"Add to basket",
+  get_h:"Where and when to collect", get_p:"Pick the method when you check out. Orders close two days before the date you want.",
+  m_h:"Saturday market", m_p:"Find us at our stall. Your box is waiting under your name, no queue.",
+  p_h:"At the farm", p_p:"Drop by the farm on weekdays during opening hours.",
+  d_h:"Delivery in France", d_p:"Chilled insulated parcel, shipped Monday or Tuesday to arrive the next day.",
+  farm_h:"A family farm in Cancale",
+  farm_p:"Parc Le Goff is a family business. On Saturdays you could find us at the market; this page simply lets you reserve your box in advance, so you never arrive too late.",
+  scale_cap:"Pacific oyster sizes, no. 5 to no. 0, drawn to scale from smallest to largest.",
+  home_h:"At home", h1h:"Keep", h1p:"Keep them cool, cup side down, under a damp cloth. Never in fresh water or a sealed bag.",
+  h2h:"Open", h2p:"Hold the oyster in a cloth, slide the knife into the hinge, twist, then cut the muscle without spilling the juice.",
+  h3h:"Enjoy", h3p:"A squeeze of lemon, or shallot vinegar, and a slice of buttered rye bread. Nothing more.",
+  faq_h:"Questions",
+  q1:"How far ahead do I need to order?", a1:"At least two days before pickup or shipping. The dates offered in the basket already respect this.",
+  q2:"How does payment work?", a2:"You send your reservation request and we confirm by phone or email. Pickups are paid on the spot; for deliveries we send you a payment link.",
+  q3:"How long do oysters keep?", a3:"Several days in the fridge, following the date on the label. For the best taste, open them within two or three days.",
+  q4:"Do you deliver everywhere in France?", a4:"Yes, mainland France, by chilled parcel. Delivery is free above an amount shown in the basket.",
+  q5:"An oyster stayed open. What should I do?", a5:"A live oyster closes when touched or tapped. If it stays open, or the shell is broken or the smell is strong, do not eat it.",
+  ft_contact:"Get in touch", ft_hours:"Opening hours",
+  sample:"Prices, hours and contact details shown are samples to replace in the CONFIG block of the file.",
+  cart_h:"Your basket",
+  /* dynamic */
+  dozen:"/ dozen", n_oysters:n=>`${n} oysters`, persons:n=>`about ${n} people at 6 each`,
+  knife:p=>`Add an oyster knife (${p})`, knife_name:"Oyster knife",
+  added:"Added to the basket.", added_btn:"Added", view_cart:"View basket", cart_aria:n=>`Basket, ${n} items`,
+  bar_empty:"Build my box", bar_cart:(n,p)=>`View basket · ${p}`,
+  empty_h:"Your basket is empty", empty_p:"Pick your oysters and the quantity to start.", empty_cta:"Choose a box",
+  remove:"Remove", removed:"Removed from the basket.", undo:"Undo", dec:"One fewer", inc:"One more",
+  how:"How do you want them?", m_opt:"Saturday market", p_opt:"Pick up at the farm", d_opt:"Delivery in France",
+  m_sub:"Free", p_sub:"Free",
+  date:"Date", date_ph:"Choose a date", date_ship:(a,b)=>`${a} (delivered ${b})`,
+  you:"Your details", name:"Full name", phone:"Phone", email:"Email", street:"Street address", zip:"Postcode", city:"City",
+  e_name:"Enter your name.", e_phone:"Enter a phone number we can call.", e_email:"Enter a valid email address, like name@example.com.",
+  e_street:"Enter the delivery street address.", e_zip:"Enter a 5-digit postcode.", e_city:"Enter the city.", e_date:"Choose a date.", e_cart:"Add at least one box first.",
+  sub:"Subtotal", delivery:"Delivery", free:"Free", grand:"Total",
+  send:"Send my reservation", pay_note:"Nothing is charged now. We confirm by phone or email.",
+  done_h:"Almost done: send the email", done_p:"Your reservation is ready. Press the button to open your email app and send it to us. We confirm by phone or email.",
+  ref:"Reference", mail_btn:"Open the email", close:"Close", again_p:"If nothing opened, write to us at",
+  subject:r=>`Reservation ${r} – Parc Le Goff`,
+  mail_body:(o)=>o,
+  open_now:"Open now", closed:"Closed", next:"Next:", until:"until",
+  days:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+  next_dates:d=>`Next: ${d}`, ship_dates:d=>`Next shipping: ${d}`, free_from:(f,m)=>`Delivery ${f}, free from ${m}`,
+  hours_m:"Saturday market: Saturday 8am–1pm", hours_f:"Farm: Wednesday to Friday, 10am–12:30pm and 3pm–6pm",
+  at:"at", when_m:"Saturday, 8am–1pm", when_f:"Wednesday to Friday, 10am–12:30pm and 3pm–6pm"
+}};
+const FR_DYN = {
+  dozen:"/ douzaine", n_oysters:n=>`${n} huîtres`, persons:n=>`pour environ ${n} personnes à 6 chacune`,
+  knife:p=>`Ajouter un couteau à huîtres (${p})`, knife_name:"Couteau à huîtres",
+  added:"Ajouté au panier.", added_btn:"Ajouté", view_cart:"Voir le panier", cart_aria:n=>`Panier, ${n} articles`,
+  bar_empty:"Composer ma box", bar_cart:(n,p)=>`Voir le panier · ${p}`,
+  empty_h:"Votre panier est vide", empty_p:"Choisissez vos huîtres et la quantité pour commencer.", empty_cta:"Choisir une box",
+  remove:"Retirer", removed:"Retiré du panier.", undo:"Annuler", dec:"Un de moins", inc:"Un de plus",
+  how:"Comment les récupérer ?", m_opt:"Marché du samedi", p_opt:"Retrait au parc", d_opt:"Livraison en France",
+  m_sub:"Gratuit", p_sub:"Gratuit",
+  date:"Date", date_ph:"Choisir une date", date_ship:(a,b)=>`${a} (livré ${b})`,
+  you:"Vos coordonnées", name:"Nom et prénom", phone:"Téléphone", email:"E-mail", street:"Adresse", zip:"Code postal", city:"Ville",
+  e_name:"Indiquez votre nom.", e_phone:"Indiquez un numéro où nous pouvons vous joindre.", e_email:"Indiquez un e-mail valide, par exemple nom@exemple.fr.",
+  e_street:"Indiquez l'adresse de livraison.", e_zip:"Indiquez un code postal à 5 chiffres.", e_city:"Indiquez la ville.", e_date:"Choisissez une date.", e_cart:"Ajoutez d'abord une box.",
+  sub:"Sous-total", delivery:"Livraison", free:"Offerte", grand:"Total",
+  send:"Envoyer ma réservation", pay_note:"Rien n'est débité maintenant. Nous confirmons par téléphone ou e-mail.",
+  done_h:"Presque fini : envoyez l'e-mail", done_p:"Votre réservation est prête. Appuyez sur le bouton pour ouvrir votre messagerie et nous l'envoyer. Nous confirmons par téléphone ou e-mail.",
+  ref:"Référence", mail_btn:"Ouvrir l'e-mail", close:"Fermer", again_p:"Si rien ne s'est ouvert, écrivez-nous à",
+  subject:r=>`Réservation ${r} – Parc Le Goff`,
+  open_now:"Ouvert maintenant", closed:"Fermé", next:"Prochaine ouverture :", until:"jusqu'à",
+  days:["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"],
+  next_dates:d=>`Prochains : ${d}`, ship_dates:d=>`Prochains envois : ${d}`, free_from:(f,m)=>`Livraison ${f}, offerte dès ${m}`,
+  hours_m:"Marché : samedi 8h–13h", hours_f:"Parc : du mercredi au vendredi, 10h–12h30 et 15h–18h", at:"à", when_m:"Samedi, 8h–13h", when_f:"Du mercredi au vendredi, 10h–12h30 et 15h–18h"
+};
+Object.assign(I18N.fr, FR_DYN);
+document.querySelectorAll("[data-i18n]").forEach(el => { I18N.fr[el.dataset.i18n] = el.innerHTML; });
+I18N.en.dec = "One fewer"; I18N.en.inc = "One more";
+const stored = (() => { try { return localStorage.getItem("lg-lang"); } catch (e) { return null; } })();
+let lang = stored || ((navigator.language || "fr").toLowerCase().startsWith("en") ? "en" : "fr");
+const t = (k, ...a) => { const v = (I18N[lang] && I18N[lang][k] !== undefined) ? I18N[lang][k] : I18N.fr[k]; return typeof v === "function" ? v(...a) : v; };
+const money = n => new Intl.NumberFormat(lang === "en" ? "en-GB" : "fr-FR", { style: "currency", currency: "EUR" }).format(n);
+const $ = s => document.querySelector(s);
+
+/* ---- time (always Paris) ---- */
+function parisNow() {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Paris", weekday: "short", year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", hourCycle: "h23" }).formatToParts(new Date()).map(p => [p.type, p.value]));
+  const dow = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 }[parts.weekday];
+  return { dow, h: +parts.hour + (+parts.minute) / 60, date: new Date(Date.UTC(+parts.year, +parts.month - 1, +parts.day)) };
+}
+const fmtH = h => { const hh = Math.floor(h), mm = Math.round((h - hh) * 60); return lang === "en" ? `${hh > 12 ? hh - 12 : hh}${mm ? ":" + String(mm).padStart(2, "0") : ""}${hh >= 12 ? "pm" : "am"}` : `${hh}h${mm ? String(mm).padStart(2, "0") : ""}`; };
+const fmtDate = (d, opts) => new Intl.DateTimeFormat(lang === "en" ? "en-GB" : "fr-FR", { timeZone: "UTC", ...opts }).format(d);
+const longDate = d => fmtDate(d, { weekday: "long", day: "numeric", month: "long" });
+const shortDate = d => fmtDate(d, { weekday: "short", day: "numeric", month: "short" });
+function openStatus(place) {
+  const n = parisNow(), today = place.days[n.dow] || [];
+  for (const [a, b] of today) if (n.h >= a && n.h < b) return { open: true, text: `${t("open_now")} · ${t("until")} ${fmtH(b)}` };
+  for (let i = 0; i < 8; i++) {
+    const dow = (n.dow + i) % 7, ranges = place.days[dow] || [];
+    for (const [a] of ranges) if (i > 0 || a > n.h) return { open: false, text: `${t("closed")} · ${t("next")} ${i === 0 ? "" : t("days")[dow] + " "}${t("at")} ${fmtH(a)}`.replace(/\s+/g, " ") };
+  }
+  return { open: false, text: t("closed") };
+}
+function upcoming(days, count) {
+  const n = parisNow(), out = [], d = new Date(n.date);
+  d.setUTCDate(d.getUTCDate() + CONFIG.leadDays);
+  for (let i = 0; i < 60 && out.length < count; i++, d.setUTCDate(d.getUTCDate() + 1)) if (days.includes(d.getUTCDay())) out.push(new Date(d));
+  return out;
+}
+
+/* ---- state ---- */
+let sel = { kind: "c3", count: 24 }, cart = [], method = "market", lastRemoved = null, toastTimer;
+try { cart = JSON.parse(localStorage.getItem("lg-cart") || "[]").filter(l => CONFIG.kinds.some(k => k.id === l.kind) || l.kind === "knife"); } catch (e) { cart = []; }
+const save = () => { try { localStorage.setItem("lg-cart", JSON.stringify(cart)); } catch (e) {} };
+const kindOf = id => CONFIG.kinds.find(k => k.id === id);
+const lineUnit = l => l.kind === "knife" ? CONFIG.knifePrice : kindOf(l.kind).dozen * l.count / 12;
+const lineTotal = l => lineUnit(l) * l.qty;
+const subtotal = () => cart.reduce((s, l) => s + lineTotal(l), 0);
+const itemCount = () => cart.reduce((s, l) => s + l.qty, 0);
+const deliveryCost = () => method === "delivery" ? (subtotal() >= CONFIG.freeDeliveryFrom ? 0 : CONFIG.deliveryFee) : 0;
+const lineName = l => l.kind === "knife" ? t("knife_name") : `${kindOf(l.kind).name[lang]} · ${t("n_oysters", l.count)}`;
+
+/* ---- static rendering ---- */
+function glyph(size, round) { return `<svg width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true"><use href="#${round ? "plate" : "shell"}"/></svg>`; }
+function renderKinds() {
+  $("#kinds").innerHTML = CONFIG.kinds.map(k => `<div class="opt"><input type="radio" name="kind" id="k-${k.id}" value="${k.id}" ${sel.kind === k.id ? "checked" : ""}><label for="k-${k.id}"><span class="glyph">${glyph(k.size + 10, k.round)}</span><span><span class="nm">${k.name[lang]}</span><span class="mt">${k.meta[lang]}</span><span class="pr">${money(k.dozen)} ${t("dozen")}</span></span></label></div>`).join("");
+  $("#counts").innerHTML = CONFIG.counts.map(c => `<div class="opt"><input type="radio" name="count" id="c-${c}" value="${c}" ${sel.count === c ? "checked" : ""}><label for="c-${c}"><span class="big">${c}</span><span class="mt">${money(kindOf(sel.kind).dozen * c / 12)}</span></label></div>`).join("");
+  $("#knifeLbl").textContent = t("knife", money(CONFIG.knifePrice));
+}
+function renderSummary() {
+  const k = kindOf(sel.kind), price = k.dozen * sel.count / 12;
+  $("#sumWhat").textContent = `${k.name[lang]} · ${t("n_oysters", sel.count)}`;
+  $("#sumFor").textContent = t("persons", Math.round(sel.count / 6));
+  $("#sumTot").textContent = money(price + ($("#knife").checked ? CONFIG.knifePrice : 0));
+  document.querySelectorAll("#counts .mt").forEach((el, i) => { el.textContent = money(k.dozen * CONFIG.counts[i] / 12); });
+}
+function renderScale() {
+  $("#scale").innerHTML = CONFIG.scale.map(([n, s], i) => `<div class="${n === "3" ? "hl" : ""}">${glyph(s, false)}n°${n}</div>`).join("");
+}
+function renderWays() {
+  const m = openStatus(CONFIG.market), f = openStatus(CONFIG.farm);
+  $("#mWhen").textContent = t("when_m");
+  $("#pWhen").textContent = t("when_f");
+  const st = (el, s) => { el.className = "status" + (s.open ? " open" : ""); el.innerHTML = `<i></i><span>${s.text}</span>`; };
+  st($("#mStatus"), m); st($("#pStatus"), f);
+  $("#dWhen").textContent = t("free_from", money(CONFIG.deliveryFee), money(CONFIG.freeDeliveryFrom));
+  $("#fAddr").innerHTML = CONFIG.address.slice(1).join("<br>");
+  $("#fTel").textContent = CONFIG.phone; $("#fTel").href = "tel:" + CONFIG.phone.replace(/\s/g, "");
+  $("#fMail").textContent = CONFIG.email; $("#fMail").href = "mailto:" + CONFIG.email;
+  $("#fHours").innerHTML = `${t("hours_m")}<br>${t("hours_f")}`;
+}
+function renderChrome() {
+  const n = itemCount();
+  $("#cartN").textContent = n; $("#cartNsr").textContent = t("cart_aria", n);
+  $("#barBtn").textContent = n ? t("bar_cart", n, money(subtotal())) : t("bar_empty");
+}
+
+/* ---- basket ---- */
+let view = "cart", fields = { name: "", phone: "", email: "", street: "", zip: "", city: "", date: "" }, lastOrder = null;
+function dateOptions() {
+  if (method === "market") return upcoming([6], 6).map(d => [d.toISOString().slice(0, 10), longDate(d)]);
+  if (method === "farm") return upcoming([3, 4, 5], 8).map(d => [d.toISOString().slice(0, 10), longDate(d)]);
+  return upcoming(CONFIG.shipDays, 6).map(d => { const n = new Date(d); n.setUTCDate(n.getUTCDate() + 1); return [d.toISOString().slice(0, 10), t("date_ship", longDate(d), longDate(n))]; });
+}
+function field(id, label, type, extra = "") {
+  return `<div class="field"><label for="f-${id}">${label}</label><input id="f-${id}" name="${id}" type="${type}" value="${(fields[id] || "").replace(/"/g, "&quot;")}" ${extra} aria-describedby="e-${id}"><div class="err" id="e-${id}"></div></div>`;
+}
+function renderBasket() {
+  const body = $("#bBody"), foot = $("#bFoot");
+  if (view === "done") return renderDone();
+  if (!cart.length) {
+    body.innerHTML = `<div class="empty"><h3>${t("empty_h")}</h3><p>${t("empty_p")}</p><button class="btn" type="button" id="goBoxes">${t("empty_cta")}</button></div>`;
+    foot.innerHTML = ""; foot.hidden = true; return;
+  }
+  foot.hidden = false;
+  const lines = cart.map((l, i) => `<div class="line"><div><div class="nm">${lineName(l)}</div><div class="sub">${money(lineUnit(l))}</div></div><div class="p">${money(lineTotal(l))}</div><div class="row2"><div class="qty" role="group" aria-label="${lineName(l)}"><button type="button" data-dec="${i}" aria-label="${t("dec")}">−</button><output aria-live="polite">${l.qty}</output><button type="button" data-inc="${i}" aria-label="${t("inc")}">+</button></div><button class="textbtn" type="button" data-rm="${i}">${t("remove")}</button></div></div>`).join("");
+  const radio = (v, name, sub) => `<div class="opt"><input type="radio" name="method" id="m-${v}" value="${v}" ${method === v ? "checked" : ""}><label for="m-${v}"><span><span class="nm">${name}</span><span class="mt">${sub}</span></span></label></div>`;
+  const opts = dateOptions();
+  const del = method === "delivery";
+  body.innerHTML = `${lines}
+  <form id="orderForm" novalidate>
+    <div class="blk"><h3>${t("how")}</h3><div class="radios" role="radiogroup" aria-label="${t("how")}">
+      ${radio("market", t("m_opt"), t("m_sub"))}${radio("farm", t("p_opt"), t("p_sub"))}${radio("delivery", t("d_opt"), t("free_from", money(CONFIG.deliveryFee), money(CONFIG.freeDeliveryFrom)))}
+    </div>
+    <div class="field"><label for="f-date">${t("date")}</label><select id="f-date" name="date" aria-describedby="e-date"><option value="">${t("date_ph")}</option>${opts.map(([v, l]) => `<option value="${v}" ${fields.date === v ? "selected" : ""}>${l}</option>`).join("")}</select><div class="err" id="e-date"></div></div></div>
+    <div class="blk"><h3>${t("you")}</h3>
+      ${field("name", t("name"), "text", 'autocomplete="name" required')}
+      ${field("phone", t("phone"), "tel", 'autocomplete="tel" inputmode="tel" required')}
+      ${field("email", t("email"), "email", 'autocomplete="email" required')}
+      ${del ? field("street", t("street"), "text", 'autocomplete="street-address" required') + `<div class="two">${field("zip", t("zip"), "text", 'autocomplete="postal-code" inputmode="numeric" maxlength="5" required')}${field("city", t("city"), "text", 'autocomplete="address-level2" required')}</div>` : ""}
+    </div>
+    <div class="totals" id="totals"></div>
+  </form>`;
+  renderTotals();
+  foot.innerHTML = `<button class="btn block" type="submit" form="orderForm" id="sendBtn">${t("send")}</button><p class="small">${t("pay_note")}</p>`;
+}
+function renderTotals() {
+  const el = $("#totals"); if (!el) return;
+  const d = deliveryCost();
+  el.innerHTML = `<div><span>${t("sub")}</span><span>${money(subtotal())}</span></div>${method === "delivery" ? `<div><span>${t("delivery")}</span><span>${d ? money(d) : t("free")}</span></div>` : ""}<div class="g"><span>${t("grand")}</span><span>${money(subtotal() + d)}</span></div>`;
+}
+function setErr(id, msg) {
+  const inp = $("#f-" + id), er = $("#e-" + id); if (!inp) return true;
+  er.textContent = msg || ""; if (msg) inp.setAttribute("aria-invalid", "true"); else inp.removeAttribute("aria-invalid");
+  return !msg;
+}
+const checks = {
+  name: v => v.trim().length >= 2 ? "" : t("e_name"),
+  phone: v => v.replace(/\D/g, "").length >= 8 ? "" : t("e_phone"),
+  email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "" : t("e_email"),
+  street: v => v.trim().length >= 4 ? "" : t("e_street"),
+  zip: v => /^\d{5}$/.test(v.trim()) ? "" : t("e_zip"),
+  city: v => v.trim().length >= 2 ? "" : t("e_city"),
+  date: v => v ? "" : t("e_date")
+};
+function validateAll() {
+  const ids = ["name", "phone", "email", ...(method === "delivery" ? ["street", "zip", "city"] : []), "date"];
+  let first = null;
+  for (const id of ids) { const ok = setErr(id, checks[id]($("#f-" + id).value)); if (!ok && !first) first = id; }
+  return first;
+}
+function buildOrder() {
+  const ref = "LG-" + new Date().toISOString().slice(5, 10).replace("-", "") + "-" + String(Math.floor(100 + Math.random() * 900));
+  const d = deliveryCost(), total = subtotal() + d;
+  const dateLabel = dateOptions().find(([v]) => v === fields.date)?.[1] || fields.date;
+  const methodLabel = { market: t("m_opt"), farm: t("p_opt"), delivery: t("d_opt") }[method];
+  const lines = cart.map(l => `- ${l.qty} × ${lineName(l)} : ${money(lineTotal(l))}`);
+  const who = [`${t("name")}: ${fields.name}`, `${t("phone")}: ${fields.phone}`, `${t("email")}: ${fields.email}`];
+  if (method === "delivery") who.push(`${t("street")}: ${fields.street}, ${fields.zip} ${fields.city}`);
+  const text = [`${t("ref")}: ${ref}`, "", ...lines, method === "delivery" ? `${t("delivery")}: ${d ? money(d) : t("free")}` : "", `${t("grand")}: ${money(total)}`, "", `${methodLabel} – ${dateLabel}`, "", ...who].filter((x, i, a) => x !== "" || a[i - 1] !== "").join("\n");
+  return { ref, text };
+}
+function renderDone() {
+  const o = lastOrder, href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(t("subject", o.ref))}&body=${encodeURIComponent(o.text)}`;
+  $("#bBody").innerHTML = `<div class="done"><h3>${t("done_h")}</h3><p>${t("done_p")}</p><div class="ref"><span class="sr">${t("ref")}: </span>${o.ref}</div><pre>${o.text.replace(/</g, "&lt;")}</pre><a class="btn block" id="mailBtn" href="${href}">${t("mail_btn")}</a><p style="margin-top:16px">${t("again_p")} <a href="mailto:${CONFIG.email}">${CONFIG.email}</a></p></div>`;
+  $("#bFoot").innerHTML = `<button class="btn ghost block" type="button" id="doneClose">${t("close")}</button>`; $("#bFoot").hidden = false;
+}
+
+/* ---- toast ---- */
+function toast(msg, undo) {
+  clearTimeout(toastTimer);
+  $("#toastMsg").textContent = msg; const u = $("#undo"); u.hidden = !undo; u.textContent = t("undo");
+  $("#toast").hidden = false; toastTimer = setTimeout(() => { $("#toast").hidden = true; lastRemoved = null; }, 6000);
+}
+
+/* ---- events ---- */
+const dlg = $("#basket");
+function openCart() { renderBasket(); dlg.showModal(); document.body.classList.add("lock"); }
+dlg.addEventListener("close", () => { document.body.classList.remove("lock"); if (view === "done") { view = "cart"; } });
+dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+$("#openCart").addEventListener("click", openCart);
+$("#barBtn").addEventListener("click", () => { if (itemCount()) openCart(); else $("#boxes").scrollIntoView(); });
+$("#closeCart").addEventListener("click", () => dlg.close());
+
+document.addEventListener("change", e => {
+  const el = e.target;
+  if (el.name === "kind") { sel.kind = el.value; renderSummary(); }
+  else if (el.name === "count") { sel.count = +el.value; renderSummary(); }
+  else if (el.id === "knife") renderSummary();
+  else if (el.name === "method") { captureFields(); method = el.value; fields.date = ""; renderBasket(); $("#m-" + method).focus(); }
+  else if (el.id === "f-date") { fields.date = el.value; setErr("date", checks.date(el.value)); }
+});
+function captureFields() { document.querySelectorAll("#orderForm input[name], #orderForm select[name]").forEach(i => { if (i.type !== "radio") fields[i.name] = i.value; }); }
+document.addEventListener("focusout", e => { const id = e.target.id && e.target.id.startsWith("f-") ? e.target.id.slice(2) : null; if (id && checks[id] && e.target.closest("#orderForm")) { fields[id] = e.target.value; setErr(id, checks[id](e.target.value)); } });
+
+function addToCart(kind, count) {
+  const hit = cart.find(l => l.kind === kind && l.count === count);
+  if (hit) hit.qty++; else cart.push({ kind, count, qty: 1 });
+}
+$("#add").addEventListener("click", () => {
+  addToCart(sel.kind, sel.count);
+  if ($("#knife").checked) { const k = cart.find(l => l.kind === "knife"); if (!k) cart.push({ kind: "knife", count: 1, qty: 1 }); $("#knife").checked = false; renderSummary(); }
+  save(); renderChrome();
+  const b = $("#add"); b.textContent = t("added_btn") + " ✓";
+  $("#addNote").innerHTML = `${t("added")} <button class="textbtn" type="button" id="viewCart">${t("view_cart")}</button>`;
+  setTimeout(() => { b.textContent = t("add"); }, 1800);
+});
+document.addEventListener("click", e => {
+  const c = e.target.closest("button, a"); if (!c) return;
+  if (c.id === "viewCart") openCart();
+  else if (c.id === "goBoxes") { dlg.close(); $("#boxes").scrollIntoView(); }
+  else if (c.id === "doneClose") { dlg.close(); }
+  else if (c.id === "mailBtn") { cart = []; save(); renderChrome(); fields.date = ""; }
+  else if (c.dataset.inc !== undefined) { cart[+c.dataset.inc].qty = Math.min(20, cart[+c.dataset.inc].qty + 1); refreshCart(); }
+  else if (c.dataset.dec !== undefined) { const l = cart[+c.dataset.dec]; l.qty = Math.max(1, l.qty - 1); refreshCart(); }
+  else if (c.dataset.rm !== undefined) { const i = +c.dataset.rm; lastRemoved = { l: cart[i], i }; cart.splice(i, 1); refreshCart(); toast(t("removed"), true); }
+  else if (c.id === "undo") { if (lastRemoved) { cart.splice(lastRemoved.i, 0, lastRemoved.l); lastRemoved = null; refreshCart(); } $("#toast").hidden = true; }
+  else if (c.dataset.lang) { setLang(c.dataset.lang); }
+});
+function refreshCart() { captureFields(); save(); renderChrome(); const y = $("#bBody").scrollTop; renderBasket(); $("#bBody").scrollTop = y; }
+
+document.addEventListener("submit", e => {
+  if (e.target.id !== "orderForm") return;
+  e.preventDefault(); captureFields();
+  if (!cart.length) return;
+  const first = validateAll();
+  if (first) { $("#f-" + first).focus(); return; }
+  lastOrder = buildOrder(); view = "done"; renderBasket();
+  $("#bBody").scrollTop = 0; $("#mailBtn").focus();
+  location.href = $("#mailBtn").href;
+  cart = []; save(); renderChrome();
+});
+
+/* ---- language switch ---- */
+function setLang(l) {
+  lang = l; try { localStorage.setItem("lg-lang", l); } catch (e) {}
+  document.documentElement.lang = l;
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.innerHTML = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+  document.title = l === "en" ? "Parc Le Goff – Cancale oyster boxes to order" : "Parc Le Goff – Huîtres de Cancale, box à commander";
+  $("#closeCart").setAttribute("aria-label", t("close"));
+  $("#addNote").textContent = ""; $("#add").textContent = t("add");
+  renderKinds(); renderSummary(); renderScale(); renderWays(); renderChrome();
+  if (dlg.open) { captureFields(); renderBasket(); }
+}
+setLang(lang);
+setInterval(renderWays, 60000);
+</script>
+</body>
+</html>

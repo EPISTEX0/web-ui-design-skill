@@ -1,0 +1,53 @@
+{
+  "id": "le-goff--web-ui-design-0.3--2",
+  "desktop": {
+    "fullH": 4528,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 1,
+      "moderate": 0,
+      "minor": 0,
+      "rules": [
+        "label-content-name-mismatch:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 3,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 29,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 4496,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 3,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 7271,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 3,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

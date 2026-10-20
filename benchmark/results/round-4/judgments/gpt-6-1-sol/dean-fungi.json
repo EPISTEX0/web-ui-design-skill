@@ -1,0 +1,182 @@
+{
+  "scores": {
+    "A8": {
+      "craft": 7,
+      "fit": 3,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 4,
+      "defects": [
+        "The visible 'Edible' and 'Inedible' labels violate the client's mandatory four-label vocabulary.",
+        "Species presented as food do not have their dangerous lookalikes alongside them.",
+        "The visible poisonous and deadly entries lack the required emergency instruction.",
+        "The overview cards do not expose the full identification information needed to distinguish similar species."
+      ],
+      "note": "A tidy, approachable directory, but its food-oriented labels and missing adjacent safety information make it unsuitable for this client."
+    },
+    "B4": {
+      "craft": 7,
+      "fit": 2,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 3,
+      "defects": [
+        "The guide uses 'Edible' and 'Inedible' rather than the required labels.",
+        "Rows show names, habitats and months but no visible distinguishing descriptions, spore prints or adjacent lookalike comparisons.",
+        "Deadly and poisonous rows lack the required emergency instruction.",
+        "The extremely sparse rows and decorative dots provide little help identifying a find."
+      ],
+      "note": "Restrained typography and an orderly responsive list cannot compensate for the missing identification and safety content."
+    },
+    "D3": {
+      "craft": 8,
+      "fit": 8,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 8,
+      "defects": [
+        "Large repeated photo-placeholder panels take substantial space away from useful identification details, especially on mobile.",
+        "The long introductory section and stacked mobile header delay access to the search and species entries.",
+        "Visible draft and confirmation notices leave the safety-sensitive guide looking not quite publication-ready."
+      ],
+      "note": "A convincing cream-and-moss field guide with useful species detail, conspicuous safety distinctions and adjacent lookalike information."
+    },
+    "D6": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 3,
+      "defects": [
+        "The visible 'Edible' and 'Inedible' filters and badges break the explicit wording rule.",
+        "All visible species entries are collapsed, so distinguishing features, spore prints and dangerous lookalikes are not available for comparison in the screenshots.",
+        "The deadly and poisonous rows show no required emergency instruction.",
+        "The generic overview does not visibly provide the requested group-specific foray information or picking rule."
+      ],
+      "note": "The compact responsive list is easy to scan, but the visible page does not deliver the client's essential safety-led species guide."
+    },
+    "G6": {
+      "craft": 6,
+      "fit": 1,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 2,
+      "defects": [
+        "The playful cartoon mushroom illustrations directly conflict with the client's stated dislike.",
+        "The visible edibility vocabulary includes the prohibited 'Edible' label.",
+        "Food-labelled species lack adjacent dangerous-lookalike comparisons.",
+        "The visible poisonous and deadly cards omit the required emergency instruction."
+      ],
+      "note": "An orderly illustrated catalogue, but its playful visual language and unsafe labelling miss the brief particularly badly."
+    },
+    "N3": {
+      "craft": 7,
+      "fit": 2,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 3,
+      "defects": [
+        "The page uses the prohibited 'Edible' label and does not follow the required four-label system.",
+        "Large, mostly empty cards with decorative circles reveal little identification information beyond names and basic metadata.",
+        "Dangerous lookalikes are not shown next to food-labelled species.",
+        "The general warning does not replace the missing emergency instruction on individual poisonous and deadly entries."
+      ],
+      "note": "Consistent spacing and clear search affordances make a polished shell, but the visible guide is too shallow and safety-incomplete."
+    },
+    "Q2": {
+      "craft": 7,
+      "fit": 3,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 4,
+      "defects": [
+        "The visible 'Edible' and 'Inedible' labels violate the client's terminology.",
+        "Species descriptions are truncated with ellipses, cutting off potentially important identification details.",
+        "The small month indicators and secondary metadata are less legible than the main names.",
+        "Food-labelled entries lack adjacent dangerous-lookalike comparisons, and the visible poisonous and deadly entries lack the required emergency instruction."
+      ],
+      "note": "A well-organised lookup interface with useful descriptive snippets, undermined by clipped content and noncompliant safety presentation."
+    },
+    "R9": {
+      "craft": 6,
+      "fit": 2,
+      "hierarchy": 8,
+      "mobile": 7,
+      "overall": 3,
+      "defects": [
+        "An empty-results message appears beneath a populated species list, contradicting the displayed results.",
+        "The page uses prohibited edibility terminology rather than the four approved labels.",
+        "The compact rows do not visibly supply spore prints, distinguishing descriptions or adjacent dangerous-lookalike comparisons.",
+        "The visible poisonous and deadly entries lack the required emergency instruction."
+      ],
+      "note": "The search-first list is efficient to scan, but a contradictory empty state and missing safety detail prevent it from feeling ready to ship."
+    },
+    "T8": {
+      "craft": 7,
+      "fit": 5,
+      "hierarchy": 7,
+      "mobile": 6,
+      "overall": 5,
+      "defects": [
+        "Fruiting months, habitats, spore prints and distinguishing descriptions are visibly left as 'To be added'.",
+        "Month browsing cannot serve the client's goal while month data is missing.",
+        "Large empty photo placeholders dominate the cards and make mobile lookup unnecessarily long."
+      ],
+      "note": "The brand, approved labels, lookalike placement and emergency wording are thoughtfully handled, but missing identification data leaves this a promising scaffold."
+    },
+    "W5": {
+      "craft": 8,
+      "fit": 8,
+      "hierarchy": 7,
+      "mobile": 8,
+      "overall": 8,
+      "defects": [
+        "The introductory safety and community sections push the lookup controls well down the mobile page.",
+        "Repeated draft and confirmation language makes the otherwise detailed species information feel unfinished."
+      ],
+      "note": "The strongest practical match, combining readable field-guide typography, substantive identification details, adjacent lookalikes and the group's own rules."
+    },
+    "Y5": {
+      "craft": 6,
+      "fit": 1,
+      "hierarchy": 7,
+      "mobile": 7,
+      "overall": 2,
+      "defects": [
+        "Every species, including Death cap and Destroying angel, is shown as 'Not yet labelled' instead of carrying its required safety label.",
+        "Every month shows zero and the page explicitly says selecting a month will show nothing.",
+        "Habitat filtering is visibly unavailable because no habitats are recorded.",
+        "Species entries lack identification descriptions, spore prints and the required emergency instruction for poisonous and deadly species."
+      ],
+      "note": "A legible, brand-appropriate index, but almost all of the information needed for safe identification and seasonal browsing is absent."
+    },
+    "Z2": {
+      "craft": 6,
+      "fit": 1,
+      "hierarchy": 7,
+      "mobile": 6,
+      "overall": 2,
+      "defects": [
+        "Every species is marked 'Label to be confirmed', leaving deadly species visually undifferentiated from the rest.",
+        "There is no visible month browser or fruiting-month information.",
+        "Species rows lack habitats, spore prints, identifying descriptions and the required emergency instruction.",
+        "The large empty beech-woodcut placeholder takes valuable space above search, particularly on mobile."
+      ],
+      "note": "The correct palette, species names and group events are present, but the missing safety labels and identification data defeat the guide's main purpose."
+    }
+  },
+  "ranking": [
+    "W5",
+    "D3",
+    "T8",
+    "Q2",
+    "A8",
+    "B4",
+    "D6",
+    "N3",
+    "R9",
+    "Y5",
+    "Z2",
+    "G6"
+  ]
+}

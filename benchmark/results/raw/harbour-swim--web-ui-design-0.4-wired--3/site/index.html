@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1b2a4a">
+<title>Harbour Swim Club - Falmouth, Cornwall</title>
+<meta name="description" content="Harbour Swim Club, Falmouth. Swimming lessons, squads, masters and family swims for all ages.">
+<link rel="preload" as="image" href="images/hero-pool.svg" fetchpriority="high">
+<link rel="stylesheet" href="style.css">
+<script src="script.js" defer></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="bar wrap">
+    <a href="#top" class="logo"><img src="images/logo.svg" width="260" height="64" alt="Harbour Swim Club"></a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#timetable">Timetable</a></li>
+        <li><a href="#membership">Membership</a></li>
+        <li><a href="#join" class="nav-join">Join</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero wrap">
+    <div class="hero-media">
+      <img class="hero-img" src="images/hero-pool.svg" width="940" height="320" fetchpriority="high" alt="Swimmers training in the lanes at Harbour Leisure Centre pool">
+    </div>
+    <div class="hero-card">
+      <h1>Harbour Swim Club</h1>
+      <p>Swimming for all ages in Falmouth since 1974</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#timetable">See the timetable</a>
+        <a class="btn btn-ghost" href="#join">Join the club</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="welcome" class="section">
+    <div class="wrap welcome-grid">
+      <div class="welcome-text">
+        <h2>Welcome</h2>
+        <p>Harbour Swim Club is a friendly, volunteer run club based at Harbour Leisure Centre on Quay Road. We have around 240 members, from toddlers having their first splash to masters swimmers in their seventies.</p>
+        <p>Whether you want to learn to swim, keep fit, or race for the county, there is a session for you. New members are always welcome and your first visit is free, just bring a towel and a smile.</p>
+      </div>
+      <img class="welcome-img" src="images/swimmers.svg" width="300" height="200" loading="lazy" alt="Two junior swimmers in the water">
+    </div>
+  </section>
+
+  <section id="timetable" class="section tint">
+    <div class="wrap">
+      <h2>Weekly timetable</h2>
+      <p class="intro">All sessions are at Harbour Leisure Centre. Please arrive 10 minutes early and report to the coach on poolside.</p>
+
+      <aside class="notices" aria-labelledby="notices-title">
+        <h3 id="notices-title">Club notices</h3>
+        <ul>
+          <li>Pool closed Bank Holiday Monday 6th May</li>
+          <li>Summer timetable starts 3rd June</li>
+          <li>Junior galas: entries to Helen by 20th April</li>
+          <li>Volunteers needed for the Falmouth Regatta water safety team</li>
+        </ul>
+      </aside>
+
+      <div id="daypicker" class="day-picker" role="group" aria-label="Choose a day" hidden></div>
+      <p id="tt-status" class="tt-status" aria-live="polite"></p>
+
+      <table id="timetable-table">
+        <thead>
+          <tr>
+            <th scope="col">Day</th>
+            <th scope="col">Time</th>
+            <th scope="col">Session</th>
+            <th scope="col">Lane</th>
+            <th scope="col">Level</th>
+            <th scope="col">Coach</th>
+          </tr>
+        </thead>
+        <tbody>
+      <tr>
+        <td>Monday</td>
+        <td>06:30 - 07:30</td>
+        <td>Early Bird Lengths</td>
+        <td>1-3</td>
+        <td>All levels</td>
+        <td>Dave</td>
+      </tr>
+      <tr>
+        <td>Monday</td>
+        <td>17:00 - 18:00</td>
+        <td>Junior Development</td>
+        <td>1-2</td>
+        <td>Beginner</td>
+        <td>Helen</td>
+      </tr>
+      <tr>
+        <td>Monday</td>
+        <td>18:00 - 19:30</td>
+        <td>Junior Squad</td>
+        <td>3-5</td>
+        <td>Advanced</td>
+        <td>Helen</td>
+      </tr>
+      <tr>
+        <td>Monday</td>
+        <td>19:30 - 20:30</td>
+        <td>Adult Improvers</td>
+        <td>1-3</td>
+        <td>Improver</td>
+        <td>Tom</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>07:00 - 08:00</td>
+        <td>Masters Early Swim</td>
+        <td>2-4</td>
+        <td>Intermediate</td>
+        <td>Priya</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>16:30 - 17:30</td>
+        <td>Learn to Swim Stage 1</td>
+        <td>1-2</td>
+        <td>Beginner</td>
+        <td>Sarah</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>17:30 - 18:30</td>
+        <td>Learn to Swim Stage 2</td>
+        <td>1-2</td>
+        <td>Beginner</td>
+        <td>Sarah</td>
+      </tr>
+      <tr>
+        <td>Tuesday</td>
+        <td>19:00 - 20:30</td>
+        <td>Competition Squad</td>
+        <td>1-5</td>
+        <td>Advanced</td>
+        <td>Mike</td>
+      </tr>
+      <tr>
+        <td>Wednesday</td>
+        <td>12:30 - 13:30</td>
+        <td>Lunchtime Lanes</td>
+        <td>1-3</td>
+        <td>All levels</td>
+        <td>Dave</td>
+      </tr>
+      <tr>
+        <td>Wednesday</td>
+        <td>17:00 - 18:00</td>
+        <td>Junior Development</td>
+        <td>1-2</td>
+        <td>Beginner</td>
+        <td>Helen</td>
+      </tr>
+      <tr>
+        <td>Wednesday</td>
+        <td>18:00 - 19:00</td>
+        <td>Aqua Fit</td>
+        <td>Shallow end</td>
+        <td>All levels</td>
+        <td>Priya</td>
+      </tr>
+      <tr>
+        <td>Wednesday</td>
+        <td>19:30 - 20:30</td>
+        <td>Masters Evening Swim</td>
+        <td>2-4</td>
+        <td>Intermediate</td>
+        <td>Priya</td>
+      </tr>
+      <tr>
+        <td>Thursday</td>
+        <td>06:30 - 07:30</td>
+        <td>Early Bird Lengths</td>
+        <td>1-3</td>
+        <td>All levels</td>
+        <td>Dave</td>
+      </tr>
+      <tr>
+        <td>Thursday</td>
+        <td>10:00 - 10:45</td>
+        <td>Parent and Baby</td>
+        <td>Teaching pool</td>
+        <td>Beginner</td>
+        <td>Sarah</td>
+      </tr>
+      <tr>
+        <td>Thursday</td>
+        <td>16:30 - 17:30</td>
+        <td>Learn to Swim Stage 1</td>
+        <td>1-2</td>
+        <td>Beginner</td>
+        <td>Sarah</td>
+      </tr>
+      <tr>
+        <td>Thursday</td>
+        <td>18:00 - 19:30</td>
+        <td>Junior Squad</td>
+        <td>3-5</td>
+        <td>Advanced</td>
+        <td>Mike</td>
+      </tr>
+      <tr>
+        <td>Thursday</td>
+        <td>19:30 - 20:30</td>
+        <td>Water Polo Intro</td>
+        <td>4-5</td>
+        <td>Improver</td>
+        <td>Tom</td>
+      </tr>
+      <tr>
+        <td>Friday</td>
+        <td>12:30 - 13:30</td>
+        <td>Lunchtime Lanes</td>
+        <td>1-3</td>
+        <td>All levels</td>
+        <td>Dave</td>
+      </tr>
+      <tr>
+        <td>Friday</td>
+        <td>17:00 - 18:00</td>
+        <td>Family Fun Swim</td>
+        <td>Whole pool</td>
+        <td>All levels</td>
+        <td>Helen</td>
+      </tr>
+      <tr>
+        <td>Friday</td>
+        <td>18:30 - 19:30</td>
+        <td>Social Swim</td>
+        <td>1-2</td>
+        <td>All levels</td>
+        <td>Tom</td>
+      </tr>
+      <tr>
+        <td>Saturday</td>
+        <td>08:00 - 09:30</td>
+        <td>Junior Squad</td>
+        <td>3-5</td>
+        <td>Advanced</td>
+        <td>Mike</td>
+      </tr>
+      <tr>
+        <td>Saturday</td>
+        <td>09:30 - 11:00</td>
+        <td>Competition Squad</td>
+        <td>1-5</td>
+        <td>Advanced</td>
+        <td>Mike</td>
+      </tr>
+      <tr>
+        <td>Saturday</td>
+        <td>11:00 - 12:00</td>
+        <td>Learn to Swim Stage 3</td>
+        <td>1-2</td>
+        <td>Improver</td>
+        <td>Sarah</td>
+      </tr>
+      <tr>
+        <td>Saturday</td>
+        <td>12:00 - 13:00</td>
+        <td>Open Water Prep</td>
+        <td>3-4</td>
+        <td>Intermediate</td>
+        <td>Dave</td>
+      </tr>
+      <tr>
+        <td>Sunday</td>
+        <td>10:00 - 11:30</td>
+        <td>Sunday Family Splash</td>
+        <td>Whole pool</td>
+        <td>All levels</td>
+        <td>Helen</td>
+      </tr>
+      <tr>
+        <td>Sunday</td>
+        <td>11:30 - 12:30</td>
+        <td>Disability Swim</td>
+        <td>Teaching pool</td>
+        <td>All levels</td>
+        <td>Priya</td>
+      </tr>
+      <tr>
+        <td>Sunday</td>
+        <td>18:00 - 19:00</td>
+        <td>Adult Beginners</td>
+        <td>1-2</td>
+        <td>Beginner</td>
+        <td>Tom</td>
+      </tr>
+        </tbody>
+      </table>
+      <p class="note">Timetable may change in school holidays. Check the news below.</p>
+    </div>
+  </section>
+
+  <section id="membership" class="section">
+    <div class="wrap">
+      <h2>Membership</h2>
+      <p class="intro">Pay monthly by standing order. No joining fee. Membership includes all club sessions for your category plus entry to club socials.</p>
+      <div class="plans">
+        <div class="plan">
+          <h3>Junior</h3>
+          <p class="price">&pound;18 <span>a month</span></p>
+          <p>Under 16s. Lessons, development and squad places.</p>
+        </div>
+        <div class="plan">
+          <h3>Adult</h3>
+          <p class="price">&pound;32 <span>a month</span></p>
+          <p>Lane swims, improvers and social sessions.</p>
+        </div>
+        <div class="plan">
+          <h3>Family</h3>
+          <p class="price">&pound;65 <span>a month</span></p>
+          <p>Two adults and up to three children under 16.</p>
+        </div>
+        <div class="plan">
+          <h3>Masters</h3>
+          <p class="price">&pound;28 <span>a month</span></p>
+          <p>Over 25s. Coached training, local and national meets.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="join" class="section tint">
+    <div class="wrap join-grid">
+      <div id="joinbox">
+        <h2>Join the club</h2>
+        <p>Fill in the form and our membership secretary will get in touch.</p>
+        <form id="joinform" action="#" method="get" novalidate>
+          <div class="field">
+            <label for="fullname">Full name</label>
+            <input type="text" id="fullname" name="fullname" autocomplete="name" aria-describedby="fullname-error">
+            <p class="error" id="fullname-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" autocomplete="email" aria-describedby="email-error">
+            <p class="error" id="email-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="phone">Phone number</label>
+            <input type="tel" id="phone" name="phone" autocomplete="tel" aria-describedby="phone-error">
+            <p class="error" id="phone-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="mtype">Membership type</label>
+            <select id="mtype" name="mtype" aria-describedby="mtype-error">
+              <option value="">Choose a type</option>
+              <option value="junior">Junior</option>
+              <option value="adult">Adult</option>
+              <option value="family">Family</option>
+              <option value="masters">Masters</option>
+            </select>
+            <p class="error" id="mtype-error" hidden></p>
+          </div>
+          <div class="field">
+            <label class="check" for="consent">
+              <input type="checkbox" id="consent" name="consent" aria-describedby="consent-error">
+              <span>I am happy for the club to contact me about membership</span>
+            </label>
+            <p class="error" id="consent-error" hidden></p>
+          </div>
+          <button type="submit" class="btn btn-primary">Join now</button>
+        </form>
+      </div>
+      <div id="joinaside">
+        <img src="images/pool.svg" width="320" height="180" loading="lazy" alt="The pool at Harbour Leisure Centre">
+        <p class="small">Not sure yet? Come along to any session for a free trial.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="news" class="section">
+    <div class="wrap">
+      <h2>Club news</h2>
+      <div class="news-list">
+        <article class="item">
+          <p class="date">12 March 2013</p>
+          <h3>Cornwall County Championships: 14 medals for Harbour</h3>
+          <p>Our juniors came home from Plymouth with six gold, four silver and four bronze. Well done to everyone who swam and thank you to the parents who helped on poolside.</p>
+        </article>
+        <article class="item">
+          <p class="date">28 February 2013</p>
+          <h3>New Masters session on Wednesday evenings</h3>
+          <p>Priya will be coaching a new masters session on Wednesday evenings starting at half past seven. All abilities, just turn up.</p>
+        </article>
+        <article class="item">
+          <p class="date">9 February 2013</p>
+          <h3>Pool maintenance closure over Easter weekend</h3>
+          <p>The leisure centre is closing the pool from Good Friday to Easter Monday while the filters are replaced. Normal sessions resume on Tuesday.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact" class="site-footer">
+  <div class="wrap">
+    <h2>Contact us</h2>
+    <div class="contact-cols">
+      <address>
+        Harbour Swim Club<br>
+        Harbour Leisure Centre<br>
+        Quay Road<br>
+        Falmouth<br>
+        Cornwall TR11 3XX
+      </address>
+      <div>
+        <p>Phone: <a href="tel:+441326555014">01326 555 014</a><br>
+        Email: <a href="mailto:info@harbourswimclub.co.uk">info@harbourswimclub.co.uk</a></p>
+        <p>Membership secretary: Helen Carne<br>
+        Registered charity no. 1049221</p>
+      </div>
+    </div>
+    <p id="copy">&copy; 2013 Harbour Swim Club. Last updated 12 March 2013.</p>
+  </div>
+</footer>
+
+</body>
+</html>

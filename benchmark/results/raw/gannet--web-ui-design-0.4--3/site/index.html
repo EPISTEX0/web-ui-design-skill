@@ -1,0 +1,889 @@
+<!doctype html>
+<html lang="en-GB" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12304a">
+<title>MV Gannet loading</title>
+<style>
+:root{
+  --navy:#12304a; --yellow:#f2b705;
+  --bg:#e9eef2; --surface:#ffffff; --surface-2:#dbe4eb;
+  --text:#0c2236; --text-2:#34495c; --text-3:#4b6074;
+  --border:#7f95a8; --line:#c3cfd9;
+  --head-bg:#12304a; --head-fg:#ffffff; --head-fg-2:#c9d8e6;
+  --veh-bg:#12304a; --veh-fg:#ffffff;
+  --free-bg:#dbe4eb; --free-line:#7f95a8;
+  --danger:#a8201a; --danger-bg:#fbe9e7;
+  --ok:#0b6b3a;
+  --focus:#12304a;
+  --u:clamp(38px,3.6dvh,46px);
+  --key:clamp(48px,5.2dvh,64px);
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:24px; --s6:32px;
+  --r-sm:6px; --r-md:10px; --r-lg:14px;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:light;
+}
+:root[data-theme=night]{
+  --bg:#0a1a28; --surface:#12304a; --surface-2:#0e2539;
+  --text:#f2f6fa; --text-2:#c9d8e6; --text-3:#a9bdd0;
+  --border:#6f8aa3; --line:#2d4e69;
+  --head-bg:#061320; --head-fg:#f2f6fa; --head-fg-2:#a9bdd0;
+  --veh-bg:#2f6a9a; --veh-fg:#ffffff;
+  --free-bg:#0e2539; --free-line:#6f8aa3;
+  --danger:#ff9d94; --danger-bg:#3a1a1a;
+  --ok:#7fe0a8;
+  --focus:#f2b705;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font:400 18px/1.4 var(--font);
+  background:var(--bg);color:var(--text);
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  -webkit-user-select:none;user-select:none;
+  overflow-x:clip;
+}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit;touch-action:manipulation}
+button:active:not([aria-disabled=true]){transform:scale(.97)}
+button[aria-disabled=true]{cursor:not-allowed}
+:focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+header :focus-visible,.on-navy :focus-visible{outline-color:var(--yellow)}
+svg{width:1.2em;height:1.2em;flex:none}
+.sr{position:absolute;width:1px;height:1px;overflow:clip;clip-path:inset(50%);white-space:nowrap}
+.num{font-variant-numeric:tabular-nums}
+
+/* shell */
+.app{
+  display:grid;grid-template-rows:auto auto minmax(420px,1fr) auto;
+  height:max(100dvh,1000px);max-width:900px;margin-inline:auto;
+  background:var(--bg);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+
+/* header */
+header{background:var(--head-bg);color:var(--head-fg);padding:env(safe-area-inset-top) var(--s4) var(--s2);display:grid;gap:var(--s2)}
+.h-top{display:flex;align-items:center;gap:var(--s3);flex-wrap:wrap;padding-top:var(--s2)}
+.h-title{flex:1 1 180px;min-width:0}
+.h-title b{display:block;font-size:22px;line-height:1.15;font-weight:700}
+.h-title span{font-size:15px;color:var(--head-fg-2)}
+.datenav{display:flex;align-items:center;gap:var(--s1)}
+.datenav button{width:52px;height:52px;display:grid;place-items:center;border:2px solid var(--head-fg-2);border-radius:var(--r-md)}
+.datenav output{min-width:112px;text-align:center;font-weight:700;font-size:18px}
+.conn{display:flex;align-items:center;gap:var(--s2);min-height:44px;padding:0 var(--s3);border-radius:var(--r-md);border:2px solid var(--head-fg-2);font-size:15px;font-weight:700;line-height:1.15}
+.conn.bad{background:var(--yellow);color:var(--navy);border-color:var(--yellow)}
+.iconbtn{width:56px;height:56px;display:grid;place-items:center;border:2px solid var(--head-fg-2);border-radius:var(--r-md)}
+.iconbtn svg{width:28px;height:28px}
+.strip{display:flex;gap:var(--s2);overflow-x:auto;scroll-snap-type:x proximity;padding-bottom:2px;margin-inline:calc(-1*var(--s4));padding-inline:var(--s4);scrollbar-width:none}
+.chip{flex:1 0 96px;scroll-snap-align:start;min-height:64px;padding:var(--s2) var(--s3);border:2px solid var(--head-fg-2);border-radius:var(--r-md);display:grid;align-content:center;text-align:center}
+.chip b{font-size:22px;line-height:1.1}
+.chip span{font-size:15px;color:var(--head-fg-2);line-height:1.2}
+.chip[aria-pressed=true]{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+.chip[aria-pressed=true] span{color:var(--navy)}
+
+/* summary */
+#summary{padding:var(--s2) var(--s4) 0;display:grid;gap:var(--s2)}
+.banner{display:flex;align-items:center;gap:var(--s3);min-height:32px;font-weight:700;font-size:18px;flex-wrap:wrap}
+.banner small{font-weight:400;font-size:16px;color:var(--text-2)}
+.banner.cut{background:var(--yellow);color:var(--navy);padding:var(--s2) var(--s3);border-radius:var(--r-md)}
+.banner.cut small{color:var(--navy)}
+.banner.done{background:var(--surface-2);padding:var(--s2) var(--s3);border-radius:var(--r-md)}
+.special{display:flex;gap:var(--s3);align-items:flex-start;background:var(--yellow);color:var(--navy);border-radius:var(--r-md);padding:var(--s3) var(--s4);font-weight:700}
+.special small{display:block;font-weight:400;font-size:16px}
+.stats{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:var(--s2)}
+.stat{background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:6px var(--s3);min-width:0}
+.stat small{display:block;font-size:15px;color:var(--text-2);line-height:1.2}
+.stat b{font-size:30px;line-height:1.05;font-weight:700;font-variant-numeric:tabular-nums}
+.stat b i{font-style:normal;font-size:18px;font-weight:400;color:var(--text-2)}
+.stat em{display:block;font-style:normal;font-size:15px;color:var(--text-2);line-height:1.2}
+.stat.free{background:var(--navy);border-color:var(--navy);color:#fff}
+.stat.free small,.stat.free b i,.stat.free em{color:#d5e1ec}
+:root[data-theme=night] .stat.free{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+:root[data-theme=night] .stat.free small,:root[data-theme=night] .stat.free b i,:root[data-theme=night] .stat.free em{color:var(--navy)}
+.stat.warn{border-color:var(--danger)}
+.stat.warn em{color:var(--danger);font-weight:700}
+
+/* deck */
+.deckwrap{display:grid;gap:var(--s1)}
+.decklab{display:flex;justify-content:space-between;font-size:15px;color:var(--text-2)}
+.deck{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--s2)}
+.lane{display:grid;gap:var(--s1);align-content:start}
+.lane-h{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s1);font-size:15px;line-height:1.2;color:var(--text-2);padding:0 2px}
+.lane-h b{font-size:18px;color:var(--text)}
+.bay{display:grid;grid-template-rows:repeat(6,var(--u));gap:3px;border:2px solid var(--border);border-radius:var(--r-md);padding:3px;background:var(--surface)}
+.veh{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:0;background:var(--veh-bg);color:var(--veh-fg);border-radius:var(--r-sm);min-width:0;overflow:hidden;line-height:1.1;border-left:6px solid transparent}
+.veh b{font-size:22px;letter-spacing:.04em}
+.veh span{font-size:15px;opacity:.95}
+.veh.prio{border-left-color:var(--yellow)}
+.veh.conflict{background:var(--danger-bg);color:var(--danger);outline:3px solid var(--danger);outline-offset:-3px}
+.cellfree{border:2px dashed var(--free-line);background:var(--free-bg);border-radius:var(--r-sm)}
+.ghost{border:3px dashed var(--navy);background:var(--yellow);color:var(--navy);border-radius:var(--r-sm);display:grid;place-items:center;font-weight:700;font-size:15px}
+.nodeck{background:repeating-linear-gradient(135deg,var(--surface-2) 0 6px,transparent 6px 12px);border-radius:var(--r-sm);opacity:.8}
+.lane.low .lane-h b::after{content:" ▾";font-size:15px}
+
+/* main */
+main{position:relative;min-height:0;display:flex;flex-direction:column;padding:var(--s2) var(--s4) var(--s2)}
+.view{display:flex;flex-direction:column;min-height:0;flex:1}
+.view[hidden]{display:none}
+.results{flex:1;min-height:96px;overflow-y:auto;display:grid;gap:var(--s2);align-content:start;padding-bottom:var(--s2);overscroll-behavior:contain}
+.hint{padding:var(--s2) 0;color:var(--text-2);font-size:18px}
+.hint b{color:var(--text)}
+.h3{font-size:18px;font-weight:700;padding-top:var(--s2)}
+.h3 small{font-weight:400;font-size:16px;color:var(--text-2);margin-left:var(--s2)}
+.row{display:flex;align-items:center;gap:var(--s3);min-height:68px;width:100%;background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:var(--s2) var(--s3)}
+.row[data-next=true]{border-color:var(--navy);border-width:3px}
+:root[data-theme=night] .row[data-next=true]{border-color:var(--yellow)}
+.row .pos{width:36px;font-size:24px;font-weight:700;color:var(--text-2);text-align:center;flex:none}
+.row .who{flex:1;min-width:0;display:grid;gap:2px}
+.row .who small{font-size:16px;color:var(--text-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.plate-t{font-size:28px;line-height:1.1;font-weight:700;letter-spacing:.03em;white-space:nowrap}
+.plate-t i{font-style:normal;font-weight:400;color:var(--text-2);font-size:20px}
+.pill{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:2px 10px;border-radius:99px;font-size:16px;font-weight:700;line-height:1.1;white-space:nowrap}
+.pill svg{width:18px;height:18px}
+.pill.prio{background:var(--yellow);color:var(--navy)}
+.pill.loaded{background:var(--navy);color:#fff}
+:root[data-theme=night] .pill.loaded{background:#2f6a9a}
+.pill.here{border:2px solid var(--ok);color:var(--ok)}
+.pill.wait{border:2px solid var(--text-3);color:var(--text-2)}
+.pill.bad{border:2px solid var(--danger);color:var(--danger);background:var(--danger-bg)}
+.pill.sb{border:2px solid var(--navy);color:var(--text)}
+:root[data-theme=night] .pill.sb{border-color:var(--yellow)}
+.row .end{display:grid;gap:4px;justify-items:end;flex:none}
+
+/* plate entry */
+.entry{flex:none;display:grid;gap:var(--s2);padding-top:var(--s2);border-top:2px solid var(--line)}
+.plate-row{display:flex;gap:var(--s2);align-items:stretch}
+.plate{flex:1;display:flex;align-items:center;gap:var(--s3);background:var(--yellow);color:var(--navy);border:4px solid var(--navy);border-radius:var(--r-md);padding:0 var(--s4);min-height:68px;box-shadow:inset 0 0 0 2px var(--yellow)}
+:root[data-theme=night] .plate{border-color:#fff}
+.plate .pre{font-size:28px;letter-spacing:.2em;opacity:.75;font-weight:700}
+.plate .slots{display:flex;gap:var(--s2)}
+.slot{width:1.05em;height:1.3em;display:grid;place-items:center;font-size:48px;line-height:1;font-weight:700;border-bottom:5px solid var(--navy);font-variant-numeric:tabular-nums}
+.slot.on{background:rgba(18,48,74,.12)}
+.plate .cap{margin-left:auto;font-size:16px;font-weight:700;text-align:right;line-height:1.15}
+.clear{width:84px;border:3px solid var(--navy);border-radius:var(--r-md);font-weight:700;font-size:18px;display:grid;place-items:center;background:var(--surface)}
+:root[data-theme=night] .clear{border-color:#fff}
+.keys{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:6px}
+.keys.flow{grid-template-columns:repeat(7,minmax(0,1fr))}
+.key{grid-column:span 2;height:var(--key);display:grid;place-items:center;font-size:28px;font-weight:700;background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);border-bottom-width:5px}
+.keys.flow .key{grid-column:span 1}
+.key.k-off{grid-column-start:2}
+.key.k-del{grid-column:span 4;background:var(--surface-2)}
+.keys.flow .key.k-del{grid-column:span 2}
+.key svg{width:32px;height:32px}
+.key:active{background:var(--yellow);color:var(--navy)}
+
+/* tabs */
+nav{position:sticky;bottom:0;z-index:6;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);padding:var(--s2) var(--s4);border-top:2px solid var(--line);background:var(--bg)}
+.tab{min-height:60px;display:flex;align-items:center;justify-content:center;gap:var(--s2);border:2px solid var(--border);border-radius:var(--r-md);font-weight:700;font-size:18px;text-align:center;line-height:1.1;padding:0 var(--s2)}
+.tab[aria-selected=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+:root[data-theme=night] .tab[aria-selected=true]{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+.tab .count{background:var(--yellow);color:var(--navy);min-width:28px;height:28px;border-radius:99px;display:inline-grid;place-items:center;font-size:16px;padding:0 6px}
+
+/* segmented */
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:var(--s2)}
+.seg button{min-height:56px;border:2px solid var(--border);border-radius:var(--r-md);font-weight:700;text-align:center;display:grid;place-items:center;padding:0 var(--s2);line-height:1.1}
+.seg button[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+:root[data-theme=night] .seg button[aria-pressed=true]{background:var(--yellow);border-color:var(--yellow);color:var(--navy)}
+
+/* standby card */
+.card{background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:var(--s3) var(--s4);display:grid;gap:var(--s1)}
+.card.go{border-color:var(--ok)}
+.card.hold{border-color:var(--text-3)}
+.card b{font-size:20px}
+
+/* sheet */
+.sheet{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;gap:var(--s3);padding:var(--s3) var(--s4) var(--s2);overflow-y:auto;z-index:5;overscroll-behavior:contain}
+.sheet[hidden]{display:none}
+.sh-head{display:flex;gap:var(--s3);align-items:flex-start}
+.sh-head .who{flex:1;min-width:0;display:grid;gap:var(--s1)}
+.sh-head .plate-t{font-size:36px}
+.sh-head small{font-size:18px;color:var(--text-2)}
+.close{width:64px;height:64px;border:3px solid var(--border);border-radius:var(--r-md);display:grid;place-items:center;flex:none}
+.close svg{width:32px;height:32px}
+.spec{display:flex;align-items:center;gap:var(--s3);background:var(--surface);border:2px solid var(--line);border-radius:var(--r-md);padding:var(--s2) var(--s3);min-height:60px;flex-wrap:wrap}
+.spec span{flex:1;min-width:0;font-weight:700}
+.btn{min-height:56px;padding:0 var(--s4);border:3px solid var(--border);border-radius:var(--r-md);font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);text-align:center;line-height:1.1}
+.btn.danger{border-color:var(--danger);color:var(--danger)}
+.btn.solid{background:var(--yellow);border-color:var(--navy);color:var(--navy)}
+.btn.block{width:100%}
+.edit{display:grid;gap:var(--s2)}
+.toggle{min-height:60px;display:flex;align-items:center;gap:var(--s3);border:2px solid var(--border);border-radius:var(--r-md);padding:0 var(--s3);font-weight:700;background:var(--surface);width:100%}
+.toggle .box{width:36px;height:36px;border:3px solid var(--text);border-radius:var(--r-sm);display:grid;place-items:center;flex:none}
+.toggle[aria-pressed=true]{background:var(--yellow);color:var(--navy);border-color:var(--navy)}
+.toggle[aria-pressed=true] .box{background:var(--navy);color:var(--yellow);border-color:var(--navy)}
+.toggle:not([aria-pressed=true]) .box svg{display:none}
+.lanes{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2)}
+.lanebtn{min-height:92px;border:3px solid var(--navy);background:var(--surface);border-radius:var(--r-lg);padding:var(--s2) var(--s4);display:grid;align-content:center;gap:2px}
+:root[data-theme=night] .lanebtn{border-color:#fff}
+.lanebtn b{font-size:30px;line-height:1.1}
+.lanebtn span{font-size:16px;line-height:1.2;color:var(--text-2)}
+.lanebtn.best{background:var(--yellow);color:var(--navy);border-color:var(--navy)}
+.lanebtn.best span{color:var(--navy);font-weight:700}
+:root[data-theme=night] .lanebtn.best{border-color:#fff}
+.lanebtn.cur{background:var(--navy);color:#fff}
+.lanebtn.cur span{color:#fff}
+:root[data-theme=night] .lanebtn.cur{background:#2f6a9a}
+.lanebtn[aria-disabled=true]{background:var(--surface-2);border:3px dashed var(--border)}
+.lanebtn[aria-disabled=true] b{color:var(--text-2)}
+.lanebtn[aria-disabled=true] span{color:var(--text)}
+.note{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3);border:2px solid var(--danger);background:var(--danger-bg);color:var(--danger);border-radius:var(--r-md);font-weight:700}
+.note.info{border-color:var(--navy);background:var(--surface);color:var(--text)}
+:root[data-theme=night] .note.info{border-color:var(--yellow)}
+.note svg{margin-top:2px}
+
+/* toast */
+#toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(92vw,720px);z-index:20;display:none}
+#toast.on{display:flex}
+.toast{flex:1;display:flex;align-items:center;gap:var(--s3);background:var(--navy);color:#fff;border:3px solid var(--yellow);border-radius:var(--r-lg);padding:var(--s2) var(--s2) var(--s2) var(--s4);font-weight:700;min-height:72px}
+.toast span{flex:1;min-width:0}
+.toast button{min-height:56px;padding:0 var(--s5);background:var(--yellow);color:var(--navy);border-radius:var(--r-md);font-weight:700;display:flex;align-items:center;gap:var(--s2)}
+
+/* menu */
+dialog{margin:auto;width:min(94vw,560px);max-height:92dvh;overflow:auto;border:3px solid var(--navy);border-radius:var(--r-lg);padding:var(--s4);background:var(--bg);color:var(--text)}
+dialog::backdrop{background:rgba(6,19,32,.7)}
+dialog h2{font-size:22px;margin-bottom:var(--s3)}
+dialog section{display:grid;gap:var(--s2);padding:var(--s3) 0;border-top:2px solid var(--line)}
+dialog section:first-of-type{border-top:0}
+dialog h3{font-size:18px}
+dialog p{font-size:16px;color:var(--text-2)}
+.sample{font-size:16px;background:var(--yellow);color:var(--navy);border-radius:var(--r-sm);padding:var(--s2) var(--s3);font-weight:700}
+
+@media (max-height:1100px){
+  :root{--u:36px}
+  .decklab,.stat em{display:none}
+  .stat b{font-size:26px}
+  .banner{min-height:28px}
+}
+@media (max-width:599px){
+  :root{--u:44px}
+  header{padding-inline:var(--s3)}
+  .strip{margin-inline:calc(-1*var(--s3));padding-inline:var(--s3)}
+  #summary,main{padding-inline:var(--s3)}
+  nav{padding-inline:var(--s3)}
+  .stat b{font-size:28px}
+  .stats{grid-template-columns:1fr 1fr 1fr}
+  .stat{padding:var(--s2)}
+  .plate{padding:0 var(--s3);gap:var(--s2)}
+  .plate .pre,.plate .cap{display:none}
+  .slot{font-size:40px}
+  .veh b{font-size:18px}
+  .lanes{grid-template-columns:1fr 1fr}
+  .tab{font-size:16px}
+  .lane-h span{display:none}
+}
+@media (prefers-reduced-motion:reduce){button:active:not([aria-disabled=true]){transform:none}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header id="head"></header>
+  <section id="summary" aria-label="Deck space"></section>
+  <main id="main">
+    <div class="view" id="view-find">
+      <div class="results" id="results" aria-live="polite"></div>
+      <div class="entry">
+        <div class="plate-row">
+          <div class="plate" id="plate" role="status" aria-label="Plate ending"></div>
+          <button class="clear" id="clear" type="button">Clear</button>
+        </div>
+        <div class="keys" id="keys" role="group" aria-label="Plate keypad"></div>
+      </div>
+    </div>
+    <div class="view" id="view-order" hidden></div>
+    <div class="view" id="view-standby" hidden></div>
+    <div class="sheet" id="sheet" hidden role="dialog" aria-label="Vehicle"></div>
+  </main>
+  <nav id="tabs" aria-label="Views" role="tablist"></nav>
+</div>
+<div id="toast" role="status"></div>
+<dialog id="menu" aria-labelledby="menu-h"></dialog>
+
+<script>
+'use strict';
+/* ---------- config ---------- */
+const VESSEL='MV Gannet', FROM='Port Ailig', TO='Skerra', CROSSING_MIN=25;
+const SAILINGS=['07:10','08:30','10:15','12:40','14:30','16:20','18:05'];
+const LANES=[{cap:5},{cap:6},{cap:6},{cap:5}];
+const LOW_LANE_M=2.1, RELEASE_MIN=10;
+const TYPES={
+  car:{label:'Car',units:1,short:'Car'},
+  van:{label:'Van',units:2,short:'Van'},
+  trailer:{label:'Car + trailer',units:2,short:'Trailer'},
+  lorry:{label:'Lorry',units:4,short:'Lorry'},
+  bus:{label:'Island bus',units:4,short:'Bus'}
+};
+const SYNC_URL=''; /* POST target for queued events. Empty = sample mode, sync is simulated. */
+const DEMO_CLOCK=true;
+const KEY='gannet.loading.v1';
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const uid=()=>Math.random().toString(36).slice(2,10);
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const hm=ms=>{const d=new Date(ms);return `${pad(d.getHours())}:${pad(d.getMinutes())}`};
+const depMs=(date,time)=>{const[y,m,d]=date.split('-').map(Number),[h,mi]=time.split(':').map(Number);return new Date(y,m-1,d,h,mi).getTime()};
+const dayLabel=date=>{const[y,m,d]=date.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})};
+const addDays=(date,n)=>{const[y,m,d]=date.split('-').map(Number);return ymd(new Date(y,m-1,d+n))};
+const ic={
+  check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  x:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+  alert:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l10 18H2z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M12 10v5M12 18v.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  star:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 17l-5.6 3 1.3-6.2L3 9.5l6.3-.7z" fill="currentColor"/></svg>',
+  menu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>',
+  left:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  right:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  back:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5h11v14H9L3 12z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><path d="M12.5 9.5l5 5M17.5 9.5l-5 5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  off:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a13 13 0 0118 0M6 13a8 8 0 0112 0M9.5 16.5a3 3 0 015 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M4 4l16 16" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg>',
+  on:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9a13 13 0 0118 0M6 13a8 8 0 0112 0M9.5 16.5a3 3 0 015 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="20" r="1.4" fill="currentColor"/></svg>',
+  undo:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 7L4 12l5 5M5 12h9a6 6 0 010 12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 -3)"/></svg>'
+};
+
+/* ---------- sample data ---------- */
+function rng(str){
+  let h=1779033703^str.length;
+  for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}
+  let a=(h^(h>>>16))>>>0;
+  return ()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+}
+const NAMES=['MacLeod','Campbell','Fraser','MacAulay','Gillies','Morrison','Nicolson','Ferguson','Maclean','Munro','Robertson','MacKinnon','Stewart','Macdonald','Beaton','Kerr','Buchanan','Lamont','Sinclair','Ross','MacPhee','Graham','Cameron','MacInnes'];
+const CARS=[['Vauxhall Corsa',1.49],['Ford Fiesta',1.48],['Ford Focus',1.47],['Skoda Octavia Estate',1.47],['Dacia Duster',1.66],['Land Rover Defender 90',1.97],['Toyota Hilux',1.85],['Nissan Qashqai',1.62],['Toyota Yaris',1.5],['VW Golf',1.46],['Suzuki Jimny',1.72],['Mitsubishi Outlander',1.71]];
+const VANS=[['Ford Transit Custom',1.99],['Citroën Berlingo van',1.85],['Ford Transit high roof',2.55],['Mercedes Sprinter',2.6],['Vauxhall Vivaro',1.95],['Peugeot Partner',1.82]];
+const TRAILERS=[['Defender + livestock trailer',2.3],['Hilux + horsebox',2.45],['Octavia + boat trailer',1.9],['Fiesta + box trailer',1.6],['Duster + quad trailer',1.85]];
+const LORRIES=[['Scania 26t flatbed, building supplies',3.6],['Iveco 7.5t, Co-op delivery',3.1],['DAF 18t, Skerra Feeds',3.5]];
+const TRADES=['MacAulay Plumbing','Ailig Joinery','Skerra Electrical','Beaton Fencing','Croft Services','Sound Seafood'];
+const PL_AREA=['SC','SF','SG','SH','SJ','SK','SL','SM','SN','SO'];
+const PL_AGE=['19','21','22','23','24','25','26','69','70','71','72','73','74','75','76'];
+const PL_L='ABCDEFGHJKLMNOPRSTUVWXY';
+function genPlate(r){
+  const L=()=>PL_L[Math.floor(r()*PL_L.length)];
+  if(r()<.1) return `${L()}${L()}${L()} ${Math.floor(1+r()*9)}${Math.floor(r()*10)}${Math.floor(r()*10)}${L()}`;
+  return `${PL_AREA[Math.floor(r()*PL_AREA.length)]}${PL_AGE[Math.floor(r()*PL_AGE.length)]} ${L()}${L()}${L()}`;
+}
+const GEN=new Map();
+function gen(date,time){
+  const key=date+' '+time;
+  if(GEN.has(key))return GEN.get(key);
+  const r=rng(key), pick=a=>a[Math.floor(r()*a.length)];
+  const dep=depMs(date,time), dow=new Date(dep).getDay();
+  const special=dow===4&&time==='10:15';
+  const list=[]; let units=0, seq=0, ref=40000+Math.floor(r()*9000);
+  const add=(o)=>{
+    const t=TYPES[o.type];
+    list.push({id:`b${seq++}`,ref:`GN-${ref+=1+Math.floor(r()*9)}`,plate:o.plate||genPlate(r),name:o.name,desc:o.desc,type:o.type,h:o.h,roof:!!o.roof,
+      prio:o.prio||null,standby:!!o.standby,arriveMin:o.arriveMin,noShow:!!o.noShow});
+    if(!o.standby)units+=t.units;
+  };
+  const arr=()=>Math.round(14+r()*54);
+  if(special){
+    add({type:'lorry',name:'Skerra Fuels',desc:'Fuel tanker, 18t',h:3.4,arriveMin:30});
+    const g={key,dep,special:true,foot:5+Math.floor(r()*10),list};GEN.set(key,g);return g;
+  }
+  const rush=time==='08:30'||time==='16:20', quiet=time==='07:10'||time==='18:05';
+  const target=(rush?21:quiet?14:17)+Math.floor(r()*3);
+  if(rush&&dow>=1&&dow<=5)add({type:'bus',name:'Skerra Community Transport',desc:'Island bus',h:3.0,arriveMin:20});
+  if(r()<.55)add({type:'van',name:'Dr Fraser, Island Practice',desc:"Doctor's van, Vauxhall Vivaro",h:1.95,prio:'doctor',arriveMin:arr()});
+  if(r()<.3)add({type:'van',name:'Skerra Vets',desc:"Vet's van, Ford Transit Connect",h:1.9,prio:'vet',arriveMin:arr()});
+  let lorries=0;
+  while(units<target){
+    const x=r();
+    if(x<.08&&lorries<1&&units<=target-4){lorries++;const[d,h]=pick(LORRIES);add({type:'lorry',name:pick(TRADES),desc:d,h,arriveMin:arr()})}
+    else if(x<.25){const[d,h]=pick(VANS);add({type:'van',name:r()<.5?pick(TRADES):pick(NAMES),desc:d,h,arriveMin:arr(),prio:r()<.15?'resident':null})}
+    else if(x<.34){const[d,h]=pick(TRAILERS);add({type:'trailer',name:pick(NAMES),desc:d,h,arriveMin:arr()})}
+    else {
+      const roof=r()<.13, [d,h]=pick(CARS);
+      add({type:'car',name:pick(NAMES),desc:roof?d+' with roof box':d,h:roof?+(h+.35).toFixed(2):h,roof,arriveMin:arr(),prio:r()<.22?'resident':null});
+    }
+  }
+  /* a couple of booked no-shows and one late arrival */
+  const booked=list.filter(b=>!b.prio&&b.type!=='bus');
+  if(booked.length>4){booked[Math.floor(r()*booked.length)].noShow=true;if(r()<.5)booked[Math.floor(r()*booked.length)].noShow=true;
+    const late=booked[Math.floor(r()*booked.length)];if(!late.noShow&&r()<.6)late.arriveMin=6}
+  const sb=2+Math.floor(r()*4);
+  for(let i=0;i<sb;i++){
+    const roof=r()<.1,van=r()<.2,[d,h]=van?pick(VANS):pick(CARS);
+    add({standby:true,type:van?'van':'car',name:pick(NAMES),desc:roof?d+' with roof box':d,h:roof?+(h+.35).toFixed(2):h,roof,arriveMin:Math.round(78-i*(10+r()*6))});
+  }
+  const g={key,dep,special:false,foot:4+Math.floor(r()*18),list};GEN.set(key,g);return g;
+}
+
+/* ---------- persistent state ---------- */
+function anchorMs(){const d=new Date();d.setHours(12,40-22,30,0);return d.getTime()}
+function fresh(){
+  const a=anchorMs();
+  return {v:1,device:uid(),offset:a-Date.now(),anchor:a,date:ymd(new Date(a)),sailing:'12:40',events:[],outbox:[],lastSync:0,theme:'auto',offline:false};
+}
+function now(){return Date.now()+S.offset}
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){S=null}
+let needSeed=false;
+if(!S||S.v!==1){S=fresh();needSeed=true}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+
+/* ---------- rules ---------- */
+const units=b=>TYPES[b.type].units;
+const heavy=b=>b.type==='lorry'||b.type==='bus';
+function laneOpts(lanes,b){
+  const u=units(b);
+  return lanes.map((l,i)=>{
+    const used=l.reduce((s,x)=>s+units(x),0), free=LANES[i].cap-used;
+    let why='';
+    if(heavy(b)&&(i===0||i===3))why='Lorry and bus: lanes 2 and 3 only';
+    else if(b.tall&&i===0)why='Too tall: 2.1 m limit';
+    else if(free<u)why=free===0?'Full':`Needs ${u}, only ${free} free`;
+    return {n:i+1,free,ok:!why,why};
+  });
+}
+function bestLane(opts,b){
+  let best=null,score=1e9;
+  for(const o of opts){
+    if(!o.ok)continue;
+    const s=(o.free-units(b))*10+((o.n===2||o.n===3)&&!heavy(b)?3:0)+o.n*.1;
+    if(s<score){score=s;best=o.n}
+  }
+  return best;
+}
+
+/* ---------- derive state from sample base + event log ---------- */
+function derive(date,time){
+  const g=gen(date,time), dep=g.dep, t=now();
+  const lanes=[[],[],[],[]], bm={};
+  const pre=dep<S.anchor||date<ymd(new Date(S.anchor));
+  const list=g.list.map(b=>{
+    const c={...b,tall:b.h>LOW_LANE_M||b.roof,loaded:null,conflict:null,
+      arrivedAt:b.noShow?null:dep-b.arriveMin*60000};
+    bm[c.id]=c;return c;
+  });
+  const detach=b=>{if(b.loaded){const l=lanes[b.loaded-1],i=l.indexOf(b);if(i>-1)l.splice(i,1);b.loaded=null}};
+  const place=(b,n)=>{lanes[n-1].push(b);b.loaded=n;b.conflict=null};
+  if(pre){
+    for(const b of list.filter(x=>!x.noShow)){const n=bestLane(laneOpts(lanes,b),b);if(n)place(b,n)}
+  }
+  const evs=S.events.filter(e=>e.k===g.key).sort((a,b)=>a.ts-b.ts||(a.id<b.id?-1:1));
+  for(const e of evs){
+    const b=bm[e.b];if(!b)continue;
+    if(e.t==='load'){detach(b);const o=laneOpts(lanes,b)[e.lane-1];if(o.ok)place(b,e.lane);else b.conflict=o.why}
+    else if(e.t==='unload'){detach(b);b.conflict=null}
+    else if(e.t==='edit'){
+      if(b.loaded){detach(b);b.conflict='Changed after loading: place again'}
+      if(e.type)b.type=e.type; if(typeof e.tall==='boolean')b.tall=e.tall;
+    }
+    else if(e.t==='arrive'){b.arrivedAt=e.at}
+    else if(e.t==='standby'){b.standby=true;b.arrivedAt=e.at}
+  }
+  const cutoff=dep-RELEASE_MIN*60000;
+  for(const b of list){
+    b.here=b.arrivedAt!=null&&b.arrivedAt<=t;
+    b.late=!b.standby&&!b.loaded&&t>=cutoff&&(!b.here||b.arrivedAt>cutoff);
+    b.released=b.late; /* space handed to standby */
+    b.tier=b.standby?2:b.prio?0:1;
+  }
+  const used=lanes.map(l=>l.reduce((s,x)=>s+units(x),0));
+  const usedAll=used.reduce((a,b)=>a+b,0);
+  const pending=list.filter(b=>!b.standby&&!b.loaded&&!b.released&&!b.conflict);
+  const pendingUnits=pending.reduce((s,b)=>s+units(b),0);
+  const free=22-usedAll;
+  const lanesFree=used.map((u,i)=>LANES[i].cap-u);
+  let gap=0,gapLane=1;lanesFree.forEach((f,i)=>{if(f>gap){gap=f;gapLane=i+1}});
+  const phase=t>=dep?'departed':t>=cutoff?'cutoff':'open';
+  const order=list.filter(b=>!b.loaded&&!b.released&&!(b.standby&&!b.here)).sort((a,b)=>
+    a.tier-b.tier||(a.tier<2?((b.here?1:0)-(a.here?1:0))||(a.ref<b.ref?-1:1):a.arrivedAt-b.arrivedAt));
+  const sbQueue=order.filter(b=>b.standby);
+  return {g,key:g.key,dep,t,lanes,bm,list,used,usedAll,free,lanesFree,gap,gapLane,pending,pendingUnits,phase,order,sbQueue,
+    called:pending.length===0&&!g.special,special:g.special,cutoff};
+}
+const cur=()=>derive(S.date,S.sailing);
+
+/* ---------- UI state ---------- */
+const UI={tab:'find',q:'',sheet:null,edit:false,override:false,orderSeg:'todo',opener:null,toastTimer:0,toastUndo:null};
+
+/* ---------- search ---------- */
+const fold=s=>s.toUpperCase().replace(/[^A-Z0-9]/g,'').replace(/O/g,'0').replace(/I/g,'1').replace(/S/g,'5').replace(/B/g,'8').replace(/Z/g,'2');
+function plateParts(p){
+  let cnt=3,i=p.length;
+  while(cnt>0&&i>0){i--;if(/[A-Z0-9]/i.test(p[i]))cnt--}
+  return [p.slice(0,i),p.slice(i)];
+}
+const plateHTML=p=>{const[a,b]=plateParts(p);return `<span class="plate-t num"><i>${esc(a)}</i>${esc(b)}</span>`};
+
+/* ---------- render: header ---------- */
+function connState(){return navigator.onLine&&!S.offline}
+function renderHead(st){
+  const dow=new Date(st.dep).getDay();
+  $('#head').innerHTML=`
+  <div class="h-top">
+    <div class="h-title"><b>${VESSEL} loading</b><span>${FROM} to ${TO} · ${CROSSING_MIN} min</span></div>
+    <div class="datenav" role="group" aria-label="Day">
+      <button type="button" data-day="-1" aria-label="Previous day">${ic.left}</button>
+      <output aria-live="polite">${dayLabel(S.date)}</output>
+      <button type="button" data-day="1" aria-label="Next day">${ic.right}</button>
+    </div>
+    <div class="conn" id="conn"></div>
+    <button class="iconbtn" type="button" id="menubtn" aria-label="Menu">${ic.menu}</button>
+  </div>
+  <div class="strip" role="group" aria-label="Departures from ${FROM}">
+    ${SAILINGS.map(t=>{
+      const s=derive(S.date,t);
+      const sub=s.special?'Tanker':s.phase==='departed'?'Departed':`${s.free} free`;
+      return `<button class="chip" type="button" data-sail="${t}" aria-pressed="${t===S.sailing}"><b class="num">${t}</b><span>${sub}</span></button>`;
+    }).join('')}
+  </div>`;
+  renderConn();
+}
+function renderConn(){
+  const el=$('#conn');if(!el)return;
+  const n=S.outbox.length;
+  if(!connState()){el.className='conn bad';el.innerHTML=`${ic.off}<span>No signal<br>${n?`${n} to send later`:'Working offline'}</span>`}
+  else if(n){el.className='conn';el.innerHTML=`${ic.on}<span>Sending ${n}…</span>`}
+  else{el.className='conn';el.innerHTML=`${ic.on}<span>Online<br>All sent</span>`}
+}
+
+/* ---------- render: summary ---------- */
+function bannerHTML(st){
+  const t=st.t, dep=st.dep, left=dep-t, arr=hm(dep+CROSSING_MIN*60000);
+  if(st.phase==='departed')return `<div class="banner done" id="bnr">${ic.check}<span>Departed ${hm(dep)}. Loading closed.</span></div>`;
+  if(st.phase==='cutoff'){
+    const mm=Math.floor(left/60000),ss=Math.floor(left/1000)%60;
+    return `<div class="banner cut" id="bnr">${ic.alert}<span>Departs in <span class="num">${mm}:${pad(ss)}</span><br><small>No-shows released. Standby takes their space.</small></span></div>`;
+  }
+  const mins=Math.ceil(left/60000);
+  return `<div class="banner" id="bnr"><span>Departs <span class="num">${hm(dep)}</span> · in ${mins>=60?`${Math.floor(mins/60)} h ${mins%60} min`:`${mins} min`}</span><small>Arrives ${arr} · no-shows released at ${hm(dep-RELEASE_MIN*60000)}</small></div>`;
+}
+function deckHTML(st,preview){
+  const cols=LANES.map((L,i)=>{
+    const cells=[];
+    st.lanes[i].forEach(b=>{
+      const u=units(b),[,tail]=plateParts(b.plate);
+      cells.push(`<button type="button" class="veh${b.prio?' prio':''}" style="grid-row:span ${u}" data-open="${b.id}" aria-label="${esc(tail)}, ${TYPES[b.type].label}, lane ${i+1}">
+        <b class="num">${esc(tail)}</b>${u>1?`<span>${TYPES[b.type].short}</span>`:''}</button>`);
+    });
+    let used=st.used[i];
+    if(preview&&preview.lane===i+1){
+      cells.push(`<div class="ghost" style="grid-row:span ${preview.units}" aria-hidden="true">Goes here</div>`);used+=preview.units;
+    }
+    for(let k=used;k<L.cap;k++)cells.push('<div class="cellfree" aria-hidden="true"></div>');
+    for(let k=L.cap;k<6;k++)cells.push('<div class="nodeck" aria-hidden="true"></div>');
+    return `<div class="lane${i===0?' low':''}"><div class="lane-h"><b>Lane ${i+1}</b><span>${i===0?'max 2.1 m':`${L.cap} units`}</span></div><div class="bay">${cells.join('')}</div></div>`;
+  });
+  return `<div class="deckwrap"><div class="decklab"><span>Bow (front)</span><span>Stern ramp</span></div><div class="deck" role="group" aria-label="Deck plan">${cols.join('')}</div></div>`;
+}
+function renderSummary(st){
+  let h='';
+  if(st.special)h+=`<div class="special">${ic.alert}<div>Thursday ${hm(st.dep)}: fuel tanker and foot passengers only<small>No cars, no standby. ${st.g.foot} foot passengers booked.</small></div></div>`;
+  h+=bannerHTML(st);
+  const spare=st.free-st.pendingUnits, short=spare<0;
+  h+=`<div class="stats">
+    <div class="stat free"><small>Space left</small><b>${st.free}<i> of 22</i></b><em>units on deck</em></div>
+    <div class="stat${short?' warn':''}"><small>Booked still to load</small><b>${st.pendingUnits}<i> units</i></b><em>${st.special?'No standby today':short?`Short by ${-spare}`:`Room for standby: ${spare}`}</em></div>
+    <div class="stat"><small>Biggest gap</small><b>${st.gap}<i> units</i></b><em>${st.gap?`Lane ${st.gapLane}`:'Deck full'}${st.gap>=4?' · lorry fits':''}</em></div>
+  </div>`;
+  const sh=UI.sheet?st.bm[UI.sheet]:null;
+  let preview=null;
+  if(sh&&!sh.loaded){const n=bestLane(laneOpts(st.lanes,sh),sh);if(n)preview={lane:n,units:units(sh)}}
+  h+=deckHTML(st,preview);
+  $('#summary').innerHTML=h;
+}
+
+/* ---------- rows ---------- */
+function statusPills(b,st){
+  const p=[];
+  if(b.prio)p.push(`<span class="pill prio">${ic.star}${b.prio==='resident'?'Island resident':b.prio==='doctor'?'Doctor':'Vet'}</span>`);
+  return p.join('');
+}
+function statePill(b,st){
+  if(b.conflict)return `<span class="pill bad">${ic.alert}Needs a lane</span>`;
+  if(b.loaded)return `<span class="pill loaded">${ic.check}Lane ${b.loaded}</span>`;
+  if(b.released&&b.here)return `<span class="pill bad">${ic.alert}Late, space gone</span>`;
+  if(b.released)return `<span class="pill bad">${ic.alert}No-show, released</span>`;
+  if(b.standby)return `<span class="pill sb">Standby ${st.sbQueue.indexOf(b)+1}</span>`;
+  if(b.here)return `<span class="pill here">${ic.check}Here</span>`;
+  return `<span class="pill wait">${ic.clock}Not here yet</span>`;
+}
+function rowHTML(b,st,opt={}){
+  return `<button type="button" class="row" data-open="${b.id}"${opt.next?' data-next="true"':''}>
+    ${opt.pos?`<span class="pos num">${opt.pos}</span>`:''}
+    <span class="who">${plateHTML(b.plate)}<small>${esc(b.name)} · ${esc(b.desc)} · ${units(b)} ${units(b)>1?'units':'unit'}</small></span>
+    <span class="end">${statePill(b,st)}${statusPills(b)}</span></button>`;
+}
+
+/* ---------- find view ---------- */
+function renderResults(st){
+  const q=fold(UI.q), el=$('#results');
+  if(!q){
+    const next=st.order.filter(b=>b.here&&(!b.standby||st.called)).slice(0,3);
+    el.innerHTML=(next.length&&st.phase!=='departed'?'':`<p class="hint"><b>Type the last 3 characters of the plate.</b> You do not need the whole number.</p>`)+
+      (st.phase==='departed'?'':next.length?`<div class="h3">Next in boarding order<small>here now</small></div>${next.map((b,i)=>rowHTML(b,st,{next:i===0})).join('')}`:
+      `<div class="card"><b>${st.pending.length?'Waiting for booked vehicles':'Nothing waiting'}</b><span>${st.pending.length?`${st.pending.length} booked not on the slipway yet.`:'All booked vehicles are loaded.'}</span></div>`);
+    return;
+  }
+  const hits=st.list.filter(b=>fold(b.plate).endsWith(q));
+  if(!hits.length){
+    const other=[];
+    for(const t of SAILINGS){if(t===S.sailing)continue;const s=derive(S.date,t);const h=s.list.filter(b=>fold(b.plate).endsWith(q));h.forEach(b=>other.push({t,b}))}
+    el.innerHTML=`<div class="note info">${ic.alert}<span>No booking ends in ${esc(UI.q)} on the ${hm(st.dep)}. Check the letters, then look at other departures.</span></div>`+
+      other.map(o=>`<button type="button" class="row" data-sail="${o.t}"><span class="who">${plateHTML(o.b.plate)}<small>${esc(o.b.name)} · ${esc(o.b.desc)}</small></span><span class="end"><span class="pill sb">Booked ${o.t}</span></span></button>`).join('');
+    return;
+  }
+  if(hits.length>6&&q.length<3){el.innerHTML=`<p class="hint"><b>${hits.length} plates match.</b> Keep typing.</p>`;return}
+  el.innerHTML=hits.map(b=>rowHTML(b,st)).join('');
+}
+function renderPlate(){
+  const ch=[...UI.q];
+  $('#plate').innerHTML=`<span class="pre" aria-hidden="true">•• ••</span><span class="slots">${[0,1,2].map(i=>`<span class="slot${ch[i]?' on':''}">${esc(ch[i]||'')}</span>`).join('')}</span><span class="cap" aria-hidden="true">last 3<br>characters</span>`;
+  $('#plate').setAttribute('aria-label',ch.length?`Plate ends ${ch.join(' ')}`:'Plate ending empty');
+  $('#clear').disabled=!ch.length;
+  $('#clear').style.opacity=ch.length?1:.45;
+}
+const KEYROWS=['1234567890','QWERTYUIOP','ASDFGHJKL','ZXCVBNM'];
+let flowMode=null;
+function buildKeys(){
+  const flow=matchMedia('(max-width:599px)').matches;
+  if(flow===flowMode)return;flowMode=flow;
+  const k=$('#keys');k.classList.toggle('flow',flow);
+  const mk=(c,cls='')=>`<button type="button" class="key ${cls}" data-key="${c}">${c}</button>`;
+  const del=`<button type="button" class="key k-del" data-key="del" aria-label="Delete last character">${ic.back}</button>`;
+  if(flow)k.innerHTML=[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'].map(c=>mk(c)).join('')+del;
+  else k.innerHTML=KEYROWS.map((row,ri)=>[...row].map((c,i)=>mk(c,(ri>=2&&i===0)?'k-off':'')).join('')+(ri===3?del:'')).join('');
+}
+function typeKey(c){
+  if(c==='del')UI.q=UI.q.slice(0,-1);
+  else if(UI.q.length<3)UI.q+=c;
+  renderPlate();renderResults(cur());
+}
+
+/* ---------- order & standby views ---------- */
+function renderOrder(st){
+  const todo=st.order.filter(b=>!b.standby), done=st.list.filter(b=>b.loaded);
+  const nextId=(st.order.find(b=>b.here&&(!b.standby||st.called))||{}).id;
+  let h=`<div class="seg" role="group" aria-label="Show"><button type="button" data-seg="todo" aria-pressed="${UI.orderSeg==='todo'}">To load (${todo.length})</button><button type="button" data-seg="done" aria-pressed="${UI.orderSeg==='done'}">Loaded (${done.length})</button></div><div class="results" style="padding-top:12px">`;
+  if(UI.orderSeg==='todo'){
+    const pri=todo.filter(b=>b.tier===0), oth=todo.filter(b=>b.tier===1);
+    let n=0;
+    h+=`<div class="h3">Priority<small>island residents, doctor, vet</small></div>`;
+    h+=pri.length?pri.map(b=>rowHTML(b,st,{pos:++n,next:b.id===nextId})).join(''):`<p class="hint">None waiting.</p>`;
+    h+=`<div class="h3">Other bookings</div>`;
+    h+=oth.length?oth.map(b=>rowHTML(b,st,{pos:++n,next:b.id===nextId})).join(''):`<p class="hint">None waiting.</p>`;
+    const rel=st.list.filter(b=>b.released);
+    if(rel.length)h+=`<div class="h3">Space released<small>${rel.length} no-show or late</small></div>`+rel.map(b=>rowHTML(b,st)).join('');
+    const cf=st.list.filter(b=>b.conflict);
+    if(cf.length)h+=`<div class="h3">Needs a lane<small>clashed when catching up</small></div>`+cf.map(b=>rowHTML(b,st)).join('');
+  }else{
+    st.lanes.forEach((l,i)=>{
+      h+=`<div class="h3">Lane ${i+1}<small>${st.used[i]} of ${LANES[i].cap} units</small></div>`;
+      h+=l.length?l.map(b=>rowHTML(b,st)).join(''):`<p class="hint">Empty.</p>`;
+    });
+  }
+  h+='</div>';
+  $('#view-order').innerHTML=h;
+}
+function renderStandby(st){
+  const q=st.sbQueue;
+  let head;
+  if(st.special)head=`<div class="card hold"><b>No standby on this sailing</b><span>Fuel tanker and foot passengers only.</span></div>`;
+  else if(st.phase==='departed')head=`<div class="card hold"><b>Loading closed</b><span>Standby left waiting go on the next sailing.</span></div>`;
+  else if(st.called)head=`<div class="card go"><b>Standby called</b><span>Booked vehicles are loaded. Room: ${st.free} ${st.free===1?'unit':'units'}, biggest gap ${st.gap}.</span></div>`;
+  else head=`<div class="card hold"><b>Standby waits</b><span>${st.pending.length} booked ${st.pending.length===1?'vehicle':'vehicles'} still to load (${st.pendingUnits} units). ${st.phase==='open'?`Spaces of any no-shows go to standby at ${hm(st.cutoff)}.`:''}</span></div>`;
+  $('#view-standby').innerHTML=`${head}<div class="h3" style="padding-bottom:8px">Shore lane<small>in order of arrival</small></div><div class="results">${
+    q.length?q.map((b,i)=>rowHTML(b,st,{pos:i+1,next:st.called&&i===0})).join(''):`<p class="hint">No standby vehicles in the shore lane.</p>`}</div>`;
+}
+
+/* ---------- sheet ---------- */
+function laneBtns(st,b){
+  const opts=laneOpts(st.lanes,b), best=b.loaded?null:bestLane(opts,b);
+  const locked=st.phase==='departed';
+  const blocked=b.standby&&!st.called&&!UI.override&&!b.loaded;
+  return `<div class="lanes">${opts.map(o=>{
+    const isCur=b.loaded===o.n;
+    let why=o.why, ok=o.ok&&!locked&&!blocked;
+    if(locked)why='Sailing has departed'; else if(blocked&&o.ok)why='Wait for booked cars';
+    const cls=isCur?'cur':(ok&&o.n===best?'best':'');
+    const sub=isCur?'Loaded here':ok?(o.n===best?`Best fit · ${o.free} free`:`${o.free} free`):why;
+    return `<button type="button" class="lanebtn ${cls}" data-lane="${o.n}" aria-disabled="${!ok||isCur}"><b>Lane ${o.n}</b><span>${esc(sub)}</span></button>`;
+  }).join('')}</div>`;
+}
+function renderSheet(){
+  const el=$('#sheet');
+  if(!UI.sheet){el.hidden=true;el.innerHTML='';return}
+  const st=cur(), b=st.bm[UI.sheet];
+  if(!b){UI.sheet=null;el.hidden=true;return}
+  const locked=st.phase==='departed';
+  const u=units(b);
+  let h=`<div class="sh-head"><div class="who">${plateHTML(b.plate)}<small>${esc(b.name)} · ${esc(b.desc)}</small><span>${statePill(b,st)} ${statusPills(b)}</span></div>
+    <button class="close" type="button" data-close aria-label="Close">${ic.x}</button></div>`;
+  h+=`<div class="spec"><span>${TYPES[b.type].label} · ${u} ${u>1?'units':'unit'} · ${b.tall?(b.roof?'Roof box or tall: not lane 1':'Over 2.1 m: not lane 1'):'Under 2.1 m'}</span>
+    ${b.loaded||locked?'':`<button class="btn" type="button" data-edit aria-expanded="${UI.edit}">${UI.edit?'Done':'Not right?'}</button>`}</div>`;
+  if(UI.edit&&!b.loaded){
+    h+=`<div class="edit"><div class="seg" role="group" aria-label="Vehicle type">${Object.entries(TYPES).map(([k,t])=>`<button type="button" data-type="${k}" aria-pressed="${b.type===k}">${t.short}<br><small>${t.units}</small></button>`).join('')}</div>
+    <button type="button" class="toggle" data-tall aria-pressed="${b.tall}"><span class="box">${ic.check}</span>Roof box or over 2.1 m</button></div>`;
+  }
+  if(b.conflict)h+=`<div class="note">${ic.alert}<span>${esc(b.conflict)}. Another tablet got there first. Pick a lane again.</span></div>`;
+  if(b.released)h+=`<div class="note">${ic.alert}<span>${b.here?'Arrived after the cut-off.':'No-show.'} Space released to standby at ${hm(st.cutoff)}.</span></div>`;
+  if(b.standby&&!st.called&&!b.loaded)h+=`<div class="note info">${ic.clock}<span>Standby is called when booked vehicles are loaded (${st.pending.length} to go).</span></div>`;
+  if(b.released&&!locked)h+=`<button class="btn block solid" type="button" data-tostandby>Put on standby, last in shore lane</button>`;
+  else h+=laneBtns(st,b);
+  if(b.standby&&!st.called&&!b.loaded&&!UI.override&&!locked)h+=`<button class="btn block" type="button" data-override>Load standby ahead of booked</button>`;
+  if(!b.standby&&!b.here&&!b.loaded&&!b.released&&!locked)h+=`<button class="btn block" type="button" data-arrive>${ic.check} Mark as arrived</button>`;
+  if(b.loaded&&!locked)h+=`<button class="btn block danger" type="button" data-unload>Take off deck (lane ${b.loaded})</button>`;
+  el.innerHTML=h;el.hidden=false;
+}
+function openSheet(id,opener){UI.sheet=id;UI.edit=false;UI.override=false;UI.opener=opener||null;render();$('#sheet').scrollTop=0;const c=$('#sheet .close');c&&c.focus({preventScroll:true})}
+function closeSheet(){
+  const op=UI.opener;UI.sheet=null;render();
+  const t=op&&document.querySelector(`[data-open="${op}"]`);(t||$('#plate')).focus&&(t||$('#plate')).focus({preventScroll:true});
+}
+
+/* ---------- events (commit + undo + sync) ---------- */
+function commit(ev,quiet){
+  const id=uid(),e={id,ts:Date.now(),at:now(),dev:S.device,k:cur().key,...ev};
+  S.events.push(e);
+  if(!quiet)S.outbox.push(id);
+  save();sync();return e;
+}
+let syncing=false,syncTimer=0;
+async function sync(){
+  if(syncing||!S.outbox.length||!connState()){renderConn();return}
+  syncing=true;renderConn();
+  const ids=[...S.outbox], batch=S.events.filter(e=>ids.includes(e.id));
+  try{
+    if(SYNC_URL){const r=await fetch(SYNC_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(batch)});if(!r.ok)throw new Error(r.status)}
+    else await sleep(900);
+    S.outbox=S.outbox.filter(i=>!ids.includes(i));S.lastSync=Date.now();save();
+  }catch(e){clearTimeout(syncTimer);syncTimer=setTimeout(sync,8000)}
+  finally{syncing=false;renderConn();if(S.outbox.length&&connState()){clearTimeout(syncTimer);syncTimer=setTimeout(sync,3000)}}
+}
+function toast(msg,undoEv){
+  const el=$('#toast');clearTimeout(UI.toastTimer);
+  el.innerHTML=`<div class="toast"><span>${msg}</span>${undoEv?`<button type="button" data-undo>${ic.undo}Undo</button>`:''}</div>`;
+  el.classList.add('on');UI.toastUndo=undoEv||null;
+  UI.toastTimer=setTimeout(()=>{el.classList.remove('on');UI.toastUndo=null},10000);
+}
+function loadInto(b,n){
+  const st=cur();
+  if(st.phase==='departed')return;
+  const prev=b.loaded;
+  commit({t:'load',b:b.id,lane:n});
+  UI.q='';UI.sheet=null;UI.override=false;
+  render();
+  const[,tail]=plateParts(b.plate);
+  const after=cur().bm[b.id];
+  if(after&&after.loaded===n)toast(`${esc(tail)} in lane ${n}`,{t:prev?'load':'unload',b:b.id,lane:prev});
+  else toast(`${esc(tail)} did not fit lane ${n}`);
+  $('#plate').focus&&$('#plate').focus({preventScroll:true});
+}
+
+/* ---------- demo seed ---------- */
+function seedDemo(){
+  /* the current sailing is part-loaded when the demo opens */
+  const sv=S.events;let guard=0;
+  while(guard++<30){
+    const st=derive(S.date,S.sailing);
+    if(st.usedAll>=8)break;
+    const b=st.order.find(x=>x.here&&!x.standby);if(!b)break;
+    const n=bestLane(laneOpts(st.lanes,b),b);if(!n)break;
+    S.events.push({id:uid(),ts:Date.now()-(40-guard)*1000,at:st.t,dev:S.device,k:st.key,t:'load',b:b.id,lane:n});
+  }
+  save();
+}
+
+/* ---------- main render ---------- */
+let lastSig='';
+function render(){
+  buildKeys();
+  const st=cur();
+  renderHead(st);renderSummary(st);
+  ['find','order','standby'].forEach(v=>$('#view-'+v).hidden=UI.tab!==v);
+  if(UI.tab==='find'){renderPlate();renderResults(st)}
+  if(UI.tab==='order')renderOrder(st);
+  if(UI.tab==='standby')renderStandby(st);
+  const sbN=st.sbQueue.length, toN=st.order.filter(b=>!b.standby).length;
+  $('#tabs').innerHTML=[['find','Find plate'],['order',`Boarding order${toN?` <span class="count num">${toN}</span>`:''}`],['standby',`Standby${sbN?` <span class="count num">${sbN}</span>`:''}`]]
+    .map(([k,l])=>`<button class="tab" type="button" role="tab" data-tab="${k}" aria-selected="${UI.tab===k}">${l}</button>`).join('');
+  renderSheet();
+  lastSig=sig(st);
+}
+const sig=st=>st.phase+':'+st.list.filter(b=>b.here).length+':'+st.list.filter(b=>b.released).length;
+
+/* ---------- menu ---------- */
+function openMenu(){
+  const m=$('#menu'),st=cur();
+  const th=S.theme;
+  m.innerHTML=`<h2 id="menu-h">Settings</h2>
+  <section><h3>Screen</h3><div class="seg" role="group" aria-label="Theme">
+    ${[['auto','Auto'],['day','Day'],['night','Night']].map(([k,l])=>`<button type="button" data-theme="${k}" aria-pressed="${th===k}">${l}</button>`).join('')}</div></section>
+  <section><h3>Signal</h3><p>${connState()?'Online.':'No signal.'} ${S.outbox.length} change${S.outbox.length===1?'':'s'} waiting to send. Everything keeps working offline and is sent when signal returns.</p>
+    <button class="btn" type="button" data-simoff>${S.offline?'Signal back on':'Test: pretend signal is lost'}</button></section>
+  ${DEMO_CLOCK?`<section><h3>Sample data</h3><p class="sample">Plates, names and bookings are made-up samples. The clock below is simulated so you can try the cut-off.</p>
+    <p>Clock now ${hm(now())}. Departure ${hm(st.dep)}.</p>
+    <div class="seg"><button type="button" data-clock="25">25 min before</button><button type="button" data-clock="11">11 min before</button></div>
+    <div class="seg"><button type="button" data-clock="9">9 min before</button><button type="button" data-clock="0">At departure</button></div>
+    <button class="btn danger" type="button" data-reset>Reset sample data</button></section>`:''}
+  <button class="btn block solid" type="button" data-closemenu>Close</button>`;
+  m.showModal();
+}
+function applyTheme(){
+  const dark=S.theme==='night'||(S.theme==='auto'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.dataset.theme=dark?'night':'day';
+  document.querySelector('meta[name=theme-color]').content=dark?'#061320':'#12304a';
+}
+
+/* ---------- input ---------- */
+document.addEventListener('click',ev=>{
+  const t=ev.target.closest('button,[data-open]');if(!t)return;
+  const d=t.dataset;
+  if(t.getAttribute('aria-disabled')==='true')return;
+  if(d.key){typeKey(d.key);return}
+  if(t.id==='clear'){UI.q='';renderPlate();renderResults(cur());return}
+  if(d.open){openSheet(d.open,d.open);return}
+  if(d.close!==undefined){closeSheet();return}
+  if(d.tab){UI.tab=d.tab;UI.sheet=null;render();return}
+  if(d.sail){S.sailing=d.sail;UI.sheet=null;UI.q=d.sail&&UI.tab==='find'?UI.q:'';save();render();t.scrollIntoView&&t.scrollIntoView({inline:'nearest',block:'nearest'});return}
+  if(d.day){S.date=addDays(S.date,+d.day);UI.sheet=null;save();render();return}
+  if(d.seg){UI.orderSeg=d.seg;render();return}
+  if(d.lane){const b=cur().bm[UI.sheet];b&&loadInto(b,+d.lane);return}
+  if(d.edit!==undefined){UI.edit=!UI.edit;renderSheet();return}
+  if(d.type){commit({t:'edit',b:UI.sheet,type:d.type});render();return}
+  if(d.tall!==undefined){const b=cur().bm[UI.sheet];commit({t:'edit',b:UI.sheet,tall:!b.tall});render();return}
+  if(d.override!==undefined){UI.override=true;renderSheet();return}
+  if(d.arrive!==undefined){commit({t:'arrive',b:UI.sheet});render();return}
+  if(d.tostandby!==undefined){const b=cur().bm[UI.sheet];commit({t:'standby',b:UI.sheet});toast(`${esc(plateParts(b.plate)[1])} is on standby`);UI.sheet=null;UI.tab='standby';render();return}
+  if(d.unload!==undefined){const b=cur().bm[UI.sheet],n=b.loaded;commit({t:'unload',b:UI.sheet});UI.sheet=null;render();toast(`${esc(plateParts(b.plate)[1])} taken off lane ${n}`,{t:'load',b:b.id,lane:n});return}
+  if(d.undo!==undefined&&UI.toastUndo){const u=UI.toastUndo;UI.toastUndo=null;$('#toast').classList.remove('on');
+    if(u.t==='unload')commit({t:'unload',b:u.b});else commit({t:'load',b:u.b,lane:u.lane});render();return}
+  if(t.id==='menubtn'){openMenu();return}
+  if(d.closemenu!==undefined){$('#menu').close();return}
+  if(d.theme){S.theme=d.theme;save();applyTheme();openMenu();return}
+  if(d.simoff!==undefined){S.offline=!S.offline;save();renderConn();if(!S.offline)sync();openMenu();return}
+  if(d.clock!==undefined){const st=cur();S.offset=st.dep-(+d.clock)*60000-Date.now()+(+d.clock?0:1000);save();$('#menu').close();render();return}
+  if(d.reset!==undefined){if(confirm('Reset the sample data and clear every loaded vehicle?')){localStorage.removeItem(KEY);location.reload()}return}
+});
+document.addEventListener('keydown',ev=>{
+  if($('#menu').open||ev.ctrlKey||ev.metaKey||ev.altKey)return;
+  if(ev.key==='Escape'&&UI.sheet){closeSheet();return}
+  if(UI.tab!=='find'||UI.sheet)return;
+  if(ev.key==='Backspace'){typeKey('del');ev.preventDefault()}
+  else if(/^[a-z0-9]$/i.test(ev.key)&&!(ev.target.matches&&ev.target.matches('button')&&ev.key===' ')){typeKey(ev.key.toUpperCase())}
+});
+addEventListener('online',()=>{renderConn();sync()});
+addEventListener('offline',renderConn);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme);
+matchMedia('(max-width:599px)').addEventListener('change',buildKeys);
+
+/* tick: countdown every second, full refresh only when something changes */
+setInterval(()=>{
+  const st=cur();
+  if(sig(st)!==lastSig){if(!UI.sheet)render();else{renderHead(st);renderSummary(st);lastSig=sig(st)}return}
+  const b=$('#bnr');if(b)b.outerHTML=bannerHTML(st);
+},1000);
+
+if(needSeed)seedDemo();
+applyTheme();render();sync();
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>

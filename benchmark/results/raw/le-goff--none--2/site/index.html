@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parc Le Goff – Huîtres de Cancale, livrées chez vous</title>
+<meta name="description" content="Commandez vos bourriches d'huîtres directement au Parc Le Goff, ostréiculteur à Cancale.">
+<style>
+  :root {
+    --sea: #12394a;
+    --sea-light: #1e5a73;
+    --sand: #f6f1e7;
+    --shell: #fffdf8;
+    --accent: #c4572e;
+    --text: #1d2b32;
+    --muted: #5e6e75;
+    --line: #e2d9c6;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--text);
+    background: var(--sand);
+    line-height: 1.55;
+  }
+  h1, h2, h3 { line-height: 1.2; margin: 0 0 .5em; }
+  a { color: var(--sea-light); }
+  .sans { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+  header.top {
+    background: var(--sea);
+    color: #fff;
+    position: sticky; top: 0; z-index: 10;
+  }
+  header.top .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 12px; padding-bottom: 12px; gap: 12px;
+  }
+  .brand { font-size: 1.25rem; font-weight: bold; letter-spacing: .02em; text-decoration: none; color: #fff; }
+  .cart-btn {
+    font: 600 .95rem system-ui, sans-serif;
+    background: var(--accent); color: #fff; border: 0; border-radius: 999px;
+    padding: 9px 16px; cursor: pointer;
+  }
+  .cart-btn:hover { filter: brightness(1.08); }
+
+  .hero {
+    background: linear-gradient(160deg, var(--sea) 0%, var(--sea-light) 100%);
+    color: #fff; padding: 72px 0 80px; text-align: center;
+  }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
+  .hero p { max-width: 620px; margin: 0 auto 1.5em; font-size: 1.15rem; opacity: .92; }
+  .btn {
+    display: inline-block; font: 600 1rem system-ui, sans-serif;
+    background: var(--accent); color: #fff; text-decoration: none;
+    border: 0; border-radius: 999px; padding: 13px 26px; cursor: pointer;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+  section { padding: 56px 0; }
+  section h2 { font-size: 1.9rem; text-align: center; margin-bottom: 1.2em; }
+
+  .points { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .point { background: var(--shell); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .point h3 { font-size: 1.1rem; }
+  .point p { margin: 0; color: var(--muted); }
+
+  .products { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; }
+  .card {
+    background: var(--shell); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; display: flex; flex-direction: column;
+  }
+  .card .emoji { font-size: 2.2rem; }
+  .card h3 { font-size: 1.25rem; }
+  .card .desc { color: var(--muted); flex: 1; margin: 0 0 14px; font-size: .95rem; }
+  .price { font: 700 1.5rem system-ui, sans-serif; color: var(--sea); }
+  .price small { font-weight: 400; font-size: .8rem; color: var(--muted); }
+  .card .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; }
+  .card select {
+    font: 1rem system-ui, sans-serif; padding: 8px; border-radius: 8px; border: 1px solid var(--line); background: #fff;
+  }
+
+  .info { background: var(--shell); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .info ul { max-width: 680px; margin: 0 auto; padding-left: 1.2em; }
+  .info li { margin-bottom: .6em; }
+
+  footer { background: var(--sea); color: #cfdde3; padding: 36px 0; text-align: center; font-size: .95rem; }
+  footer a { color: #fff; }
+
+  /* cart drawer */
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: none; z-index: 20; }
+  .overlay.open { display: block; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100%);
+    background: var(--shell); z-index: 21; transform: translateX(100%);
+    transition: transform .25s; display: flex; flex-direction: column;
+    font-family: system-ui, sans-serif;
+  }
+  .drawer.open { transform: none; }
+  .drawer header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .drawer header h2 { margin: 0; font-size: 1.2rem; text-align: left; }
+  .close { background: none; border: 0; font-size: 1.6rem; cursor: pointer; line-height: 1; }
+  .drawer .body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+  .line { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .line .name { font-weight: 600; }
+  .line .sub { font-size: .85rem; color: var(--muted); }
+  .qty { display: inline-flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .qty button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line); background: #fff; cursor: pointer; font-size: 1rem; }
+  .empty { color: var(--muted); text-align: center; padding: 40px 0; }
+  .totals { padding: 6px 0; }
+  .totals div { display: flex; justify-content: space-between; padding: 3px 0; }
+  .totals .grand { font-weight: 700; font-size: 1.1rem; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 8px; }
+  form#order { margin-top: 16px; display: grid; gap: 10px; }
+  form#order label { font-size: .85rem; color: var(--muted); display: grid; gap: 3px; }
+  form#order input, form#order select, form#order textarea {
+    font: 1rem system-ui, sans-serif; padding: 9px; border: 1px solid var(--line); border-radius: 8px; width: 100%; background: #fff;
+  }
+  .note { font-size: .8rem; color: var(--muted); }
+  .toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--sea); color: #fff; padding: 11px 20px; border-radius: 999px;
+    font: .95rem system-ui, sans-serif; transition: transform .25s; z-index: 30;
+  }
+  .toast.show { transform: translateX(-50%); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#">Parc Le Goff</a>
+    <button class="cart-btn" id="open-cart" aria-label="Ouvrir le panier">🧺 Panier (<span id="cart-count">0</span>)</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Les huîtres de Cancale,<br>directement du parc à votre table</h1>
+    <p>Famille d'ostréiculteurs à Cancale. Après le marché du samedi, nos bourriches voyagent désormais jusqu'à chez vous.</p>
+    <a class="btn" href="#bourriches">Choisir ma bourriche</a>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="points">
+      <div class="point"><h3>🌊 Élevées à Cancale</h3><p>Grandies dans la baie du Mont-Saint-Michel, au rythme des grandes marées.</p></div>
+      <div class="point"><h3>👨‍👩‍👧 Entreprise familiale</h3><p>Nous élevons, trions et préparons nous-mêmes chaque commande.</p></div>
+      <div class="point"><h3>📦 Expédiées fraîches</h3><p>Emballées pour voyager et arriver vivantes, prêtes à ouvrir.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="bourriches" style="padding-top:0">
+  <div class="wrap">
+    <h2>Nos bourriches</h2>
+    <div class="products" id="products"></div>
+  </div>
+</section>
+
+<section class="info">
+  <div class="wrap">
+    <h2>Livraison &amp; conservation</h2>
+    <ul class="sans">
+      <li>Commande à passer quelques jours avant la date souhaitée : nous préparons vos huîtres à la demande.</li>
+      <li>Retrait possible au parc ou au marché du samedi.</li>
+      <li>À réception, conservez les huîtres au frais (entre 5 et 15 °C), creux vers le bas, sous un linge humide. Jamais dans l'eau douce.</li>
+      <li>Ouvrez uniquement les huîtres bien fermées ; une huître ouverte qui ne se referme pas au toucher est à écarter.</li>
+      <li>L'abus d'alcool est dangereux pour la santé — et les huîtres, elles, se dégustent avec modération… ou pas.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <strong>Parc Le Goff</strong> · Cancale (Ille-et-Vilaine)<br>
+    Marché de Cancale chaque samedi · <a href="mailto:contact@exemple.fr" id="footer-mail">contact@exemple.fr</a>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-label="Panier">
+  <header>
+    <h2>Votre commande</h2>
+    <button class="close" id="close-cart" aria-label="Fermer">×</button>
+  </header>
+  <div class="body">
+    <div id="cart-lines"></div>
+    <div class="totals" id="totals"></div>
+    <form id="order">
+      <label>Nom complet <input name="name" required autocomplete="name"></label>
+      <label>Téléphone <input name="phone" type="tel" required autocomplete="tel"></label>
+      <label>E-mail <input name="email" type="email" required autocomplete="email"></label>
+      <label>Mode de réception
+        <select name="mode" id="mode">
+          <option value="retrait">Retrait au parc / marché du samedi</option>
+          <option value="livraison">Livraison à domicile</option>
+        </select>
+      </label>
+      <label id="address-wrap" hidden>Adresse de livraison
+        <textarea name="address" rows="2" autocomplete="street-address"></textarea>
+      </label>
+      <label>Date souhaitée <input name="date" type="date" required></label>
+      <label>Remarque (facultatif) <textarea name="comment" rows="2"></textarea></label>
+      <button class="btn" type="submit" id="submit" disabled>Envoyer ma commande</button>
+      <p class="note">Aucun paiement en ligne : votre commande est envoyée par e-mail au parc, qui vous confirme la disponibilité, le montant final et le règlement.</p>
+    </form>
+  </div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== À personnaliser =====
+const CONFIG = {
+  email: "contact@exemple.fr",      // adresse qui reçoit les commandes
+  shippingFee: 12,                  // frais de livraison (€) ; 0 en cas de retrait
+  freeShippingFrom: 80              // livraison offerte à partir de (€) ; null pour désactiver
+};
+
+// Prix et contenus indicatifs : à remplacer par vos vrais tarifs.
+const PRODUCTS = [
+  { id: "d12",  emoji: "🦪", name: "Bourriche découverte", count: 12,  price: 15,  desc: "12 huîtres creuses, idéale pour un apéritif à deux." },
+  { id: "f24",  emoji: "🦪", name: "Bourriche famille",    count: 24,  price: 28,  desc: "24 huîtres creuses pour un repas en famille." },
+  { id: "t48",  emoji: "🦪", name: "Bourriche tablée",     count: 48,  price: 52,  desc: "48 huîtres creuses pour recevoir 6 à 8 convives." },
+  { id: "f100", emoji: "🦪", name: "Grande bourriche",     count: 100, price: 98,  desc: "100 huîtres creuses pour les grandes occasions." }
+];
+const SIZES = ["N°3 (moyenne)", "N°2 (grosse)", "N°4 (petite)"];
+// ===========================
+
+const eur = n => n.toLocaleString("fr-FR", { style: "currency", currency: "EUR" });
+const $ = id => document.getElementById(id);
+let cart = JSON.parse(localStorage.getItem("legoff-cart") || "[]");
+
+function save() { localStorage.setItem("legoff-cart", JSON.stringify(cart)); }
+
+function renderProducts() {
+  $("products").innerHTML = PRODUCTS.map(p => `
+    <article class="card">
+      <div class="emoji">${p.emoji}</div>
+      <h3>${p.name}</h3>
+      <p class="desc">${p.desc}</p>
+      <div class="price">${eur(p.price)} <small>/ bourriche</small></div>
+      <div class="row">
+        <select id="size-${p.id}" aria-label="Calibre">
+          ${SIZES.map(s => `<option>${s}</option>`).join("")}
+        </select>
+        <button class="btn" data-add="${p.id}">Ajouter</button>
+      </div>
+    </article>`).join("");
+}
+
+function addToCart(id) {
+  const size = $("size-" + id).value;
+  const found = cart.find(l => l.id === id && l.size === size);
+  if (found) found.qty++; else cart.push({ id, size, qty: 1 });
+  save(); renderCart(); toast("Ajouté au panier");
+}
+
+function totals() {
+  const sub = cart.reduce((s, l) => s + PRODUCTS.find(p => p.id === l.id).price * l.qty, 0);
+  const delivery = $("mode").value === "livraison";
+  const free = CONFIG.freeShippingFrom !== null && sub >= CONFIG.freeShippingFrom;
+  const ship = delivery && sub > 0 && !free ? CONFIG.shippingFee : 0;
+  return { sub, ship, delivery, total: sub + ship };
+}
+
+function renderCart() {
+  const n = cart.reduce((s, l) => s + l.qty, 0);
+  $("cart-count").textContent = n;
+  $("submit").disabled = n === 0;
+
+  $("cart-lines").innerHTML = cart.length ? cart.map((l, i) => {
+    const p = PRODUCTS.find(p => p.id === l.id);
+    return `<div class="line">
+      <div>
+        <div class="name">${p.name}</div>
+        <div class="sub">${p.count} huîtres · ${l.size}</div>
+        <div class="qty">
+          <button data-dec="${i}" aria-label="Retirer une">−</button>
+          <span>${l.qty}</span>
+          <button data-inc="${i}" aria-label="Ajouter une">+</button>
+        </div>
+      </div>
+      <div>${eur(p.price * l.qty)}</div>
+    </div>`;
+  }).join("") : `<p class="empty">Votre panier est vide.</p>`;
+
+  const t = totals();
+  $("totals").innerHTML = cart.length ? `
+    <div><span>Sous-total</span><span>${eur(t.sub)}</span></div>
+    ${t.delivery ? `<div><span>Livraison</span><span>${t.ship ? eur(t.ship) : "Offerte"}</span></div>` : ""}
+    <div class="grand"><span>Total</span><span>${eur(t.total)}</span></div>` : "";
+}
+
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast.id); toast.id = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+function setDrawer(open) {
+  $("drawer").classList.toggle("open", open);
+  $("overlay").classList.toggle("open", open);
+}
+
+document.addEventListener("click", e => {
+  const t = e.target;
+  if (t.dataset.add) addToCart(t.dataset.add);
+  if (t.dataset.inc) { cart[+t.dataset.inc].qty++; save(); renderCart(); }
+  if (t.dataset.dec) {
+    const l = cart[+t.dataset.dec];
+    if (--l.qty <= 0) cart.splice(+t.dataset.dec, 1);
+    save(); renderCart();
+  }
+});
+$("open-cart").onclick = () => setDrawer(true);
+$("close-cart").onclick = $("overlay").onclick = () => setDrawer(false);
+document.addEventListener("keydown", e => { if (e.key === "Escape") setDrawer(false); });
+
+$("mode").onchange = () => {
+  const d = $("mode").value === "livraison";
+  $("address-wrap").hidden = !d;
+  document.querySelector("[name=address]").required = d;
+  renderCart();
+};
+
+// Date minimale : dans 3 jours
+const min = new Date(); min.setDate(min.getDate() + 3);
+document.querySelector("[name=date]").min = min.toISOString().slice(0, 10);
+
+$("order").onsubmit = e => {
+  e.preventDefault();
+  if (!cart.length) return;
+  const f = Object.fromEntries(new FormData(e.target));
+  const t = totals();
+  const lines = cart.map(l => {
+    const p = PRODUCTS.find(p => p.id === l.id);
+    return `- ${l.qty} × ${p.name} (${p.count} huîtres, ${l.size}) : ${eur(p.price * l.qty)}`;
+  });
+  const body = [
+    "Bonjour, je souhaite commander :", "", ...lines, "",
+    `Sous-total : ${eur(t.sub)}`,
+    t.delivery ? `Livraison : ${t.ship ? eur(t.ship) : "offerte"}` : "Retrait sur place",
+    `Total : ${eur(t.total)}`, "",
+    `Date souhaitée : ${new Date(f.date).toLocaleDateString("fr-FR")}`,
+    t.delivery ? `Adresse : ${f.address}` : "",
+    f.comment ? `Remarque : ${f.comment}` : "", "",
+    `Nom : ${f.name}`, `Téléphone : ${f.phone}`, `E-mail : ${f.email}`
+  ].filter((x, i, a) => x !== "" || a[i - 1] !== "").join("\n");
+  location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Commande bourriche – " + f.name)}&body=${encodeURIComponent(body)}`;
+  toast("Votre messagerie s'ouvre pour envoyer la commande");
+};
+
+$("footer-mail").textContent = CONFIG.email;
+$("footer-mail").href = "mailto:" + CONFIG.email;
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>

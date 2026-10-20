@@ -38,9 +38,10 @@ Ask about every gap that would change a choice from the catalog. A guessed gap i
 1. Infer from the request, the repo and `DESIGN.md` first. Never ask what they already answer.
 2. The gaps, in this order: the primary action of the screen; who uses it and on what device; brand assets and references that already exist; the feel, offered as the 2 or 3 style families from the catalog that fit, one line each; real content and proof; for Improve, what must stay and the scope.
 3. Ask once, at most 4 questions. Each is multiple choice with your recommended option first and the reason for it. Use your question tool when you have one. Otherwise make the questions your whole reply and end the turn. The build waits for the answer.
-4. When the user answers "your call", or the request says to go ahead without questions, take your recommended options and record them as assumptions.
+4. When the user answers "your call" or declines, or the request says not to ask, take your recommended options and record them as assumptions. Any other instruction in the request, such as "use sample data" or "make it modern", answers only the gap it names. Ask about the rest.
+5. Facts the page needs that the user did not give (names, hours, prices, dates, items) become realistic sample values that fill the layout as real content would. List each one in the Brief and in your reply for the user to replace. Every line on the page reads as finished copy. Proof (reviews, ratings, customer logos, stats) still comes only from the user, so drop a proof section rather than fill it.
 
-Skip the round only when the request, the repo or `DESIGN.md` already answer every gap. Done when every line of the Brief in `DESIGN.md` has a value and a source: the user, inferred (name from where), or assumed after the user left it to you.
+Skip the round only when the request, the repo or `DESIGN.md` already answer every gap. Done when every line of the Brief in `DESIGN.md` has a value and a source: the user, inferred (name from where), or assumed after you asked and the user left it to you. A line marked assumed before you asked means the round has not run yet.
 
 ## Render loop
 
@@ -50,7 +51,7 @@ Run the checker on the page. For an app with a build step, start its dev server 
 node <this skill's directory>/scripts/check.mjs <page file or URL>   # add --dark if the page has dark mode
 ```
 
-It renders the full page at 390, 768 and 1440 px. It reports overflow, clipped content, contrast, unloaded fonts, script errors, tap targets, keyboard focus, wide tables on phones and a performance budget, and it saves screenshot tiles. Open every tile it lists. Then walk the primary flow once with your browser tool: the main action, one error and one empty state. Critique the tiles and the flow against every section of the rules, fix the failures and findings as one batch, and run the checker again. Stop after 3 rounds, and list any failure still open in your reply.
+It renders the full page at 390, 768 and 1440 px. It reports overflow, clipped content, contrast, unloaded fonts, script errors, tap targets, controls out of reach on phones, keyboard focus, wide tables, placeholder text and a performance budget, and it saves screenshot tiles. Open every tile it lists, the 390 px tiles first. Then walk the primary flow once with your browser tool: the main action, one error and one empty state. Critique the tiles and the flow against every section of the rules, fix the failures and findings as one batch, and run the checker again. Stop after 3 rounds, and list any failure still open in your reply.
 
 When the checker cannot start (no Node 22 or no Chrome), use your browser tool instead: full-page screenshots at the same widths, plus measured overflow, contrast and tap targets.
 

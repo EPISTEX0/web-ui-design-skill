@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parc Le Goff – Oyster boxes from Cancale</title>
+<meta name="description" content="Order oyster boxes from Parc Le Goff, a family oyster farm in Cancale since 1961. Delivery to mainland France, Belgium and Luxembourg, or collect at our farm shop.">
+<meta name="theme-color" content="#3e5363">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%233e5363'/%3E%3Cpath d='M6 20c0-7 5-12 10-12s10 5 10 12c-4 4-16 4-20 0z' fill='%23c8a24a'/%3E%3C/svg%3E">
+<style>
+:root {
+  --shell: #f4efe6;
+  --shell-2: #ebe4d6;
+  --slate: #3e5363;
+  --ink: #1f2b34;
+  --ink-2: #4a5b68;
+  --ink-3: #5d6d79;
+  --line: rgba(31, 43, 52, .18);
+  --ochre: #c8a24a;
+  --ochre-hover: #d6b35e;
+  --ochre-text: #7a5f16;
+  --on-slate: #f4efe6;
+  --on-slate-2: #d9d6cf;
+  --error: #9b2c2c;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px;
+  --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px;
+
+  --r-sm: 2px; --r-md: 4px;
+
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-press: 140ms;
+  --t-menu: 200ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--shell);
+  color: var(--ink);
+  font: 17px/1.55 var(--font-body);
+  overflow-x: clip;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.5rem, 9vw, 4.75rem); }
+h2 { font-size: clamp(1.75rem, 5vw, 2.75rem); }
+h3 { font-size: 1.25rem; letter-spacing: -0.01em; }
+p { margin: 0; text-wrap: pretty; }
+a { color: inherit; text-underline-offset: 3px; }
+img, svg { display: block; max-width: 100%; }
+:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
+.on-slate :focus-visible { outline-color: var(--shell); }
+.wrap { width: min(1120px, 100% - 2 * var(--s5)); margin-inline: auto; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; left: var(--s4); top: -64px; background: var(--shell); padding: var(--s3) var(--s4); z-index: 20; }
+.skip:focus { top: var(--s2); }
+.muted { color: var(--ink-2); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 52px; padding: 0 var(--s5);
+  border: 1.5px solid var(--ochre); border-radius: var(--r-sm);
+  background: var(--ochre); color: var(--ink);
+  font: 700 17px/1 var(--font-body); text-decoration: none; cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-menu) var(--ease-out);
+}
+.btn:active { transform: scale(0.97); }
+.btn-quiet { background: transparent; border-color: var(--slate); color: var(--ink); }
+.on-slate .btn-quiet { border-color: var(--on-slate); color: var(--on-slate); }
+@media (hover: hover) {
+  .btn:hover { background: var(--ochre-hover); border-color: var(--ochre-hover); }
+  .btn-quiet:hover { background: rgba(62, 83, 99, .1); border-color: var(--slate); }
+  .on-slate .btn-quiet:hover { background: rgba(244, 239, 230, .12); border-color: var(--on-slate); }
+}
+
+/* Header */
+.top { position: sticky; top: 0; z-index: 10; background: var(--shell); border-bottom: 1px solid var(--line); }
+.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); min-height: 64px; }
+.brand { display: flex; align-items: center; gap: var(--s3); text-decoration: none; min-height: 44px; }
+/* Logo placeholder: replace the .mark span with the hand-drawn logo (<img>) when it is ready. */
+.mark { width: 36px; height: 36px; border: 1.5px dashed var(--slate); border-radius: 50%; display: grid; place-items: center; font: 600 14px var(--font-display); color: var(--slate); }
+.brand b { font: 600 1.25rem/1 var(--font-display); letter-spacing: -0.01em; }
+.nav { display: none; gap: var(--s5); }
+.nav a { text-decoration: none; padding: var(--s3) 0; }
+.top .btn { min-height: 44px; padding: 0 var(--s4); font-size: 16px; }
+@media (hover: hover) { .nav a:hover { text-decoration: underline; } }
+@media (min-width: 760px) { .nav { display: flex; } }
+
+/* Hero */
+.hero { padding: var(--s7) 0 var(--s8); }
+.hero .wrap { display: grid; gap: var(--s7); }
+.hero-copy { display: grid; gap: var(--s5); align-content: center; }
+.lead { font-size: 1.25rem; line-height: 1.5; color: var(--ink-2); max-width: 34em; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.slot {
+  display: grid; place-items: center; text-align: center; padding: var(--s5);
+  background: var(--shell-2); border: 1px solid var(--line); border-radius: var(--r-sm);
+  color: var(--ink-2); font-size: 14px; aspect-ratio: 4 / 3; width: 100%;
+  background-image: repeating-linear-gradient(0deg, transparent 0 23px, rgba(62, 83, 99, .09) 23px 24px);
+}
+.slot.tall { aspect-ratio: 4 / 5; }
+@media (min-width: 900px) {
+  .hero .wrap { grid-template-columns: 1.15fr 1fr; align-items: center; gap: var(--s8); }
+  .hero { padding: var(--s8) 0 var(--s9); }
+  .hero .slot { aspect-ratio: 4 / 5; }
+}
+
+/* Weekly boat strip: the signature element */
+.boat { background: var(--slate); color: var(--on-slate); padding: var(--s7) 0; }
+.boat .wrap { display: grid; gap: var(--s6); }
+.boat h2 { font-size: clamp(1.5rem, 4.5vw, 2rem); }
+.boat .next { color: var(--on-slate-2); margin-top: var(--s3); }
+.boat .next strong { color: var(--on-slate); }
+.week { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--s1); list-style: none; padding: 0; margin: 0; }
+.week li { display: grid; gap: var(--s1); justify-items: center; align-content: end; min-height: 76px; padding: var(--s2) 0 var(--s2); border: 1px solid rgba(244, 239, 230, .35); border-radius: var(--r-sm); font-size: 13px; line-height: 1.2; text-align: center; }
+.week .d { font-weight: 600; }
+.week .close { background: var(--ochre); border-color: var(--ochre); color: var(--ink); }
+.week .ship { background: var(--on-slate); border-color: var(--on-slate); color: var(--ink); }
+.week .today { box-shadow: 0 0 0 2px var(--slate), 0 0 0 4px var(--on-slate); }
+.week .tag { font-size: 12px; }
+.legend { color: var(--on-slate-2); font-size: 15px; margin-top: var(--s3); }
+@media (min-width: 900px) { .boat .wrap { grid-template-columns: 1fr 1.1fr; align-items: center; gap: var(--s8); } }
+
+/* Sections */
+section.block { padding: var(--s8) 0; }
+.head { display: grid; gap: var(--s3); margin-bottom: var(--s6); max-width: 40em; }
+
+/* Order */
+.order { display: grid; gap: var(--s7); align-items: start; }
+@media (min-width: 960px) { .order { grid-template-columns: minmax(0, 1fr) 380px; gap: var(--s8); } }
+fieldset { border: 0; padding: 0; margin: 0 0 var(--s7); min-width: 0; }
+legend { padding: 0; font: 600 1.5rem/1.2 var(--font-display); letter-spacing: -0.01em; margin-bottom: var(--s4); }
+.items { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.item { display: grid; gap: var(--s3); padding: var(--s5) 0; border-bottom: 1px solid var(--line); }
+.item h3 { font-family: var(--font-body); font-size: 1.125rem; letter-spacing: 0; font-weight: 700; }
+.item .desc { color: var(--ink-2); font-size: 15px; }
+.item .buy { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); }
+.price { font: 600 1.5rem/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.stepper { display: inline-flex; align-items: center; border: 1.5px solid var(--slate); border-radius: var(--r-sm); background: var(--shell); }
+.stepper button { width: 48px; height: 48px; border: 0; background: transparent; color: var(--ink); font: 400 24px/1 var(--font-body); cursor: pointer; transition: transform var(--t-press) var(--ease-out); }
+.stepper button:active { transform: scale(0.9); }
+.stepper input { width: 52px; height: 48px; border: 0; border-inline: 1px solid var(--line); text-align: center; background: transparent; color: var(--ink); font: 600 17px var(--font-body); font-variant-numeric: tabular-nums; -moz-appearance: textfield; appearance: textfield; border-radius: 0; }
+.stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.stepper.off { opacity: .45; pointer-events: none; }
+@media (hover: hover) { .stepper button:hover { background: var(--shell-2); } }
+.note { font-size: 15px; color: var(--ink-2); }
+.note.warn { color: var(--ochre-text); font-weight: 600; }
+
+.choice { display: grid; gap: var(--s3); grid-template-columns: 1fr; }
+@media (min-width: 560px) { .choice { grid-template-columns: 1fr 1fr; } }
+.choice label { display: flex; gap: var(--s3); align-items: flex-start; padding: var(--s4); min-height: 64px; border: 1.5px solid var(--line); border-radius: var(--r-sm); cursor: pointer; transition: border-color var(--t-menu) var(--ease-out), background-color var(--t-menu) var(--ease-out); }
+.choice label:has(input:checked) { border-color: var(--slate); background: var(--shell-2); }
+.choice input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--slate); flex: none; }
+.choice b { display: block; }
+.choice span span { color: var(--ink-2); font-size: 15px; }
+
+.fields { display: grid; gap: var(--s5); margin-top: var(--s5); }
+.row2 { display: grid; gap: var(--s5); }
+@media (min-width: 560px) { .row2 { grid-template-columns: 1fr 1fr; } }
+.field { display: grid; gap: var(--s2); align-content: start; }
+.field label { font-weight: 600; font-size: 16px; }
+.field label small { font-weight: 400; color: var(--ink-2); font-size: 15px; }
+.field input, .field select, .field textarea {
+  width: 100%; min-height: 52px; padding: var(--s3) var(--s4);
+  border: 1.5px solid var(--ink-3); border-radius: var(--r-sm);
+  background: #fbf9f4; color: var(--ink); font: 400 16px/1.4 var(--font-body);
+}
+.field textarea { min-height: 96px; resize: vertical; }
+.field [aria-invalid="true"] { border-color: var(--error); }
+.err { color: var(--error); font-size: 15px; font-weight: 600; margin: 0; }
+.err[hidden] { display: none; }
+[hidden] { display: none !important; }
+
+.summary { border: 1px solid var(--line); border-radius: var(--r-sm); padding: var(--s5); background: var(--shell-2); display: grid; gap: var(--s4); }
+@media (min-width: 960px) { .summary { position: sticky; top: 88px; } }
+.summary h3 { font-size: 1.5rem; }
+.lines { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.lines li { display: flex; justify-content: space-between; gap: var(--s4); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.lines li span:last-child { white-space: nowrap; }
+.tot { display: grid; gap: var(--s2); border-top: 1px solid var(--line); padding-top: var(--s4); font-variant-numeric: tabular-nums; }
+.tot div { display: flex; justify-content: space-between; gap: var(--s4); }
+.tot .grand { font: 600 1.75rem/1.1 var(--font-display); padding-top: var(--s2); }
+.send { display: grid; gap: var(--s3); }
+.send .btn { width: 100%; }
+.send .fine { font-size: 14px; color: var(--ink-2); }
+.sent { border-top: 1px solid var(--line); padding-top: var(--s4); display: grid; gap: var(--s3); }
+.sent textarea { width: 100%; min-height: 160px; font: 14px/1.5 var(--font-body); padding: var(--s3); border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--shell); color: var(--ink); }
+.status { font-weight: 600; }
+.status.bad { color: var(--error); }
+
+/* How it works */
+.how { background: var(--shell-2); }
+.steps { list-style: none; counter-reset: s; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 48px 1fr; gap: var(--s3); padding: var(--s5) 0; border-bottom: 1px solid var(--line); }
+.steps li::before { content: counter(s); font: 600 2rem/1 var(--font-display); color: var(--ochre-text); }
+.steps b { display: block; font-size: 1.125rem; }
+.keep { margin-top: var(--s6); padding: var(--s5); border-left: 4px solid var(--ochre); background: var(--shell); font-size: 1.125rem; }
+@media (min-width: 900px) { .steps { grid-template-columns: repeat(4, 1fr); border-top: 0; gap: var(--s5); } .steps li { display: block; border: 0; border-top: 1px solid var(--line); padding: var(--s4) 0 0; } .steps li::before { display: block; margin-bottom: var(--s3); } }
+
+/* Story + visit */
+.two { display: grid; gap: var(--s7); }
+@media (min-width: 900px) { .two { grid-template-columns: 1fr 1fr; gap: var(--s8); align-items: center; } }
+.story p + p { margin-top: var(--s4); }
+.story .big { font: 600 clamp(1.5rem, 4vw, 2rem)/1.25 var(--font-display); letter-spacing: -0.01em; }
+.hours { display: grid; gap: var(--s2); margin: var(--s4) 0; }
+.pill { display: inline-block; width: fit-content; padding: var(--s1) var(--s3); border-radius: 999px; font-size: 15px; font-weight: 700; border: 1.5px solid currentColor; }
+.pill.open { color: #2f5d3a; }
+.pill.closed { color: var(--ink-2); }
+.visit .pill.open { color: #b9e0c0; }
+.visit .pill.closed { color: var(--on-slate-2); }
+.visit { background: var(--slate); color: var(--on-slate); }
+.visit .muted { color: var(--on-slate-2); }
+.visit a.btn { margin-top: var(--s4); }
+
+/* FAQ */
+.faq details { border-bottom: 1px solid var(--line); }
+.faq { border-top: 1px solid var(--line); max-width: 46em; }
+.faq summary { cursor: pointer; padding: var(--s4) 0; min-height: 56px; font-weight: 700; font-size: 1.125rem; list-style: none; display: flex; justify-content: space-between; gap: var(--s4); align-items: center; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; font: 400 28px/1 var(--font-body); flex: none; }
+.faq details[open] summary::after { content: "−"; }
+.faq details p { padding: 0 0 var(--s5); color: var(--ink-2); max-width: 38em; }
+
+footer { background: var(--ink); color: var(--on-slate-2); padding: var(--s7) 0 var(--s8); font-size: 15px; }
+footer .wrap { display: grid; gap: var(--s3); }
+footer b { font: 600 1.25rem var(--font-display); color: var(--on-slate); }
+
+/* Mobile order bar */
+.bar { position: fixed; inset: auto 0 0 0; z-index: 9; display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding: var(--s3) var(--s5) calc(var(--s3) + env(safe-area-inset-bottom)); background: var(--shell); border-top: 1px solid var(--line); transform: translateY(0); transition: transform var(--t-menu) var(--ease-out); }
+.bar.gone { transform: translateY(110%); pointer-events: none; }
+.bar .t { font-variant-numeric: tabular-nums; line-height: 1.25; }
+.bar .t b { display: block; font-size: 1.125rem; }
+.bar .t span { font-size: 14px; color: var(--ink-2); }
+.bar .btn { padding: 0 var(--s5); flex: none; }
+@media (max-width: 899px) { body { padding-bottom: 84px; } }
+@media (min-width: 900px) { .bar { display: none; } }
+
+/* One orchestrated moment: the hero settles in */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > * { animation: settle 520ms var(--ease-out) both; }
+  .hero-copy > :nth-child(2) { animation-delay: 60ms; }
+  .hero-copy > :nth-child(3) { animation-delay: 120ms; }
+  @keyframes settle { from { opacity: 0; transform: translateY(8px); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .btn, .stepper button, .bar { transition: none; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#boxes">Skip to the boxes</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Parc Le Goff, back to top">
+      <span class="mark" aria-hidden="true">LG</span>
+      <b>Parc Le Goff</b>
+    </a>
+    <nav class="nav" aria-label="Page sections">
+      <a href="#boxes">Boxes</a>
+      <a href="#how">How it works</a>
+      <a href="#visit">Visit</a>
+      <a href="#faq">Questions</a>
+    </nav>
+    <a class="btn" href="#boxes">Order a box</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <h1>Oysters from our beds in Cancale, to your table.</h1>
+        <p class="lead">Third generation on the same beds since 1961. Order a box online and we ship it to mainland France, Belgium and Luxembourg, or you collect it at our farm shop.</p>
+        <div class="actions">
+          <a class="btn" href="#boxes">Order a box</a>
+          <a class="btn btn-quiet" href="#visit">Visit the farm shop</a>
+        </div>
+      </div>
+      <div class="slot" role="img" aria-label="Photo of the oyster beds in Cancale, coming soon">Photo of our oyster beds in Cancale, coming soon</div>
+    </div>
+  </section>
+
+  <section class="boat on-slate" aria-labelledby="boat-h">
+    <div class="wrap">
+      <div>
+        <h2 id="boat-h">The boat leaves on Wednesdays and Thursdays</h2>
+        <p class="next" id="next-ship">We ship every Wednesday and Thursday. Orders for a week close on Monday at 18:00.</p>
+      </div>
+      <div>
+        <ol class="week" id="week" aria-label="Our week">
+          <li data-d="1" class="close"><span class="d">Mon</span><span class="tag">Orders close 18:00</span></li>
+          <li data-d="2"><span class="d">Tue</span></li>
+          <li data-d="3" class="ship"><span class="d">Wed</span><span class="tag">We ship</span></li>
+          <li data-d="4" class="ship"><span class="d">Thu</span><span class="tag">We ship</span></li>
+          <li data-d="5"><span class="d">Fri</span></li>
+          <li data-d="6"><span class="d">Sat</span></li>
+          <li data-d="0"><span class="d">Sun</span></li>
+        </ol>
+        <p class="legend" id="today-note">Times are Cancale time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="boxes" aria-labelledby="boxes-h">
+    <div class="wrap">
+      <div class="head">
+        <h2 id="boxes-h">Choose your box</h2>
+        <p class="lead">Pick your boxes, tell us where and when, and send us the order. We reply to confirm it and to take payment. Nothing is charged on this page.</p>
+      </div>
+      <noscript><p class="status bad">Building an order needs JavaScript. You can also visit us at the farm shop.</p></noscript>
+
+      <div class="order">
+        <form id="order-form" novalidate autocomplete="on">
+          <fieldset>
+            <legend>1. Your boxes</legend>
+            <ul class="items" id="items">
+              <li class="item" data-id="c24">
+                <div>
+                  <h3>24 creuses No. 3</h3>
+                  <p class="desc">Cupped oysters (creuses), size No. 3.</p>
+                </div>
+                <div class="buy">
+                  <span class="price">€32</span>
+                  <div class="stepper" role="group" aria-label="Quantity of 24 creuses No. 3">
+                    <button type="button" data-step="-1" aria-label="One fewer 24 creuses box">−</button>
+                    <input type="number" inputmode="numeric" min="0" max="99" value="0" aria-label="Number of 24 creuses No. 3 boxes">
+                    <button type="button" data-step="1" aria-label="One more 24 creuses box">+</button>
+                  </div>
+                </div>
+              </li>
+              <li class="item" data-id="c48">
+                <div>
+                  <h3>48 creuses No. 3</h3>
+                  <p class="desc">Cupped oysters (creuses), size No. 3.</p>
+                </div>
+                <div class="buy">
+                  <span class="price">€58</span>
+                  <div class="stepper" role="group" aria-label="Quantity of 48 creuses No. 3">
+                    <button type="button" data-step="-1" aria-label="One fewer 48 creuses box">−</button>
+                    <input type="number" inputmode="numeric" min="0" max="99" value="0" aria-label="Number of 48 creuses No. 3 boxes">
+                    <button type="button" data-step="1" aria-label="One more 48 creuses box">+</button>
+                  </div>
+                </div>
+              </li>
+              <li class="item" data-id="p12">
+                <div>
+                  <h3>12 plates</h3>
+                  <p class="desc">Cancale flat oysters. In season from September to April only.</p>
+                  <p class="note warn" id="plates-note" hidden></p>
+                </div>
+                <div class="buy">
+                  <span class="price">€39</span>
+                  <div class="stepper" role="group" aria-label="Quantity of 12 plates">
+                    <button type="button" data-step="-1" aria-label="One fewer 12 plates box">−</button>
+                    <input type="number" inputmode="numeric" min="0" max="99" value="0" aria-label="Number of 12 plates boxes">
+                    <button type="button" data-step="1" aria-label="One more 12 plates box">+</button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+            <p class="err" id="items-err" role="alert" hidden>Choose at least one box.</p>
+          </fieldset>
+
+          <fieldset>
+            <legend>2. Delivery or collection</legend>
+            <div class="choice" role="radiogroup" aria-label="Delivery or collection">
+              <label><input type="radio" name="mode" value="delivery" checked>
+                <span><b>Delivery</b><span>€12, free over €80. Mainland France, Belgium, Luxembourg.</span></span></label>
+              <label><input type="radio" name="mode" value="pickup">
+                <span><b>Collect at the farm shop</b><span>Port de la Houle, Cancale. Free.</span></span></label>
+            </div>
+
+            <div class="fields">
+              <div class="field" id="f-ship">
+                <label for="ship-date">Shipping day</label>
+                <select id="ship-date" name="ship-date" required aria-describedby="ship-help"></select>
+                <p class="note" id="ship-help">Orders for a week close Monday at 18:00.</p>
+              </div>
+              <div class="field" id="f-pick" hidden>
+                <label for="pick-date">Collection day</label>
+                <select id="pick-date" name="pick-date" required aria-describedby="pick-help"></select>
+                <p class="note" id="pick-help">The shop is open 10:00 to 13:00. We will confirm your collection with you.</p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>3. Your details</legend>
+            <div class="fields" style="margin-top:0">
+              <div class="row2">
+                <div class="field">
+                  <label for="name">Full name</label>
+                  <input id="name" name="name" autocomplete="name" required aria-describedby="name-err">
+                  <p class="err" id="name-err" hidden></p>
+                </div>
+                <div class="field">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required aria-describedby="email-err">
+                  <p class="err" id="email-err" hidden></p>
+                </div>
+              </div>
+              <div class="field">
+                <label for="phone">Phone <small>(optional)</small></label>
+                <input id="phone" name="phone" type="tel" autocomplete="tel">
+              </div>
+
+              <div class="fields" id="address" style="margin-top:0">
+                <div class="field">
+                  <label for="street">Street address</label>
+                  <input id="street" name="street" autocomplete="street-address" required aria-describedby="street-err">
+                  <p class="err" id="street-err" hidden></p>
+                </div>
+                <div class="row2">
+                  <div class="field">
+                    <label for="zip">Postcode</label>
+                    <input id="zip" name="zip" autocomplete="postal-code" required aria-describedby="zip-err">
+                    <p class="err" id="zip-err" hidden></p>
+                  </div>
+                  <div class="field">
+                    <label for="city">Town</label>
+                    <input id="city" name="city" autocomplete="address-level2" required aria-describedby="city-err">
+                    <p class="err" id="city-err" hidden></p>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="country">Country</label>
+                  <select id="country" name="country" autocomplete="country-name">
+                    <option>France</option>
+                    <option>Belgium</option>
+                    <option>Luxembourg</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="msg">Note for us <small>(optional)</small></label>
+                <textarea id="msg" name="msg" autocomplete="off"></textarea>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+
+        <aside class="summary" id="summary" aria-labelledby="sum-h">
+          <h3 id="sum-h">Your order</h3>
+          <ul class="lines" id="lines"></ul>
+          <p class="note" id="empty-note">No boxes yet. Choose a box to start.</p>
+          <div class="tot" aria-live="polite">
+            <div><span>Boxes</span><span id="t-sub">€0</span></div>
+            <div><span>Delivery</span><span id="t-del">–</span></div>
+            <p class="note" id="t-hint" hidden></p>
+            <div class="grand"><span>Total</span><span id="t-total">€0</span></div>
+          </div>
+          <div class="send" id="send">
+            <button class="btn" type="submit" form="order-form" value="email">Send order by email</button>
+            <button class="btn btn-quiet" type="submit" form="order-form" value="whatsapp">Send order by WhatsApp</button>
+            <p class="fine">This sends us a request. It is not confirmed until we reply, and you pay us directly after that.</p>
+            <p class="status" id="status" role="status"></p>
+          </div>
+          <div class="sent" id="sent" hidden>
+            <label for="sent-text" class="status">Your order message</label>
+            <textarea id="sent-text" readonly></textarea>
+            <button class="btn btn-quiet" type="button" id="copy">Copy message</button>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="block how" id="how" aria-labelledby="how-h">
+    <div class="wrap">
+      <div class="head"><h2 id="how-h">How it works</h2></div>
+      <ol class="steps">
+        <li><div><b>Choose your boxes</b>Pick a shipping day, Wednesday or Thursday, or a day to collect.</div></li>
+        <li><div><b>Send us the order</b>By email or WhatsApp. Orders for a week close on Monday at 18:00.</div></li>
+        <li><div><b>We confirm</b>We reply to confirm your order and take payment.</div></li>
+        <li><div><b>We ship it</b>Your box leaves on Wednesday or Thursday of that week.</div></li>
+      </ol>
+      <p class="keep"><b>When it arrives:</b> keep your oysters in the fridge, flat side up. They keep for 7 days.</p>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="story-h">
+    <div class="wrap two">
+      <div class="slot tall" role="img" aria-label="Photo of the Le Goff family at work, coming soon">Photo of the family at work, coming soon</div>
+      <div class="story">
+        <h2 id="story-h">Three generations on the same beds</h2>
+        <p style="margin-top:var(--s5)">Parc Le Goff has worked the same oyster beds in Cancale since 1961. Today the third generation of the family runs the farm.</p>
+        <p>We supply Le Bistrot du Port and two other restaurants in Saint-Malo. Now you can order a box for your own table too.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block visit on-slate" id="visit" aria-labelledby="visit-h">
+    <div class="wrap two">
+      <div>
+        <h2 id="visit-h">Come to the farm shop</h2>
+        <p class="lead muted" style="margin-top:var(--s4)">Port de la Houle, Cancale</p>
+        <div class="hours">
+          <p><b>Open Wednesday to Sunday, 10:00 to 13:00</b></p>
+          <span class="pill closed" id="open-pill">Closed now</span>
+        </div>
+        <p class="muted">Closed Monday and Tuesday.</p>
+        <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=Port+de+la+Houle+Cancale" target="_blank" rel="noopener">Get directions</a>
+      </div>
+      <div class="slot" role="img" aria-label="Photo of the farm shop at Port de la Houle, coming soon" style="background-color:rgba(244,239,230,.08);border-color:rgba(244,239,230,.35);color:var(--on-slate-2)">Photo of the farm shop, coming soon</div>
+    </div>
+  </section>
+
+  <section class="block" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="head"><h2 id="faq-h">Questions</h2></div>
+      <div class="faq">
+        <details><summary>Where do you deliver?</summary><p>Mainland France, Belgium and Luxembourg. Delivery costs €12 and is free over €80.</p></details>
+        <details><summary>When do you ship?</summary><p>On Wednesdays and Thursdays. Orders for a week close on Monday at 18:00. An order sent after that goes out the following week.</p></details>
+        <details><summary>How do I pay?</summary><p>You send us your order, and we reply to confirm it and take payment. Nothing is charged on this page.</p></details>
+        <details><summary>How long do the oysters keep?</summary><p>7 days in the fridge, flat side up.</p></details>
+        <details><summary>Why can't I order plates in summer?</summary><p>Our Cancale flat oysters (plates) are only available from September to April. The creuses are available all year.</p></details>
+        <details><summary>Can I collect my order?</summary><p>Yes. Choose collection in the order form and pick up at our farm shop at Port de la Houle, Wednesday to Sunday, 10:00 to 13:00.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Parc Le Goff</b>
+    <p>Family oyster farm. Farm shop at Port de la Houle, Cancale. On the same beds since 1961.</p>
+  </div>
+</footer>
+
+<div class="bar" id="bar">
+  <div class="t"><b id="bar-total">Oyster boxes</b><span id="bar-sub">From €32</span></div>
+  <a class="btn" id="bar-cta" href="#boxes">Order a box</a>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // Fill these in to switch on ordering. Email: you@example.fr. WhatsApp: digits only with country code, e.g. 33612345678.
+  var CONFIG = { email: '', whatsapp: '' };
+
+  var PRODUCTS = [
+    { id: 'c24', name: '24 creuses No. 3', price: 32, flat: false },
+    { id: 'c48', name: '48 creuses No. 3', price: 58, flat: false },
+    { id: 'p12', name: '12 plates (Cancale flat oysters)', price: 39, flat: true }
+  ];
+  var FEE = 12, FREE_OVER = 80, DAY = 864e5;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var eur = function (n) { return '€' + n; };
+
+  /* ---------- Cancale time ---------- */
+  var parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Paris', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', hourCycle: 'h23' });
+  function wallNow() {
+    var p = {};
+    parts.formatToParts(new Date()).forEach(function (x) { p[x.type] = x.value; });
+    return new Date(Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute));
+  }
+  function fmtDay(d) { return d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' }); }
+  function iso(d) { return d.toISOString().slice(0, 10); }
+  function inSeason(isoDate) { var m = +isoDate.slice(5, 7); return m >= 9 || m <= 4; }
+  function remaining(ms) {
+    var m = Math.max(0, Math.floor(ms / 6e4)), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mi = m % 60;
+    if (d > 0) return d + (d === 1 ? ' day ' : ' days ') + h + ' h';
+    if (h > 0) return h + ' h ' + mi + ' min';
+    return mi + ' min';
+  }
+
+  // Orders close Monday 18:00. Before that, this week's Wed/Thu are open. After it, next week's.
+  function plan() {
+    var w = wallNow();
+    var midnight = Date.UTC(w.getUTCFullYear(), w.getUTCMonth(), w.getUTCDate());
+    var sinceMon = (w.getUTCDay() + 6) % 7;
+    var monday = midnight - sinceMon * DAY;
+    var thisWeek = w.getTime() < monday + 18 * 36e5;
+    var start = thisWeek ? monday : monday + 7 * DAY;
+    return {
+      wall: w, sinceMon: sinceMon, thisWeek: thisWeek,
+      cutoff: new Date(start + 18 * 36e5),
+      ship: [2, 3, 9, 10].map(function (n) { return new Date(start + n * DAY); })
+    };
+  }
+  function pickupDays(w) {
+    var out = [], base = Date.UTC(w.getUTCFullYear(), w.getUTCMonth(), w.getUTCDate());
+    for (var i = 0; out.length < 5 && i < 14; i++) {
+      var d = new Date(base + i * DAY), dow = d.getUTCDay();
+      if ([0, 3, 4, 5, 6].indexOf(dow) < 0) continue;
+      if (i === 0 && w.getUTCHours() >= 13) continue;
+      out.push(d);
+    }
+    return out;
+  }
+
+  function renderTime() {
+    var p = plan(), w = p.wall;
+    var next = $('#next-ship');
+    var left = p.cutoff.getTime() - w.getTime();
+    var cutTxt = p.thisWeek && p.sinceMon === 0 ? 'today' : fmtDay(p.cutoff);
+    next.innerHTML = 'Next shipping: <strong>' + fmtDay(p.ship[0]) + '</strong> and <strong>' + fmtDay(p.ship[1]) + '</strong>. Order by <strong>' + cutTxt + ' at 18:00</strong> (in ' + remaining(left) + ').';
+    $$('#week li').forEach(function (li) {
+      var on = +li.dataset.d === w.getUTCDay();
+      li.classList.toggle('today', on);
+      if (on) li.setAttribute('aria-current', 'date'); else li.removeAttribute('aria-current');
+    });
+    $('#today-note').textContent = 'Today is ' + w.toLocaleDateString('en-GB', { weekday: 'long', timeZone: 'UTC' }) + '. Times are Cancale time.';
+
+    var dow = w.getUTCDay(), h = w.getUTCHours();
+    var open = [0, 3, 4, 5, 6].indexOf(dow) >= 0 && h >= 10 && h < 13;
+    var pill = $('#open-pill');
+    pill.textContent = open ? 'Open now' : 'Closed now';
+    pill.className = 'pill ' + (open ? 'open' : 'closed');
+  }
+
+  function fillDates() {
+    var p = plan();
+    var ship = $('#ship-date'), pick = $('#pick-date');
+    var keepS = ship.value, keepP = pick.value;
+    ship.innerHTML = p.ship.map(function (d) { return '<option value="' + iso(d) + '">' + fmtDay(d) + '</option>'; }).join('');
+    pick.innerHTML = pickupDays(p.wall).map(function (d) { return '<option value="' + iso(d) + '">' + fmtDay(d) + '</option>'; }).join('');
+    if (keepS) ship.value = keepS;
+    if (keepP) pick.value = keepP;
+  }
+
+  /* ---------- Order state ---------- */
+  var form = $('#order-form');
+  var items = $$('.item').map(function (li) {
+    var prod = PRODUCTS.filter(function (p) { return p.id === li.dataset.id; })[0];
+    return { prod: prod, li: li, input: $('input', li), stepper: $('.stepper', li) };
+  });
+  function mode() { return form.elements.mode.value; }
+  function chosenDate() { return (mode() === 'pickup' ? $('#pick-date') : $('#ship-date')).value; }
+  function qty(it) { var n = parseInt(it.input.value, 10); return isNaN(n) ? 0 : Math.min(99, Math.max(0, n)); }
+
+  function totals() {
+    var sub = 0, lines = [];
+    items.forEach(function (it) {
+      var n = qty(it);
+      if (n > 0) { sub += n * it.prod.price; lines.push({ name: it.prod.name, n: n, sum: n * it.prod.price }); }
+    });
+    var del = 0;
+    if (mode() === 'delivery' && sub > 0) del = sub > FREE_OVER ? 0 : FEE;
+    return { sub: sub, del: del, total: sub + del, lines: lines };
+  }
+
+  function updateSeason() {
+    var d = chosenDate(), it = items[2], ok = !d || inSeason(d);
+    it.stepper.classList.toggle('off', !ok);
+    it.input.disabled = !ok;
+    var note = $('#plates-note');
+    if (!ok) {
+      if (qty(it) > 0) it.input.value = 0;
+      note.hidden = false;
+      note.textContent = 'Not available on the day you chose. Plates are back in September.';
+    } else {
+      note.hidden = true;
+    }
+  }
+
+  function render() {
+    updateSeason();
+    var t = totals();
+    $('#lines').innerHTML = t.lines.map(function (l) {
+      return '<li><span>' + l.n + ' × ' + l.name + '</span><span>' + eur(l.sum) + '</span></li>';
+    }).join('');
+    $('#empty-note').hidden = t.lines.length > 0;
+    $('#t-sub').textContent = eur(t.sub);
+    var delEl = $('#t-del'), hint = $('#t-hint');
+    hint.hidden = true;
+    if (mode() === 'pickup') delEl.textContent = 'Free (collection)';
+    else if (t.sub === 0) delEl.textContent = '–';
+    else if (t.del === 0) delEl.textContent = 'Free';
+    else {
+      delEl.textContent = eur(t.del);
+      hint.hidden = false;
+      hint.textContent = 'Add ' + eur(FREE_OVER + 1 - t.sub) + ' more for free delivery.';
+    }
+    $('#t-total').textContent = eur(t.total);
+    if (t.lines.length) $('#items-err').hidden = true;
+
+    var count = t.lines.reduce(function (a, l) { return a + l.n; }, 0);
+    var cta = $('#bar-cta');
+    if (count > 0) {
+      $('#bar-total').textContent = count + (count === 1 ? ' box' : ' boxes') + ' · ' + eur(t.total);
+      $('#bar-sub').textContent = mode() === 'pickup' ? 'Collection, free' : (t.del ? 'Incl. ' + eur(t.del) + ' delivery' : 'Free delivery');
+      cta.textContent = 'Review order';
+      cta.setAttribute('href', '#summary');
+    } else {
+      $('#bar-total').textContent = 'Oyster boxes';
+      $('#bar-sub').textContent = 'From ' + eur(32);
+      cta.textContent = 'Order a box';
+      cta.setAttribute('href', '#boxes');
+    }
+  }
+
+  function setMode() {
+    var pickup = mode() === 'pickup';
+    $('#f-ship').hidden = pickup;
+    $('#f-pick').hidden = !pickup;
+    $('#address').hidden = pickup;
+    render();
+  }
+
+  /* ---------- Validation ---------- */
+  function setErr(input, msg) {
+    var e = $('#' + input.id + '-err');
+    if (!e) return !msg;
+    e.hidden = !msg;
+    e.textContent = msg || '';
+    if (msg) input.setAttribute('aria-invalid', 'true'); else input.removeAttribute('aria-invalid');
+    return !msg;
+  }
+  var RULES = {
+    name: function (v) { return v.trim() ? '' : 'Enter your name.'; },
+    email: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? '' : 'Enter a valid email address so we can reply.'; },
+    street: function (v) { return v.trim() ? '' : 'Enter the delivery address.'; },
+    zip: function (v) { return v.trim() ? '' : 'Enter the postcode.'; },
+    city: function (v) { return v.trim() ? '' : 'Enter the town.'; }
+  };
+  function check(id) {
+    var input = $('#' + id);
+    if (['street', 'zip', 'city'].indexOf(id) >= 0 && mode() === 'pickup') return setErr(input, '');
+    return setErr(input, RULES[id](input.value));
+  }
+  Object.keys(RULES).forEach(function (id) { $('#' + id).addEventListener('blur', function () { check(id); }); });
+  Object.keys(RULES).forEach(function (id) { $('#' + id).addEventListener('input', function () { if (this.getAttribute('aria-invalid')) check(id); }); });
+
+  /* ---------- Events ---------- */
+  items.forEach(function (it) {
+    it.input.addEventListener('input', render);
+    it.input.addEventListener('change', function () { it.input.value = qty(it); render(); });
+    $$('button', it.li).forEach(function (b) {
+      b.addEventListener('click', function () {
+        it.input.value = Math.min(99, Math.max(0, qty(it) + (+b.dataset.step)));
+        render();
+      });
+    });
+  });
+  $$('input[name="mode"]').forEach(function (r) { r.addEventListener('change', setMode); });
+  $('#ship-date').addEventListener('change', render);
+  $('#pick-date').addEventListener('change', render);
+
+  function message(t) {
+    var pickup = mode() === 'pickup', f = form.elements, L = [];
+    L.push('Hello Parc Le Goff, I would like to order:', '');
+    t.lines.forEach(function (l) { L.push('- ' + l.n + ' × ' + l.name + ' (' + eur(l.sum) + ')'); });
+    L.push('', 'Boxes: ' + eur(t.sub), 'Delivery: ' + (pickup ? 'collection, free' : (t.del ? eur(t.del) : 'free')), 'Total: ' + eur(t.total), '');
+    if (pickup) {
+      L.push('Collection at the farm shop on ' + fmtDay(new Date($('#pick-date').value + 'T00:00:00Z')));
+    } else {
+      L.push('Delivery for shipping on ' + fmtDay(new Date($('#ship-date').value + 'T00:00:00Z')) + ' to:');
+      L.push(f.street.value.trim(), f.zip.value.trim() + ' ' + f.city.value.trim(), f.country.value);
+    }
+    L.push('', 'Name: ' + f.name.value.trim(), 'Email: ' + f.email.value.trim());
+    if (f.phone.value.trim()) L.push('Phone: ' + f.phone.value.trim());
+    if (f.msg.value.trim()) L.push('', f.msg.value.trim());
+    return L.join('\n');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var channel = (e.submitter && e.submitter.value) || 'email';
+    var status = $('#status');
+    status.className = 'status'; status.textContent = '';
+    var t = totals(), firstBad = null;
+    if (!t.lines.length) {
+      $('#items-err').hidden = false;
+      firstBad = $('.stepper input', form);
+    }
+    ['name', 'email', 'street', 'zip', 'city'].forEach(function (id) {
+      if (!check(id) && !firstBad) firstBad = $('#' + id);
+    });
+    if (firstBad) {
+      firstBad.focus();
+      status.className = 'status bad';
+      status.textContent = 'Please fix the highlighted fields.';
+      return;
+    }
+    var text = message(t);
+    $('#sent-text').value = text;
+    $('#sent').hidden = false;
+    var subject = 'Oyster order – ' + form.elements.name.value.trim();
+    if (channel === 'whatsapp') {
+      if (!CONFIG.whatsapp) { status.className = 'status bad'; status.textContent = 'WhatsApp ordering is not switched on yet. Copy your message below and send it to us.'; return; }
+      window.open('https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(text), '_blank', 'noopener');
+    } else {
+      if (!CONFIG.email) { status.className = 'status bad'; status.textContent = 'Email ordering is not switched on yet. Copy your message below and send it to us.'; return; }
+      window.location.href = 'mailto:' + CONFIG.email + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text);
+    }
+    status.textContent = 'Your message is ready to send. If nothing opened, copy it below. Your order is confirmed when we reply.';
+  });
+
+  $('#copy').addEventListener('click', function () {
+    var ta = $('#sent-text'), btn = this;
+    function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy message'; }, 2000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(done, function () { ta.select(); });
+    else { ta.select(); try { document.execCommand('copy'); done(); } catch (x) {} }
+  });
+
+  // Hide the mobile bar once the summary is on screen.
+  var bar = $('#bar');
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (en) { bar.classList.toggle('gone', en[0].isIntersecting); }, { threshold: 0.2 }).observe($('#summary'));
+  }
+
+  fillDates();
+  renderTime();
+  setMode();
+  setInterval(renderTime, 60000);
+})();
+</script>
+</body>
+</html>

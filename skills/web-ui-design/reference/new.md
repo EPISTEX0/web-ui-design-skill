@@ -9,7 +9,7 @@ Run the question round in SKILL.md. Then write the Brief into `DESIGN.md` at the
 - **Subject**: what the product is and its world (materials, vernacular, industry).
 - **Primary action** of this screen, and the audience with their main device.
 - **Mode**: *Persuade*, *Operate* or *Read*, from the page type.
-- **Assets**: brand colors, logo, type, references, and the real content and proof the user gave. Proof (customers, stats, quotes, logos) comes only from the user. Sample data looks real and is labelled as sample.
+- **Assets**: brand colors, logo, type, references, and the real content and proof the user gave. Missing facts and proof follow point 5 of the question round.
 
 Done when every Brief line has a value and a source.
 

@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="en-GB" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#12304a">
+<title>MV Gannet · Loading</title>
+<style>
+:root {
+  /* primitives */
+  --navy-950: #06111b; --navy-900: #0b1f31; --navy-800: #0d2033; --navy-700: #12304a; --navy-600: #1b4668; --navy-500: #2c5a82;
+  --navy-300: #8fb0cc; --navy-100: #dbe6f0; --navy-50: #eef3f8;
+  --yellow-500: #f2b705; --yellow-400: #ffd23f; --yellow-100: #fff1bd;
+  --green-700: #0f6431; --green-100: #d3efdc; --green-300: #7fdca4; --green-900: #0f3a24;
+  --red-700: #a3190f; --red-100: #fbdcd8; --red-300: #ff9d92; --red-900: #4a1410;
+  --amber-800: #7a3f00; --amber-100: #ffe6bd; --amber-300: #ffc266; --amber-900: #4a2c00;
+
+  /* day (default) semantic tokens */
+  --bg: var(--navy-100);
+  --surface: #ffffff;
+  --surface-2: var(--navy-50);
+  --text: var(--navy-900);
+  --text-2: #2d4357;
+  --text-3: #465c71;
+  --border: #5f7a92;
+  --border-soft: #b9c9d8;
+  --top-bg: var(--navy-700); --top-text: #ffffff; --top-text-2: #c9d9e8;
+  --accent: var(--yellow-500); --on-accent: var(--navy-900);
+  --block-bg: var(--navy-700); --block-text: #ffffff;
+  --ok-bg: var(--green-100); --ok-text: var(--green-700);
+  --bad-bg: var(--red-100); --bad-text: var(--red-700);
+  --warn-bg: var(--amber-100); --warn-text: var(--amber-800);
+  --focus: #0b5fff;
+  --backdrop: rgba(6, 17, 27, .62);
+
+  --font: system-ui, "Roboto", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --fs-sm: 15px; --fs-md: 17px; --fs-lg: 20px; --fs-xl: 26px; --fs-2xl: 40px;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px;
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px;
+  --tap: 56px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-press: 120ms; --t-sheet: 220ms;
+}
+[data-theme="night"] {
+  --bg: var(--navy-950);
+  --surface: var(--navy-800);
+  --surface-2: #112a42;
+  --text: #f4f7fa;
+  --text-2: #cbd8e4;
+  --text-3: #a3b7c9;
+  --border: #6f8ca6;
+  --border-soft: #2a4b68;
+  --top-bg: #030a11; --top-text: #f4f7fa; --top-text-2: #a3b7c9;
+  --block-bg: var(--navy-500); --block-text: #ffffff;
+  --ok-bg: var(--green-900); --ok-text: var(--green-300);
+  --bad-bg: var(--red-900); --bad-text: var(--red-300);
+  --warn-bg: var(--amber-900); --warn-text: var(--amber-300);
+  --focus: #7db0ff;
+  --backdrop: rgba(0, 0, 0, .72);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 400 var(--fs-md)/1.4 var(--font);
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: clip;
+}
+button, input { font: inherit; color: inherit; }
+button { touch-action: manipulation; cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; letter-spacing: -.01em; }
+p { text-wrap: pretty; }
+:focus-visible { outline: 4px solid var(--focus); outline-offset: 2px; }
+.ic { width: 1.25em; height: 1.25em; flex: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- shell ---------- */
+.app {
+  min-height: 100dvh; display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto auto auto auto;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+}
+.top { grid-area: auto; }
+@media (min-width: 700px) {
+  .app { grid-template-rows: auto auto auto auto minmax(380px, 1fr) auto; padding-bottom: 0; }
+  .queue .list { overflow: visible; }
+}
+@media (min-width: 1000px) {
+  .sail { min-height: 52px; } .sailings { padding-block: var(--s2); } .status { padding-bottom: var(--s2); }
+  .tile .d { display: none; } .tile .n { font-size: 30px; } .tile { padding: 6px var(--s4); }
+  .blk, .cell-free, .lane-bar { min-height: 40px; } .deck { gap: 6px; }
+  .queue .list { overflow-y: auto; }
+  .app .tile { display: flex; align-items: center; justify-content: space-between; gap: var(--s2); }
+  .app .tiles { grid-template-columns: 1fr; padding: 0 var(--s4) var(--s4) 0; gap: 6px; align-content: start; }
+  .app {
+    height: 100dvh; min-height: 700px;
+    grid-template-columns: minmax(0, 1fr) 250px 480px;
+    grid-template-rows: auto auto auto auto minmax(0, 1fr);
+    grid-template-areas: "top top top" "sail sail sail" "status status entry" "deck tiles entry" "queue queue entry";
+  }
+  .top { grid-area: top; } .sailings { grid-area: sail; } .status { grid-area: status; }
+  .deck { grid-area: deck; } .tiles { grid-area: tiles; } .queue { grid-area: queue; } .entry { grid-area: entry; }
+}
+
+/* ---------- top bar ---------- */
+.top {
+  background: var(--top-bg); color: var(--top-text);
+  display: flex; align-items: center; gap: var(--s3);
+  padding: calc(var(--s3) + env(safe-area-inset-top)) var(--s4) var(--s3);
+  border-bottom: 4px solid var(--accent);
+}
+.brand { flex: 1; min-width: 0; }
+.brand h1 { font-size: var(--fs-lg); font-weight: 800; line-height: 1.15; white-space: nowrap; }
+.brand p { color: var(--top-text-2); font-size: var(--fs-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.clock { font-size: var(--fs-xl); font-weight: 800; line-height: 1; text-align: right; }
+.clock small { display: block; font-size: 13px; font-weight: 600; color: var(--top-text-2); margin-top: 2px; }
+.net {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 var(--s3);
+  border-radius: 20px; font-size: var(--fs-sm); font-weight: 700; background: var(--ok-bg); color: var(--ok-text);
+  border: 0; white-space: nowrap;
+}
+.net.off { background: var(--warn-bg); color: var(--warn-text); }
+.net.busy { background: var(--navy-100); color: var(--navy-900); }
+.icon-btn {
+  width: var(--tap); height: var(--tap); border-radius: var(--r-md); display: grid; place-items: center;
+  background: transparent; border: 2px solid currentColor; padding: 0;
+}
+.icon-btn .ic { width: 28px; height: 28px; }
+.top .icon-btn { width: 48px; height: 48px; color: var(--top-text); border-color: var(--navy-500); }
+@media (max-width: 699px) { .net .t { display: none; } .net { padding: 0 var(--s2); } }
+
+/* ---------- sailings ---------- */
+.sailings {
+  display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--s2);
+  padding: var(--s3) var(--s4); background: var(--surface); border-bottom: 2px solid var(--border-soft);
+}
+.sail {
+  min-height: 68px; padding: var(--s2) var(--s1); border-radius: var(--r-md);
+  background: var(--surface-2); border: 2px solid var(--border-soft); color: var(--text);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  transition: transform var(--t-press) var(--ease-out);
+}
+.sail b { font-size: var(--fs-lg); line-height: 1.1; }
+.sail span { font-size: 13px; font-weight: 600; color: var(--text-3); }
+.sail[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.sail[aria-pressed="true"] span { color: var(--on-accent); }
+.sail.gone:not([aria-pressed="true"]) { background: transparent; border-style: dashed; }
+.sail.gone:not([aria-pressed="true"]) b { color: var(--text-3); }
+.sail:active, .btn:active, .key:active, .row:active, .lane-btn:active, .blk:active { transform: scale(.97); }
+@media (max-width: 699px) {
+  .sailings { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+/* ---------- status ---------- */
+.status { padding: var(--s4) var(--s4) var(--s3); display: grid; gap: var(--s3); }
+.banner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s4); }
+.banner h2 { font-size: var(--fs-xl); font-weight: 800; }
+.banner .sub { color: var(--text-2); }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 16px; font-size: var(--fs-sm); font-weight: 700; background: var(--surface-2); border: 2px solid var(--border-soft); }
+.pill.ok { background: var(--ok-bg); color: var(--ok-text); border-color: transparent; }
+.pill.warn { background: var(--warn-bg); color: var(--warn-text); border-color: transparent; }
+.pill.bad { background: var(--bad-bg); color: var(--bad-text); border-color: transparent; }
+.notice { display: flex; gap: var(--s3); align-items: flex-start; padding: var(--s3) var(--s4); border-radius: var(--r-md); background: var(--warn-bg); color: var(--warn-text); font-weight: 600; }
+.notice.bad { background: var(--bad-bg); color: var(--bad-text); }
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s2); padding: 0 var(--s4) var(--s4); }
+.tile { background: var(--surface); border: 2px solid var(--border-soft); border-radius: var(--r-md); padding: var(--s3) var(--s4); min-width: 0; }
+.tile .n { font-size: var(--fs-2xl); font-weight: 800; line-height: 1.05; letter-spacing: -.02em; }
+.tile .n small { font-size: var(--fs-md); font-weight: 600; color: var(--text-3); letter-spacing: 0; }
+.tile .l { font-weight: 700; font-size: var(--fs-sm); color: var(--text-2); }
+.tile .d { font-size: 14px; color: var(--text-3); margin-top: 2px; }
+.tile.key-tile { border-color: var(--text); }
+@media (max-width: 480px) {
+  .row { grid-template-columns: auto minmax(0, 1fr); }
+  .row .state { grid-column: 1 / -1; display: flex; gap: var(--s3); align-items: baseline; justify-items: start; text-align: left; }
+  .row .who b, .row .who .d { white-space: normal; }
+}
+@media (max-width: 480px) { .blk { font-size: 14px; letter-spacing: 0; } .tile { padding: var(--s2) var(--s3); } .tile .n { font-size: 32px; } .tile .d { display: none; } }
+
+/* ---------- deck ---------- */
+.deck { padding: 0 var(--s4) var(--s4); display: grid; gap: var(--s2); }
+.lane { display: grid; grid-template-columns: 84px minmax(0, 1fr) 52px; gap: var(--s3); align-items: center; }
+.lane-label b { display: block; font-size: var(--fs-md); line-height: 1.1; }
+.lane-label span { font-size: 13px; color: var(--text-3); font-weight: 600; display: block; line-height: 1.15; }
+.lane-bar { display: grid; gap: 4px; min-height: 48px; }
+.blk {
+  min-height: 48px; border: 0; border-radius: 6px; padding: 0 4px; background: var(--block-bg); color: var(--block-text);
+  font-weight: 800; font-size: var(--fs-md); letter-spacing: .04em; text-transform: uppercase;
+  transition: transform var(--t-press) var(--ease-out);
+}
+.blk.tall { box-shadow: inset 0 -5px 0 var(--accent); }
+.cell-free { min-height: 48px; border: 2px dashed var(--border); border-radius: 6px; }
+.lane-free { text-align: right; font-size: var(--fs-sm); color: var(--text-2); font-weight: 600; line-height: 1.1; }
+.lane-free b { display: block; font-size: var(--fs-xl); color: var(--text); }
+.deck-key { font-size: 13px; color: var(--text-3); display: flex; gap: var(--s4); flex-wrap: wrap; }
+.deck-key i { display: inline-block; width: 14px; height: 10px; border-radius: 2px; vertical-align: -1px; margin-right: 4px; }
+.deck-key .a { background: var(--block-bg); } .deck-key .b { border: 2px dashed var(--border); } .deck-key .c { background: var(--accent); }
+
+/* ---------- queue ---------- */
+.queue { display: flex; flex-direction: column; min-height: 0; background: var(--surface); border-top: 2px solid var(--border-soft); }
+.tabs { display: flex; gap: var(--s2); padding: var(--s3) var(--s4); }
+.tab {
+  flex: 1; min-height: 52px; border-radius: var(--r-md); border: 2px solid var(--border); background: transparent; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 var(--s2);
+}
+.tab .c { min-width: 28px; padding: 0 8px; border-radius: 14px; background: var(--surface-2); border: 2px solid var(--border-soft); text-align: center; font-size: var(--fs-sm); }
+.tab[aria-pressed="true"] { background: var(--text); color: var(--surface); border-color: var(--text); }
+.tab[aria-pressed="true"] .c { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.match-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding: var(--s3) var(--s4); font-weight: 700; }
+.list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 0 var(--s4) var(--s4); }
+.group-h { font-size: var(--fs-sm); font-weight: 800; color: var(--text-2); padding: var(--s4) 0 var(--s2); display: flex; justify-content: space-between; gap: var(--s3); }
+.group-h span { font-weight: 600; color: var(--text-3); text-align: right; }
+.rows { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.row {
+  width: 100%; min-height: 76px; text-align: left; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--s3); align-items: center;
+  padding: var(--s2) var(--s3); border-radius: var(--r-md); background: var(--surface-2); border: 2px solid var(--border-soft);
+  transition: transform var(--t-press) var(--ease-out);
+}
+.row.hit { border-color: var(--text); }
+.row.dim { opacity: 1; background: transparent; border-style: dashed; }
+.who { min-width: 0; }
+.who b { display: block; font-size: var(--fs-md); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.who .d { display: block; color: var(--text-2); font-size: var(--fs-sm); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.chip { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; padding: 1px 8px; border-radius: 6px; background: var(--surface); border: 2px solid var(--border-soft); color: var(--text-2); white-space: nowrap; }
+.chip.pri { background: var(--text); color: var(--surface); border-color: var(--text); }
+.chip.tall { background: var(--warn-bg); color: var(--warn-text); border-color: transparent; }
+.chip.ok { background: var(--ok-bg); color: var(--ok-text); border-color: transparent; }
+.chip.bad { background: var(--bad-bg); color: var(--bad-text); border-color: transparent; }
+.state { text-align: right; font-weight: 800; font-size: var(--fs-md); display: grid; gap: 2px; justify-items: end; }
+.state small { font-weight: 600; font-size: 14px; color: var(--text-3); }
+.state .big { font-size: var(--fs-xl); line-height: 1; }
+.empty { text-align: center; padding: var(--s8) var(--s4); color: var(--text-2); display: grid; gap: var(--s3); justify-items: center; }
+.empty h3 { font-size: var(--fs-lg); color: var(--text); }
+.queue-foot { padding: var(--s3) var(--s4); border-top: 2px solid var(--border-soft); display: flex; gap: var(--s3); align-items: center; }
+.queue-foot p { flex: 1; font-size: var(--fs-sm); color: var(--text-2); }
+
+/* UK rear plate: the signature of this screen. The last 3 characters are what the crew type. */
+.plate { display: inline-flex; align-items: stretch; border-radius: 6px; background: var(--yellow-500); color: #111; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; line-height: 1; overflow: hidden; border: 2px solid #111; white-space: nowrap; }
+.plate .h { padding: 8px 6px 8px 8px; font-size: 18px; }
+.plate .t { padding: 8px 8px; font-size: 18px; background: #111; color: var(--yellow-400); }
+.plate .h:empty { display: none; }
+.plate.lg .h, .plate.lg .t { font-size: 30px; padding-top: 10px; padding-bottom: 10px; }
+
+/* ---------- entry (keypad) ---------- */
+.entry { background: var(--surface); border-top: 4px solid var(--text); padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom)); position: sticky; bottom: 0; z-index: 5; }
+.entry-head { display: grid; grid-template-columns: 1fr auto auto; gap: var(--s2); align-items: center; }
+.plate-in { display: flex; gap: var(--s2); align-items: center; }
+.pc { width: 64px; height: 68px; display: grid; place-items: center; border-radius: var(--r-sm); background: var(--yellow-500); color: #111; font-size: 40px; font-weight: 800; border: 3px solid #111; }
+.pc.empty-c { background: var(--surface-2); color: var(--text-3); border-color: var(--border); border-style: dashed; font-size: 28px; }
+.entry-hint { font-size: var(--fs-sm); color: var(--text-2); margin: var(--s1) 0 var(--s2); }
+.keys { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px; }
+.key {
+  height: 64px; border-radius: var(--r-sm); border: 2px solid var(--border); background: var(--surface-2); color: var(--text);
+  font-size: var(--fs-xl); font-weight: 800; padding: 0;
+  transition: transform var(--t-press) var(--ease-out);
+}
+.key.num { background: var(--surface); border-bottom-width: 4px; }
+.key.off { background: transparent; color: var(--text-3); border-style: dashed; }
+.entry .btn { min-height: 52px; }
+.entry-bar, .entry .only-narrow { display: none; }
+@media (min-width: 1000px) {
+  .entry { position: static; border-top: 0; border-left: 4px solid var(--text); padding: var(--s4); align-self: stretch; display: flex; flex-direction: column; justify-content: flex-start; }
+  .key { height: auto; aspect-ratio: 1 / 1.05; }
+  .keys { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+  .pc { width: 80px; height: 88px; font-size: 52px; }
+}
+@media (max-width: 699px) {
+  .entry { position: fixed; inset: auto 0 0 0; transform: translateY(105%); visibility: hidden; transition: transform var(--t-sheet) var(--ease-out), visibility 0s var(--t-sheet); box-shadow: 0 -2px 0 var(--border-soft); max-height: 92dvh; overflow-y: auto; }
+  .kp-open .entry { transform: none; visibility: visible; transition-delay: 0s; }
+  .keys { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .key { height: 56px; }
+  .pc { width: 52px; height: 60px; font-size: 32px; }
+  .entry .only-narrow { display: inline-flex; }
+  .entry-bar { display: flex; position: fixed; inset: auto 0 0 0; z-index: 4; padding: var(--s3) var(--s4) calc(var(--s3) + env(safe-area-inset-bottom)); background: var(--surface); border-top: 4px solid var(--text); }
+  .entry-bar .btn { width: 100%; }
+  .kp-open .entry-bar { visibility: hidden; }
+}
+
+/* ---------- buttons ---------- */
+.btn {
+  min-height: var(--tap); padding: 0 var(--s5); border-radius: var(--r-md); border: 2px solid var(--border);
+  background: var(--surface); color: var(--text); font-weight: 800; font-size: var(--fs-md);
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  transition: transform var(--t-press) var(--ease-out);
+}
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.danger { border-color: var(--bad-text); color: var(--bad-text); }
+.btn.ghost { background: transparent; }
+.btn:disabled { border-style: dashed; color: var(--text-3); background: transparent; cursor: not-allowed; }
+@media (hover: hover) {
+  .btn:not(:disabled):hover, .row:hover, .key:hover, .sail:hover, .tab:hover { border-color: var(--text); }
+  .btn.primary:hover { background: var(--yellow-400); border-color: var(--yellow-400); }
+}
+
+/* ---------- sheet ---------- */
+dialog.sheet {
+  margin: auto auto 0; width: min(760px, 100%); max-width: 100%; max-height: 94dvh; padding: 0; border: 0;
+  border-top: 6px solid var(--accent); border-radius: var(--r-lg) var(--r-lg) 0 0; background: var(--surface); color: var(--text);
+  overflow-y: auto; overscroll-behavior: contain;
+}
+dialog.sheet[open] { animation: up var(--t-sheet) var(--ease-out); }
+dialog.sheet::backdrop { background: var(--backdrop); }
+@keyframes up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+.sheet-in { padding: var(--s5) var(--s5) calc(var(--s5) + env(safe-area-inset-bottom)); display: grid; gap: var(--s4); }
+.sheet-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s3); }
+.sheet h2 { font-size: var(--fs-xl); line-height: 1.15; }
+.sheet .vehicle { display: grid; gap: var(--s2); }
+.sheet .vehicle .d { color: var(--text-2); }
+.lanes { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); }
+.lane-btn {
+  min-height: 104px; border-radius: var(--r-md); border: 3px solid var(--text); background: var(--surface-2); text-align: left; padding: var(--s3) var(--s4);
+  display: grid; align-content: center; gap: 2px; transition: transform var(--t-press) var(--ease-out);
+}
+.lane-btn b { font-size: var(--fs-2xl); line-height: 1; letter-spacing: -.02em; }
+.lane-btn .f { font-weight: 700; }
+.lane-btn .why { font-size: var(--fs-sm); font-weight: 700; }
+.lane-btn.sug { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.lane-btn.here { border-color: var(--ok-text); }
+.lane-btn:disabled { border: 3px dashed var(--border); background: transparent; color: var(--text-3); }
+.lane-btn:disabled .why { color: var(--bad-text); }
+.toggle { display: flex; align-items: center; gap: var(--s3); min-height: var(--tap); padding: var(--s2) var(--s4); border-radius: var(--r-md); border: 2px solid var(--border); background: transparent; text-align: left; font-weight: 700; width: 100%; }
+.toggle .box { width: 32px; height: 32px; border-radius: 8px; border: 3px solid var(--text); display: grid; place-items: center; flex: none; }
+.toggle .box .ic { opacity: 0; width: 22px; height: 22px; }
+.toggle[aria-pressed="true"] { background: var(--warn-bg); border-color: transparent; color: var(--warn-text); }
+.toggle[aria-pressed="true"] .box { background: var(--warn-text); border-color: var(--warn-text); color: var(--warn-bg); }
+.toggle[aria-pressed="true"] .box .ic { opacity: 1; }
+.toggle small { display: block; font-weight: 600; color: inherit; font-size: var(--fs-sm); }
+.field label, .field .lbl { display: block; font-weight: 700; margin-bottom: var(--s1); }
+.field input[type="text"], .field input[type="date"], .field input[type="time"] { width: 100%; min-height: var(--tap); border-radius: var(--r-md); border: 3px solid var(--border); background: var(--surface); padding: 0 var(--s4); font-size: 22px; font-weight: 700; text-transform: none; }
+.field input.upper { text-transform: uppercase; letter-spacing: .06em; }
+.field input[aria-invalid="true"] { border-color: var(--bad-text); }
+.field .err { color: var(--bad-text); font-weight: 700; margin-top: var(--s1); }
+.field .help { color: var(--text-2); font-size: var(--fs-sm); margin-top: var(--s1); }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: var(--s2); }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.seg span { display: grid; place-items: center; text-align: center; min-height: var(--tap); padding: var(--s1) var(--s2); border-radius: var(--r-md); border: 2px solid var(--border); font-weight: 700; line-height: 1.15; }
+.seg span small { font-weight: 600; font-size: 14px; color: var(--text-3); }
+.seg input:checked + span { background: var(--text); color: var(--surface); border-color: var(--text); }
+.seg input:checked + span small { color: var(--surface); }
+.seg input:focus-visible + span { outline: 4px solid var(--focus); outline-offset: 2px; }
+.actions { display: flex; gap: var(--s3); flex-wrap: wrap; }
+.actions .btn { flex: 1 1 200px; }
+.log { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; font-size: var(--fs-sm); }
+.log li { display: flex; gap: var(--s2); align-items: flex-start; }
+.log time { color: var(--text-3); min-width: 44px; }
+.set-group { display: grid; gap: var(--s2); padding-top: var(--s4); border-top: 2px solid var(--border-soft); }
+.set-group h3 { font-size: var(--fs-lg); }
+.set-group p { color: var(--text-2); font-size: var(--fs-sm); }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s3); }
+
+/* ---------- toast ---------- */
+.toast {
+  position: fixed; left: 50%; top: calc(env(safe-area-inset-top) + 76px); transform: translateX(-50%); z-index: 50;
+  width: min(640px, calc(100% - 24px)); display: none; align-items: center; gap: var(--s3);
+  background: var(--text); color: var(--surface); border-radius: var(--r-md); padding: var(--s2) var(--s2) var(--s2) var(--s4); font-weight: 700;
+}
+.toast.show { display: flex; animation: up var(--t-sheet) var(--ease-out); }
+.toast span { flex: 1; }
+.toast .btn { min-height: 48px; background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.toast.bad { background: var(--bad-text); color: #fff; }
+[data-theme="night"] .toast.bad { background: var(--red-300); color: var(--red-900); }
+
+noscript { display: block; padding: var(--s6); font-weight: 700; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
+}
+</style>
+</head>
+<body>
+<noscript>The loading screen needs JavaScript. Switch it on in the browser settings, then reload.</noscript>
+<div class="app" id="app">
+  <header class="top">
+    <div class="brand">
+      <h1>MV Gannet</h1>
+      <p id="route">Port Ailig to Skerra</p>
+    </div>
+    <div class="clock" id="clock" aria-label="Current time"></div>
+    <button class="net" id="net" data-act="settings" type="button"></button>
+    <button class="icon-btn" id="themeBtn" data-act="theme" type="button"></button>
+    <button class="icon-btn" data-act="settings" type="button" aria-label="Settings and activity"></button>
+  </header>
+
+  <nav class="sailings" id="sailings" aria-label="Sailings"></nav>
+  <section class="status" id="status" aria-live="polite"></section>
+  <section class="tiles" id="tiles" aria-label="Deck space"></section>
+  <section class="deck" id="deck" aria-label="Deck plan"></section>
+  <main class="queue" id="queue"></main>
+
+  <section class="entry" id="entry" aria-label="Find a vehicle by number plate">
+    <div class="entry-head">
+      <div class="plate-in" id="plateIn" role="group" aria-label="Plate characters typed"></div>
+      <button class="icon-btn" data-act="back" type="button" aria-label="Delete last character"></button>
+      <button class="btn ghost" data-act="clear" type="button">Clear</button>
+    </div>
+    <p class="entry-hint" id="hint">Type the last 3 characters of the plate.</p>
+    <div class="keys" id="keys" role="group" aria-label="Keypad"></div>
+    <button class="btn only-narrow" data-act="kp-close" type="button" style="margin-top:12px;width:100%">Done</button>
+  </section>
+  <div class="entry-bar"><button class="btn primary" id="kpOpen" data-act="kp-open" type="button">Enter plate</button></div>
+</div>
+
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle"><div class="sheet-in" id="sheetIn"></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+
+/* ================= fixed facts about the ship ================= */
+const SAILINGS = ['07:10', '08:30', '10:15', '12:40', '14:30', '16:20', '18:05'];
+const LANES = [
+  { n: 1, cap: 5, note: 'max 2.1 m' },
+  { n: 2, cap: 6, note: 'lorry, bus' },
+  { n: 3, cap: 6, note: 'lorry, bus' },
+  { n: 4, cap: 5, note: '' },
+];
+const CAP = LANES.reduce((a, l) => a + l.cap, 0);     // 22 car units
+const MAX_H = 2.1;                                     // lane 1 headroom, metres
+const RELEASE_MIN = 10;                                // no-shows lose their space this long before departure
+const KIND = {
+  car:     { label: 'Car', units: 1 },
+  van:     { label: 'Van', units: 2 },
+  trailer: { label: 'Car + trailer', units: 2 },
+  lorry:   { label: 'Lorry', units: 4 },
+  bus:     { label: 'Bus', units: 4 },
+  tanker:  { label: 'Fuel tanker', units: 4 },
+};
+const PRI = {
+  resident: { label: 'Island resident', icon: 'star' },
+  medic:    { label: 'Doctor', icon: 'cross' },
+  vet:      { label: 'Vet', icon: 'heart' },
+};
+
+/* ================= sample vehicles =================
+   [plate, holder, description, kind, over 2.1 m, priority] */
+const POOL = [
+  ['SF71 DRM', 'Dr Ishbel Macrae', 'Skerra Medical Practice · Peugeot Partner', 'van', false, 'medic'],
+  ['SK69 VTG', 'Fraser Gillies', 'Skerra Vets · Vauxhall Vivaro', 'van', false, 'vet'],
+  ['SG20 BPT', 'Morag MacAskill', 'Silver Dacia Duster', 'car', false, 'resident'],
+  ['SF67 TCH', 'Angus Beaton', 'Land Rover Defender · roof box', 'car', true, 'resident'],
+  ['SG68 DMH', 'Donald Macleod', 'Hilux + livestock trailer', 'trailer', true, 'resident'],
+  ['SK19 YFR', 'Fiona Ross', 'Red Toyota Yaris', 'car', false, 'resident'],
+  ['YC21 INK', 'Isla Nicolson', 'Blue Skoda Fabia', 'car', false, 'resident'],
+  ['SN19 LMK', 'MacKinnon Building Supplies', '7.5 t box lorry', 'lorry', true, null],
+  ['SN70 COP', 'Skerra Co-op', 'Mercedes Sprinter, high roof', 'van', true, null],
+  ['SF18 HGL', 'Hamish Gillies', 'Grey Ford Focus', 'car', false, null],
+  ['YJ70 KNB', 'Kirsty Nicolson', 'VW Golf · roof box', 'car', true, null],
+  ['SK72 RCM', 'Rory and Eilidh Campbell', 'Nissan Qashqai', 'car', false, null],
+  ['YC17 BRA', 'Ewan Bruce', 'White Ford Fiesta', 'car', false, null],
+  ['SG21 BRA', 'Beth Rae', 'Black Mini Cooper', 'car', false, null],
+  ['LK70 HJR', 'Tom Hargreaves', 'Skoda Octavia · bikes on rack', 'car', false, null],
+  ['SJ17 CMB', 'Skerra Community Bus', 'Optare minibus', 'bus', true, null],
+  ['SN66 CBH', 'Calum Beaton Haulage', '18 t curtainsider', 'lorry', true, null],
+  ['SG69 SWT', 'Scottish Water', 'Ford Transit Custom', 'van', false, null],
+  ['YP21 RML', 'Royal Mail', 'Skerra delivery van', 'van', false, null],
+  ['SV68 IMR', 'Iain Morrison', 'Campervan', 'van', true, null],
+  ['SG21 SMK', 'Sheena Mackay', 'Green Mini', 'car', false, null],
+  ['WN19 AWK', 'Anna Wójcik', 'Vauxhall Corsa', 'car', false, null],
+  ['SK17 LFR', 'Lewis Fraser', 'Pickup + boat trailer', 'trailer', false, null],
+  ['SG67 MMH', 'Marion Maclean', 'Honda Jazz', 'car', false, null],
+  ['SF20 SMN', 'Struan Munro', 'Subaru Forester', 'car', false, null],
+];
+const STANDBY_POOL = [
+  ['SG18 FNL', 'Neil Ferguson', 'Ford Fiesta', 'car', false],
+  ['SK67 PWE', 'Stewart Joinery', 'Vauxhall Combo', 'van', false],
+  ['SK22 HJD', 'Catriona Hogg', 'Mini Countryman', 'car', false],
+  ['YJ69 TKW', 'Duncan Kerr', 'Kia Sportage', 'car', false],
+  ['SF16 GRM', 'Greta Mowat', 'Citroën Berlingo', 'van', true],
+];
+const TANKER = ['SK16 FUL', 'Hebridean Fuels', 'Road tanker, 4 axle', 'tanker', false, null];
+const TARGET = { '07:10': 17, '10:15': 12, '12:40': 15, '14:30': 13, '16:20': 19, '18:05': 10 };
+
+/* ================= helpers ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const mins = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+const fmt = m => { m = Math.floor(m); return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+const norm = p => p.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+const last3 = v => norm(v.plate).slice(-3);
+const ICON = {
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  wifi: '<path d="M2 9a15 15 0 0120 0M5.5 12.5a10 10 0 0113 0M9 16a5 5 0 016 0M12 19.5h.01"/>',
+  wifioff: '<path d="M2 9a15 15 0 015-3M22 9a15 15 0 00-8-4M5.5 12.5a10 10 0 014-2.5M18.5 12.5A10 10 0 0016 11M9 16a5 5 0 016 0M12 19.5h.01M3 3l18 18"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M5 19l1.5-1.5M17.5 6.5L19 5"/>',
+  moon: '<path d="M20 14.5A8 8 0 019.5 4 8 8 0 1020 14.5z"/>',
+  sliders: '<path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.5"/><circle cx="8" cy="17" r="2.5"/>',
+  back: '<path d="M9 5h11a1 1 0 011 1v12a1 1 0 01-1 1H9l-6-7z"/><path d="M12.5 10l4 4M16.5 10l-4 4"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  warn: '<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>',
+  lock: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
+  star: '<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>',
+  cross: '<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>',
+  heart: '<path d="M12 20s-8-5-8-11a4.5 4.5 0 018-2.5A4.5 4.5 0 0120 9c0 6-8 11-8 11z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+};
+const ic = n => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n]}</svg>`;
+
+function rng(seed) {
+  let h = 1779033703 ^ seed.length;
+  for (let i = 0; i < seed.length; i++) { h = Math.imul(h ^ seed.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
+  let a = h >>> 0;
+  return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+
+/* ================= persistence ================= */
+const KEY = 'gannet-loading-v1';
+const fresh = () => ({ days: {}, log: [], prefs: { theme: 'auto', forceOffline: false, clock: 'sample', sampleTime: '08:02', date: null } });
+let store;
+try { store = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch (e) { store = fresh(); }
+store.prefs = Object.assign(fresh().prefs, store.prefs);
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) { /* storage full or blocked: keep working in memory */ } };
+
+/* ================= clock and day ================= */
+const params = new URLSearchParams(location.search);
+const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const dayISO = () => params.get('date') || store.prefs.date || todayISO();
+let clockBase = 0, clockT0 = performance.now();
+function resetClock() {
+  const t = params.get('now') && /^\d{1,2}:\d{2}$/.test(params.get('now')) ? params.get('now') : store.prefs.sampleTime;
+  clockBase = mins(t); clockT0 = performance.now();
+}
+function nowMin() {
+  if (store.prefs.clock === 'live' && !params.get('now')) { const d = new Date(); return d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60; }
+  return clockBase + (performance.now() - clockT0) / 60000;
+}
+const isThursday = iso => new Date(iso + 'T12:00:00').getDay() === 4;
+const isRestricted = (iso, time) => time === '10:15' && isThursday(iso);
+
+/* ================= sample day builder ================= */
+function mk(spec, sl, group, i) {
+  const [plate, name, desc, kind, tall, pri] = spec;
+  return { id: sl.key + '-' + (group[0]) + i, plate, name, desc, kind, units: KIND[kind].units, tall: !!tall, pri: pri || null, group, status: group === 'standby' ? 'waiting' : 'expected', lane: null, loadedAt: null, seq: group === 'standby' ? i + 1 : 0, ord: i, note: '' };
+}
+function buildSailing(iso, time) {
+  const sl = { key: iso + '|' + time, time, vehicles: [], seq: 0, touched: false, settled: false };
+  const add = (specs, grp) => specs.forEach((s, i) => sl.vehicles.push(mk(s, sl, grp === 'auto' ? (s[5] ? 'priority' : 'booked') : grp, sl.vehicles.length)));
+  const byPlate = p => POOL.find(s => s[0] === p);
+  if (isRestricted(iso, time)) {
+    add([TANKER], 'booked');
+  } else if (time === '08:30') {
+    add(['SF71 DRM', 'SK69 VTG', 'SG20 BPT', 'SF67 TCH', 'SG68 DMH', 'SK19 YFR', 'SN19 LMK', 'SN70 COP', 'SF18 HGL', 'YJ70 KNB', 'SK72 RCM', 'YC17 BRA', 'SG21 BRA', 'LK70 HJR'].map(byPlate), 'auto');
+    add(STANDBY_POOL.slice(0, 4), 'standby');
+  } else {
+    const r = rng(sl.key);
+    const pool = POOL.slice().sort(() => r() - .5);
+    let total = 0, big = 0;
+    const picked = [];
+    for (const s of pool) {
+      const u = KIND[s[3]].units;
+      if (u === 4 && big) continue;
+      if (total + u > (TARGET[time] || 12) + 1) continue;
+      picked.push(s); total += u; if (u === 4) big++;
+      if (total >= (TARGET[time] || 12)) break;
+    }
+    picked.sort((a, b) => (b[5] ? 1 : 0) - (a[5] ? 1 : 0));
+    add(picked, 'auto');
+    const n = Math.floor(r() * 3);
+    add(STANDBY_POOL.slice().sort(() => r() - .5).slice(0, n), 'standby');
+  }
+  sl.vehicles.filter(v => v.group === 'standby').forEach((v, k) => { v.seq = k + 1; sl.seq = k + 1; });
+  return sl;
+}
+function ensureDay(iso) {
+  if (store.days[iso]) return store.days[iso];
+  const day = {};
+  SAILINGS.forEach(t => { day[t] = buildSailing(iso, t); });
+  // 08:30 is part-loaded when the crew open it: priority vehicles are already on.
+  const s = day['08:30'];
+  if (s && !isRestricted(iso, '08:30')) {
+    s.vehicles.filter(v => v.group === 'priority').slice(0, 4).forEach((v, i) => placeSuggested(s, v, mins('08:30') - 38 + i * 3, 0));
+  }
+  store.days[iso] = day;
+  settlePast();
+  save();
+  return day;
+}
+
+/* ================= deck rules ================= */
+const toLoadOrder = sl => sl.vehicles.filter(v => v.status === 'expected' || v.status === 'waiting')
+  .sort((a, b) => ({ priority: 0, booked: 1, standby: 2 }[a.group] - { priority: 0, booked: 1, standby: 2 }[b.group]) || (a.group === 'standby' ? a.seq - b.seq : a.ord - b.ord));
+function laneUsed(sl, n, skipId) { return sl.vehicles.filter(v => v.status === 'loaded' && v.lane === n && v.id !== skipId).reduce((a, v) => a + v.units, 0); }
+function laneCheck(sl, v, n) {
+  if (n === 1 && v.tall) return { ok: false, why: 'Over 2.1 m: never lane 1' };
+  if (v.units === 4 && n !== 2 && n !== 3) return { ok: false, why: 'Lane 2 or 3 only' };
+  const free = LANES[n - 1].cap - laneUsed(sl, n, v.id);
+  if (free < v.units) return { ok: false, why: free === 0 ? 'Lane full' : `${free} free, needs ${v.units}`, free };
+  return { ok: true, free };
+}
+const effStatus = (sl, v, now) => (v.status === 'expected' && now >= mins(sl.time) - RELEASE_MIN) ? 'noshow' : v.status;
+function suggest(sl, v, now) {
+  const pref = v.units === 4 ? [2, 3] : v.tall ? [4, 2, 3] : [1, 4, 3, 2];
+  const pendingBig = sl.vehicles.filter(x => x.units === 4 && x.id !== v.id && effStatus(sl, x, now) === 'expected').length;
+  let best = null;
+  pref.forEach((n, i) => {
+    const c = laneCheck(sl, v, n);
+    if (!c.ok) return;
+    let score = i * 10 + (c.free - v.units);
+    if (v.units < 4 && (n === 2 || n === 3)) {
+      // keep room in lanes 2 and 3 for the lorries and buses still to come
+      const slots = [2, 3].reduce((a, k) => a + Math.floor((LANES[k - 1].cap - laneUsed(sl, k, v.id) - (k === n ? v.units : 0)) / 4), 0);
+      if (slots < pendingBig) score += 100;
+    }
+    if (!best || score < best.score) best = { n, score };
+  });
+  return best && best.n;
+}
+function placeSuggested(sl, v, at, now) {
+  const n = suggest(sl, v, now);
+  if (!n) return false;
+  v.status = 'loaded'; v.lane = n; v.loadedAt = at; return true;
+}
+// Sailings already gone when the crew open the app are shown as they would have left.
+function settlePast() {
+  const now = nowMin();
+  Object.keys(store.days).forEach(iso => {
+    if (iso > dayISO()) return;
+    Object.values(store.days[iso]).forEach(sl => {
+      const dep = mins(sl.time);
+      if (sl.settled || sl.touched || (iso === dayISO() && dep > now)) return;
+      sl.settled = true;
+      const order = toLoadOrder(sl).filter(v => v.group !== 'standby');
+      const skip = order.length > 5 ? order[order.length - 1] : null;
+      order.forEach((v, i) => { if (v !== skip) placeSuggested(sl, v, dep - 30 + i, -1); });
+      toLoadOrder(sl).filter(v => v.group === 'standby').forEach((v, i) => placeSuggested(sl, v, dep - 12 + i, -1));
+    });
+  });
+}
+
+/* ================= sync (simulated until a shore system is connected) ================= */
+const online = () => navigator.onLine && !store.prefs.forceOffline;
+let syncTimer = null;
+function logEvent(text) { store.log.unshift({ id: Date.now() + Math.random(), at: fmt(nowMin()), text, synced: false }); store.log.length = Math.min(store.log.length, 200); }
+// Replace the body of pushToShore with a real request to the shore booking system.
+function pushToShore(events) { return new Promise(res => setTimeout(() => res(events.map(e => e.id)), 700)); }
+function scheduleSync() {
+  if (syncTimer || !online() || !store.log.some(e => !e.synced)) return;
+  syncTimer = setTimeout(async () => {
+    syncTimer = null;
+    if (!online()) return;
+    const pending = store.log.filter(e => !e.synced);
+    try {
+      const ok = new Set(await pushToShore(pending));
+      store.log.forEach(e => { if (ok.has(e.id)) e.synced = true; });
+      save();
+    } catch (e) { /* stays queued; tries again on next change or reconnect */ }
+    renderTop(); scheduleSync();
+  }, 1200);
+}
+
+/* ================= state ================= */
+let day = null, sel = null, entry = '', tab = 'todo';
+const cur = () => day[sel];
+const edit = sl => { sl.touched = true; };
+function pickDefaultSailing() {
+  const now = nowMin();
+  sel = SAILINGS.find(t => mins(t) > now) || SAILINGS[SAILINGS.length - 1];
+}
+
+/* ================= info about the current sailing ================= */
+function info(sl) {
+  const now = nowMin(), dep = mins(sl.time), iso = dayISO();
+  const departed = now >= dep;
+  const loadedU = sl.vehicles.filter(v => v.status === 'loaded').reduce((a, v) => a + v.units, 0);
+  const exp = sl.vehicles.filter(v => effStatus(sl, v, now) === 'expected');
+  const expU = exp.reduce((a, v) => a + v.units, 0);
+  const free = CAP - loadedU;
+  return {
+    now, dep, departed, loadedU, free, expU, expN: exp.length, open: Math.max(0, free - expU),
+    release: dep - RELEASE_MIN, standbyOpen: exp.length === 0,
+    restricted: isRestricted(iso, sl.time),
+    noshows: sl.vehicles.filter(v => effStatus(sl, v, now) === 'noshow'),
+  };
+}
+function canLoad(sl, v) {
+  const i = info(sl), st = effStatus(sl, v, i.now);
+  if (i.departed) return { ok: false, why: 'This sailing has departed.' };
+  if (i.restricted && v.kind !== 'tanker') return { ok: false, why: 'Only the fuel tanker loads on this sailing.' };
+  if (st === 'noshow') return { ok: false, noshow: true, why: `Booking released at ${fmt(i.release)}. If it turns up, it joins the standby queue.` };
+  if (st === 'waiting' && !i.standbyOpen) return { ok: false, locked: true, why: `Standby is called on once booked vehicles are loaded or released. ${i.expN} still expected, released at ${fmt(i.release)}.` };
+  return { ok: true };
+}
+
+/* ================= rendering ================= */
+const el = { clock: $('#clock'), net: $('#net'), sailings: $('#sailings'), status: $('#status'), tiles: $('#tiles'), deck: $('#deck'), queue: $('#queue'), plateIn: $('#plateIn'), keys: $('#keys'), hint: $('#hint'), sheet: $('#sheet'), sheetIn: $('#sheetIn'), toast: $('#toast'), app: $('#app'), kpOpen: $('#kpOpen') };
+
+function plate(v, lg) {
+  const n = norm(v.plate), h = n.slice(0, -3), t = n.slice(-3);
+  const head = h.length === 4 ? h.slice(0, 2) + h.slice(2) : h;
+  return `<span class="plate${lg ? ' lg' : ''}" aria-label="Plate ${esc(v.plate)}"><span class="h">${esc(head)}</span><span class="t">${esc(t)}</span></span>`;
+}
+
+function renderTop() {
+  const now = nowMin(), pend = store.log.filter(e => !e.synced).length;
+  el.clock.innerHTML = fmt(now) + (store.prefs.clock === 'live' && !params.get('now') ? '' : '<small>sample time</small>');
+  $('#route').textContent = 'Port Ailig to Skerra · 25 min · ' + new Date(dayISO() + 'T12:00:00').toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  let cls = 'net', txt;
+  if (!online()) { cls += ' off'; txt = pend ? `No signal · ${pend} saved on tablet` : 'No signal · working offline'; el.net.innerHTML = ic('wifioff') + `<span class="t">${txt}</span>`; }
+  else if (pend) { cls += ' busy'; txt = `Sending ${pend}`; el.net.innerHTML = ic('wifi') + `<span class="t">${txt}…</span>`; }
+  else { txt = 'Online · all sent'; el.net.innerHTML = ic('wifi') + `<span class="t">${txt}</span>`; }
+  el.net.className = cls;
+  el.net.setAttribute('aria-label', 'Connection: ' + txt + '. Open settings');
+  const night = document.documentElement.dataset.theme === 'night';
+  $('#themeBtn').innerHTML = ic(night ? 'sun' : 'moon');
+  $('#themeBtn').setAttribute('aria-label', night ? 'Switch to day mode' : 'Switch to night mode');
+}
+
+function renderSailings() {
+  const now = nowMin();
+  el.sailings.innerHTML = SAILINGS.map(t => {
+    const s = day[t], gone = now >= mins(t);
+    const u = s.vehicles.filter(v => v.status === 'loaded').reduce((a, v) => a + v.units, 0);
+    return `<button type="button" class="sail${gone ? ' gone' : ''}" data-act="sail" data-t="${t}" aria-pressed="${t === sel}"><b>${t}</b><span>${gone ? 'Departed' : u + ' / ' + CAP}</span></button>`;
+  }).join('');
+}
+
+function renderStatus() {
+  const sl = cur(), i = info(sl), mm = Math.ceil(i.dep - i.now);
+  const stateP = i.departed ? `<span class="pill bad">${ic('lock')} Departed · read only</span>`
+    : i.now >= i.release ? `<span class="pill ok">${ic('check')} No-shows released</span>`
+    : `<span class="pill">${ic('clock')} Releases no-shows at ${fmt(i.release)}</span>`;
+  const when = i.departed ? `Left at ${sl.time}` : (mm >= 60 ? `Departs in ${Math.floor(mm / 60)} h ${mm % 60} min` : `Departs in ${mm} min`);
+  el.status.innerHTML = `
+    <div class="banner"><h2>${sl.time} to Skerra</h2><span class="sub">${when}</span>${stateP}</div>
+    ${i.restricted ? `<div class="notice">${ic('warn')}<span>Thursday ${sl.time}: fuel tanker and foot passengers only. No other vehicles load on this sailing.</span></div>` : ''}`;
+  el.tiles.innerHTML = `
+    <div class="tile key-tile"><div class="l">Space left</div><div class="n">${i.free} <small>of ${CAP}</small></div><div class="d">car units</div></div>
+    <div class="tile"><div class="l">Still expected</div><div class="n">${i.expU}</div><div class="d">${i.expN ? i.expN + ' booked vehicle' + (i.expN > 1 ? 's' : '') : 'all booked are in'}</div></div>
+    <div class="tile"><div class="l">Open to standby</div><div class="n">${i.restricted ? 0 : i.open}</div><div class="d">${i.restricted ? 'none today' : i.standbyOpen ? 'call on now' : 'locked until booked are in'}</div></div>`;
+}
+
+function renderDeck() {
+  const sl = cur();
+  el.deck.innerHTML = LANES.map(L => {
+    const vs = sl.vehicles.filter(v => v.status === 'loaded' && v.lane === L.n).sort((a, b) => a.loadedAt - b.loadedAt);
+    const used = vs.reduce((a, v) => a + v.units, 0), free = L.cap - used;
+    const blocks = vs.map(v => `<button type="button" class="blk${v.tall ? ' tall' : ''}" data-act="veh" data-id="${v.id}" style="grid-column:span ${v.units}" aria-label="Lane ${L.n}: ${esc(v.plate)}, ${KIND[v.kind].label}">${esc(last3(v))}</button>`).join('');
+    const cells = '<span class="cell-free"></span>'.repeat(Math.max(0, free));
+    return `<div class="lane"><div class="lane-label"><b>Lane ${L.n}</b><span>${L.note || '&nbsp;'}</span></div>
+      <div class="lane-bar" style="grid-template-columns:repeat(${L.cap},minmax(0,1fr));width:${(L.cap / 6 * 100).toFixed(2)}%">${blocks}${cells}</div>
+      <div class="lane-free"><b>${free}</b>free</div></div>`;
+  }).join('') + `<div class="deck-key"><span><i class="a"></i>Loaded, last 3 of plate</span><span><i class="b"></i>Free unit</span><span><i class="c"></i>Yellow edge: over 2.1 m</span></div>`;
+}
+
+function matchList(sl) { return entry ? sl.vehicles.filter(v => last3(v).startsWith(entry)) : []; }
+
+function rowHTML(sl, v, i, hit) {
+  const st = effStatus(sl, v, i.now), k = KIND[v.kind];
+  const chips = [`<span class="chip">${k.label} · ${v.units}</span>`];
+  if (v.pri) chips.push(`<span class="chip pri">${ic(PRI[v.pri].icon)} ${PRI[v.pri].label}</span>`);
+  if (v.tall) chips.push(`<span class="chip tall">${ic('warn')} Over 2.1 m</span>`);
+  if (v.note) chips.push(`<span class="chip">${esc(v.note)}</span>`);
+  let state = '';
+  if (st === 'loaded') state = `<span class="state"><span class="big">Lane ${v.lane}</span><small>${ic('check')} loaded ${fmt(v.loadedAt)}</small></span>`;
+  else if (st === 'noshow') state = `<span class="state"><span>Released</span><small>${fmt(i.release)}</small></span>`;
+  else if (st === 'waiting') {
+    const first = toLoadOrder(sl).find(x => x.group === 'standby') === v;
+    state = i.standbyOpen && !i.restricted ? `<span class="state"><span class="big">S${v.seq}</span><small>${first ? 'next to call on' : 'standby'}</small></span>` : `<span class="state"><span class="big">S${v.seq}</span><small>${ic('lock')} waiting</small></span>`;
+  } else state = `<span class="state"><span>${v.group === 'priority' ? 'Priority' : 'Booked'}</span><small>choose lane</small></span>`;
+  return `<li><button type="button" class="row${hit ? ' hit' : ''}" data-act="veh" data-id="${v.id}">${plate(v)}<span class="who"><b>${esc(v.name)}</b><span class="d">${esc(v.desc)}</span><span class="chips">${chips.join('')}</span></span>${state}</button></li>`;
+}
+
+function renderQueue() {
+  const sl = cur(), i = info(sl);
+  const todo = toLoadOrder(sl).filter(v => effStatus(sl, v, i.now) !== 'noshow');
+  const loaded = sl.vehicles.filter(v => v.status === 'loaded').sort((a, b) => b.loadedAt - a.loadedAt);
+  const ns = i.noshows;
+  let head = '', body = '';
+  if (entry) {
+    const m = matchList(sl);
+    head = `<div class="match-head"><span>Plates ending “${esc(entry)}…”: ${m.length} ${m.length === 1 ? 'match' : 'matches'}</span><button type="button" class="btn ghost" data-act="clear" style="min-height:48px">Clear</button></div>`;
+    body = m.length ? `<ul class="rows">${m.map(v => rowHTML(sl, v, i, true)).join('')}</ul>` : `<div class="empty"><h3>No booking ends “${esc(entry)}”</h3><p>Check the characters, or add the vehicle to the standby queue.</p>${addBtn(i, true)}</div>`;
+  } else {
+    head = `<div class="tabs">
+      <button type="button" class="tab" data-act="tab" data-tab="todo" aria-pressed="${tab === 'todo'}">To load <span class="c">${todo.length}</span></button>
+      <button type="button" class="tab" data-act="tab" data-tab="done" aria-pressed="${tab === 'done'}">Loaded <span class="c">${loaded.length}</span></button>
+      <button type="button" class="tab" data-act="tab" data-tab="gone" aria-pressed="${tab === 'gone'}">No-shows <span class="c">${ns.length}</span></button></div>`;
+    if (tab === 'todo') {
+      const g = k => todo.filter(v => v.group === k);
+      const sect = (title, hint, arr) => arr.length ? `<div class="group-h">${title}<span>${hint}</span></div><ul class="rows">${arr.map(v => rowHTML(sl, v, i, false)).join('')}</ul>` : '';
+      body = sect('Priority', 'islanders, doctor, vet', g('priority')) + sect('Booked', 'any order', g('booked')) +
+        sect('Standby, shore lane', i.standbyOpen ? 'arrival order, call on now' : 'arrival order, locked', g('standby'));
+      if (!todo.length) body = `<div class="empty"><h3>${i.departed ? 'Nothing left to load' : 'Everyone is on board'}</h3><p>${i.departed ? 'This sailing has departed.' : 'No booked or standby vehicles waiting. Type a plate if one more arrives.'}</p></div>`;
+    } else if (tab === 'done') {
+      body = loaded.length ? `<ul class="rows">${loaded.map(v => rowHTML(sl, v, i, false)).join('')}</ul>` : `<div class="empty"><h3>Nothing loaded yet</h3><p>Type the last 3 characters of a plate to find the booking and give it a lane.</p></div>`;
+    } else {
+      body = ns.length ? `<p class="group-h">Space given to standby<span></span></p><ul class="rows">${ns.map(v => rowHTML(sl, v, i, false)).join('')}</ul>` : `<div class="empty"><h3>No no-shows</h3><p>Booked vehicles that haven’t arrived by ${fmt(i.release)} are listed here and lose their space.</p></div>`;
+    }
+  }
+  const prev = $('.list', el.queue), top = prev ? prev.scrollTop : 0;
+  el.queue.innerHTML = `${head}<div class="list">${body}</div><div class="queue-foot"><p>${i.restricted ? 'Standby is closed on this sailing.' : 'Vehicle with no booking?'}</p>${addBtn(i, false)}</div>`;
+  $('.list', el.queue).scrollTop = top;
+}
+function addBtn(i, primary) {
+  const off = i.departed || i.restricted;
+  return `<button type="button" class="btn${primary ? ' primary' : ''}" data-act="add" ${off ? 'disabled' : ''}>${ic('plus')} Add standby</button>`;
+}
+
+function renderEntry() {
+  const cells = [0, 1, 2].map(k => entry[k] ? `<span class="pc">${esc(entry[k])}</span>` : `<span class="pc empty-c">–</span>`).join('');
+  el.plateIn.innerHTML = cells;
+  el.kpOpen.textContent = entry ? 'Plate: ' + entry : 'Enter plate';
+  const sl = cur(), next = new Set();
+  if (entry.length < 3) sl.vehicles.forEach(v => { const t = last3(v); if (t.startsWith(entry)) next.add(t[entry.length]); });
+  el.keys.querySelectorAll('.key').forEach(b => b.classList.toggle('off', !next.has(b.dataset.k)));
+  const m = matchList(sl);
+  el.hint.textContent = entry.length === 0 ? 'Type the last 3 characters of the plate. Solid keys can match a vehicle on this sailing.'
+    : m.length === 1 ? `1 match: ${m[0].plate}` : m.length ? `${m.length} matches. Keep typing to narrow it down.` : 'No match yet. Check the plate or add standby.';
+}
+
+function render() { renderTop(); renderSailings(); renderStatus(); renderDeck(); renderQueue(); renderEntry(); }
+
+/* keypad is built once */
+'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split('').forEach(c => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'key' + (/\d/.test(c) ? ' num' : ''); b.dataset.k = c; b.dataset.act = 'key'; b.textContent = c;
+  el.keys.appendChild(b);
+});
+document.querySelector('[data-act="back"]').innerHTML = ic('back');
+document.querySelector('.top [data-act="settings"].icon-btn').innerHTML = ic('sliders');
+
+/* ================= actions ================= */
+function typeChar(c) {
+  if (entry.length >= 3) return;
+  entry += c;
+  const sl = cur(), m = matchList(sl);
+  renderQueue(); renderEntry();
+  if (entry.length === 3 && m.length === 1) openVehicle(m[0].id);
+}
+function delChar() { entry = entry.slice(0, -1); renderQueue(); renderEntry(); }
+function clearEntry() { entry = ''; renderQueue(); renderEntry(); }
+
+let toastTimer = null;
+function toast(msg, undo, bad) {
+  clearTimeout(toastTimer);
+  el.toast.className = 'toast show' + (bad ? ' bad' : '');
+  el.toast.innerHTML = `<span>${esc(msg)}</span>` + (undo ? `<button type="button" class="btn" data-act="undo">Undo</button>` : '');
+  el.toast._undo = undo || null;
+  toastTimer = setTimeout(() => { el.toast.className = 'toast'; el.toast._undo = null; }, undo ? 9000 : 4000);
+}
+function findV(id) { const sl = cur(); return { sl, v: sl.vehicles.find(x => x.id === id) }; }
+function snap(v) { return JSON.parse(JSON.stringify(v)); }
+
+function doLoad(id, n) {
+  const { sl, v } = findV(id);
+  const can = canLoad(sl, v);
+  if (!can.ok && !(v.status === 'loaded')) { toast(can.why, null, true); return; }
+  const c = laneCheck(sl, v, n);
+  if (!c.ok) { toast(`Lane ${n}: ${c.why}`, null, true); return; }
+  const before = snap(v), wasMove = v.status === 'loaded';
+  v.status = 'loaded'; v.lane = n; v.loadedAt = Math.floor(nowMin()); edit(sl);
+  logEvent(`${v.plate} ${wasMove ? 'moved to' : 'loaded in'} lane ${n} (${sl.time})`);
+  save(); closeSheet(); entry = ''; render(); scheduleSync();
+  toast(`${v.plate} ${wasMove ? 'moved to' : 'loaded in'} lane ${n}`, () => { Object.assign(v, before); logEvent(`${v.plate} change undone (${sl.time})`); save(); render(); scheduleSync(); });
+}
+function doUnload(id) {
+  const { sl, v } = findV(id), before = snap(v);
+  v.status = v.group === 'standby' ? 'waiting' : 'expected'; v.lane = null; v.loadedAt = null; edit(sl);
+  logEvent(`${v.plate} taken off, not loaded (${sl.time})`);
+  save(); closeSheet(); render(); scheduleSync();
+  toast(`${v.plate} taken off the deck plan`, () => { Object.assign(v, before); logEvent(`${v.plate} change undone (${sl.time})`); save(); render(); scheduleSync(); });
+}
+function doLate(id) {
+  const { sl, v } = findV(id), before = snap(v);
+  v.group = 'standby'; v.status = 'waiting'; v.seq = ++sl.seq; v.note = 'Arrived late'; edit(sl);
+  logEvent(`${v.plate} arrived late, now standby S${v.seq} (${sl.time})`);
+  save(); closeSheet(); entry = ''; render(); scheduleSync();
+  toast(`${v.plate} added to standby as S${v.seq}`, () => { Object.assign(v, before); sl.seq--; save(); render(); });
+}
+function doTall(id) {
+  const { sl, v } = findV(id);
+  v.tall = !v.tall; edit(sl);
+  logEvent(`${v.plate} marked ${v.tall ? 'over' : 'under'} 2.1 m (${sl.time})`);
+  save(); render(); openVehicle(id, true); scheduleSync();
+}
+
+/* ---------- sheets ---------- */
+let sheetFor = null;
+function openSheet(html) { el.sheetIn.innerHTML = html; if (!el.sheet.open) el.sheet.showModal(); }
+function closeSheet() { if (el.sheet.open) el.sheet.close(); }
+el.sheet.addEventListener('close', () => { sheetFor = null; });
+el.sheet.addEventListener('click', e => { if (e.target === el.sheet) closeSheet(); });
+
+function vehicleHead(v, extra) {
+  const k = KIND[v.kind];
+  return `<div class="sheet-top"><div class="vehicle">${plate(v, true)}<h2 id="sheetTitle">${esc(v.name)}</h2><p class="d">${esc(v.desc)}</p>
+    <div class="chips"><span class="chip">${k.label} · ${v.units} unit${v.units > 1 ? 's' : ''}</span>${v.pri ? `<span class="chip pri">${ic(PRI[v.pri].icon)} ${PRI[v.pri].label}</span>` : ''}${v.group === 'standby' ? `<span class="chip">Standby S${v.seq}</span>` : ''}${extra || ''}</div></div>
+    <button type="button" class="icon-btn" data-act="close" aria-label="Close">${ic('x')}</button></div>`;
+}
+function openVehicle(id, keepFocus) {
+  const { sl, v } = findV(id);
+  if (!v) return;
+  sheetFor = id;
+  const i = info(sl), can = canLoad(sl, v), loaded = v.status === 'loaded';
+  const sug = !loaded && can.ok ? suggest(sl, v, i.now) : null;
+  const tallToggle = (!i.departed && (can.ok || loaded)) ? `<button type="button" class="toggle" id="tallBtn" data-act="tall" aria-pressed="${v.tall}"><span class="box">${ic('check')}</span><span>Taller than 2.1 m<small>Roof box, high roof or load. Keeps it out of lane 1.</small></span></button>` : '';
+  let body = '';
+  if (loaded && v.lane === 1 && v.tall) body += `<div class="notice bad">${ic('warn')}<span>Over 2.1 m in lane 1. Move it to another lane now.</span></div>`;
+  if (can.ok || loaded) {
+    const lanes = LANES.map(L => {
+      const c = laneCheck(sl, v, L.n), here = loaded && v.lane === L.n;
+      const free = L.cap - laneUsed(sl, L.n, v.id);
+      const dis = here || !c.ok || i.departed;
+      const cls = 'lane-btn' + (sug === L.n ? ' sug' : '') + (here ? ' here' : '');
+      return `<button type="button" class="${cls}" data-act="lane" data-lane="${L.n}" ${dis ? 'disabled' : ''}><b>Lane ${L.n}</b><span class="f">${free} free${L.note ? ' · ' + L.note : ''}</span><span class="why">${here ? 'Loaded here now' : !c.ok ? c.why : sug === L.n ? 'Suggested' : 'Fits'}</span></button>`;
+    }).join('');
+    body += tallToggle + `<h3 style="font-size:var(--fs-lg)">${loaded ? `In lane ${v.lane} since ${fmt(v.loadedAt)}. Move to:` : 'Load into lane'}</h3><div class="lanes">${lanes}</div>`;
+    if (loaded && !i.departed) body += `<div class="actions"><button type="button" class="btn danger" data-act="unload">${ic('x')} Take off, not loaded</button></div>`;
+  } else if (can.noshow) {
+    body += `<div class="notice">${ic('clock')}<span>${can.why}</span></div><div class="actions"><button type="button" class="btn primary" data-act="late">Arrived late: add to standby</button></div>`;
+  } else {
+    body += `<div class="notice ${can.locked ? '' : 'bad'}">${ic(can.locked ? 'lock' : 'warn')}<span>${esc(can.why)}</span></div>`;
+  }
+  openSheet(vehicleHead(v) + body);
+  if (keepFocus) { const t = $('#tallBtn'); if (t) t.focus(); }
+}
+function openStandby(err) {
+  sheetFor = 'standby';
+  const typed = entry && entry.length ? entry : '';
+  openSheet(`<div class="sheet-top"><h2 id="sheetTitle">Add standby vehicle</h2><button type="button" class="icon-btn" data-act="close" aria-label="Close">${ic('x')}</button></div>
+    <form id="sbForm" novalidate class="sheet-in" style="padding:0">
+      <div class="field"><label for="sbPlate">Number plate</label><input id="sbPlate" class="upper" type="text" value="${esc(typed)}" maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="sbHelp sbErr">
+        <p class="help" id="sbHelp">The last 3 characters are enough.</p><p class="err" id="sbErr" hidden></p></div>
+      <div class="field"><span class="lbl" id="kindL">Vehicle</span>
+        <div class="seg" role="radiogroup" aria-labelledby="kindL">
+          <label><input type="radio" name="kind" value="car" checked><span>Car<small>1 unit</small></span></label>
+          <label><input type="radio" name="kind" value="van"><span>Van<small>2 units</small></span></label>
+          <label><input type="radio" name="kind" value="trailer"><span>Car + trailer<small>2 units</small></span></label>
+          <label><input type="radio" name="kind" value="lorry"><span>Lorry or bus<small>4 units</small></span></label>
+        </div></div>
+      <button type="button" class="toggle" id="sbTall" aria-pressed="false" data-act="sbtall"><span class="box">${ic('check')}</span><span>Taller than 2.1 m<small>Roof box, high roof or load.</small></span></button>
+      <div class="actions"><button type="submit" class="btn primary">Add to shore lane</button><button type="button" class="btn" data-act="close">Cancel</button></div>
+    </form>`);
+  setTimeout(() => $('#sbPlate') && $('#sbPlate').focus(), 50);
+}
+function submitStandby() {
+  const inp = $('#sbPlate'), errEl = $('#sbErr'), p = norm(inp.value);
+  if (p.length < 3) {
+    inp.setAttribute('aria-invalid', 'true'); errEl.hidden = false; errEl.textContent = 'Enter at least the last 3 characters of the plate.'; inp.focus(); return;
+  }
+  const sl = cur(), kind = $('input[name=kind]:checked').value;
+  const dup = sl.vehicles.find(v => norm(v.plate) === p);
+  if (dup) { inp.setAttribute('aria-invalid', 'true'); errEl.hidden = false; errEl.textContent = `${dup.plate} is already on this sailing (${dup.name}). Search for it instead.`; inp.focus(); return; }
+  const v = { id: sl.key + '-x' + Date.now(), plate: p.length > 3 ? p.slice(0, -3) + ' ' + p.slice(-3) : p, name: 'No booking', desc: 'Standby, added at the slip', kind, units: KIND[kind].units, tall: $('#sbTall').getAttribute('aria-pressed') === 'true', pri: null, group: 'standby', status: 'waiting', lane: null, loadedAt: null, seq: ++sl.seq, ord: 999, note: 'Arrived ' + fmt(nowMin()) };
+  sl.vehicles.push(v); edit(sl);
+  logEvent(`${v.plate} added to standby S${v.seq} (${sl.time})`);
+  save(); closeSheet(); entry = ''; tab = 'todo'; render(); scheduleSync();
+  toast(`${v.plate} added to standby as S${v.seq}`, () => { sl.vehicles.splice(sl.vehicles.indexOf(v), 1); sl.seq--; save(); render(); });
+}
+
+function openSettings() {
+  sheetFor = 'settings';
+  const p = store.prefs, log = store.log.slice(0, 8);
+  const seg = (name, val, items) => `<div class="seg" role="radiogroup">${items.map(([v, l]) => `<label><input type="radio" name="${name}" value="${v}" ${val === v ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`;
+  openSheet(`<div class="sheet-top"><h2 id="sheetTitle">Settings and activity</h2><button type="button" class="icon-btn" data-act="close" aria-label="Close">${ic('x')}</button></div>
+    <div class="set-group" style="border:0;padding:0"><h3>Screen</h3>${seg('theme', p.theme, [['auto', 'Auto'], ['day', 'Day'], ['night', 'Night']])}</div>
+    <div class="set-group"><h3>Connection</h3><p>Changes are saved on the tablet first and sent to the shore office when there is signal.</p>
+      <button type="button" class="toggle" data-act="offline" aria-pressed="${p.forceOffline}"><span class="box">${ic('check')}</span><span>Pretend there is no signal<small>For testing. Port Ailig drops out for real.</small></span></button></div>
+    <div class="set-group"><h3>Last changes</h3>${log.length ? `<ul class="log">${log.map(e => `<li><time>${e.at}</time><span>${esc(e.text)}</span><span style="margin-left:auto;white-space:nowrap;color:var(--${e.synced ? 'ok' : 'warn'}-text);font-weight:700">${e.synced ? 'Sent' : 'Waiting'}</span></li>`).join('')}</ul>` : '<p>No changes yet today.</p>'}</div>
+    <div class="set-group"><h3>Sample data</h3><p>Every vehicle on this screen is made-up sample data. The clock below runs from a set time so you can try the 10-minute release.</p>
+      ${seg('clock', p.clock, [['sample', 'Sample clock'], ['live', 'Real clock']])}
+      <div class="grid2"><div class="field"><label for="sTime">Sample time</label><input id="sTime" type="time" value="${p.sampleTime}"></div>
+      <div class="field"><label for="sDate">Sailing day</label><input id="sDate" type="date" value="${dayISO()}"></div></div>
+      <p>Try a Thursday to see the tanker-only 10:15.</p>
+      <div class="actions"><button type="button" class="btn danger" id="resetBtn" data-act="reset">Erase all changes on this tablet</button><button type="button" class="btn" data-act="close">Done</button></div></div>`);
+}
+
+/* ================= theme ================= */
+const mq = matchMedia('(prefers-color-scheme: dark)');
+function applyTheme() {
+  const t = store.prefs.theme, night = t === 'night' || (t === 'auto' && mq.matches);
+  document.documentElement.dataset.theme = night ? 'night' : 'day';
+  $('meta[name=theme-color]').content = night ? '#030a11' : '#12304a';
+  if (day) renderTop();
+}
+mq.addEventListener('change', applyTheme);
+
+/* ================= events ================= */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b || b.disabled) return;
+  const act = b.dataset.act;
+  switch (act) {
+    case 'key': typeChar(b.dataset.k); break;
+    case 'back': delChar(); break;
+    case 'clear': clearEntry(); break;
+    case 'kp-open': el.app.classList.add('kp-open'); break;
+    case 'kp-close': el.app.classList.remove('kp-open'); break;
+    case 'sail': {
+      sel = b.dataset.t; entry = ''; tab = 'todo';
+      if (mins(sel) > nowMin()) edit(cur());
+      render(); break;
+    }
+    case 'tab': tab = b.dataset.tab; renderQueue(); break;
+    case 'veh': el.app.classList.remove('kp-open'); openVehicle(b.dataset.id); break;
+    case 'lane': if (sheetFor) doLoad(sheetFor, +b.dataset.lane); break;
+    case 'unload': doUnload(sheetFor); break;
+    case 'late': doLate(sheetFor); break;
+    case 'tall': doTall(sheetFor); break;
+    case 'sbtall': b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); break;
+    case 'add': el.app.classList.remove('kp-open'); openStandby(); break;
+    case 'close': closeSheet(); break;
+    case 'undo': { const u = el.toast._undo; el.toast.className = 'toast'; el.toast._undo = null; if (u) u(); break; }
+    case 'theme': store.prefs.theme = document.documentElement.dataset.theme === 'night' ? 'day' : 'night'; save(); applyTheme(); render(); break;
+    case 'settings': openSettings(); break;
+    case 'offline': {
+      store.prefs.forceOffline = !store.prefs.forceOffline; save();
+      b.setAttribute('aria-pressed', store.prefs.forceOffline); renderTop(); scheduleSync(); break;
+    }
+    case 'reset': {
+      if (b.dataset.sure) { try { localStorage.removeItem(KEY); } catch (err) { /* ignore */ } location.reload(); }
+      else { b.dataset.sure = '1'; b.textContent = 'Yes, erase everything now'; setTimeout(() => { if (b.isConnected) { delete b.dataset.sure; b.textContent = 'Erase all changes on this tablet'; } }, 6000); }
+      break;
+    }
+  }
+});
+document.addEventListener('submit', e => { if (e.target.id === 'sbForm') { e.preventDefault(); submitStandby(); } });
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.name === 'theme') { store.prefs.theme = t.value; save(); applyTheme(); render(); }
+  else if (t.name === 'clock') { store.prefs.clock = t.value; save(); resetClock(); settlePast(); pickDefaultSailing(); save(); render(); }
+  else if (t.id === 'sTime' && t.value) { store.prefs.sampleTime = t.value; store.prefs.clock = 'sample'; save(); resetClock(); settlePast(); pickDefaultSailing(); save(); render(); const r = $('input[name=clock][value=sample]'); if (r) r.checked = true; }
+  else if (t.id === 'sDate' && t.value) { store.prefs.date = t.value; save(); day = ensureDay(dayISO()); pickDefaultSailing(); entry = ''; render(); }
+});
+document.addEventListener('input', e => {
+  if (e.target.id === 'sbPlate') { e.target.removeAttribute('aria-invalid'); const er = $('#sbErr'); er.hidden = true; }
+});
+document.addEventListener('focusout', e => {
+  if (e.target.id === 'sbPlate' && norm(e.target.value).length && norm(e.target.value).length < 3) {
+    e.target.setAttribute('aria-invalid', 'true'); const er = $('#sbErr'); er.hidden = false; er.textContent = 'Enter at least the last 3 characters of the plate.';
+  }
+});
+document.addEventListener('keydown', e => {
+  if (el.sheet.open || e.ctrlKey || e.metaKey || e.altKey) return;
+  const t = e.target;
+  if (t.matches && t.matches('input, textarea, select')) return;
+  if (/^[a-z0-9]$/i.test(e.key)) { typeChar(e.key.toUpperCase()); e.preventDefault(); }
+  else if (e.key === 'Backspace') { delChar(); e.preventDefault(); }
+  else if (e.key === 'Escape') clearEntry();
+});
+addEventListener('online', () => { renderTop(); scheduleSync(); });
+addEventListener('offline', renderTop);
+
+/* ================= start ================= */
+resetClock();
+applyTheme();
+day = ensureDay(dayISO());
+pickDefaultSailing();
+render();
+scheduleSync();
+setInterval(() => { renderTop(); renderStatus(); renderSailings(); renderQueue(); renderEntry(); }, 15000);
+})();
+</script>
+</body>
+</html>

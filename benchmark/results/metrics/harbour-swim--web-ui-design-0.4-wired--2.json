@@ -1,0 +1,56 @@
+{
+  "id": "harbour-swim--web-ui-design-0.4-wired--2",
+  "desktop": {
+    "fullH": 3950,
+    "overflowX": 0,
+    "errors": 2,
+    "errorSamples": [
+      "Access to XMLHttpRequest at 'file://~/.t3/scratch/2026-10-19-t-m-hi-u-v-4465e2cb/web-ui-design-skill/benchmark/results/raw/harbour-swim--web-ui-design-0.4-wired--2/site/style.css' from origin 'null' has been blocked by CORS policy: Cross origin requests are only supported for protocol schemes: chrome, chrome-extension, chrome-untrusted, data, http, https, isolated-app.",
+      "Failed to load resource: net::ERR_FAILED"
+    ],
+    "axe": {
+      "critical": 0,
+      "serious": 7,
+      "moderate": 0,
+      "minor": 0,
+      "rules": [
+        "label-content-name-mismatch:7"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 29,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 3950,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 5868,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

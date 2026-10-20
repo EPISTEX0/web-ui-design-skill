@@ -1,0 +1,185 @@
+{
+	"scores": {
+		"A9": {
+			"craft": 8,
+			"fit": 9,
+			"hierarchy": 9,
+			"mobile": 8,
+			"overall": 8,
+			"defects": [
+				"Omits the client proof points about being third generation on the same beds since 1961 and supplying Le Bistrot du Port and two other Saint-Malo restaurants",
+				"Mobile header navigation wraps awkwardly onto a second row for the Basket button",
+				"Order summary card on mobile still says 'Pick a box on the left' when stacked vertically below the box list"
+			],
+			"note": "The strongest page by far, combining the exact brand palette, custom shell and contour illustrations instead of empty photo boxes, clear shipping and storage rules before checkout, and the only implementation of Maëlle's 2027 tide-flat visits."
+		},
+		"Y6": {
+			"craft": 7,
+			"fit": 7,
+			"hierarchy": 8,
+			"mobile": 6,
+			"overall": 7,
+			"defects": [
+				"Completely omits the tide-flat visit with Maëlle and its fixed 2027 dates",
+				"Omits the rule that oysters keep 7 days in the fridge flat side up",
+				"Includes a large empty dashed 'Photo des parcs à marée basse à venir' wireframe box despite the client having no photos yet",
+				"Mobile full-page view is cut off at 6000 px before the delivery steps and footer finish, and mobile header hides navigation links without a menu toggle"
+			],
+			"note": "Well-crafted dark slate hero and clean order flow with the right boxes, prices, and 1961 Saint-Malo restaurant proof, held back by an empty photo placeholder and missing both Maëlle's tide-flat visit and the 7-day storage rule."
+		},
+		"U6": {
+			"craft": 7,
+			"fit": 6,
+			"hierarchy": 8,
+			"mobile": 6,
+			"overall": 7,
+			"defects": [
+				"Product copy for the 48 creuses No. 3 box (EUR 58) falsely claims 'it comes with free delivery', contradicting the EUR 80 free-delivery threshold",
+				"Completely omits the tide-flat visit with Maëlle and the 1961 third-generation / Le Bistrot du Port proof points",
+				"Does not show the 7-day fridge flat-side-up rule before ordering (hidden inside a collapsed FAQ)",
+				"Mobile full-page screenshot is cut off at 6000 px mid-sentence in the farm shop section, and uses a placeholder email in the footer"
+			],
+			"note": "Cleverly solves the no-photo constraint with illustrated oyster count grids and a clear weekly order window, but misses Maëlle's tide-flat visit, the 1961 restaurant proof, and the visible 7-day storage rule while misstating free delivery on the EUR 58 box."
+		},
+		"S6": {
+			"craft": 7,
+			"fit": 6,
+			"hierarchy": 8,
+			"mobile": 7,
+			"overall": 6,
+			"defects": [
+				"Completely omits the tide-flat visit with Maëlle and the 1961 third-generation / Le Bistrot du Port proof points",
+				"Does not show the 7-day fridge flat-side-up storage rule before ordering (hidden inside a collapsed FAQ)",
+				"Desktop fold cuts horizontally through the description text of the first product card",
+				"Displays placeholder contact details (commandes@parclegoff.example and 02 99 00 00 00)"
+			],
+			"note": "Clean editorial typography and a compact layout that fits well on mobile, but it leaves out Maëlle's tide-flat visit, the 1961 Saint-Malo restaurant proof, and the visible 7-day storage rule."
+		},
+		"B6": {
+			"craft": 5,
+			"fit": 7,
+			"hierarchy": 7,
+			"mobile": 6,
+			"overall": 6,
+			"defects": [
+				"Litters the layout with five empty dashed 'Photo to come' and 'Photo box' wireframe placeholders plus a literal 'logo soon' circle in the header",
+				"Exposes raw developer placeholder text 'orders@CHANGE-ME.example [placeholder]' in the footer",
+				"Completely omits the tide-flat visit with Maëlle and its 2027 dates",
+				"Desktop fold slices horizontally through the timeline dots of the dark banner, and mobile full-page screenshot is cut off at 6000 px before the farm shop and FAQ"
+			],
+			"note": "Covers the boxes, shipping cutoff, 7-day flat-side-up rule, and 1961 restaurant proof well, but fails visually by filling the page with ugly empty photo wireframes and raw CHANGE-ME placeholder text while omitting Maëlle's tide-flat visit."
+		},
+		"D3": {
+			"craft": 5,
+			"fit": 6,
+			"hierarchy": 6,
+			"mobile": 5,
+			"overall": 5,
+			"defects": [
+				"Three huge empty lined 'Photo ... coming soon' wireframe boxes dominate the hero, story, and farm shop sections",
+				"On mobile-full.jpg, a fixed bottom CTA bar renders mid-page at the first viewport height and overlaps the hero placeholder box",
+				"Desktop fold slices horizontally right through the white heading text of the dark blue shipping banner",
+				"Completely omits the tide-flat visit with Maëlle, and mobile-full.jpg is cut off at 6000 px before the farm shop and FAQ"
+			],
+			"note": "Includes the right boxes, weekly shipping countdown, and 1961 story, but wastes half the hero on an empty photo wireframe, suffers from a mid-page sticky bar overlap on mobile, and forgets Maëlle's tide-flat visit."
+		},
+		"T2": {
+			"craft": 7,
+			"fit": 2,
+			"hierarchy": 7,
+			"mobile": 6,
+			"overall": 4,
+			"defects": [
+				"On mobile-full.jpg, the weight label '66-85 g' inside the N°3 calibre card wraps awkwardly with an orphaned 'g' next to the Selected badge",
+				"Mobile full-page view is cut off at 6000 px mid-form before the submit button, storage tips, and footer",
+				"Contradicts nearly every client note: wrong boxes and prices, local-only delivery to Cancale and Saint-Malo instead of France/Belgium/Luxembourg on Wed/Thu, wrong brand colors, and missing Maëlle's visit and 1961 proof",
+				"Uses placeholder contact details (commandes@parc-legoff.example and 02 99 00 00 00)"
+			],
+			"note": "Competently designed in isolation with neat oyster size silhouettes, but built without the client notes so its products, prices, and local-only delivery rules directly contradict what the farm actually sells and ships."
+		},
+		"N8": {
+			"craft": 6,
+			"fit": 2,
+			"hierarchy": 7,
+			"mobile": 6,
+			"overall": 3,
+			"defects": [
+				"Desktop fold slices horizontally through the 'Les boîtes' section heading at the bottom edge of the viewport",
+				"Mobile header navigation wraps onto two uneven lines",
+				"Contradicts the client notes on boxes, prices, shipping days, delivery fee, brand palette, and farm hours, and omits Maëlle's visit and 1961 proof",
+				"Uses fake placeholder contact details (02 99 00 00 00 and contact@parclegoff.example)"
+			],
+			"note": "A clean generic French oyster template with custom shell drawings, but it invents all prices, boxes, and shipping rules without any of the client's actual requirements or brand colors."
+		},
+		"Y4": {
+			"craft": 6,
+			"fit": 2,
+			"hierarchy": 6,
+			"mobile": 4,
+			"overall": 3,
+			"defects": [
+				"Severe overlap on mobile-full.jpg where the fixed 'Build my box' bottom bar renders directly across the hero's primary and secondary CTA buttons",
+				"Desktop fold slices horizontally through the 'Build your box' heading at the bottom of the viewport",
+				"Exposes a developer instruction note in the footer ('Prices, hours and contact details shown are samples to replace in the CONFIG block of the file')",
+				"Contradicts client notes on products, prices, shipping days, delivery fees, and brand palette while omitting Maëlle's visit and 1961 proof"
+			],
+			"note": "Features a structured step-by-step box builder on desktop, but fails on mobile with a sticky bar overlapping the hero buttons and misses all of the client's actual boxes, prices, shipping rules, and brand identity."
+		},
+		"C5": {
+			"craft": 4,
+			"fit": 2,
+			"hierarchy": 5,
+			"mobile": 5,
+			"overall": 2,
+			"defects": [
+				"Uses generic system emojis (truck, basket, wave) as primary section icons",
+				"Desktop fold cuts off the four product cards just above their 'Ajouter au panier' buttons",
+				"No visible checkout or order form on the page, and footer displays placeholder 'contact@example.com'",
+				"Invented boxes, prices, and shipping rules that miss all client notes, brand colors, Maëlle's visit, and 1961 proof"
+			],
+			"note": "A bare-bones generic template with system emojis, invented products and prices, no visible checkout flow, and none of the client's brand or content requirements."
+		},
+		"K2": {
+			"craft": 4,
+			"fit": 2,
+			"hierarchy": 5,
+			"mobile": 4,
+			"overall": 2,
+			"defects": [
+				"An empty dark fixed toast pill renders in the middle of the product grid on desktop and tablet and overlaps the description text of 'Box Découverte' on mobile",
+				"Mobile navigation bar is overly cramped, forcing the brand title, nav links, and cart button to wrap onto two lines each",
+				"Desktop fold cuts the four product cards in half horizontally",
+				"Invented boxes, prices, and delivery rules that miss all client notes, plus fake contact@exemple.fr in the footer"
+			],
+			"note": "A generic template marred by a stray floating dark pill that overlaps mobile card text, cramped mobile navigation, and completely invented products and shipping rules."
+		},
+		"Z3": {
+			"craft": 3,
+			"fit": 1,
+			"hierarchy": 4,
+			"mobile": 3,
+			"overall": 1,
+			"defects": [
+				"Product card 'Ajouter' buttons overflow horizontally on desktop and tablet, getting clipped to 'Ajout' in three cards and protruding outside the fourth card border on tablet",
+				"An empty dark fixed toast pill floats between product cards on desktop and tablet and directly obscures the heading 'Expédiées fraîches' on mobile",
+				"Relies on generic system emojis throughout and cuts product cards through their titles at the desktop fold",
+				"No visible order form, placeholder contact@exemple.fr in footer, and completely wrong boxes, prices, and shipping rules"
+			],
+			"note": "The weakest submission, suffering from clipped and overflowing buttons on desktop and tablet, a floating dark pill obscuring text on mobile, generic emojis, and zero alignment with the client notes."
+		}
+	},
+	"ranking": [
+		"A9",
+		"Y6",
+		"U6",
+		"S6",
+		"B6",
+		"D3",
+		"T2",
+		"N8",
+		"Y4",
+		"C5",
+		"K2",
+		"Z3"
+	]
+}

@@ -1,6 +1,12 @@
 # Blind A/B benchmark
 
-Three rounds, 105 builds, three judges from three model families scoring blind.
+Four rounds, 153 builds, three judges from three model families scoring blind.
+
+**Round 4 (v0.4)** fixed the three gaps round 3 found and checked them against bars set before any build ran, on three fresh New briefs.
+
+- **New sites.** v0.4 scored 6.41 against 2.89 for defaults (win rate 0.89, p = 0.001) and 4.93 for v0.3 (win rate 0.80, p = 0.107). It asked the client in 15 of 15 eligible builds, against 11 of 15 for v0.3 in round 3.
+- **A client who declines** still gets a page with no measurable gain over defaults overall (3.15). It is better built, but it cannot know facts nobody gave it. That missed its bar.
+- **Phones.** Every wired Extend build kept Approve and Decline in reach at 390 px.
 
 **Round 3 (v0.3)** tested the three cases the skill now routes: a new site, a page added to an existing app, and a redesign. A simulated client answered the builder's questions from private notes, and the judges scored each page against those notes.
 
@@ -8,7 +14,81 @@ Three rounds, 105 builds, three judges from three model families scoring blind.
 - **Adding a page to an app.** Installed alone, v0.3 never triggered (0 of 3). With the one `CLAUDE.md` line the README asks for, it triggered 3 of 3 and scored 7.22 against 5.11. Its pages were the only ones that worked on a phone.
 - **Redesigns.** Every skill arm beat defaults (about 6.6 against 4.33) and fixed all 12 planted defects. v0.3 did no better than v0.2 here.
 
-Rounds 1 and 2 (v0.1 and v0.2) are below the round-3 section.
+Rounds 1 to 3 are below the round-4 section.
+
+## Round 4
+
+Run date: 2026-10-20. Builder: Claude Sonnet 5.5 in Claude Code, headless. 48 builds, $34.22 in builder tokens, not counting judging. 36 of them were judged.
+
+Round 3 left three gaps: the question round was skipped on one brief, a client who declined got "to confirm" in place of facts, and a wired Extend build hid its actions on phones. Version 0.4 changes only those three things, and the round was meant to stop the fix-and-retest loop. The pass bars were written down before any build ran, and the skill ships whichever way they fall.
+
+### What changed in 0.4
+
+- **The question round.** "Use sample data" or "make it modern" now answer only the gap they name, and the builder still asks about the rest. A Brief line may say "assumed" only after the user left the choice to the builder.
+- **Missing facts.** Facts the user did not give (names, hours, prices, dates) become realistic sample values, listed in the Brief and in the reply for the user to replace. Proof (reviews, ratings, logos, stats) still comes only from the user, so the section is dropped rather than filled.
+- **The checker.** `check.mjs` now fails a control that sits out of reach on a phone, inside a clipping parent or off screen. It warns on placeholder text such as "TBC" or "[Price]". The render loop opens the 390 px tiles first.
+
+### What was tested
+
+| Brief | Prompt, in short | What the client's private notes hold |
+| --- | --- | --- |
+| [le-goff](briefs/le-goff.md) | An online shop page for an oyster farm in Cancale | Shipping Wednesday and Thursday only, orders close Monday 18:00, box prices, slate, kelp ochre and shell white |
+| [gannet](briefs/gannet.md) | A car-loading screen for a ferry crew, "use realistic sample data" | A rugged portrait tablet used with gloves, lane 1 headroom 2.1 m, navy and safety yellow |
+| [dean-fungi](briefs/dean-fungi.md) | A species guide for a fungus recording group | Never write "edible", four fixed labels, each eaten species shown beside its look-alike, red only for Deadly |
+
+A subagent told not to open `skills/` or `arms/` wrote the three briefs and their notes. Its brief is not archived. The arms were `none`, `web-ui-design-0.3` frozen in [`arms/web-ui-design-0.3`](arms/web-ui-design-0.3), `web-ui-design-0.4`, and `web-ui-design-0.4-silent`, where the client declines every question. The client, the checks, the rubric ([`judge-rubric-new.md`](judge-rubric-new.md)) and the three judges are the same as in round 3.
+
+The other 12 builds tested the three fixes where they had failed before. Three were judged-round builds of `web-ui-design-0.4-wired` on harbour-swim. Nine were tuning builds on round-3 briefs: 0.4 on kestrel, 0.4-silent on salt-and-iron and 0.4-wired on shiftboard.
+
+### Results
+
+Panel score, 1 to 10, 9 builds per arm:
+
+| Arm | craft | fit | hierarchy | mobile | overall | Asked the client | Mean cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| none | 5.22 | 2.56 | 5.70 | 4.78 | 2.89 | 0/9 | $0.30 |
+| web-ui-design-0.3 | 6.59 | 4.74 | 6.74 | 6.15 | 4.93 | 6/9 | $0.98 |
+| web-ui-design-0.4 | **7.00** | **6.74** | **7.56** | **6.70** | **6.41** | 9/9 | $0.95 |
+| web-ui-design-0.4-silent | 6.15 | 2.41 | 6.33 | 5.52 | 3.15 | 9/9 | $0.82 |
+
+- **0.4 beat defaults** with a win rate of 0.89 (p = 0.001). It also led 0.3 with a win rate of 0.80 (p = 0.107 for the panel, p = 0.028 for Opus alone). It had the top brief mean in 8 of 9 judge and brief pairs. The exception was GPT on le-goff, which put 0.3 ahead, 7.33 to 7.00.
+- **The gain is fit.** 0.4 asked in every build. 0.3 asked in 6 of 9, and those 6 averaged 5.50 against 3.78 for the 3 that skipped the round.
+- **A client who declines still gets little.** 0.4-silent beat defaults on craft (+0.93), hierarchy (+0.63) and mobile (+0.74). On fit and overall it showed no measurable difference (win rate 0.54, p = 0.59). These briefs hide the deciding facts in the client's notes, so a builder who gets no answers cannot know them.
+- **Almost no placeholder text.** One of the 36 judged builds showed "to be confirmed", a 0.4 fungus guide whose client had asked for exactly that wording on the fields the notes left out. This was checked with the checker's own pattern on the rendered text at 390 px.
+- Judges agree on overall scores at a Spearman correlation of 0.68 to 0.88.
+
+### The pre-registered bars
+
+| # | Bar | Result |
+| --- | --- | --- |
+| C1 | 0.4 runs the question round in at least 13 of 15 eligible builds | **Met, 15 of 15.** 9 fresh New builds, 3 kestrel builds (0 of 3 in round 3), 3 wired harbour-swim builds |
+| C2 | 0.4-silent scores at least 1.0 above defaults on the fresh briefs | **Missed.** +0.26 (3.15 against 2.89) |
+| C3 | No wired shiftboard build leaves Approve or Decline out of reach at 390 px | **Met, 0 of 3.** 0.3-wired had 1 of 3 |
+| C4 | 0.4 is not more than 0.5 below 0.3 on the fresh briefs | **Met, 1.48 above** |
+
+The tuning builds also showed the other two fixes on the briefs where the gaps first appeared. On salt-and-iron, 0.4-silent raised the placeholder warning in 0 of 3 builds, against 2 of 3 for 0.3-silent. Every shiftboard 0.4-wired build reused the app's components and changed no existing page.
+
+### Redesign side effect
+
+All 3 wired harbour-swim builds fixed the 12 planted defects and kept the brand. One of them failed the content check. The client had approved "refresh the 2013 dates", and the builder went further. It moved the Easter closure to Christmas and invented four notices for the notice bar. It listed every change in its reply. The sample-value rule was written for missing facts, and here it reached into existing content. This goes to the next version.
+
+### Integrity notes
+
+- **The fixes were tuned on round-3 briefs.** One tuning pass ran on kestrel, salt-and-iron and shiftboard. The skill text was frozen after it, so the kestrel and shiftboard builds count toward C1 and C3 as built. C2 and C4 rest only on the fresh briefs.
+- **The checker additions target the diagnosed gaps.** The reach failure and the placeholder warning were written after seeing round-3 failures. They are part of the skill under test, and the judges never saw checker output.
+- **Earlier rounds' metrics were overwritten and restored.** `render.mjs` and `score-fixtures.mjs` re-scored every build on disk and rewrote 68 metrics files from rounds 1 to 3. Those files were restored from git. Only the new `actionsReachableMobile` field on shiftboard was kept, and its diff adds that one field.
+- **The Extend reach metric is coarse.** `actionsReachableMobile` passes when at least one Approve or Decline button sits inside the 390 px viewport. It would not catch a page that hides every Decline button.
+- The decision log, with every bar, diagnosis and result, is in [`results/round-4/decisions.tsv`](results/round-4/decisions.tsv).
+
+### Limits
+
+- 3 builds per arm per brief. 0.4 against defaults is significant. 0.4 against 0.3 is a strong hint (panel p = 0.107), not a significant result.
+- One simulated client that answers readily, as in round 3. Judges score against the notes, so a build that follows a client reply the notes do not contain can lose fit.
+- Screenshots stop at 6,000 px, which cut the mobile capture of 17 of the 36 pages. Defects further down were invisible to the judges.
+- One author wrote the three briefs, and the notes again hold facts that only asking can reach. The fit criterion therefore rewards asking. The silent arm is the floor.
+- Judges are models. Vote in the [round-4 blind gallery](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-4/gallery/).
+
+The full tables, per judge, are in [`results/round-4/summary.md`](results/round-4/summary.md), and every build, score and judge note is in [`results/round-4/summary.json`](results/round-4/summary.json).
 
 ## Round 3
 
@@ -239,6 +319,8 @@ npm install
 REPS=3 JOBS=4 ./run-all.sh                                   # rounds 1 and 2
 BRIEFS="tandem kestrel salt-and-iron" ARMS="none frontend-design web-ui-design-0.2 web-ui-design-0.3 web-ui-design-0.3-silent" REPS=3 JOBS=4 ./run-all.sh
 BRIEFS="shiftboard harbour-swim" ARMS="none web-ui-design-0.2 web-ui-design-0.3 web-ui-design-0.3-wired" REPS=3 JOBS=4 ./run-all.sh
+BRIEFS="le-goff gannet dean-fungi" ARMS="none web-ui-design-0.3 web-ui-design-0.4 web-ui-design-0.4-silent" REPS=3 JOBS=4 ./run-all.sh   # round 4
+BRIEFS="harbour-swim" ARMS="web-ui-design-0.4-wired" REPS=3 JOBS=3 ./run-all.sh
 export CHROME_PATH=/path/to/chrome
 node render.mjs
 node score-fixtures.mjs
@@ -246,6 +328,9 @@ ROUND=round-3 BRIEFS=tandem,kestrel,salt-and-iron,shiftboard,harbour-swim node m
 # score each results/round-3/judging/<brief>/ with its judging-brief.md into results/round-3/judgments/<judge>/<brief>.json
 ROUND=round-3 node aggregate.mjs
 ROUND=round-3 node gallery.mjs
+# round 4: the same three steps with ROUND=round-4 BRIEFS=le-goff,gannet,dean-fungi
 ```
 
-`build.sh` needs `claude`, `bwrap`, `jq` and `rsync`, and reads credentials from `~/.claude/.credentials.json`. Round 1 cost $6.97 in builder tokens for 27 builds, the 0.2 round $3.09 for 9, and round 3 $25.49 for 69, not counting judging.
+`render.mjs` and `score-fixtures.mjs` re-score every build in `results/raw/` unless you pass build ids, such as `node render.mjs le-goff--none--1`. Pass the new round's ids so earlier rounds' metrics stay as judged.
+
+`build.sh` needs `claude`, `bwrap`, `jq` and `rsync`, and reads credentials from `~/.claude/.credentials.json`. Round 1 cost $6.97 in builder tokens for 27 builds, the 0.2 round $3.09 for 9, round 3 $25.49 for 69, and round 4 $34.22 for 48, not counting judging.

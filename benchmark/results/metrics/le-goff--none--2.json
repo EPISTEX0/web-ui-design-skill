@@ -1,0 +1,56 @@
+{
+  "id": "le-goff--none--2",
+  "desktop": {
+    "fullH": 1727,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 6,
+      "moderate": 26,
+      "minor": 0,
+      "rules": [
+        "color-contrast:6",
+        "heading-order:1",
+        "landmark-one-main:1",
+        "region:24"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 30,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 1727,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 2991,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

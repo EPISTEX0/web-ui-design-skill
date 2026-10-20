@@ -1,0 +1,30 @@
+{
+  "order": [
+    "R2",
+    "A3",
+    "N9",
+    "A7",
+    "E9",
+    "Q7",
+    "J2",
+    "Z6",
+    "W2",
+    "S7",
+    "R6",
+    "P4"
+  ],
+  "key": {
+    "R2": "gannet--web-ui-design-0.3--2",
+    "A3": "gannet--web-ui-design-0.4--1",
+    "N9": "gannet--none--3",
+    "A7": "gannet--none--2",
+    "E9": "gannet--web-ui-design-0.4--2",
+    "Q7": "gannet--web-ui-design-0.4-silent--3",
+    "J2": "gannet--web-ui-design-0.3--3",
+    "Z6": "gannet--web-ui-design-0.3--1",
+    "W2": "gannet--web-ui-design-0.4-silent--1",
+    "S7": "gannet--none--1",
+    "R6": "gannet--web-ui-design-0.4-silent--2",
+    "P4": "gannet--web-ui-design-0.4--3"
+  }
+}

@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Salt and Iron: visitor guide | Harwick Maritime Museum</title>
+<meta name="description" content="The visitor guide to Salt and Iron at the Harwick Maritime Museum: five galleries, twelve objects, opening hours and how to find us.">
+<meta name="color-scheme" content="light dark">
+<!--
+  SAMPLE CONTENT: the museum supplied no copy, so everything below was written as realistic
+  placeholder text. Replace before publishing: exhibition dates, opening hours, prices, address,
+  phone, email, directions, accessibility details, gallery texts, object names, dates and
+  catalogue numbers.
+-->
+<style>
+:root {
+  /* Primitives: salt, tarred iron, rust */
+  --salt-50: #f7f9f8;
+  --salt-100: #edf0ef;
+  --salt-300: #c9d1d1;
+  --iron-900: #172026;
+  --iron-700: #3a474e;
+  --iron-500: #56646c;
+  --rust-600: #9b3a1c;
+  --rust-300: #e58f67;
+  --tide-900: #12191d;
+  --tide-800: #1b252a;
+  --tide-600: #33433f;
+
+  /* Semantic tokens (light) */
+  --bg: var(--salt-100);
+  --surface: var(--salt-50);
+  --text: var(--iron-900);
+  --text-2: var(--iron-700);
+  --text-3: var(--iron-500);
+  --border: var(--salt-300);
+  --accent: var(--rust-600);
+  --on-accent: #fff;
+  --focus: var(--rust-600);
+
+  --font-display: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-body: system-ui, "Avenir Next", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px;
+  --s8: 32px; --s10: 40px; --s12: 48px; --s16: 64px; --s24: 96px;
+  --r-sm: 2px; --r-md: 4px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-press: 140ms; --t-hover: 200ms;
+
+  --header-h: 112px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--tide-900);
+    --surface: var(--tide-800);
+    --text: #e6ecea;
+    --text-2: #bac5c4;
+    --text-3: #97a5a6;
+    --border: var(--tide-600);
+    --accent: var(--rust-300);
+    --on-accent: #12191d;
+    --focus: var(--rust-300);
+  }
+}
+:root[data-theme="dark"] {
+  --bg: var(--tide-900);
+  --surface: var(--tide-800);
+  --text: #e6ecea;
+  --text-2: #bac5c4;
+  --text-3: #97a5a6;
+  --border: var(--tide-600);
+  --accent: var(--rust-300);
+  --on-accent: #12191d;
+  --focus: var(--rust-300);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + var(--s4));
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 400 1.0625rem/1.55 var(--font-body);
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+}
+h1, h2, h3 { font-family: var(--font-display); font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+a { color: inherit; }
+button { font: inherit; color: inherit; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: var(--r-sm); }
+.wrap { width: min(100% - var(--s8), 72rem); margin-inline: auto; }
+.skip {
+  position: absolute; left: var(--s4); top: -100px; z-index: 20;
+  background: var(--accent); color: var(--on-accent); padding: var(--s3) var(--s4);
+}
+.skip:focus { top: var(--s2); }
+
+/* Header and gallery strip */
+.top {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding-top: env(safe-area-inset-top);
+}
+.top-row { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); min-height: 56px; }
+.brand { display: block; padding-block: var(--s2); font-family: var(--font-display); font-weight: 600; text-decoration: none; line-height: 1.2; }
+.brand small { display: block; font: 400 0.875rem/1.3 var(--font-body); color: var(--text-3); }
+.tools { display: flex; align-items: center; gap: var(--s2); }
+.tool-btn {
+  min-height: 44px; padding: 0 var(--s4);
+  background: transparent; border: 1px solid var(--border); border-radius: var(--r-md);
+  cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover);
+}
+.tool-btn:active { transform: scale(0.97); }
+.tool-btn[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+@media (hover: hover) { .tool-btn:hover { border-color: var(--text-3); } }
+
+.chips {
+  display: flex; gap: var(--s2); margin: 0; padding: 0 0 var(--s3); list-style: none;
+  overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chips a {
+  display: flex; align-items: center; min-height: 44px; padding: 0 var(--s4);
+  white-space: nowrap; text-decoration: none; font-size: 0.9375rem;
+  border: 1px solid var(--border); border-radius: var(--r-md); scroll-snap-align: start;
+  transition: background-color var(--t-hover), border-color var(--t-hover);
+}
+.chips a[aria-current="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+@media (hover: hover) { .chips a:not([aria-current="true"]):hover { border-color: var(--text-3); } }
+
+/* Hero */
+.hero { padding-block: var(--s16) var(--s12); }
+.hero h1 {
+  font-size: clamp(3.5rem, 13vw, 8.5rem); line-height: 0.92; letter-spacing: -0.03em; font-weight: 600;
+}
+.hero h1 span { display: block; }
+.hero h1 .amp { color: var(--accent); font-style: italic; font-weight: 400; }
+.waterline {
+  height: 14px; margin-block: var(--s8) var(--s6); background: var(--accent);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='14'%3E%3Cpath d='M0 7 Q12 0 24 7 T48 7' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='14'%3E%3Cpath d='M0 7 Q12 0 24 7 T48 7' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+}
+.hero-grid { display: grid; gap: var(--s8); }
+.lede { font-family: var(--font-display); font-size: clamp(1.375rem, 3.2vw, 1.875rem); line-height: 1.3; max-width: 34ch; }
+.hero-meta { display: grid; gap: var(--s4); align-content: start; color: var(--text-2); }
+.hero-meta strong { color: var(--text); font-weight: 600; }
+.actions { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s2); }
+.btn {
+  display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--s6);
+  border-radius: var(--r-md); border: 1px solid var(--text); text-decoration: none; font-weight: 600;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover);
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (hover: hover) { .btn-primary:hover { filter: brightness(1.08); } .btn:not(.btn-primary):hover { background: var(--surface); } }
+@media (min-width: 52rem) {
+  .hero-grid { grid-template-columns: 1.4fr 1fr; gap: var(--s16); align-items: end; }
+}
+
+/* Floor plan */
+.plan-section { padding-block: var(--s12); border-top: 1px solid var(--border); }
+.plan-section h2, .visit h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.01em; }
+.section-note { color: var(--text-2); margin-top: var(--s3); max-width: 60ch; }
+.progress { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); margin-top: var(--s4); color: var(--text-2); }
+.progress button { min-height: 44px; background: none; border: 0; text-decoration: underline; cursor: pointer; padding: 0 var(--s2); }
+.plan {
+  list-style: none; margin: var(--s8) 0 0; padding: 0;
+  display: grid; gap: 0;
+  border: 2px solid var(--text);
+}
+.plan li { display: flex; border-bottom: 1px solid var(--text); }
+.plan li:last-child { border-bottom: 0; }
+.room {
+  flex: 1; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: var(--s1) var(--s4);
+  padding: var(--s4) var(--s5); min-height: 76px; text-decoration: none;
+  transition: background-color var(--t-hover), color var(--t-hover);
+}
+.room .num { grid-row: span 2; font: 600 2.5rem/1 var(--font-display); color: var(--accent); min-width: 1ch; }
+.room .name { font-weight: 600; line-height: 1.25; }
+.room .count { color: var(--text-3); font-size: 0.9375rem; }
+.lobby { padding: var(--s4) var(--s5); color: var(--text-3); font-size: 0.9375rem; display: flex; align-items: center; min-height: 56px; background: var(--bg); }
+@media (hover: hover) {
+  a.room:hover { background: var(--text); color: var(--bg); }
+  a.room:hover .num, a.room:hover .count { color: var(--bg); }
+}
+.room:focus-visible { outline-offset: -3px; }
+@media (min-width: 52rem) {
+  .plan {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-areas: "g1 g2 g3" "lobby g5 g4";
+  }
+  .plan li { border-bottom: 0; border-right: 1px solid var(--text); min-height: 150px; }
+  .plan li:nth-child(1), .plan li:nth-child(2) { }
+  .plan li[data-area="g1"] { grid-area: g1; } .plan li[data-area="g2"] { grid-area: g2; }
+  .plan li[data-area="g3"] { grid-area: g3; border-right: 0; } .plan li[data-area="g4"] { grid-area: g4; border-right: 0; }
+  .plan li[data-area="g5"] { grid-area: g5; } .plan li[data-area="lobby"] { grid-area: lobby; }
+  .plan li[data-area="g1"], .plan li[data-area="g2"], .plan li[data-area="g3"] { border-bottom: 1px solid var(--text); }
+  .room { grid-template-columns: 1fr; align-content: space-between; padding: var(--s5); }
+  .room .num { grid-row: auto; font-size: 3.5rem; }
+  .lobby { align-items: end; }
+}
+
+/* Galleries */
+.gallery { padding-block: var(--s12); border-top: 1px solid var(--border); }
+.gallery-grid { display: grid; gap: var(--s8); }
+.g-head .g-num { font: 600 clamp(3.5rem, 8vw, 5rem)/1 var(--font-display); color: var(--accent); }
+.g-head h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.01em; margin-top: var(--s2); }
+.g-years { color: var(--text-3); margin-top: var(--s2); font-variant-numeric: tabular-nums; }
+.g-intro { margin-top: var(--s5); color: var(--text-2); max-width: 44ch; }
+.objects { list-style: none; margin: 0; padding: 0; }
+.object { padding-block: var(--s6); border-top: 1px solid var(--border); max-width: 42rem; }
+.object:first-child { border-top: 0; padding-top: 0; }
+.object-top { display: flex; align-items: baseline; gap: var(--s4); }
+.stop {
+  flex: none; min-width: 2.25rem; text-align: center; font: 600 0.9375rem/1.8 var(--font-body);
+  font-variant-numeric: tabular-nums; border: 1px solid var(--text-3); border-radius: var(--r-sm); color: var(--text-2);
+}
+.object h3 { font-size: 1.5rem; line-height: 1.2; letter-spacing: -0.01em; }
+.object .facts {
+  display: flex; flex-wrap: wrap; gap: var(--s1) var(--s6); margin: var(--s3) 0 var(--s4);
+  color: var(--text-3); font-size: 0.9375rem;
+}
+.facts div { display: flex; gap: var(--s2); }
+.facts dt { color: var(--text-3); }
+.facts dd { margin: 0; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.object p { max-width: 62ch; }
+.seen {
+  display: inline-flex; align-items: center; gap: var(--s2); margin-top: var(--s4); min-height: 44px; padding: 0 var(--s4);
+  background: transparent; border: 1px solid var(--border); border-radius: var(--r-md); cursor: pointer;
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-hover), border-color var(--t-hover);
+}
+.seen:active { transform: scale(0.97); }
+.seen .tick { width: 18px; height: 18px; border: 2px solid var(--text-3); border-radius: var(--r-sm); display: grid; place-items: center; }
+.seen .tick svg { width: 12px; height: 12px; opacity: 0; stroke: var(--on-accent); }
+.seen[aria-pressed="true"] { border-color: var(--accent); }
+.seen[aria-pressed="true"] .tick { background: var(--accent); border-color: var(--accent); }
+.seen[aria-pressed="true"] .tick svg { opacity: 1; }
+@media (hover: hover) { .seen:hover { border-color: var(--text-3); } }
+@media (min-width: 52rem) {
+  .gallery-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: var(--s16); }
+  .g-head { position: sticky; top: calc(var(--header-h) + var(--s8)); align-self: start; }
+}
+
+/* Visit */
+.visit { padding-block: var(--s16); border-top: 2px solid var(--text); }
+.visit-grid { display: grid; gap: var(--s10); margin-top: var(--s8); }
+.status { display: inline-flex; align-items: center; gap: var(--s2); font-weight: 600; min-height: 24px; }
+.status::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--text-3); }
+.status[data-open="true"]::before { background: var(--accent); }
+.status:empty { display: none; }
+.visit h3 { font-size: 1.375rem; line-height: 1.2; margin-bottom: var(--s3); }
+.hours { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.hours th, .hours td { text-align: left; padding: var(--s2) 0; border-bottom: 1px solid var(--border); font-weight: 400; }
+.hours td { text-align: right; }
+.hours tr[aria-current="date"] th, .hours tr[aria-current="date"] td { font-weight: 600; color: var(--accent); }
+.prices { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 0 var(--s4); font-variant-numeric: tabular-nums; }
+.prices dt, .prices dd { margin: 0; padding: var(--s2) 0; border-bottom: 1px solid var(--border); }
+.prices dd { text-align: right; }
+.visit p + p { margin-top: var(--s3); }
+.visit address { font-style: normal; }
+.visit a { text-underline-offset: 3px; }
+.visit .maplink { display: inline-flex; align-items: center; min-height: 44px; }
+.faq { margin-top: var(--s12); max-width: 46rem; }
+.faq h3 { margin-bottom: var(--s2); }
+details { border-bottom: 1px solid var(--border); }
+summary { min-height: 56px; display: flex; align-items: center; cursor: pointer; font-weight: 600; padding-block: var(--s2); }
+details p { padding-bottom: var(--s4); color: var(--text-2); max-width: 60ch; }
+@media (min-width: 52rem) { .visit-grid { grid-template-columns: repeat(3, 1fr); gap: var(--s12); } }
+
+footer { border-top: 1px solid var(--border); padding-block: var(--s8) calc(var(--s12) + env(safe-area-inset-bottom)); color: var(--text-3); font-size: 0.9375rem; }
+footer p + p { margin-top: var(--s2); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: 1ms !important; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the guide</a>
+
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="brand" href="#top">Salt and Iron<small>Harwick Maritime Museum</small></a>
+      <div class="tools">
+        <button class="tool-btn" id="theme" type="button" aria-pressed="false" title="Switch to a darker page for dim galleries">Low light</button>
+      </div>
+    </div>
+    <nav aria-label="Guide sections">
+      <ul class="chips" id="chips">
+        <li><a href="#plan">Plan</a></li>
+        <li><a href="#gallery-1">1 The pans</a></li>
+        <li><a href="#gallery-2">2 The slip</a></li>
+        <li><a href="#gallery-3">3 The quay</a></li>
+        <li><a href="#gallery-4">4 Wrack and rust</a></li>
+        <li><a href="#gallery-5">5 The light</a></li>
+        <li><a href="#visit">Visit</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap">
+      <h1>Salt <span class="amp">and</span> Iron</h1>
+      <div class="waterline" role="presentation"></div>
+      <div class="hero-grid">
+        <p class="lede">How one stretch of coast boiled seawater into salt, hammered ore into ships, and watched the sea take both back.</p>
+        <div class="hero-meta">
+          <p><strong>On now, 21 March 2026 to 10 January 2027.</strong><br>Five galleries and twelve objects to look for. Allow about ninety minutes.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="#gallery-1">Start in Gallery 1</a>
+            <a class="btn" href="#visit">Plan your visit</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="plan-section" id="plan" aria-labelledby="plan-h">
+    <div class="wrap">
+      <h2 id="plan-h">Find your way</h2>
+      <p class="section-note">The galleries run in a loop, starting on the left as you come in from the lobby. Tap a room to jump to its objects. Each object has a numbered label on the wall.</p>
+      <p class="progress" id="progress" hidden><span id="progress-text"></span> <button type="button" id="reset">Clear marks</button></p>
+      <ol class="plan" aria-label="Floor plan, ground floor">
+        <li data-area="g1"><a class="room" href="#gallery-1"><span class="num">1</span><span class="name">The pans</span><span class="count" data-count="1">3 objects</span></a></li>
+        <li data-area="g2"><a class="room" href="#gallery-2"><span class="num">2</span><span class="name">The slip</span><span class="count" data-count="2">3 objects</span></a></li>
+        <li data-area="g3"><a class="room" href="#gallery-3"><span class="num">3</span><span class="name">The quay</span><span class="count" data-count="3">2 objects</span></a></li>
+        <li data-area="g4"><a class="room" href="#gallery-4"><span class="num">4</span><span class="name">Wrack and rust</span><span class="count" data-count="4">2 objects</span></a></li>
+        <li data-area="g5"><a class="room" href="#gallery-5"><span class="num">5</span><span class="name">The light</span><span class="count" data-count="5">2 objects</span></a></li>
+        <li data-area="lobby"><span class="lobby">Entrance, shop and café</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery-1" aria-labelledby="g1-h">
+    <div class="wrap gallery-grid">
+      <div class="g-head">
+        <div class="g-num" aria-hidden="true">1</div>
+        <h2 id="g1-h">The pans</h2>
+        <p class="g-years">1780 to 1860</p>
+        <p class="g-intro">Until the 1860s the Harwick marshes were crowded with salt pans: shallow trays where brine was boiled down over coal fires. The salt cured the herring that paid for the town’s first stone quay.</p>
+      </div>
+      <ol class="objects">
+        <li class="object" data-id="s1">
+          <div class="object-top"><span class="stop">1</span><h3>Salt rake</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>c. 1820</dd></div><div><dt>Made of</dt><dd>Ash and wrought iron</dd></div><div><dt>Catalogue</dt><dd>HMM 1987.14</dd></div></dl>
+          <p>Used to draw the crust of crystals to the edge of the pan. The iron blade is worn into a curve by decades of the same stroke, made a few thousand times a day.</p>
+        </li>
+        <li class="object" data-id="s2">
+          <div class="object-top"><span class="stop">2</span><h3>Lead pan fragment</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>c. 1790</dd></div><div><dt>Made of</dt><dd>Rolled lead</dd></div><div><dt>Catalogue</dt><dd>HMM 1962.3</dd></div></dl>
+          <p>Lead was cheap and held heat well, but it sagged and leaked. Look at the underside, where repair patches were hammered over repair patches until the pan was more patch than pan.</p>
+        </li>
+        <li class="object" data-id="s3">
+          <div class="object-top"><span class="stop">3</span><h3>Customs ledger</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>1811</dd></div><div><dt>Made of</dt><dd>Paper, calf leather</dd></div><div><dt>Catalogue</dt><dd>HMM 1930.1</dd></div></dl>
+          <p>Every barrel of salt that left the quay was entered here by weight and buyer. Salt was taxed heavily, which is why the clerk’s handwriting is so careful.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery-2" aria-labelledby="g2-h">
+    <div class="wrap gallery-grid">
+      <div class="g-head">
+        <div class="g-num" aria-hidden="true">2</div>
+        <h2 id="g2-h">The slip</h2>
+        <p class="g-years">1850 to 1910</p>
+        <p class="g-intro">In 1851 the Harwick yard launched its first iron-framed hull. Within a generation oak was the exception. This gallery follows the metal from foundry floor to launch ways.</p>
+      </div>
+      <ol class="objects">
+        <li class="object" data-id="i1">
+          <div class="object-top"><span class="stop">4</span><h3>Riveter’s hammer set</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>c. 1885</dd></div><div><dt>Made of</dt><dd>Iron and steel</dd></div><div><dt>Catalogue</dt><dd>HMM 1974.56</dd></div></dl>
+          <p>A hull plate was held together by tens of thousands of hot rivets, each closed by a team of four. The set’s dished head left the neat round dome you can still see on old iron ships.</p>
+        </li>
+        <li class="object" data-id="i2">
+          <div class="object-top"><span class="stop">5</span><h3>Iron knee from the brig <i>Alder Rose</i></h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>1857</dd></div><div><dt>Made of</dt><dd>Wrought iron</dd></div><div><dt>Catalogue</dt><dd>HMM 1991.2</dd></div></dl>
+          <p>A bracket joining deck beam to hull side. Oak knees had to be cut from naturally curved trees; this one was bent in an afternoon. It was recovered when the brig was broken up in 1902.</p>
+        </li>
+        <li class="object" data-id="i3">
+          <div class="object-top"><span class="stop">6</span><h3>Foundry pattern for an anchor</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>c. 1900</dd></div><div><dt>Made of</dt><dd>Pine, lead weights</dd></div><div><dt>Catalogue</dt><dd>HMM 2003.8</dd></div></dl>
+          <p>The anchor itself was cast in iron, but first it was carved in wood, full size, so a sand mould could be pressed around it. The finished anchor weighed 1.2 tonnes.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery-3" aria-labelledby="g3-h">
+    <div class="wrap gallery-grid">
+      <div class="g-head">
+        <div class="g-num" aria-hidden="true">3</div>
+        <h2 id="g3-h">The quay</h2>
+        <p class="g-years">1860 to 1940</p>
+        <p class="g-intro">Salt went out and pig iron came in. For eighty years the quay was the town’s noisiest street, worked by crane drivers, stevedores and tallymen.</p>
+      </div>
+      <ol class="objects">
+        <li class="object" data-id="q1">
+          <div class="object-top"><span class="stop">7</span><h3>Bill of lading for forty tons of pig iron</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>1902</dd></div><div><dt>Made of</dt><dd>Printed paper</dd></div><div><dt>Catalogue</dt><dd>HMM 1958.77</dd></div></dl>
+          <p>The paper that moved a cargo: who shipped it, who owned it and where it was bound. This one covers the iron that went into the yard’s last big order, a coastal steamer.</p>
+        </li>
+        <li class="object" data-id="q2">
+          <div class="object-top"><span class="stop">8</span><h3>Stevedore’s hooks</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>c. 1920</dd></div><div><dt>Made of</dt><dd>Steel, ash</dd></div><div><dt>Catalogue</dt><dd>HMM 1999.31</dd></div></dl>
+          <p>A pair of hand hooks used to drag sacks and crates. Their owner scratched initials into both handles so they would not walk off at the end of a shift.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery-4" aria-labelledby="g4-h">
+    <div class="wrap gallery-grid">
+      <div class="g-head">
+        <div class="g-num" aria-hidden="true">4</div>
+        <h2 id="g4-h">Wrack and rust</h2>
+        <p class="g-years">Wrecks and what the sea does to iron</p>
+        <p class="g-intro">Salt is what makes iron rust faster at sea. Chloride settles into the metal and keeps working long after the object is lifted from the water. Here the museum’s conservators show how they stop it.</p>
+      </div>
+      <ol class="objects">
+        <li class="object" data-id="w1">
+          <div class="object-top"><span class="stop">9</span><h3>Concreted shot from Gull Ledge</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>c. 1760</dd></div><div><dt>Made of</dt><dd>Iron, marine concretion</dd></div><div><dt>Catalogue</dt><dd>HMM 2011.4</dd></div></dl>
+          <p>Cannonballs fused into a single lump by rust and shell. X-rays show the iron inside has almost entirely turned to graphite; the lump holds together only because the sea built a second skin around it.</p>
+        </li>
+        <li class="object" data-id="w2">
+          <div class="object-top"><span class="stop">10</span><h3>Rudder pintle from the SS <i>Tern</i></h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>1911</dd></div><div><dt>Made of</dt><dd>Wrought iron</dd></div><div><dt>Catalogue</dt><dd>HMM 2019.12</dd></div></dl>
+          <p>Still in the tank where it is being soaked in fresh alkaline water to draw the salt out. The process takes about three years. Through the window you can see this month’s water change.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="gallery" id="gallery-5" aria-labelledby="g5-h">
+    <div class="wrap gallery-grid">
+      <div class="g-head">
+        <div class="g-num" aria-hidden="true">5</div>
+        <h2 id="g5-h">The light</h2>
+        <p class="g-years">1874 to 1950</p>
+        <p class="g-intro">Everything in the exhibition came and went past Harwick Point. The last gallery is the lamp that marked it, and the people who kept it burning.</p>
+      </div>
+      <ol class="objects">
+        <li class="object" data-id="l1">
+          <div class="object-top"><span class="stop">11</span><h3>Fresnel lens panel</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>1874</dd></div><div><dt>Made of</dt><dd>Cut glass, brass</dd></div><div><dt>Catalogue</dt><dd>HMM 1966.9</dd></div></dl>
+          <p>One of twenty-four panels that bent a single oil flame into a beam visible from twenty miles. Stand at the marked spot and the gallery lights will pulse the way the beam did.</p>
+        </li>
+        <li class="object" data-id="l2">
+          <div class="object-top"><span class="stop">12</span><h3>Keeper’s log for the winter of 1893</h3></div>
+          <dl class="facts"><div><dt>Date</dt><dd>1893</dd></div><div><dt>Made of</dt><dd>Ink on paper</dd></div><div><dt>Catalogue</dt><dd>HMM 1948.20</dd></div></dl>
+          <p>Page after page of weather, in a small steady hand. On the night of 11 December the entry reads, in full: “Gale from the north-east. Lamp kept. Three vessels seen to pass.”</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="visit" id="visit" aria-labelledby="visit-h">
+    <div class="wrap">
+      <h2 id="visit-h">Plan your visit</h2>
+      <p class="status" id="status" aria-live="polite" style="margin-top: 12px"></p>
+      <div class="visit-grid">
+        <div>
+          <h3>Opening hours</h3>
+          <table class="hours" id="hours">
+            <tbody>
+              <tr data-day="1"><th scope="row">Monday</th><td>Closed</td></tr>
+              <tr data-day="2"><th scope="row">Tuesday</th><td>10:00 to 17:00</td></tr>
+              <tr data-day="3"><th scope="row">Wednesday</th><td>10:00 to 17:00</td></tr>
+              <tr data-day="4"><th scope="row">Thursday</th><td>10:00 to 20:00</td></tr>
+              <tr data-day="5"><th scope="row">Friday</th><td>10:00 to 17:00</td></tr>
+              <tr data-day="6"><th scope="row">Saturday</th><td>10:00 to 17:00</td></tr>
+              <tr data-day="0"><th scope="row">Sunday</th><td>10:00 to 17:00</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top: 12px; color: var(--text-2)">Last entry one hour before closing.</p>
+        </div>
+        <div>
+          <h3>Tickets</h3>
+          <dl class="prices">
+            <dt>Adult</dt><dd>£12</dd>
+            <dt>Concession</dt><dd>£8</dd>
+            <dt>Ages 5 to 15</dt><dd>£4</dd>
+            <dt>Under 5</dt><dd>Free</dd>
+            <dt>Thursday after 17:00</dt><dd>£6</dd>
+          </dl>
+          <p style="margin-top: 12px; color: var(--text-2)">Your ticket covers the whole museum and this exhibition. Pay at the desk; no booking needed.</p>
+        </div>
+        <div>
+          <h3>Find us</h3>
+          <p><address>Harwick Maritime Museum<br>1 Quayside Row<br>Harwick HW1 2QR</address></p>
+          <p>Ten minutes’ walk from Harwick station. Buses 14 and 22 stop at Customs House, outside the door. Parking is on the quay; the car park fills by midday on weekends.</p>
+          <p>Phone <a href="tel:+441255550142">01255 550142</a><br>Email <a href="mailto:visit@harwickmaritime.example">visit@harwickmaritime.example</a></p>
+          <p><a class="maplink" href="https://www.openstreetmap.org/search?query=1%20Quayside%20Row%20Harwick" rel="noopener">Open in a map</a></p>
+        </div>
+      </div>
+
+      <div class="faq">
+        <h3>Before you come</h3>
+        <details><summary>Can I get around with a wheelchair or pushchair?</summary><p>Yes. The ground floor is step-free from the quay entrance and every gallery is on it. A lift serves the café. Wheelchairs and folding stools can be borrowed at the desk.</p></details>
+        <details><summary>Are the galleries dark?</summary><p>Gallery 5 and the log case in Gallery 4 are kept dim to protect paper and glass. Use the Low light button at the top of this page to darken the guide so it is easier on your eyes.</p></details>
+        <details><summary>Can I take photographs?</summary><p>Yes, without flash. Tripods are not allowed in the galleries.</p></details>
+        <details><summary>Is there a café?</summary><p>The Chandlery café is by the entrance and serves hot drinks, soup and cake until 16:30.</p></details>
+        <details><summary>Can I touch anything?</summary><p>Only what is marked with a hand symbol. In Gallery 2 you can handle a replica rivet set and try the hammer.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Salt and Iron is shown at the Harwick Maritime Museum, 1 Quayside Row, Harwick.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+                set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+  /* Low light toggle */
+  var themeBtn = document.getElementById('theme');
+  var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  function isDark() { return root.dataset.theme ? root.dataset.theme === 'dark' : mq.matches; }
+  function applyTheme(t) {
+    if (t) root.dataset.theme = t;
+    themeBtn.setAttribute('aria-pressed', String(isDark()));
+  }
+  applyTheme(store.get('si-theme'));
+  themeBtn.addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    store.set('si-theme', next);
+    applyTheme(next);
+  });
+
+  /* Seen marks */
+  var tick = '<span class="tick" aria-hidden="true"><svg viewBox="0 0 12 12" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6.5l3 3 5-6"/></svg></span>';
+  var seen = {};
+  try { seen = JSON.parse(store.get('si-seen') || '{}'); } catch (e) { seen = {}; }
+  var items = document.querySelectorAll('.object');
+  var total = items.length;
+
+  function paint() {
+    var n = 0;
+    var perGallery = {};
+    items.forEach(function (li) {
+      var id = li.dataset.id, on = !!seen[id];
+      var btn = li.querySelector('.seen');
+      btn.setAttribute('aria-pressed', String(on));
+      btn.lastChild.textContent = on ? 'Seen' : 'Mark as seen';
+      if (on) n++;
+      var g = li.closest('.gallery').id.replace('gallery-', '');
+      perGallery[g] = perGallery[g] || [0, 0];
+      perGallery[g][1]++;
+      if (on) perGallery[g][0]++;
+    });
+    document.querySelectorAll('[data-count]').forEach(function (el) {
+      var p = perGallery[el.dataset.count];
+      el.textContent = n > 0 ? p[0] + ' of ' + p[1] + ' seen' : p[1] + ' objects';
+    });
+    var prog = document.getElementById('progress');
+    prog.hidden = n === 0;
+    document.getElementById('progress-text').textContent = n + ' of ' + total + ' objects seen';
+  }
+  items.forEach(function (li) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'seen';
+    btn.innerHTML = tick + '<span></span>';
+    btn.addEventListener('click', function () {
+      var id = li.dataset.id;
+      if (seen[id]) delete seen[id]; else seen[id] = 1;
+      store.set('si-seen', JSON.stringify(seen));
+      paint();
+    });
+    li.appendChild(btn);
+  });
+  document.getElementById('reset').addEventListener('click', function () {
+    seen = {}; store.set('si-seen', '{}'); paint();
+  });
+  paint();
+
+  /* Highlight the current section in the strip */
+  var links = {};
+  document.querySelectorAll('#chips a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+  var current = null;
+  function setCurrent(id) {
+    if (!links[id] || id === current) return;
+    if (current) links[current].removeAttribute('aria-current');
+    current = id;
+    links[id].setAttribute('aria-current', 'true');
+    var chips = document.getElementById('chips'), a = links[id];
+    chips.scrollTo({ left: a.offsetLeft - 16, behavior: 'auto' });
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) setCurrent(e.target.id); });
+    }, { rootMargin: '-35% 0px -60% 0px' });
+    ['plan', 'gallery-1', 'gallery-2', 'gallery-3', 'gallery-4', 'gallery-5', 'visit'].forEach(function (id) {
+      io.observe(document.getElementById(id));
+    });
+  }
+
+  /* Open now, in the museum's time zone */
+  var hours = { 0: [10, 17], 1: null, 2: [10, 17], 3: [10, 17], 4: [10, 20], 5: [10, 17], 6: [10, 17] };
+  var days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+  try {
+    var parts = {};
+    new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+      .formatToParts(new Date()).forEach(function (p) { parts[p.type] = p.value; });
+    var d = days[parts.weekday], mins = +parts.hour * 60 + +parts.minute;
+    var row = document.querySelector('#hours tr[data-day="' + d + '"]');
+    if (row) row.setAttribute('aria-current', 'date');
+    var h = hours[d], el = document.getElementById('status');
+    var fmt = function (hr) { return hr + ':00'; };
+    if (h && mins >= h[0] * 60 && mins < h[1] * 60) {
+      el.dataset.open = 'true';
+      el.textContent = 'Open now, until ' + fmt(h[1]) + ' today';
+    } else {
+      el.dataset.open = 'false';
+      el.textContent = 'Closed now' + (h && mins < h[0] * 60 ? ', opens at ' + fmt(h[0]) + ' today' : '');
+    }
+  } catch (e) {}
+})();
+</script>
+</body>
+</html>

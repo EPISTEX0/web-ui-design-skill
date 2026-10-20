@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MV Gannet – car deck loading · Skerra Ferry Company</title>
+<meta name="description" content="Car deck loading screen for the MV Gannet, Skerra Ferry Company.">
+<style>
+:root {
+  /* colour: neutral ramp on a cool harbour-slate hue, one accent (ferry-livery blue) */
+  --color-bg: #eceff3;
+  --color-surface: #ffffff;
+  --color-surface-2: #f6f8fa;
+  --color-text: #121c26;
+  --color-text-secondary: #3d4a57;
+  --color-text-tertiary: #566371;
+  --color-border: #c5cdd6;
+  --color-border-strong: #8d9bab;
+  --color-accent: #1b4f8f;
+  --color-accent-hover: #164176;
+  --color-accent-soft: #e0ebf8;
+  --color-on-accent: #ffffff;
+  --color-ok: #1b6e45;
+  --color-ok-soft: #dff2e7;
+  --color-warn: #7a4e00;
+  --color-warn-soft: #fff1cc;
+  --color-warn-line: #d99a00;
+  --color-danger: #a8231b;
+  --color-danger-soft: #fbe4e1;
+  --color-veh: #dde5ee;
+  --color-veh-heavy: #c3cfdc;
+  --color-focus: #0b5fff;
+
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Roboto, "Noto Sans", Arial, sans-serif;
+  --fs-sm: 14px;
+  --fs-md: 17px;
+  --fs-lg: 20px;
+  --fs-xl: 26px;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px;
+  --r-sm: 4px; --r-md: 6px; --r-lg: 8px;
+  --target: 48px;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --t-press: 120ms;
+  --t-menu: 200ms;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font: 400 var(--fs-md)/1.4 var(--font);
+  color: var(--color-text);
+  background: var(--color-bg);
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow-x: clip;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; touch-action: manipulation; }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- buttons ---------- */
+.btn {
+  min-height: var(--target);
+  padding: 0 var(--s5);
+  border-radius: var(--r-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  font-weight: 600;
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  transition: transform var(--t-press) var(--ease-out), background-color var(--t-press), border-color var(--t-press);
+}
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { color: var(--color-text-tertiary); background: var(--color-surface-2); border-color: var(--color-border); cursor: not-allowed; }
+.btn-primary { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+.btn-primary:disabled { background: var(--color-border); border-color: var(--color-border); color: var(--color-text-secondary); }
+.btn-danger { border-color: var(--color-danger); color: var(--color-danger); }
+@media (hover: hover) {
+  .btn:hover:not(:disabled) { background: var(--color-surface-2); border-color: var(--color-text-secondary); }
+  .btn-primary:hover:not(:disabled) { background: var(--color-accent-hover); border-color: var(--color-accent-hover); }
+}
+
+/* ---------- header ---------- */
+.top {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--s3) var(--s4);
+  display: grid;
+  gap: var(--s3) var(--s6);
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+}
+.brand h1 { margin: 0; font-size: var(--fs-xl); line-height: 1.1; letter-spacing: -0.01em; font-weight: 700; text-wrap: balance; }
+.brand p { margin: var(--s1) 0 0; color: var(--color-text-secondary); font-size: var(--fs-sm); }
+.stats { display: flex; flex-wrap: wrap; gap: var(--s3) var(--s6); align-items: stretch; }
+.stat { min-width: 132px; flex: 1 1 132px; max-width: 220px; }
+.stat-label { font-size: var(--fs-sm); color: var(--color-text-secondary); }
+.stat-value { font-size: var(--fs-lg); font-weight: 700; line-height: 1.25; }
+.stat-value small { font-size: var(--fs-sm); font-weight: 400; color: var(--color-text-secondary); }
+.meter { height: 8px; border-radius: 4px; background: var(--color-border); overflow: hidden; margin-top: var(--s1); }
+.meter > i { display: block; height: 100%; background: var(--color-accent); border-radius: 4px; transform-origin: left; transition: transform var(--t-menu) var(--ease-out); }
+.meter.is-warn > i { background: var(--color-warn-line); }
+.meter.is-over > i { background: var(--color-danger); }
+
+.balance { min-width: 220px; flex: 1.4 1 220px; max-width: 320px; }
+.bal-track { position: relative; height: 12px; border-radius: 6px; background: var(--color-surface-2); border: 1px solid var(--color-border-strong); margin-top: var(--s2); }
+.bal-track::before { content: ""; position: absolute; left: 50%; top: -4px; bottom: -4px; width: 2px; background: var(--color-text-secondary); }
+.bal-ok { position: absolute; top: 0; bottom: 0; left: 25%; right: 25%; background: var(--color-ok-soft); }
+.bal-mark { position: absolute; top: -5px; width: 8px; height: 20px; margin-left: -4px; border-radius: 3px; background: var(--color-accent); transition: left var(--t-menu) var(--ease-out); }
+.bal-mark.is-warn { background: var(--color-warn-line); outline: 2px solid var(--color-warn); }
+.bal-ends { display: flex; justify-content: space-between; font-size: var(--fs-sm); color: var(--color-text-secondary); margin-top: var(--s1); }
+.bal-msg { font-size: var(--fs-sm); font-weight: 600; margin-top: var(--s1); }
+.bal-msg.is-warn { color: var(--color-warn); }
+
+.clock { text-align: right; }
+.clock .big { font-size: var(--fs-lg); font-weight: 700; }
+.clock .sub { font-size: var(--fs-sm); color: var(--color-text-secondary); }
+.clock .sub.is-late { color: var(--color-danger); font-weight: 600; }
+.actions { display: flex; gap: var(--s2); align-items: center; }
+
+/* ---------- layout ---------- */
+.main { display: grid; grid-template-columns: minmax(300px, 380px) minmax(0, 1fr); min-height: 0; }
+.panel { min-height: 0; display: flex; flex-direction: column; }
+.queue { background: var(--color-surface); border-right: 1px solid var(--color-border); }
+.panel-head { padding: var(--s4) var(--s4) var(--s3); display: grid; gap: var(--s3); }
+.panel-head h2 { margin: 0; font-size: var(--fs-lg); font-weight: 700; display: flex; align-items: baseline; justify-content: space-between; gap: var(--s2); }
+.panel-head h2 .count { font-size: var(--fs-sm); font-weight: 400; color: var(--color-text-secondary); }
+
+.search { position: relative; }
+.search input {
+  width: 100%; min-height: var(--target); padding: 0 var(--s4); padding-right: 56px;
+  border: 1px solid var(--color-border-strong); border-radius: var(--r-md); background: var(--color-surface);
+  text-transform: uppercase; letter-spacing: 0.02em; font-size: 16px;
+}
+.search input::placeholder { text-transform: none; letter-spacing: 0; color: var(--color-text-tertiary); }
+.search .clear { position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; border: 0; background: transparent; border-radius: var(--r-md); font-size: 22px; line-height: 1; color: var(--color-text-secondary); }
+
+.seg { display: flex; border: 1px solid var(--color-border-strong); border-radius: var(--r-md); overflow: hidden; }
+.seg label { flex: 1 1 0; position: relative; }
+.seg input { position: absolute; appearance: none; -webkit-appearance: none; background: transparent; border: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.seg span { display: flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 var(--s1); font-size: var(--fs-sm); font-weight: 600; text-align: center; border-left: 1px solid var(--color-border); transition: background-color var(--t-press); line-height: 1.15; }
+.seg label:first-child span { border-left: 0; }
+.seg input:checked + span { background: var(--color-accent); color: var(--color-on-accent); }
+.seg input:focus-visible + span { outline: 3px solid var(--color-focus); outline-offset: -3px; }
+
+.qlist { list-style: none; margin: 0; padding: 0 var(--s2) var(--s4); overflow-y: auto; flex: 1; overscroll-behavior: contain; }
+.qitem { margin: 0 0 var(--s2); }
+.qbtn {
+  width: 100%; text-align: left; min-height: 72px; padding: var(--s3) var(--s4);
+  border: 1px solid var(--color-border); border-radius: var(--r-lg); background: var(--color-surface);
+  display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: var(--s1) var(--s3); align-items: center;
+  transition: transform var(--t-press) var(--ease-out), border-color var(--t-press), background-color var(--t-press);
+}
+.qbtn:active { transform: scale(0.985); }
+@media (hover: hover) { .qbtn:hover { border-color: var(--color-border-strong); background: var(--color-surface-2); } }
+.qbtn[aria-pressed="true"] { border-color: var(--color-accent); box-shadow: inset 0 0 0 2px var(--color-accent); background: var(--color-accent-soft); }
+.qnum { font-size: var(--fs-sm); color: var(--color-text-secondary); font-weight: 600; }
+.qreg { font-size: var(--fs-lg); font-weight: 700; letter-spacing: 0.02em; line-height: 1.2; }
+.qdesc { font-size: var(--fs-sm); color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+.qspec { text-align: right; font-size: var(--fs-sm); color: var(--color-text-secondary); line-height: 1.3; white-space: nowrap; }
+.qspec b { color: var(--color-text); font-size: var(--fs-md); }
+.qmain { min-width: 0; }
+.qflags { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); }
+
+.chip { display: inline-flex; align-items: center; gap: var(--s1); min-height: 22px; padding: 0 var(--s2); border-radius: var(--r-sm); font-size: 13px; font-weight: 700; line-height: 1; white-space: nowrap; background: var(--color-surface-2); border: 1px solid var(--color-border-strong); color: var(--color-text-secondary); }
+.chip.dg { background: var(--color-warn-soft); border-color: var(--color-warn-line); color: var(--color-warn); }
+.chip.mob { background: var(--color-accent-soft); border-color: var(--color-accent); color: var(--color-accent); }
+.chip.standby { border-style: dashed; }
+
+.empty { padding: var(--s6) var(--s4); text-align: center; color: var(--color-text-secondary); display: grid; gap: var(--s3); justify-items: center; }
+.empty strong { color: var(--color-text); font-size: var(--fs-lg); }
+
+.noshows { border-top: 1px solid var(--color-border); padding: var(--s3) var(--s4); font-size: var(--fs-sm); }
+.noshows summary { min-height: 40px; display: flex; align-items: center; cursor: pointer; font-weight: 600; }
+.noshows ul { list-style: none; margin: 0; padding: 0; }
+.noshows li { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); min-height: var(--target); }
+.noshows .btn { min-height: 44px; padding: 0 var(--s3); font-size: var(--fs-sm); }
+
+/* ---------- deck column ---------- */
+.deckcol { overflow-y: auto; overscroll-behavior: contain; padding: var(--s4); display: flex; flex-direction: column; gap: var(--s4); }
+
+.selbar {
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-lg);
+  padding: var(--s3) var(--s4); display: grid; gap: var(--s3) var(--s5);
+  grid-template-columns: minmax(0, 1fr) auto; align-items: center;
+}
+.selbar.is-active { border-color: var(--color-accent); box-shadow: inset 0 0 0 1px var(--color-accent); }
+.sel-reg { font-size: var(--fs-xl); font-weight: 700; letter-spacing: 0.02em; line-height: 1.15; }
+.sel-sub { color: var(--color-text-secondary); font-size: var(--fs-sm); }
+.sel-specs { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s5); margin-top: var(--s2); font-size: var(--fs-md); }
+.sel-specs b { font-weight: 700; }
+.sel-hint { margin: var(--s2) 0 0; font-size: var(--fs-sm); color: var(--color-text-secondary); }
+.sel-hint.is-warn { color: var(--color-warn); font-weight: 600; }
+.sel-actions { display: flex; flex-wrap: wrap; gap: var(--s2); justify-content: flex-end; }
+.selbar h2 { margin: 0; font-size: var(--fs-lg); }
+.selbar .flags { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s2); }
+
+.deck-wrap { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--r-lg); padding: var(--s4); }
+.deck-title { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3); margin: 0 0 var(--s3); flex-wrap: wrap; }
+.deck-title h2 { margin: 0; font-size: var(--fs-lg); }
+.deck-title span { font-size: var(--fs-sm); color: var(--color-text-secondary); }
+
+.deck { display: grid; gap: var(--s2); }
+.lane { display: grid; grid-template-columns: 148px minmax(0, 1fr); gap: var(--s3); align-items: stretch; }
+.lane-head {
+  text-align: left; border: 1px solid var(--color-border); border-radius: var(--r-md); background: var(--color-surface-2);
+  padding: var(--s2) var(--s3); min-height: 76px; display: grid; align-content: center; gap: 2px;
+  transition: transform var(--t-press) var(--ease-out), border-color var(--t-press), background-color var(--t-press);
+}
+.lane-head b { font-size: var(--fs-md); }
+.lane-head .lm { font-size: 13px; color: var(--color-text-secondary); line-height: 1.25; }
+.lane-head .tag { font-size: 13px; font-weight: 700; line-height: 1.2; }
+.lane.is-ok .lane-head { background: var(--color-accent-soft); border-color: var(--color-accent); }
+.lane.is-suggested .lane-head { background: var(--color-accent); border-color: var(--color-accent); color: var(--color-on-accent); }
+.lane.is-suggested .lane-head .lm, .lane.is-suggested .lane-head .tag { color: var(--color-on-accent); }
+.lane.is-blocked .lane-head { background: var(--color-surface-2); }
+.lane.is-blocked .lane-head .tag { color: var(--color-danger); }
+.lane-head:active { transform: scale(0.98); }
+
+.track-wrap { min-width: 0; }
+.track {
+  width: calc(var(--lane-len) / 32 * 100%);
+  height: 100%; min-height: 76px;
+  display: flex; flex-direction: row-reverse;
+  gap: calc(0.6 / var(--lane-len) * 100%);
+  padding: 4px; background: var(--color-surface-2);
+  border: 1px solid var(--color-border); border-radius: var(--r-md);
+}
+.veh {
+  flex: 0 0 calc(var(--len) / var(--lane-len) * 100%);
+  min-width: 0; padding: var(--s1) var(--s2);
+  border: 1px solid var(--color-border-strong); border-radius: var(--r-sm);
+  background: var(--color-veh); text-align: left;
+  display: flex; flex-direction: column; justify-content: center; gap: 2px; overflow: hidden;
+  transition: transform var(--t-press) var(--ease-out);
+}
+.veh.heavy { background: var(--color-veh-heavy); }
+.veh.has-dg { border-left: 6px solid var(--color-warn-line); }
+.veh.has-mob { border-left: 6px solid var(--color-accent); }
+.veh:active { transform: scale(0.97); }
+.veh[aria-pressed="true"] { outline: 3px solid var(--color-accent); outline-offset: 1px; background: var(--color-accent-soft); }
+.veh.is-new { animation: land 240ms var(--ease-out); }
+@keyframes land { from { transform: scale(0.9); opacity: 0; } to { transform: none; opacity: 1; } }
+.veh .reg { font-weight: 700; font-size: 13px; line-height: 1.15; letter-spacing: 0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.veh .sub { font-size: 12px; line-height: 1.15; color: var(--color-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.free {
+  flex: 1 1 0; min-width: 0; border: 2px dashed var(--color-border); border-radius: var(--r-sm); background: transparent;
+  color: var(--color-text-tertiary); font-size: 13px; font-weight: 600; padding: 0 var(--s2);
+  display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden;
+}
+.free:disabled { cursor: default; }
+.lane.is-ok .free { border-color: var(--color-accent); color: var(--color-accent); background: var(--color-surface); cursor: pointer; }
+.lane.is-suggested .free { border-style: solid; background: var(--color-accent-soft); color: var(--color-accent); }
+.lane.is-blocked .free { cursor: not-allowed; }
+
+.ends { display: flex; justify-content: space-between; font-size: var(--fs-sm); color: var(--color-text-secondary); margin: var(--s2) 0 0 calc(148px + var(--s3)); }
+
+.legend { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); margin-top: var(--s3); font-size: var(--fs-sm); color: var(--color-text-secondary); }
+.legend span { display: inline-flex; align-items: center; gap: var(--s2); }
+.legend i { display: inline-block; width: 22px; height: 14px; border-radius: 3px; border: 1px solid var(--color-border-strong); background: var(--color-veh); }
+.legend i.h { background: var(--color-veh-heavy); }
+.legend i.d { border-left: 6px solid var(--color-warn-line); }
+.legend i.m { border-left: 6px solid var(--color-accent); }
+
+.closed-banner {
+  background: var(--color-ok-soft); border: 1px solid var(--color-ok); color: var(--color-text); border-radius: var(--r-lg);
+  padding: var(--s3) var(--s4); display: flex; justify-content: space-between; align-items: center; gap: var(--s4); flex-wrap: wrap;
+}
+.closed-banner b { color: var(--color-ok); }
+
+/* ---------- toast + dialog ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--s6) + env(safe-area-inset-bottom)); transform: translate(-50%, 8px);
+  z-index: 20; max-width: min(560px, calc(100vw - 32px)); width: max-content;
+  background: var(--color-text); color: #fff; border-radius: var(--r-lg); padding: var(--s2) var(--s2) var(--s2) var(--s5);
+  display: flex; align-items: center; gap: var(--s4); opacity: 0; pointer-events: none;
+  transition: opacity var(--t-menu) var(--ease-out), transform var(--t-menu) var(--ease-out);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.toast.is-error { background: var(--color-danger); }
+.toast .btn { min-height: 44px; background: transparent; color: #fff; border-color: rgba(255,255,255,.7); }
+@media (hover: hover) { .toast .btn:hover:not(:disabled) { background: rgba(255,255,255,.15); border-color: #fff; } }
+
+dialog { border: 0; border-radius: var(--r-lg); padding: 0; width: min(520px, calc(100vw - 32px)); color: var(--color-text); box-shadow: 0 0 0 1px rgba(18,28,38,.15), 0 24px 48px -12px rgba(18,28,38,.35); }
+dialog::backdrop { background: rgba(18,28,38,.5); }
+dialog form { padding: var(--s6); display: grid; gap: var(--s4); }
+dialog h2 { margin: 0; font-size: var(--fs-xl); text-wrap: balance; }
+dialog p { margin: 0; color: var(--color-text-secondary); text-wrap: pretty; }
+dialog ul { margin: 0; padding-left: var(--s5); max-height: 200px; overflow-y: auto; }
+dialog li { padding: 2px 0; }
+.dlg-actions { display: flex; flex-wrap: wrap; gap: var(--s2); justify-content: flex-end; }
+
+/* ---------- print sheet ---------- */
+#print { display: none; }
+
+/* ---------- narrow screens: stack, and run lanes vertically with the bow up ---------- */
+@media (max-width: 1099px) {
+  .top { grid-template-columns: 1fr auto; }
+  .stats { grid-column: 1 / -1; order: 3; }
+}
+@media (max-width: 899px) {
+  body { height: auto; min-height: 100dvh; display: block; }
+  .main { display: block; }
+  .queue { border-right: 0; border-bottom: 1px solid var(--color-border); }
+  .qlist { max-height: 56dvh; }
+  .deckcol { overflow: visible; padding: var(--s3); padding-bottom: calc(var(--s8) + 120px); }
+  .selbar { grid-template-columns: 1fr; }
+  .sel-actions { justify-content: stretch; }
+  .sel-actions .btn { flex: 1 1 auto; }
+  .selbar.is-active { position: sticky; bottom: calc(var(--s3) + env(safe-area-inset-bottom)); z-index: 5; box-shadow: 0 0 0 1px var(--color-accent), 0 8px 24px -8px rgba(18,28,38,.4); }
+  .top { padding: var(--s3); }
+  .brand h1 { font-size: var(--fs-lg); }
+  .actions .btn { padding: 0 var(--s3); }
+  .clock { text-align: left; }
+
+  .deck { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--s1); }
+  .lane { display: grid; grid-template-columns: none; grid-template-rows: auto 540px; gap: var(--s1); }
+  .lane-head { min-height: 64px; padding: var(--s1); text-align: center; align-content: start; }
+  .lane-head .lm, .lane-head .tag { display: none; }
+  .lane-head b { font-size: 15px; }
+  .lane-head .free-m { display: block; font-size: 12px; color: inherit; }
+  .track-wrap { display: flex; flex-direction: column; justify-content: flex-start; }
+  .track { width: 100%; height: calc(var(--lane-len) / 32 * 100%); min-height: 0; flex-direction: column; gap: calc(0.6 / var(--lane-len) * 100%); padding: 3px; }
+  .veh { flex: 0 0 calc(var(--len) / var(--lane-len) * 100%); padding: var(--s1) 2px; align-items: center; writing-mode: vertical-rl; text-orientation: mixed; }
+  .veh .sub { display: none; }
+  .veh .reg { font-size: 12px; }
+  .free { font-size: 12px; writing-mode: vertical-rl; padding: 0; }
+  .ends { margin-left: 0; flex-direction: column-reverse; }
+  .ends span:last-child::after { content: " (top of plan)"; }
+  .toast { bottom: calc(150px + env(safe-area-inset-bottom)); }
+}
+@media (min-width: 900px) { .lane-head .free-m { display: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition-duration: 1ms !important; }
+  .veh.is-new { animation: none !important; }
+}
+
+@media print {
+  body { display: block; height: auto; background: #fff; }
+  body > :not(#print) { display: none !important; }
+  #print { display: block; font-size: 12px; color: #000; }
+  #print h1 { font-size: 20px; margin: 0 0 4px; }
+  #print table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  #print th, #print td { border: 1px solid #000; padding: 4px 6px; text-align: left; }
+  #print h2 { font-size: 14px; margin: 16px 0 4px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <h1>MV Gannet</h1>
+    <p id="sailing">Skerra → Port Ellan · Skerra Ferry Company</p>
+  </div>
+  <div class="clock" id="clock" aria-live="off"></div>
+  <div class="actions">
+    <button class="btn" id="btnReset" type="button" title="Put the sample sailing back to the start">Reset sample</button>
+    <button class="btn btn-primary" id="btnClose" type="button">Close loading</button>
+  </div>
+  <div class="stats" id="stats"></div>
+</header>
+
+<div class="main">
+  <section class="panel queue" aria-labelledby="qh">
+    <div class="panel-head">
+      <h2 id="qh">Waiting to load <span class="count num" id="qcount"></span></h2>
+      <div class="search">
+        <label class="sr" for="q">Find by registration or name</label>
+        <input id="q" type="search" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Find by reg or name">
+        <button class="clear" id="qclear" type="button" aria-label="Clear search" hidden>×</button>
+      </div>
+      <div class="seg" role="radiogroup" aria-label="Filter waiting vehicles" id="filters"></div>
+    </div>
+    <ul class="qlist" id="qlist"></ul>
+    <details class="noshows" id="noshows" hidden>
+      <summary id="nsSummary"></summary>
+      <ul id="nsList"></ul>
+    </details>
+  </section>
+
+  <section class="panel deckcol" aria-label="Car deck">
+    <div id="closedBanner" class="closed-banner" hidden></div>
+    <div class="selbar" id="selbar"></div>
+    <div class="deck-wrap">
+      <div class="deck-title">
+        <h2>Car deck</h2>
+        <span class="num" id="deckNote">Lanes numbered from port to starboard</span>
+      </div>
+      <div class="deck" id="deck"></div>
+      <div class="ends"><span>Stern ramp</span><span>Bow</span></div>
+      <div class="legend" aria-hidden="true">
+        <span><i></i>Car</span><span><i class="h"></i>Over 3 t</span><span><i class="d"></i>Dangerous goods</span><span><i class="m"></i>Mobility</span>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button class="btn" id="toastUndo" type="button" hidden>Undo</button></div>
+
+<dialog id="closeDlg" aria-labelledby="closeTitle">
+  <form method="dialog" id="closeForm">
+    <h2 id="closeTitle">Close loading?</h2>
+    <p id="closeBody"></p>
+    <ul id="closeList"></ul>
+    <div class="dlg-actions">
+      <button class="btn" value="cancel" type="submit">Keep loading</button>
+      <button class="btn" id="btnPrint" type="button">Print load list</button>
+      <button class="btn btn-primary" id="btnConfirmClose" value="close" type="submit">Close loading</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="print" aria-hidden="true"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- deck definition (sample layout – replace with the real MV Gannet plan) ---------- */
+  const LANES = [
+    { n: 1, len: 24, maxH: 2.1, maxWt: 20, centre: false, note: 'Under side gallery' },
+    { n: 2, len: 30, maxH: 3.0, maxWt: 25, centre: false, note: '' },
+    { n: 3, len: 32, maxH: 4.2, maxWt: 30, centre: true,  note: 'Centre' },
+    { n: 4, len: 32, maxH: 4.2, maxWt: 30, centre: true,  note: 'Centre' },
+    { n: 5, len: 30, maxH: 3.0, maxWt: 25, centre: false, note: '' },
+    { n: 6, len: 24, maxH: 2.1, maxWt: 20, centre: false, note: 'Under side gallery' },
+  ];
+  const MAX_LEN = 32, GAP = 0.6, DECK_MAX_WT = 90, BAL_LIMIT = 6, CLOSE_BEFORE_MIN = 15;
+  const FLAGS = {
+    dg:  { label: 'DG',       long: 'Dangerous goods – centre lanes (3–4) only' },
+    mob: { label: 'Mobility', long: 'Mobility – door space needed, outer lane near stairs preferred' },
+  };
+
+  /* ---------- sample bookings (replace with the real manifest) ---------- */
+  // [id, reg, description, type, length m, height m, weight t, driver, booking ref, flags, standby]
+  const RAW = [
+    ['v01','SK19 TRN','Vauxhall Corsa','Car',4.1,1.5,1.1,'A. Beaton','GN-40127'],
+    ['v02','MA70 KLP','Mini Cooper','Car',3.9,1.4,1.3,'R. Ferguson','GN-40131'],
+    ['v03','ST22 BXA','Ford Transit Custom – Skerra Stores','Van',5.3,2.0,2.9,'Skerra Stores Ltd','GN-40102'],
+    ['v04','SK68 WYD','Volvo XC60','Car',4.7,1.7,2.0,'J. MacPhee','GN-40118'],
+    ['v05','YJ16 FSH','DAF CF – fish lorry','Lorry',10.4,3.7,16.0,'Harbour Fish Co.','GN-40090'],
+    ['v06','SN73 FDR','Scania P – feed lorry','Lorry',9.6,3.5,12.5,'Orrin Farm Supplies','GN-40094'],
+    ['v07','BV71 PLK','Toyota Hilux','Car',5.3,1.9,2.3,'D. Ross','GN-40122'],
+    ['v08','SA20 MNO','Skoda Octavia Estate','Car',4.7,1.5,1.5,'H. Gunn','GN-40125'],
+    ['v09','SK22 JHG','Nissan Leaf','Car',4.5,1.6,1.6,'E. Sutherland','GN-40133'],
+
+    ['v10','AK71 DRV','VW Golf','Car',4.3,1.5,1.3,'F. Campbell','GN-40140'],
+    ['v11','SK18 PTL','Land Rover Defender 110','Car',4.8,2.0,2.3,'Skerra Estate','GN-40141'],
+    ['v12','EX19 WND','Auto-Sleeper Burford campervan','Camper',6.0,2.9,3.4,'P. Hartley','GN-40143'],
+    ['v13','BN64 RFT','Ford Focus Estate + trailer','Car + trailer',8.2,1.9,2.6,'K. Mackenzie','GN-40144'],
+    ['v14','SK21 MBC','Renault Trafic minibus – Community Transport','Minibus',5.9,2.0,3.1,'Skerra Community Transport','GN-40146',['mob']],
+    ['v15','SN22 GKL','Peugeot 208','Car',4.1,1.5,1.2,'M. MacAulay','GN-40148'],
+    ['v16','YX70 TGU','Tesla Model 3','Car',4.7,1.4,1.9,'C. Okafor','GN-40150'],
+    ['v17','SK69 HZA','Iveco Daily – gas cylinders (ADR)','Van',6.2,2.7,4.8,'Skerra Gas & Fuel','GN-40104',['dg']],
+    ['v18','SK15 CDE','Ford Ranger','Car',5.4,1.9,2.2,'N. Gillies','GN-40151'],
+    ['v19','SO20 EWR','DAF LF – island provisions','Lorry',8.2,3.4,10.5,'Island Provisions','GN-40096'],
+    ['v20','SK23 AAB','Hyundai Kona (blue badge)','Car',4.2,1.6,1.5,'S. Fraser','GN-40152',['mob']],
+    ['v21','KS23 PLM','Fiat Ducato campervan','Camper',6.0,2.8,3.5,'T. Nowak','GN-40154'],
+    ['v22','SK66 LPG','Mercedes Sprinter – paint and solvents','Van',5.9,2.6,3.4,'Ellan Decorators','GN-40106',['dg']],
+    ['v23','LR68 JTP','BMW 3 Series Touring','Car',4.7,1.5,1.7,'G. Whitfield','GN-40156'],
+    ['v24','SK64 DNB','Ford Kuga','Car',4.6,1.7,1.8,'L. MacDonald','GN-40158'],
+    ['v25','HN22 UYB','Kia Sportage','Car',4.5,1.7,1.7,'V. Mukherjee','GN-40160'],
+    ['v26','CP21 XRV','Discovery + horsebox','Car + trailer',9.4,2.8,3.9,'I. MacInnes','GN-40162'],
+    ['v27','SK16 PRW','Citroën Berlingo','Car',4.4,1.8,1.6,'B. Macrae','GN-40164'],
+    ['v28','DS69 KLM','Dacia Duster','Car',4.3,1.7,1.4,'O. Stewart','GN-40166'],
+    ['v29','SK72 TTR','Polestar 2','Car',4.6,1.5,2.0,'W. Murray','GN-40168'],
+    ['v30','WF70 BHM','Volvo V90','Car',4.9,1.5,1.8,'Y. Thomson','GN-40170'],
+    ['v31','SK20 FLS','Mazda MX-5','Car',3.9,1.2,1.1,'D. Galbraith','GN-40172',[],true],
+    ['v32','GL19 HJK','Mercedes Vito','Van',5.3,1.9,2.6,'R. Cowan','GN-40174',[],true],
+    ['v33','SK17 BPN','Suzuki Jimny','Car',3.7,1.7,1.1,'A. Rennie','GN-40176',[],true],
+    ['v34','OX21 TSR','Volkswagen California campervan','Camper',5.0,2.0,3.2,'E. Lindqvist','GN-40178',[],true],
+  ];
+  const VEH = RAW.map((r, i) => ({
+    id: r[0], reg: r[1], desc: r[2], type: r[3], len: r[4], h: r[5], wt: r[6],
+    who: r[7], ref: r[8], flags: r[9] || [], standby: !!r[10], q: i + 1,
+  }));
+  const BY_ID = Object.fromEntries(VEH.map(v => [v.id, v]));
+  const START_DECK = [['v01','v02'], ['v03','v04'], ['v05'], ['v06'], ['v07','v08'], ['v09']];
+
+  /* ---------- state ---------- */
+  const KEY = 'gannet-loading-v1';
+  let state = load() || fresh();
+  let ui = { sel: null, selFrom: null, search: '', filter: 'all', newId: null };
+  const history = [];
+
+  function fresh() {
+    const d = new Date(Date.now() + 45 * 60000);
+    d.setSeconds(0, 0); d.setMinutes(Math.ceil(d.getMinutes() / 5) * 5);
+    return { departure: d.getTime(), lanes: START_DECK.map(l => l.slice()), noshow: [], closedAt: null };
+  }
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY));
+      if (s && Array.isArray(s.lanes) && s.lanes.length === LANES.length && s.departure
+          && s.lanes.flat().every(id => BY_ID[id])) return { noshow: [], closedAt: null, ...s };
+    } catch (e) { /* storage unavailable or corrupt – start fresh */ }
+    return null;
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ } }
+  function snap() { return JSON.stringify({ lanes: state.lanes, noshow: state.noshow, closedAt: state.closedAt }); }
+  function commit(mutate) {
+    history.push(snap()); if (history.length > 50) history.shift();
+    mutate(); save();
+  }
+  function undo() {
+    const s = history.pop(); if (!s) return;
+    Object.assign(state, JSON.parse(s)); save();
+    if (ui.sel && !isWaiting(ui.sel) && !onDeck(ui.sel)) ui.sel = null;
+    render('sel'); say('Undone');
+  }
+
+  /* ---------- derived ---------- */
+  const onDeckIds = () => new Set(state.lanes.flat());
+  const onDeck = id => onDeckIds().has(id);
+  const isWaiting = id => !onDeck(id) && !state.noshow.includes(id);
+  const waiting = () => VEH.filter(v => isWaiting(v.id));
+  const laneLen = i => state.lanes[i].reduce((s, id, k) => s + BY_ID[id].len + (k ? GAP : 0), 0);
+  const laneWt = i => state.lanes[i].reduce((s, id) => s + BY_ID[id].wt, 0);
+  const free = i => LANES[i].len - laneLen(i);
+  const totalWt = () => state.lanes.reduce((s, _, i) => s + laneWt(i), 0);
+  const sideWt = side => [0, 1, 2].reduce((s, k) => s + laneWt(side === 'port' ? k : k + 3), 0);
+  const r1 = n => Math.round(n * 10) / 10;
+  const fmt = n => r1(n).toFixed(1);
+
+  function laneProblem(v, i) {
+    const L = LANES[i];
+    if (state.closedAt) return 'Loading closed';
+    if (v.h > L.maxH) return `Too tall – max ${fmt(L.maxH)} m`;
+    if (v.flags.includes('dg') && !L.centre) return 'DG – lanes 3–4 only';
+    const need = v.len + (state.lanes[i].length ? GAP : 0);
+    if (need > free(i) + 1e-9) return `No room – ${fmt(Math.max(0, free(i)))} m free`;
+    if (laneWt(i) + v.wt > L.maxWt) return `Lane limit ${L.maxWt} t`;
+    if (totalWt() + v.wt > DECK_MAX_WT) return `Deck limit ${DECK_MAX_WT} t`;
+    return null;
+  }
+  function suggest(v) {
+    const port = sideWt('port'), stbd = sideWt('stbd');
+    let best = null;
+    LANES.forEach((L, i) => {
+      if (laneProblem(v, i)) return;
+      const need = v.len + (state.lanes[i].length ? GAP : 0);
+      let score = free(i) - need;                       // best fit: leave the least wasted space
+      const heavierSide = port > stbd ? 'port' : 'stbd';
+      const mySide = i < 3 ? 'port' : 'stbd';
+      if (v.wt >= 2.5 && mySide === heavierSide) score += 12;   // put heavy loads on the lighter side
+      if (v.flags.includes('mob') && (i === 0 || i === 5)) score -= 20;
+      if (!best || score < best.score) best = { i, score };
+    });
+    return best ? best.i : null;
+  }
+
+  /* ---------- tiny DOM helper (data is set as text, never as HTML) ---------- */
+  function h(tag, props, ...kids) {
+    const el = document.createElement(tag);
+    for (const [k, v] of Object.entries(props || {})) {
+      if (v == null || v === false) continue;
+      if (k === 'class') el.className = v;
+      else if (k === 'text') el.textContent = v;
+      else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+      else if (k === 'style') el.style.cssText = v;
+      else el.setAttribute(k, v === true ? '' : v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) el.append(kid.nodeType ? kid : document.createTextNode(kid));
+    return el;
+  }
+  const $ = id => document.getElementById(id);
+  const flagChips = v => v.flags.map(f => h('span', { class: 'chip ' + f, text: FLAGS[f].label, title: FLAGS[f].long }));
+
+  /* ---------- toast / announcements ---------- */
+  let toastTimer;
+  function say(msg, opts = {}) {
+    $('toastMsg').textContent = msg;
+    $('toastUndo').hidden = !opts.undo;
+    $('toast').classList.toggle('is-error', !!opts.error);
+    $('toast').classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => $('toast').classList.remove('show'), opts.undo ? 9000 : 4500);
+  }
+  $('toastUndo').addEventListener('click', () => { undo(); });
+
+  /* ---------- actions ---------- */
+  function select(id, from) { ui.sel = id; ui.selFrom = from; render('sel'); }
+  function deselect() { ui.sel = null; ui.selFrom = null; render('qlist'); }
+
+  function loadTo(i) {
+    const v = BY_ID[ui.sel];
+    if (!v || ui.selFrom !== 'queue') { say('Pick a vehicle from the waiting list first', { error: true }); return; }
+    const why = laneProblem(v, i);
+    if (why) { say(`Lane ${i + 1}: ${why}`, { error: true }); return; }
+    const next = waiting().find(w => w.q > v.q && w.id !== v.id) || waiting().find(w => w.id !== v.id);
+    commit(() => state.lanes[i].push(v.id));
+    ui.newId = v.id;
+    ui.sel = next ? next.id : null; ui.selFrom = next ? 'queue' : null;
+    render('sel');
+    say(`${v.reg} loaded in lane ${i + 1}`, { undo: true });
+  }
+  function takeOff(id) {
+    const i = state.lanes.findIndex(l => l.includes(id));
+    if (i < 0) return;
+    const lane = state.lanes[i];
+    if (lane[lane.length - 1] !== id) { say(`${BY_ID[lane[lane.length - 1]].reg} is behind it – take that off first`, { error: true }); return; }
+    commit(() => lane.pop());
+    ui.sel = id; ui.selFrom = 'queue';
+    render('sel'); say(`${BY_ID[id].reg} taken off lane ${i + 1}`, { undo: true });
+  }
+  function markNoShow(id) {
+    const next = waiting().find(w => w.q > BY_ID[id].q) || waiting().find(w => w.id !== id);
+    commit(() => state.noshow.push(id));
+    ui.sel = next ? next.id : null; ui.selFrom = next ? 'queue' : null;
+    render('sel'); say(`${BY_ID[id].reg} marked as no-show`, { undo: true });
+  }
+  function returnNoShow(id) {
+    commit(() => { state.noshow = state.noshow.filter(x => x !== id); });
+    ui.sel = id; ui.selFrom = 'queue';
+    render('sel'); say(`${BY_ID[id].reg} back in the waiting list`);
+  }
+
+  /* ---------- render: header ---------- */
+  function renderTop() {
+    const used = state.lanes.reduce((s, _, i) => s + laneLen(i), 0);
+    const cap = LANES.reduce((s, L) => s + L.len, 0);
+    const aboard = state.lanes.flat().length;
+    const wt = totalWt();
+    const port = sideWt('port'), stbd = sideWt('stbd'), diff = port - stbd;
+    const heavy = Math.abs(diff) > BAL_LIMIT;
+
+    const meter = (frac, cls) => h('div', { class: 'meter ' + (cls || ''), 'aria-hidden': 'true' }, h('i', { style: `transform:scaleX(${Math.min(1, Math.max(0.001, frac))})` }));
+    const stat = (label, value, small, frac, cls) => h('div', { class: 'stat' },
+      h('div', { class: 'stat-label', text: label }),
+      h('div', { class: 'stat-value num' }, value, ' ', h('small', { text: small })),
+      meter(frac, cls));
+
+    const wtFrac = wt / DECK_MAX_WT;
+    const balPos = 50 - Math.max(-1, Math.min(1, diff / (BAL_LIMIT * 2))) * 50; // port on the left
+    const balMsg = heavy
+      ? `Heavy to ${diff > 0 ? 'port' : 'starboard'} by ${fmt(Math.abs(diff))} t – next heavy load to ${diff > 0 ? 'starboard' : 'port'}`
+      : `Balanced – ${fmt(Math.abs(diff))} t difference`;
+
+    $('stats').replaceChildren(
+      stat('On deck', aboard, `of ${VEH.length} booked`, aboard / VEH.length),
+      stat('Lane length used', Math.round(used), `of ${cap} m`, used / cap, used / cap > 0.97 ? 'is-warn' : ''),
+      stat('Deck weight', fmt(wt), `of ${DECK_MAX_WT} t`, wtFrac, wtFrac > 0.95 ? 'is-over' : wtFrac > 0.85 ? 'is-warn' : ''),
+      h('div', { class: 'stat balance' },
+        h('div', { class: 'stat-label', text: 'Port / starboard balance' }),
+        h('div', { class: 'stat-value num' }, fmt(port), ' ', h('small', { text: 'port' }), ' · ', fmt(stbd), ' ', h('small', { text: 'stbd' })),
+        h('div', { class: 'bal-track', role: 'img', 'aria-label': balMsg }, h('div', { class: 'bal-ok' }), h('div', { class: 'bal-mark' + (heavy ? ' is-warn' : ''), style: `left:${balPos}%` })),
+        h('div', { class: 'bal-msg' + (heavy ? ' is-warn' : ''), text: balMsg })));
+
+    $('btnClose').disabled = !!state.closedAt;
+    $('btnClose').textContent = state.closedAt ? 'Loading closed' : 'Close loading';
+  }
+
+  function renderClock() {
+    const now = Date.now();
+    const mins = Math.round((state.departure - now) / 60000);
+    const t = ts => new Date(ts).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    const closeAt = state.departure - CLOSE_BEFORE_MIN * 60000;
+    const cm = Math.round((closeAt - now) / 60000);
+    let sub, late = false;
+    if (state.closedAt) sub = `Loading closed at ${t(state.closedAt)}`;
+    else if (cm >= 0) sub = `Loading closes ${t(closeAt)} (in ${cm} min)`;
+    else { sub = `Past closing time (${t(closeAt)}) by ${-cm} min`; late = true; }
+    $('clock').replaceChildren(
+      h('div', { class: 'big num', text: `Cast-off ${t(state.departure)}` }),
+      h('div', { class: 'sub num' + (late ? ' is-late' : ''), text: sub + (mins < 0 ? ' · departure time passed' : '') }));
+  }
+
+  /* ---------- render: queue ---------- */
+  const FILTERS = [
+    ['all', 'All', () => true],
+    ['cars', 'Cars', v => v.type === 'Car' || v.type === 'Car + trailer'],
+    ['big', 'Vans & heavy', v => !(v.type === 'Car' || v.type === 'Car + trailer')],
+    ['flag', 'Flagged', v => v.flags.length > 0 || v.standby],
+  ];
+  function matches(v) {
+    const f = FILTERS.find(x => x[0] === ui.filter)[2];
+    if (!f(v)) return false;
+    const q = ui.search.trim().toLowerCase().replace(/\s+/g, '');
+    if (!q) return true;
+    return (v.reg + v.who + v.desc + v.ref).toLowerCase().replace(/\s+/g, '').includes(q);
+  }
+  function renderFilters() {
+    const w = waiting();
+    $('filters').replaceChildren(...FILTERS.map(([key, label, fn]) =>
+      h('label', {},
+        h('input', { type: 'radio', name: 'flt', value: key, checked: ui.filter === key, 'data-key': 'flt-' + key,
+          onchange: () => { ui.filter = key; render('qlist'); } }),
+        h('span', { text: `${label} ${w.filter(fn).length}` }))));
+    // `checked` is a property, not an attribute
+    [...$('filters').querySelectorAll('input')].forEach(inp => { inp.checked = inp.value === ui.filter; });
+  }
+  function renderQueue() {
+    renderFilters();
+    const w = waiting(), shown = w.filter(matches);
+    $('qcount').textContent = shown.length === w.length ? `${w.length} vehicles` : `${shown.length} of ${w.length}`;
+    $('qclear').hidden = !ui.search;
+    const list = $('qlist');
+    if (!w.length) {
+      list.replaceChildren(h('li', { class: 'empty' }, h('strong', { text: 'Everyone is aboard' }), h('span', { text: state.closedAt ? 'Loading is closed.' : 'Close loading when the deck is checked.' })));
+    } else if (!shown.length) {
+      list.replaceChildren(h('li', { class: 'empty' },
+        h('strong', { text: 'No vehicle matches' }),
+        h('span', { text: ui.search ? `Nothing waiting for “${ui.search.trim()}” in this filter.` : 'Nothing waiting in this filter.' }),
+        h('button', { class: 'btn', type: 'button', text: 'Show all vehicles', onclick: () => { ui.search = ''; ui.filter = 'all'; $('q').value = ''; render('qlist'); } })));
+    } else {
+      list.replaceChildren(...shown.map(v => {
+        const sel = ui.sel === v.id && ui.selFrom === 'queue';
+        return h('li', { class: 'qitem' },
+          h('button', { class: 'qbtn', type: 'button', 'aria-pressed': sel ? 'true' : 'false', 'data-key': 'q-' + v.id, onclick: () => select(v.id, 'queue') },
+            h('span', { class: 'qnum num', text: '#' + String(v.q).padStart(2, '0') }),
+            h('span', { class: 'qmain' },
+              h('span', { class: 'qreg', text: v.reg }),
+              h('span', { class: 'qdesc', text: `${v.desc} · ${v.who}`, title: `${v.desc} · ${v.who}` })),
+            h('span', { class: 'qspec num' }, h('b', { text: fmt(v.len) + ' m' }), h('br'), `${fmt(v.wt)} t · h ${fmt(v.h)}`),
+            (v.flags.length || v.standby) && h('span', { class: 'qflags' }, v.standby && h('span', { class: 'chip standby', text: 'Standby' }), flagChips(v), v.type !== 'Car' && h('span', { class: 'chip', text: v.type }))));
+      }));
+      const active = list.querySelector('[aria-pressed="true"]');
+      if (active && ui.scrollSel) { active.scrollIntoView({ block: 'nearest' }); }
+    }
+    const ns = state.noshow;
+    $('noshows').hidden = !ns.length;
+    $('nsSummary').textContent = `No-shows (${ns.length})`;
+    $('nsList').replaceChildren(...ns.map(id => h('li', {},
+      h('span', {}, h('b', { text: BY_ID[id].reg }), ` · ${BY_ID[id].who}`),
+      h('button', { class: 'btn', type: 'button', text: 'Back to list', 'data-key': 'ns-' + id, onclick: () => returnNoShow(id) }))));
+  }
+
+  /* ---------- render: selection bar ---------- */
+  function renderSel() {
+    const bar = $('selbar'), v = ui.sel && BY_ID[ui.sel];
+    bar.classList.toggle('is-active', !!v);
+    if (!v) {
+      const w = waiting();
+      bar.replaceChildren(
+        h('div', {},
+          h('h2', { text: w.length ? 'Choose the next vehicle' : 'Deck is fully loaded' }),
+          h('p', { class: 'sel-hint', text: w.length ? 'Tap a vehicle in the waiting list, then tap a lane to load it. Tap a vehicle on the deck to see it or take it off.' : 'Nothing is waiting. Check the deck, then close loading.' })));
+      return;
+    }
+    const fromQueue = ui.selFrom === 'queue';
+    const lane = state.lanes.findIndex(l => l.includes(v.id));
+    const info = h('div', {},
+      h('div', { class: 'sel-sub num', text: fromQueue ? `Check-in #${String(v.q).padStart(2, '0')} · ${v.ref}` : `On deck · lane ${lane + 1}, position ${state.lanes[lane].indexOf(v.id) + 1} from the bow` }),
+      h('div', { class: 'sel-reg', text: v.reg }),
+      h('div', { class: 'sel-sub', text: `${v.desc} · ${v.who}` }),
+      h('div', { class: 'sel-specs num' }, h('span', {}, h('b', { text: fmt(v.len) }), ' m long'), h('span', {}, h('b', { text: fmt(v.wt) }), ' t'), h('span', {}, h('b', { text: fmt(v.h) }), ' m high')),
+      (v.flags.length || v.standby) && h('div', { class: 'flags' }, v.standby && h('span', { class: 'chip standby', text: 'Standby – load only if there is room' }), v.flags.map(f => h('span', { class: 'chip ' + f, text: FLAGS[f].long }))));
+    const actions = h('div', { class: 'sel-actions' });
+    if (fromQueue) {
+      const s = suggest(v);
+      actions.append(
+        h('button', { class: 'btn btn-primary', type: 'button', 'data-key': 'act-load', disabled: s == null, text: s == null ? 'No lane fits' : `Load in lane ${s + 1}`, onclick: () => loadTo(s) }),
+        h('button', { class: 'btn', type: 'button', text: 'No-show', 'data-key': 'act-ns', onclick: () => markNoShow(v.id) }),
+        h('button', { class: 'btn', type: 'button', text: 'Clear', 'data-key': 'act-clear', onclick: deselect }));
+      info.append(h('p', { class: 'sel-hint' + (s == null ? ' is-warn' : ''), text: s == null
+        ? (state.closedAt ? 'Loading is closed.' : 'No lane has room for this vehicle. Hold it for standby or mark it as a no-show.')
+        : `Suggested lane ${s + 1} – best fit for length${v.wt >= 2.5 ? ' and weight balance' : ''}. Or tap another lane marked “Load here”.` }));
+    } else {
+      const l = state.lanes[lane], last = l[l.length - 1] === v.id;
+      actions.append(
+        h('button', { class: 'btn btn-danger', type: 'button', 'data-key': 'act-off', disabled: !last || !!state.closedAt, text: 'Take off deck', onclick: () => takeOff(v.id) }),
+        h('button', { class: 'btn', type: 'button', text: 'Close', 'data-key': 'act-clear', onclick: deselect }));
+      if (!last) info.append(h('p', { class: 'sel-hint is-warn', text: `${BY_ID[l[l.length - 1]].reg} is parked behind it and must come off first.` }));
+    }
+    bar.replaceChildren(info, actions);
+  }
+
+  /* ---------- render: deck ---------- */
+  function renderDeck() {
+    const v = ui.sel && ui.selFrom === 'queue' ? BY_ID[ui.sel] : null;
+    const sug = v ? suggest(v) : null;
+    $('deck').replaceChildren(...LANES.map((L, i) => {
+      const why = v ? laneProblem(v, i) : null;
+      const cls = 'lane' + (v ? (why ? ' is-blocked' : (i === sug ? ' is-suggested' : ' is-ok')) : '');
+      const f = free(i);
+      const tag = v ? (why ? why : (i === sug ? 'Suggested – load here' : 'Load here')) : (L.note || '');
+      const target = () => (v ? loadTo(i) : null);
+      const head = h('button', { class: 'lane-head', type: 'button', 'data-key': 'lane-' + i, 'aria-disabled': v && why ? 'true' : null,
+        'aria-label': `Lane ${L.n}, ${fmt(Math.max(0, f))} metres free, ${fmt(laneWt(i))} tonnes${v ? '. ' + tag : ''}`, onclick: target },
+        h('b', { text: `Lane ${L.n}` }),
+        h('span', { class: 'lm num', text: `${fmt(Math.max(0, f))} m free · ${fmt(laneWt(i))} t` }),
+        h('span', { class: 'free-m num', text: `${Math.round(Math.max(0, f))} m` }),
+        tag && h('span', { class: 'tag', text: tag }),
+        !v && h('span', { class: 'lm', text: `Max ${fmt(L.maxH)} m high${L.centre ? ' · DG ok' : ''}` }));
+      const track = h('div', { class: 'track', style: `--lane-len:${L.len}` },
+        state.lanes[i].map((id, k) => {
+          const x = BY_ID[id];
+          const pressed = ui.sel === id && ui.selFrom === 'deck';
+          return h('button', {
+            class: 'veh' + (x.wt > 3 ? ' heavy' : '') + (x.flags.includes('dg') ? ' has-dg' : '') + (x.flags.includes('mob') ? ' has-mob' : '') + (ui.newId === id ? ' is-new' : ''),
+            type: 'button', style: `--len:${x.len};--lane-len:${L.len}`, 'aria-pressed': pressed ? 'true' : 'false', 'data-key': 'veh-' + id,
+            title: `${x.reg} · ${x.desc} · ${fmt(x.len)} m · ${fmt(x.wt)} t`,
+            'aria-label': `${x.reg}, ${x.desc}, ${fmt(x.len)} metres, ${fmt(x.wt)} tonnes, lane ${L.n} position ${k + 1}`,
+            onclick: () => select(id, 'deck') },
+            h('span', { class: 'reg', text: x.reg }), h('span', { class: 'sub num', text: `${fmt(x.wt)} t` }));
+        }),
+        h('button', { class: 'free', type: 'button', style: `--lane-len:${L.len}`, tabindex: v && !why ? '0' : '-1', 'aria-hidden': 'true', onclick: target,
+          text: v && !why && f > 3 ? (i === sug ? 'Load here ✓' : 'Load here') : '' }));
+      return h('div', { class: cls }, head, h('div', { class: 'track-wrap' }, track));
+    }));
+    ui.newId = null;
+    $('deckNote').textContent = 'Lanes run port to starboard';
+  }
+
+  function renderBanner() {
+    const b = $('closedBanner');
+    b.hidden = !state.closedAt;
+    if (!state.closedAt) return;
+    const t = new Date(state.closedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    b.replaceChildren(
+      h('span', {}, h('b', { text: `Loading closed at ${t}. ` }), `${state.lanes.flat().length} vehicles aboard, ${fmt(totalWt())} t, ${waiting().length} left behind, ${state.noshow.length} no-show.`),
+      h('button', { class: 'btn', type: 'button', text: 'Print load list', onclick: () => window.print() }),
+      h('button', { class: 'btn', type: 'button', text: 'Reopen loading', onclick: () => { commit(() => { state.closedAt = null; }); render('all'); say('Loading reopened'); } }));
+  }
+
+  function renderPrint() {
+    const t = ts => new Date(ts).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    const rows = [];
+    state.lanes.forEach((l, i) => l.forEach((id, k) => {
+      const x = BY_ID[id];
+      rows.push(h('tr', {}, h('td', { text: `${i + 1}` }), h('td', { text: `${k + 1}` }), h('td', { text: x.reg }), h('td', { text: x.desc }), h('td', { text: fmt(x.len) }), h('td', { text: fmt(x.wt) }), h('td', { text: x.who }), h('td', { text: x.flags.map(f => FLAGS[f].label).join(', ') })));
+    }));
+    const left = waiting();
+    $('print').replaceChildren(
+      h('h1', { text: 'MV Gannet – load list' }),
+      h('div', { text: `Skerra → Port Ellan · cast-off ${t(state.departure)} · ${state.lanes.flat().length} vehicles · ${fmt(totalWt())} t · port ${fmt(sideWt('port'))} t / starboard ${fmt(sideWt('stbd'))} t` }),
+      h('table', {}, h('thead', {}, h('tr', {}, ['Lane', 'Pos', 'Reg', 'Vehicle', 'Length m', 'Weight t', 'Driver', 'Flags'].map(c => h('th', { text: c })))), h('tbody', {}, rows)),
+      h('h2', { text: `Left behind (${left.length})` }),
+      h('div', { text: left.map(x => `${x.reg} (${x.ref})`).join(', ') || 'None' }),
+      h('h2', { text: `No-shows (${state.noshow.length})` }),
+      h('div', { text: state.noshow.map(id => `${BY_ID[id].reg} (${BY_ID[id].ref})`).join(', ') || 'None' }));
+  }
+
+  /* ---------- render driver (keeps keyboard focus across re-renders) ---------- */
+  function render(scope) {
+    const key = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.key : null;
+    ui.scrollSel = scope === 'sel';
+    renderTop(); renderQueue(); renderSel(); renderDeck(); renderBanner(); renderClock(); renderPrint();
+    if (key) {
+      const el = document.querySelector(`[data-key="${key}"]`) || (key.startsWith('q-') || key.startsWith('act-') ? document.querySelector('[data-key="act-load"]') : null);
+      if (el && !el.disabled) el.focus({ preventScroll: true });
+    }
+  }
+
+  /* ---------- wiring ---------- */
+  $('q').addEventListener('input', e => { ui.search = e.target.value; render('qlist'); });
+  $('qclear').addEventListener('click', () => { ui.search = ''; $('q').value = ''; render('qlist'); $('q').focus(); });
+
+  $('btnClose').addEventListener('click', () => {
+    const left = waiting();
+    $('closeBody').textContent = left.length
+      ? `${state.lanes.flat().length} vehicles are aboard. ${left.length} still waiting will be left behind:`
+      : `All ${state.lanes.flat().length} checked-in vehicles are aboard.`;
+    $('closeList').replaceChildren(...left.map(x => h('li', {}, h('b', { text: x.reg }), ` · ${x.desc}${x.standby ? ' (standby)' : ''}`)));
+    $('closeList').hidden = !left.length;
+    $('btnConfirmClose').textContent = left.length ? `Close loading, leave ${left.length} behind` : 'Close loading';
+    $('closeDlg').showModal();
+  });
+  $('closeDlg').addEventListener('close', () => {
+    if ($('closeDlg').returnValue === 'close') {
+      commit(() => { state.closedAt = Date.now(); });
+      ui.sel = null; ui.selFrom = null; render('all'); say('Loading closed', { undo: true });
+    }
+    $('closeDlg').returnValue = '';
+  });
+  $('btnPrint').addEventListener('click', () => window.print());
+  $('btnReset').addEventListener('click', () => {
+    if (!confirm('Reset to the sample sailing? Everything loaded so far on this screen will be cleared.')) return;
+    state = fresh(); history.length = 0; ui.sel = null; ui.selFrom = null; save(); render('all'); say('Sample sailing reset');
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && ui.sel && !$('closeDlg').open) deselect(); });
+
+  // start with the first waiting vehicle selected so the crew can load straight away
+  const first = waiting()[0]; if (first && !state.closedAt) { ui.sel = first.id; ui.selFrom = 'queue'; }
+  render('all');
+  setInterval(renderClock, 30000);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MV Gannet loading · Skerra Ferry Company</title>
+<style>
+:root {
+  /* Night (default): sea-navy ramp, gannet-head yellow accent */
+  --bg: oklch(0.19 0.035 250);
+  --surface: oklch(0.24 0.04 250);
+  --surface-2: oklch(0.30 0.045 250);
+  --lane: oklch(0.155 0.03 250);
+  --border: oklch(0.40 0.05 250);
+  --text: oklch(0.97 0.01 240);
+  --text-2: oklch(0.84 0.03 245);
+  --text-3: oklch(0.72 0.035 245);
+  --accent: oklch(0.86 0.16 92);
+  --on-accent: oklch(0.2 0.04 250);
+  --select: oklch(0.86 0.16 92);
+  --ok: oklch(0.80 0.13 165);
+  --warn: oklch(0.82 0.15 65);
+  --bad: oklch(0.76 0.17 25);
+  --veh: oklch(0.36 0.07 205);
+  --veh-line: oklch(0.68 0.09 205);
+  --tick: oklch(1 0 0 / 0.07);
+  --scrim: oklch(0 0 0 / 0.55);
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --m: clamp(12px, calc((100dvh - 400px) / 42), 17px); /* px per metre of deck */
+}
+:root[data-theme="day"] {
+  --bg: oklch(0.96 0.01 240);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.93 0.015 240);
+  --lane: oklch(0.91 0.015 240);
+  --border: oklch(0.72 0.03 245);
+  --text: oklch(0.2 0.04 250);
+  --text-2: oklch(0.34 0.04 250);
+  --text-3: oklch(0.44 0.04 250);
+  --accent: oklch(0.86 0.16 92);
+  --select: oklch(0.32 0.12 255);
+  --ok: oklch(0.42 0.11 165);
+  --warn: oklch(0.48 0.14 55);
+  --bad: oklch(0.48 0.19 25);
+  --veh: oklch(0.88 0.05 205);
+  --veh-line: oklch(0.45 0.09 205);
+  --tick: oklch(0 0 0 / 0.09);
+  --scrim: oklch(0.2 0.04 250 / 0.5);
+}
+* { box-sizing: border-box; }
+html { color-scheme: dark; }
+html[data-theme="day"] { color-scheme: light; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 17px/1.45 var(--font);
+  font-variant-numeric: tabular-nums;
+  -webkit-tap-highlight-color: transparent;
+  height: 100dvh; display: grid; grid-template-rows: auto 1fr;
+  overflow-x: clip;
+}
+button, input { font: inherit; color: inherit; touch-action: manipulation; }
+button { cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+h1, h2 { text-wrap: balance; }
+p { text-wrap: pretty; }
+:focus-visible { outline: 3px solid var(--select); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Buttons */
+.btn {
+  min-height: 48px; padding: 0 var(--s5); border-radius: var(--r-md);
+  border: 2px solid var(--border); background: var(--surface-2);
+  font-weight: 650; display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  transition: transform 120ms var(--ease-out), background-color 150ms;
+}
+.btn:active { transform: scale(0.97); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.danger { border-color: var(--bad); color: var(--bad); background: transparent; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.block { width: 100%; }
+@media (hover: hover) { .btn:not(:disabled):hover { background: color-mix(in oklch, var(--surface-2), var(--text) 10%); } .btn.primary:not(:disabled):hover { background: color-mix(in oklch, var(--accent), white 18%); } }
+
+/* Header */
+.top {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3) var(--s6);
+  padding: var(--s3) var(--s4); padding-top: max(var(--s3), env(safe-area-inset-top));
+  padding-left: max(var(--s4), env(safe-area-inset-left)); padding-right: max(var(--s4), env(safe-area-inset-right));
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+.brand { display: grid; line-height: 1.15; }
+.brand b { font-size: 24px; letter-spacing: -0.02em; }
+.brand span { color: var(--text-3); font-size: 14px; }
+.sailing { display: grid; line-height: 1.2; }
+.sailing b { font-size: 20px; }
+.sailing span { color: var(--text-2); font-size: 15px; }
+.clock { display: grid; text-align: right; line-height: 1.15; margin-left: auto; }
+.clock b { font-size: 24px; }
+.clock span { color: var(--text-2); font-size: 14px; }
+.top-actions { display: flex; gap: var(--s2); }
+.statebar { grid-column: 1 / -1; }
+.banner {
+  background: var(--accent); color: var(--on-accent); font-weight: 650;
+  padding: var(--s3) var(--s4); display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; justify-content: space-between;
+}
+.banner .btn { min-height: 40px; background: transparent; border-color: var(--on-accent); color: var(--on-accent); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: minmax(280px, 330px) minmax(0, 1fr) minmax(260px, 310px); min-height: 0; }
+.pane { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.pane + .pane { border-left: 1px solid var(--border); }
+.pane-queue { display: flex; flex-direction: column; background: var(--surface); }
+.pane-side { background: var(--surface); padding: var(--s4); display: grid; gap: var(--s5); align-content: start; }
+.pane-deck { padding: var(--s4); background: var(--bg); }
+.mobnav { display: none; }
+
+/* Queue */
+.q-head { padding: var(--s3) var(--s3) 0; display: grid; gap: var(--s3); position: sticky; top: 0; background: var(--surface); z-index: 2; padding-bottom: var(--s3); border-bottom: 1px solid var(--border); }
+.field label { display: block; font-size: 14px; color: var(--text-2); margin-bottom: var(--s1); }
+.field input { width: 100%; min-height: 48px; padding: 0 var(--s3); border-radius: var(--r-md); border: 2px solid var(--border); background: var(--bg); font-size: 18px; }
+.field input:focus-visible { outline-offset: 0; border-color: var(--select); }
+.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s1); background: var(--bg); padding: var(--s1); border-radius: var(--r-md); }
+.tab { min-height: 52px; border: 0; border-radius: var(--r-sm); background: transparent; color: var(--text-2); display: grid; place-items: center; line-height: 1.15; padding: var(--s1); }
+.tab b { font-size: 20px; color: var(--text); }
+.tab span { font-size: 14px; }
+.tab[aria-pressed="true"] { background: var(--surface-2); box-shadow: inset 0 0 0 2px var(--border); color: var(--text); }
+.tab[aria-pressed="true"] span { font-weight: 650; }
+.list { list-style: none; margin: 0; padding: var(--s2) var(--s3) var(--s6); display: grid; gap: var(--s2); }
+.row {
+  width: 100%; text-align: left; min-height: 68px; display: grid; grid-template-columns: 1fr auto; gap: var(--s1) var(--s3); align-items: center;
+  padding: var(--s2) var(--s3); border-radius: var(--r-md); border: 2px solid var(--border); background: var(--bg);
+}
+.row[aria-pressed="true"] { border-color: var(--select); background: var(--surface-2); box-shadow: 0 0 0 1px var(--select); }
+.row .reg { font-weight: 750; font-size: 20px; letter-spacing: 0.02em; }
+.row .sub { color: var(--text-2); font-size: 14px; grid-column: 1; overflow-wrap: anywhere; }
+.row .meta { grid-column: 2; grid-row: 1 / span 2; text-align: right; display: grid; gap: var(--s1); justify-items: end; font-size: 14px; color: var(--text-2); }
+.row.noshow .reg { text-decoration: line-through; color: var(--text-3); }
+.flags { display: flex; flex-wrap: wrap; gap: var(--s1); }
+.flag { font-size: 12px; font-weight: 750; letter-spacing: 0.03em; padding: 1px 6px; border-radius: 4px; border: 1.5px solid currentColor; line-height: 1.4; white-space: nowrap; }
+.flag.dg { color: var(--bad); }
+.flag.reefer { color: oklch(0.78 0.1 225); }
+.flag.access { color: var(--warn); }
+.flag.livestock { color: var(--ok); }
+:root[data-theme="day"] .flag.reefer { color: oklch(0.42 0.11 235); }
+.empty { padding: var(--s6) var(--s4); text-align: center; color: var(--text-2); display: grid; gap: var(--s3); justify-items: center; }
+.empty b { color: var(--text); font-size: 18px; }
+
+/* Deck */
+.strip { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); min-height: 64px; padding: var(--s3) var(--s4); background: var(--surface); border: 2px solid var(--border); border-radius: var(--r-md); margin-bottom: var(--s4); }
+.strip.live { border-color: var(--select); }
+.strip .reg { font-size: 22px; font-weight: 750; letter-spacing: 0.02em; }
+.strip p { flex: 1 1 200px; color: var(--text-2); }
+.strip .btn { min-height: 44px; }
+.decktabs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s1); margin-bottom: var(--s4); background: var(--surface); padding: var(--s1); border-radius: var(--r-md); }
+.dtab { min-height: 52px; border: 0; border-radius: var(--r-sm); background: transparent; font-weight: 650; color: var(--text-2); line-height: 1.2; }
+.dtab small { display: block; font-weight: 400; font-size: 13px; }
+.dtab[aria-pressed="true"] { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 2px var(--border); }
+.deck { display: grid; grid-template-columns: 32px 1fr; gap: var(--s2); max-width: 760px; margin: 0 auto; }
+.ruler { position: relative; margin-top: 80px; font-size: 12px; color: var(--text-3); }
+.ruler i { position: absolute; right: 0; font-style: normal; transform: translateY(-50%); }
+.hull { min-width: 0; }
+.cap { text-align: center; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; color: var(--text-3); text-transform: uppercase; padding: var(--s1) 0; }
+.lanes { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--s2); align-items: start; }
+.lane-h { height: 72px; padding: var(--s1) var(--s2); background: var(--surface); border-radius: var(--r-md) var(--r-md) 0 0; border: 1px solid var(--border); border-bottom: 0; display: grid; align-content: center; line-height: 1.2; font-size: 13px; color: var(--text-2); }
+.lane-h b { font-size: 22px; color: var(--text); }
+.lane-h .why { font-weight: 700; color: var(--bad); }
+.lane-h .sug { font-weight: 700; color: var(--on-accent); background: var(--accent); border-radius: 4px; padding: 0 6px; justify-self: start; }
+.lane-h.ok { border-color: var(--select); }
+.lane {
+  position: relative; height: calc(var(--m) * var(--len)); background: var(--lane);
+  border: 1px solid var(--border); border-radius: 0 0 var(--r-sm) var(--r-sm);
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--m) * 10 - 1px), var(--tick) calc(var(--m) * 10 - 1px), var(--tick) calc(var(--m) * 10));
+}
+.lane.ok { border-color: var(--select); }
+.lane.dim { opacity: 0.55; }
+.veh {
+  position: absolute; left: 3px; right: 3px; top: calc(var(--m) * var(--off)); height: calc(var(--m) * var(--vl));
+  border-radius: var(--r-sm); border: 2px solid var(--veh-line); background: var(--veh);
+  padding: 0 var(--s1); display: grid; align-content: center; justify-items: center; text-align: center; line-height: 1.15; overflow: hidden;
+  transition: box-shadow 120ms;
+}
+.veh .reg { font-weight: 750; font-size: 14px; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.veh .sm { font-size: 12px; color: var(--text-2); }
+.veh.dgb { background-image: repeating-linear-gradient(135deg, transparent 0 8px, oklch(0.76 0.17 25 / 0.35) 8px 16px); border-color: var(--bad); }
+.veh[aria-pressed="true"] { border-color: var(--select); box-shadow: 0 0 0 3px var(--select); z-index: 1; }
+.ghost {
+  position: absolute; left: 3px; right: 3px; top: calc(var(--m) * var(--off)); height: calc(var(--m) * var(--vl));
+  border: 3px dashed var(--select); border-radius: var(--r-sm); background: color-mix(in oklch, var(--select), transparent 86%);
+  font-weight: 700; font-size: 14px; display: grid; place-items: center; text-align: center; line-height: 1.1; padding: 0;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse { 50% { background: color-mix(in oklch, var(--select), transparent 70%); } }
+.ghost:active { transform: scale(0.97); }
+
+/* Side */
+.card { display: grid; gap: var(--s3); }
+.card h2 { font-size: 14px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.06em; }
+.sel { background: var(--bg); border: 2px solid var(--border); border-radius: var(--r-lg); padding: var(--s4); display: grid; gap: var(--s3); }
+.sel.live { border-color: var(--select); }
+.sel .reg { font-size: 30px; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; overflow-wrap: anywhere; }
+.kv { display: grid; grid-template-columns: auto 1fr; gap: var(--s1) var(--s4); margin: 0; }
+.kv dt { color: var(--text-2); }
+.kv dd { margin: 0; text-align: right; font-weight: 650; }
+.notes { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--s2); font-size: 15px; color: var(--text-2); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s2); text-align: center; }
+.stats div { background: var(--bg); border-radius: var(--r-md); padding: var(--s2) var(--s1); display: grid; line-height: 1.15; }
+.stats b { font-size: 28px; }
+.stats span { font-size: 13px; color: var(--text-2); }
+.bar { height: 10px; border-radius: 5px; background: var(--bg); overflow: hidden; border: 1px solid var(--border); }
+.bar i { display: block; height: 100%; background: var(--ok); transition: width 250ms var(--ease-out); }
+.small { font-size: 14px; color: var(--text-2); }
+.trim { position: relative; height: 14px; border-radius: 7px; background: var(--bg); border: 1px solid var(--border); }
+.trim::before { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; background: var(--text-3); }
+.trim i { position: absolute; top: -4px; width: 8px; height: 20px; margin-left: -4px; border-radius: 3px; background: var(--ok); transition: left 250ms var(--ease-out); }
+.trim.warn i { background: var(--warn); } .trim.bad i { background: var(--bad); }
+.split { display: flex; justify-content: space-between; font-size: 14px; color: var(--text-2); }
+.alerts { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s2); }
+.alerts li { padding: var(--s2) var(--s3); border-left: 5px solid var(--ok); background: var(--bg); border-radius: 0 var(--r-sm) var(--r-sm) 0; font-size: 15px; }
+.alerts li b { margin-right: var(--s1); }
+.alerts li.warn { border-color: var(--warn); } .alerts li.warn b { color: var(--warn); }
+.alerts li.bad { border-color: var(--bad); } .alerts li.bad b { color: var(--bad); }
+.alerts li.ok b { color: var(--ok); }
+.linkbtn { background: none; border: 0; color: var(--text-2); text-decoration: underline; min-height: 44px; justify-self: start; padding: 0; }
+
+/* Toast + dialog */
+.toast { position: fixed; left: 50%; bottom: max(var(--s4), env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 20; display: flex; align-items: center; gap: var(--s4); background: var(--text); color: var(--bg); padding: var(--s2) var(--s2) var(--s2) var(--s5); border-radius: var(--r-lg); max-width: calc(100vw - 32px); box-shadow: 0 8px 30px var(--scrim); animation: in 200ms var(--ease-out); }
+.toast[hidden] { display: none; }
+.toast .btn { min-height: 44px; background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+@keyframes in { from { opacity: 0; transform: translateX(-50%) scale(0.95); } }
+dialog { border: 2px solid var(--border); border-radius: var(--r-lg); background: var(--surface); color: var(--text); padding: var(--s6); width: min(480px, calc(100vw - 32px)); }
+dialog::backdrop { background: var(--scrim); }
+dialog h2 { font-size: 22px; margin-bottom: var(--s3); }
+dialog .kv { margin: var(--s4) 0; }
+dialog .actions { display: flex; gap: var(--s3); justify-content: flex-end; flex-wrap: wrap; margin-top: var(--s5); }
+
+/* Phones and small tablets: one pane at a time */
+@media (max-width: 959px) {
+  body { height: auto; min-height: 100dvh; display: block; padding-bottom: 72px; }
+  .layout { display: block; }
+  .pane { overflow: visible; }
+  .pane + .pane { border-left: 0; }
+  .layout[data-pane="queue"] .pane-deck, .layout[data-pane="queue"] .pane-side,
+  .layout[data-pane="deck"] .pane-queue, .layout[data-pane="deck"] .pane-side,
+  .layout[data-pane="side"] .pane-queue, .layout[data-pane="side"] .pane-deck { display: none; }
+  .top { position: sticky; top: 0; z-index: 5; }
+  .clock { margin-left: 0; text-align: left; }
+  .top-actions { margin-left: auto; }
+  .q-head { top: 0; position: static; }
+  .mobnav { display: grid; grid-template-columns: repeat(3, 1fr); position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: var(--surface); border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); }
+  .mobnav button { min-height: 64px; border: 0; background: transparent; color: var(--text-2); font-weight: 650; font-size: 16px; }
+  .mobnav button[aria-pressed="true"] { color: var(--text); box-shadow: inset 0 4px 0 var(--accent); background: var(--surface-2); }
+  .toast { bottom: calc(80px + env(safe-area-inset-bottom)); }
+  .deck { grid-template-columns: 24px 1fr; }
+  .pane-deck { padding: var(--s3); }
+}
+@media (max-width: 480px) {
+  .top { gap: var(--s2) var(--s4); }
+  .top-actions .btn { padding: 0 var(--s3); }
+  .veh .reg { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .ghost { animation: none; } .toast { animation: none; } .btn, .bar i, .trim i { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand"><b>MV Gannet</b><span>Skerra Ferry Company</span></div>
+  <div class="sailing"><b id="sailTitle">14:30 Skerra to Port Calloway</b><span id="sailSub"></span></div>
+  <div class="clock"><b id="clock">13:42</b><span id="countdown"></span></div>
+  <div class="top-actions">
+    <button class="btn" id="themeBtn" data-act="theme" aria-pressed="false">Daylight view</button>
+    <button class="btn primary" data-act="askClose" id="closeBtn">Close loading</button>
+  </div>
+</header>
+
+<main class="layout" id="layout" data-pane="queue">
+  <section class="pane pane-queue" aria-label="Vehicles">
+    <div class="q-head">
+      <div class="field">
+        <label for="q">Find registration or booking</label>
+        <input id="q" type="search" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. KT69 or SK-4850">
+      </div>
+      <div class="tabs" id="tabs"></div>
+    </div>
+    <ul class="list" id="list"></ul>
+  </section>
+
+  <section class="pane pane-deck" id="deckPane" aria-label="Deck plan"></section>
+
+  <aside class="pane pane-side" id="side" aria-label="Vehicle and sailing"></aside>
+</main>
+
+<nav class="mobnav" aria-label="Screen">
+  <button data-act="pane" data-v="queue" id="nQueue">Vehicles</button>
+  <button data-act="pane" data-v="deck">Deck plan</button>
+  <button data-act="pane" data-v="side">Details</button>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<dialog id="closeDlg" aria-labelledby="cdT"></dialog>
+<dialog id="resetDlg" aria-labelledby="rdT">
+  <h2 id="rdT">Reset sample data?</h2>
+  <p>This puts every vehicle back to its starting position for the demo and clears all loading you have done on this device.</p>
+  <div class="actions">
+    <button class="btn" data-act="closeDlg" data-v="resetDlg">Keep loading</button>
+    <button class="btn danger" data-act="doReset">Reset sample data</button>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+/* ---------- Sample data: replace with the live booking feed ---------- */
+const SAILING = { time: "14:30", from: "Skerra", to: "Port Calloway", crossing: "1 h 25 min", date: "Tue 20 Oct", cutoff: 14 * 60, depart: 14 * 60 + 30, start: 13 * 60 + 42, trimLimit: 12 };
+const GAP = 0.5; // metres kept between vehicles
+const LANES = [
+  { id: "A", deck: "main", len: 42, side: "P" }, { id: "B", deck: "main", len: 42, side: "P" },
+  { id: "C", deck: "main", len: 42, side: "S" }, { id: "D", deck: "main", len: 42, side: "S", note: "Dangerous goods" },
+  { id: "E", deck: "upper", len: 26, side: "P" }, { id: "F", deck: "upper", len: 26, side: "S" }
+];
+const DECKS = { main: { name: "Main deck", sub: "4 lanes · 42 m" }, upper: { name: "Upper deck", sub: "Max 2.0 m high, 2 t" } };
+const FLAGS = { dg: ["DG", "Dangerous goods: lane D only"], reefer: ["REEFER", "Refrigerated: needs shore power plug"], access: ["ACCESS", "Disabled access: leave a wide side gap"], livestock: ["LIVESTOCK", "Livestock: keep clear of upper deck, check ventilation"] };
+// id, ref, reg, make, type, length m, height m, weight kg, flags, state, arrived (min), lane
+const RAW = [
+  [1, "SK-4821", "YH21 WFN", "Ford Kuga", "Car", 4.6, 1.7, 1700, "", "here", 798],
+  [2, "SK-4822", "LX70 BDT", "Mercedes Sprinter", "Van", 6.0, 2.6, 3100, "", "here", 801],
+  [3, "SK-4830", "GN19 OPR", "VW Golf", "Car", 4.3, 1.5, 1300, "", "loaded", 770, "A", 2],
+  [4, "SK-4831", "SA68 KJH", "Auto-Trail F-Line", "Motorhome", 7.4, 3.0, 3400, "", "here", 807],
+  [5, "SK-4835", "SF18 DGL", "Skerra Fuels tanker", "Tanker", 9.5, 3.6, 12400, "dg", "loaded", 755, "D", 1],
+  [6, "SK-4838", "ML71 RZE", "Tesla Model Y", "Car", 4.8, 1.6, 2000, "", "loaded", 782, "B", 2],
+  [7, "SK-4840", "DE17 HHC", "Vauxhall Corsa", "Car", 4.1, 1.5, 1100, "", "loaded", 785, "A", 3],
+  [8, "SK-4844", "AB65 MNB", "Ford Transit minibus", "Minibus", 7.0, 2.5, 3800, "access", "here", 813],
+  [9, "SK-4847", "SK12 MCY", "Triumph Tiger", "Motorbike", 3.0, 1.4, 230, "", "here", 815],
+  [10, "SK-4850", "RJ20 TLR", "Defender + horsebox", "Car + trailer", 9.8, 2.4, 3600, "livestock", "here", 816],
+  [11, "SK-4852", "KT69 CLD", "Iveco Daily chiller", "Van", 6.8, 3.0, 4200, "reefer", "loaded", 760, "B", 1],
+  [12, "SK-4855", "FD22 OXE", "Kia Niro", "Car", 4.4, 1.6, 1600, "", "here", 818],
+  [13, "SK-4858", "BN18 SJV", "Skoda Octavia Estate", "Car", 4.7, 1.5, 1400, "", "away"],
+  [14, "SK-4860", "WR20 PKA", "Ford Transit Custom", "Van", 5.3, 2.0, 2400, "", "away"],
+  [15, "SK-4861", "NV71 FLK", "DAF XF parcel freight", "Lorry", 12.0, 4.0, 16500, "", "loaded", 750, "A", 1],
+  [16, "SK-4863", "HG16 YUT", "Nissan Leaf", "Car", 4.5, 1.6, 1600, "access", "away"],
+  [17, "SK-4866", "EU69 PGT", "Peugeot 208", "Car", 4.1, 1.4, 1100, "", "loaded", 790, "E", 1],
+  [18, "SK-4870", "CV21 AUQ", "Audi Q5", "Car", 4.7, 1.7, 1900, "", "away"],
+  [19, "SK-4871", "PO18 VWC", "VW California", "Motorhome", 5.0, 2.0, 2800, "", "away"],
+  [20, "SK-4874", "HN22 BGS", "BMW R1250GS", "Motorbike", 3.0, 1.4, 260, "", "away"],
+  [21, "SK-4877", "TT15 MNI", "Mini Cooper", "Car", 3.9, 1.4, 1200, "", "away"],
+  [22, "SK-4880", "YS70 CTR", "Citroën Berlingo", "Van", 4.4, 1.8, 1500, "", "here", 820],
+  [23, "SK-4883", "VK19 YRS", "Toyota Yaris", "Car", 3.9, 1.5, 1100, "", "away"],
+  [24, "SK-4885", "LV19 SHP", "Mercedes Atego livestock", "Lorry", 10.5, 3.8, 9800, "livestock", "loaded", 765, "C", 1],
+  [25, "SK-4888", "OL68 HYT", "Hyundai Tucson", "Car", 4.5, 1.7, 1750, "", "away"],
+  [26, "SK-4890", "GB22 DCD", "Dacia Duster", "Car", 4.3, 1.6, 1400, "", "away"],
+  [27, "SK-4893", "MR17 XCV", "Volvo XC60", "Car", 4.7, 1.7, 2000, "", "away"],
+  [28, "SK-4896", "EJ64 CKD", "Citroën C1", "Car", 3.5, 1.5, 900, "", "here", 821]
+];
+const CATALOG = RAW.map(r => ({ id: r[0], ref: r[1], reg: r[2], make: r[3], type: r[4], len: r[5], h: r[6], kg: r[7], flags: r[8] ? r[8].split(" ") : [] }));
+const byId = id => CATALOG.find(v => v.id === id);
+
+/* ---------- State ---------- */
+const KEY = "gannet-loading-v1";
+function seed() {
+  return { t0: Date.now(), closed: null, theme: "night", seq: 10, v: RAW.map(r => ({ id: r[0], st: r[9], arr: r[10] ?? null, lane: r[11] ?? null, seq: r[12] ?? 0 })) };
+}
+let D;
+try { D = JSON.parse(localStorage.getItem(KEY)); } catch (e) { D = null; }
+if (!D || !Array.isArray(D.v) || D.v.length !== RAW.length) D = seed();
+const ui = { sel: null, tab: "here", deck: "main", q: "", pane: "queue" };
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(D)); } catch (e) { /* storage blocked: keep working in memory */ } };
+const rec = id => D.v.find(x => x.id === id);
+const nowMin = () => SAILING.start + (Date.now() - D.t0) / 60000;
+const fmt = m => { m = Math.floor(m); return String(Math.floor(m / 60) % 24).padStart(2, "0") + ":" + String(m % 60).padStart(2, "0"); };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const t1 = kg => (kg / 1000).toFixed(1) + " t";
+const m1 = n => n.toFixed(1) + " m";
+
+/* ---------- Derived ---------- */
+const inLane = id => D.v.filter(x => x.st === "loaded" && x.lane === id).sort((a, b) => a.seq - b.seq);
+const laneUsed = id => inLane(id).reduce((s, x) => s + byId(x.id).len + GAP, 0);
+const laneFree = l => l.len - laneUsed(l.id);
+const laneKg = id => inLane(id).reduce((s, x) => s + byId(x.id).kg, 0);
+const sideKg = s => LANES.filter(l => l.side === s).reduce((t, l) => t + laneKg(l.id), 0);
+function why(v, l) {
+  if (v.flags.includes("dg") && l.id !== "D") return "DG: lane D only";
+  if (l.deck === "upper") {
+    if (v.h > 2.0) return "Over 2.0 m high";
+    if (v.kg > 2000) return "Over 2 t";
+    if (v.flags.includes("livestock") || v.flags.includes("dg")) return "Not for upper deck";
+  }
+  if (v.len > laneFree(l)) return "No room";
+  return "";
+}
+function suggest(v) {
+  let best = null;
+  for (const l of LANES) {
+    if (why(v, l)) continue;
+    const p = sideKg("P") + (l.side === "P" ? v.kg : 0), s = sideKg("S") + (l.side === "S" ? v.kg : 0);
+    const score = Math.abs(p - s);
+    if (!best || score < best.score - 1) best = { l, score };
+  }
+  return best && best.l.id;
+}
+const counts = () => ({ here: D.v.filter(x => x.st === "here").length, loaded: D.v.filter(x => x.st === "loaded").length, away: D.v.filter(x => x.st === "away" || x.st === "noshow").length });
+const match = v => { const q = ui.q.trim().toLowerCase().replace(/\s+/g, ""); return !q || (v.reg + v.ref + v.make).toLowerCase().replace(/\s+/g, "").includes(q); };
+const tabOf = x => x.st === "loaded" ? "loaded" : x.st === "here" ? "here" : "away";
+
+/* ---------- Render ---------- */
+const $ = s => document.querySelector(s);
+const badge = v => v.flags.length ? `<span class="flags">${v.flags.map(f => `<span class="flag ${f}">${FLAGS[f][0]}</span>`).join("")}</span>` : "";
+
+function renderQueue() {
+  const c = { here: 0, loaded: 0, away: 0 };
+  D.v.forEach(x => { if (match(byId(x.id))) c[tabOf(x)]++; });
+  const T = [["here", "Waiting"], ["away", "Not here"], ["loaded", "Loaded"]];
+  $("#tabs").innerHTML = T.map(([k, n]) => `<button class="tab" data-act="tab" data-v="${k}" data-focus="tab-${k}" aria-pressed="${ui.tab === k}"><b>${c[k]}</b><span>${n}</span></button>`).join("");
+  let rows = D.v.filter(x => tabOf(x) === ui.tab && match(byId(x.id)));
+  if (ui.tab === "here") rows.sort((a, b) => a.arr - b.arr);
+  else if (ui.tab === "loaded") rows.sort((a, b) => (a.lane > b.lane ? 1 : a.lane < b.lane ? -1 : a.seq - b.seq));
+  else rows.sort((a, b) => byId(a.id).ref.localeCompare(byId(b.id).ref));
+  if (!rows.length) {
+    const other = T.filter(([k]) => k !== ui.tab && c[k]).map(([k, n]) => `<button class="btn" data-act="tab" data-v="${k}">${n} (${c[k]})</button>`).join("");
+    const msg = ui.q ? `<b>No match in this list</b><span>Nothing here matches “${esc(ui.q)}”.${other ? " Try:" : ""}</span>${other}` :
+      ui.tab === "here" ? `<b>Nobody waiting</b><span>Vehicles appear here once they are checked in. Check in from the Not here list.</span>` :
+        ui.tab === "loaded" ? `<b>Nothing loaded yet</b><span>Pick a waiting vehicle, then tap a lane on the deck plan.</span>` : `<b>Everyone has arrived</b><span>All booked vehicles are checked in.</span>`;
+    $("#list").innerHTML = `<li class="empty">${msg}</li>`;
+    return;
+  }
+  $("#list").innerHTML = rows.map(x => {
+    const v = byId(x.id);
+    const right = x.st === "loaded" ? `<span>Lane ${x.lane}</span>` : x.st === "here" ? `<span>Here ${fmt(x.arr)}</span>` : x.st === "noshow" ? `<span>No-show</span>` : `<span>Due</span>`;
+    return `<li><button class="row ${x.st}" data-act="sel" data-v="${v.id}" data-focus="row-${v.id}" aria-pressed="${ui.sel === v.id}">
+      <span class="reg">${esc(v.reg)}</span>
+      <span class="sub">${esc(v.make)} · ${esc(v.type)} · ${m1(v.len)} · ${t1(v.kg)}</span>
+      <span class="meta">${right}${badge(v)}</span></button></li>`;
+  }).join("");
+}
+
+function renderDeck() {
+  const sel = ui.sel && byId(ui.sel), sr = sel && rec(sel.id);
+  const loading = !D.closed && sel && sr.st === "here";
+  const sug = loading ? suggest(sel) : null;
+  let strip;
+  if (!sel) strip = `<div class="strip"><p>Pick a waiting vehicle from the list, then tap a lane. The deck plan is drawn to scale.</p></div>`;
+  else {
+    const hint = sr.st === "here" ? (D.closed ? "Loading is closed. Reopen it to place vehicles." : sug ? `Tap a highlighted slot to load. Suggested lane ${sug}.` : "No lane can take this vehicle. See the reason on each lane.") :
+      sr.st === "loaded" ? `Loaded in lane ${sr.lane}. Use the Details panel to take it off.` : "Not checked in yet. Check it in from the Details panel.";
+    strip = `<div class="strip ${loading ? "live" : ""}"><span class="reg">${esc(sel.reg)}</span><p>${esc(hint)}</p><button class="btn" data-act="clear">Clear</button></div>`;
+  }
+  const lanes = LANES.filter(l => l.deck === ui.deck);
+  const marks = []; for (let m = 0; m <= 40; m += 10) marks.push(`<i style="top:calc(var(--m) * ${m})">${m}</i>`);
+  const cols = lanes.map(l => {
+    const vs = inLane(l.id); let off = 0;
+    const blocks = vs.map(x => {
+      const v = byId(x.id), o = off; off += v.len + GAP;
+      const big = v.len >= 4;
+      return `<button class="veh ${v.flags.includes("dg") ? "dgb" : ""}" style="--off:${o};--vl:${v.len}" data-act="sel" data-v="${v.id}" data-focus="veh-${v.id}" aria-pressed="${ui.sel === v.id}" aria-label="${esc(v.reg)}, ${esc(v.make)}, lane ${l.id}, ${t1(v.kg)}">
+        <span class="reg">${esc(v.reg)}</span>${big ? `<span class="sm">${t1(v.kg)}${v.flags.includes("dg") ? " · DG" : ""}</span>` : ""}</button>`;
+    }).join("");
+    const reason = loading ? why(sel, l) : "";
+    const ok = loading && !reason;
+    const ghost = ok ? `<button class="ghost" style="--off:${off};--vl:${sel.len}" data-act="place" data-v="${l.id}" data-focus="ghost-${l.id}" aria-label="Load ${esc(sel.reg)} in lane ${l.id}">Load here</button>` : "";
+    const free = laneFree(l);
+    const status = reason ? `<span class="why">${reason}</span>` : l.id === sug ? `<span class="sug">Suggested</span>` : `<span>${m1(Math.max(0, free))} free · ${t1(laneKg(l.id))}</span>`;
+    return `<div><div class="lane-h ${ok ? "ok" : ""}"><b>Lane ${l.id}</b>${status}</div><div class="lane ${ok ? "ok" : loading ? "dim" : ""}" style="--len:${l.len}">${blocks}${ghost}</div></div>`;
+  }).join("");
+  const tabs = Object.entries(DECKS).map(([k, d]) => `<button class="dtab" data-act="deck" data-v="${k}" data-focus="deck-${k}" aria-pressed="${ui.deck === k}">${d.name}<small>${d.sub}</small></button>`).join("");
+  $("#deckPane").innerHTML = `${strip}<div class="decktabs">${tabs}</div>
+    <div class="deck"><div class="ruler" aria-hidden="true">${marks.join("")}</div>
+    <div class="hull"><div class="cap">Bow</div><div class="lanes" style="--n:${lanes.length}">${cols}</div><div class="cap">Stern ramp</div></div></div>`;
+}
+
+function renderSide() {
+  const sel = ui.sel && byId(ui.sel), sr = sel && rec(sel.id), c = counts();
+  let selHtml;
+  if (!sel) selHtml = `<div class="sel"><p class="small">No vehicle selected. Tap one in the list or on the deck plan to see its details.</p></div>`;
+  else {
+    const where = sr.st === "loaded" ? `Lane ${sr.lane}, position ${inLane(sr.lane).findIndex(x => x.id === sr.id) + 1}` : sr.st === "here" ? `Waiting since ${fmt(sr.arr)}` : sr.st === "noshow" ? "Marked no-show" : "Not checked in";
+    let acts = "";
+    if (sr.st === "away") acts = `<button class="btn primary block" data-act="checkin" data-focus="a-main">Check in</button><button class="btn block" data-act="noshow">Mark no-show</button>`;
+    else if (sr.st === "noshow") acts = `<button class="btn primary block" data-act="restore" data-focus="a-main">Restore booking</button>`;
+    else if (sr.st === "here") acts = `<p class="small">Tap a highlighted slot on the deck plan to load.</p><button class="btn block" data-act="toDeck">Show deck plan</button><button class="btn block" data-act="noshow">Mark no-show</button>`;
+    else acts = `<button class="btn block" data-act="unload" data-focus="a-main"${D.closed ? " disabled" : ""}>Take off deck</button>`;
+    selHtml = `<div class="sel live"><div><div class="reg">${esc(sel.reg)}</div><div class="small">${esc(sel.ref)} · ${esc(sel.make)}</div></div>${badge(sel)}
+      <dl class="kv"><dt>Type</dt><dd>${esc(sel.type)}</dd><dt>Length</dt><dd>${m1(sel.len)}</dd><dt>Height</dt><dd>${m1(sel.h)}</dd><dt>Weight</dt><dd>${t1(sel.kg)}</dd><dt>Status</dt><dd>${where}</dd></dl>
+      ${sel.flags.length ? `<ul class="notes">${sel.flags.map(f => `<li><b>${FLAGS[f][0]}</b> ${FLAGS[f][1]}</li>`).join("")}</ul>` : ""}
+      ${acts}</div>`;
+  }
+  const P = sideKg("P"), S = sideKg("S"), diff = P - S, lim = SAILING.trimLimit * 1000;
+  const pos = 50 + Math.max(-1, Math.min(1, diff / lim)) * 50;
+  const tcls = Math.abs(diff) > lim ? "bad" : Math.abs(diff) > lim * 0.7 ? "warn" : "";
+  const total = P + S, arrived = c.loaded + c.here;
+  const used = LANES.reduce((s, l) => s + laneUsed(l.id), 0), cap = LANES.reduce((s, l) => s + l.len, 0);
+  const al = [];
+  const dgWait = D.v.filter(x => x.st === "here" && byId(x.id).flags.includes("dg")).length;
+  if (tcls === "bad") al.push(["bad", "Trim", `${t1(Math.abs(diff))} to ${diff > 0 ? "port" : "starboard"}, over the ${SAILING.trimLimit} t limit. Move weight across before sailing.`]);
+  else if (tcls === "warn") al.push(["warn", "Trim", `${t1(Math.abs(diff))} to ${diff > 0 ? "port" : "starboard"}. Load the other side next.`]);
+  if (dgWait) al.push(["warn", "Dangerous goods", `${dgWait} waiting. Lane D only.`]);
+  const nowM = nowMin();
+  if (c.away) al.push([nowM >= SAILING.cutoff ? "bad" : "warn", nowM >= SAILING.cutoff ? "Check-in closed" : "Not arrived", nowM >= SAILING.cutoff ? `${c.away} booked vehicles missing. Mark them as no-shows.` : `${c.away} booked vehicles not here. Check-in closes ${fmt(SAILING.cutoff)}.`]);
+  if (c.here) al.push(["warn", "Waiting", `${c.here} checked-in vehicles still to load.`]);
+  if (!al.length) al.push(["ok", "All clear", "Everyone booked is loaded and the ship is in trim."]);
+  $("#side").innerHTML = `<div class="card"><h2>Selected vehicle</h2>${selHtml}</div>
+    <div class="card"><h2>Sailing</h2>
+      <div class="stats"><div><b>${c.loaded}</b><span>Loaded</span></div><div><b>${c.here}</b><span>Waiting</span></div><div><b>${c.away}</b><span>Not here</span></div></div>
+      <div class="bar" role="progressbar" aria-label="Arrived vehicles loaded" aria-valuemin="0" aria-valuemax="${arrived}" aria-valuenow="${c.loaded}"><i style="width:${arrived ? c.loaded / arrived * 100 : 0}%"></i></div>
+      <p class="small">${c.loaded} of ${arrived} arrived vehicles loaded · ${used.toFixed(0)} of ${cap} m deck used · ${t1(total)} on board</p></div>
+    <div class="card"><h2>Balance</h2>
+      <div class="trim ${tcls}" role="img" aria-label="${t1(Math.abs(diff))} to ${diff > 0 ? "port" : "starboard"}, limit ${SAILING.trimLimit} tonnes"><i style="left:${pos}%"></i></div>
+      <div class="split"><span>Port ${t1(P)}</span><span>Stbd ${t1(S)}</span></div></div>
+    <div class="card"><h2>Check</h2><ul class="alerts">${al.map(([k, h, t]) => `<li class="${k}"><b>${h}</b>${esc(t)}</li>`).join("")}</ul></div>
+    <button class="linkbtn" data-act="askReset">Reset sample data</button>`;
+}
+
+function renderChrome() {
+  document.documentElement.dataset.theme = D.theme === "day" ? "day" : "night";
+  $("#themeBtn").textContent = D.theme === "day" ? "Night view" : "Daylight view";
+  $("#themeBtn").setAttribute("aria-pressed", D.theme === "day");
+  $("#sailTitle").textContent = `${SAILING.time} ${SAILING.from} to ${SAILING.to}`;
+  $("#sailSub").textContent = `${SAILING.date} · ${SAILING.crossing} crossing`;
+  $("#closeBtn").hidden = !!D.closed;
+  document.querySelector(".statebar")?.remove();
+  if (D.closed) {
+    const c = counts();
+    $(".top").insertAdjacentHTML("beforeend", `<div class="banner statebar"><span>Loading closed at ${fmt(D.closed)}. ${c.loaded} vehicles on board.</span><button class="btn" data-act="reopen" data-focus="reopen">Reopen loading</button></div>`);
+  }
+  $("#layout").dataset.pane = ui.pane;
+  document.querySelectorAll(".mobnav button").forEach(b => b.setAttribute("aria-pressed", b.dataset.v === ui.pane));
+  $("#nQueue").textContent = `Vehicles (${counts().here} waiting)`;
+}
+function tick() {
+  const m = nowMin(), left = Math.round(SAILING.depart - m);
+  $("#clock").textContent = fmt(m);
+  $("#countdown").textContent = left > 0 ? `Departs in ${left} min` : "Departure time passed";
+}
+function render() {
+  const f = document.activeElement && document.activeElement.dataset && document.activeElement.dataset.focus;
+  renderChrome(); renderQueue(); renderDeck(); renderSide(); tick();
+  if (f) { const el = document.querySelector(`[data-focus="${f}"]`); if (el) el.focus({ preventScroll: true }); }
+}
+
+/* ---------- Actions ---------- */
+let toastTimer;
+function toast(msg, undo) {
+  const t = $("#toast");
+  t.innerHTML = `<span>${esc(msg)}</span>${undo ? `<button class="btn" data-act="undo">Undo</button>` : ""}`;
+  t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 7000);
+  window._undo = undo || null;
+}
+function change(msg, fn) {
+  const before = JSON.stringify(D.v), selBefore = ui.sel;
+  fn(); save();
+  toast(msg, () => { D.v = JSON.parse(before); ui.sel = selBefore; save(); render(); $("#toast").hidden = true; });
+  render();
+}
+function nextWaiting() { const w = D.v.filter(x => x.st === "here").sort((a, b) => a.arr - b.arr)[0]; return w ? w.id : null; }
+function setSel(id) {
+  ui.sel = id; if (!id) return;
+  const x = rec(id);
+  if (x.st === "loaded") { ui.deck = LANES.find(l => l.id === x.lane).deck; ui.tab = "loaded"; }
+  else ui.tab = tabOf(x);
+  if (matchMedia("(max-width: 959px)").matches) ui.pane = x.st === "here" ? "deck" : "side";
+}
+const A = {
+  sel(v) { setSel(+v); render(); },
+  clear() { ui.sel = null; render(); },
+  tab(v) { ui.tab = v; render(); },
+  deck(v) { ui.deck = v; render(); },
+  pane(v) { ui.pane = v; render(); window.scrollTo(0, 0); },
+  toDeck() { ui.pane = "deck"; render(); },
+  theme() { D.theme = D.theme === "day" ? "night" : "day"; save(); render(); },
+  place(laneId) {
+    const x = rec(ui.sel), v = byId(ui.sel), l = LANES.find(k => k.id === laneId);
+    if (!x || D.closed || why(v, l)) return;
+    change(`${v.reg} loaded in lane ${laneId}`, () => { x.st = "loaded"; x.lane = laneId; x.seq = ++D.seq; ui.sel = nextWaiting(); if (ui.sel) { ui.tab = "here"; } });
+  },
+  unload() {
+    const x = rec(ui.sel), v = byId(ui.sel);
+    change(`${v.reg} taken off the deck`, () => { x.st = "here"; x.lane = null; x.arr = x.arr ?? Math.floor(nowMin()); ui.tab = "here"; });
+    if (matchMedia("(max-width: 959px)").matches) ui.pane = "deck";
+    render();
+  },
+  checkin() {
+    const x = rec(ui.sel), v = byId(ui.sel);
+    change(`${v.reg} checked in at ${fmt(nowMin())}`, () => { x.st = "here"; x.arr = Math.floor(nowMin()); ui.tab = "here"; });
+    if (matchMedia("(max-width: 959px)").matches) { ui.pane = "deck"; render(); }
+  },
+  noshow() { const x = rec(ui.sel), v = byId(ui.sel); change(`${v.reg} marked as no-show`, () => { x.st = "noshow"; x.arr = null; ui.tab = "away"; }); },
+  restore() { const x = rec(ui.sel), v = byId(ui.sel); change(`${v.reg} booking restored`, () => { x.st = "away"; }); },
+  undo() { if (window._undo) window._undo(); },
+  askClose() {
+    const c = counts();
+    $("#closeDlg").innerHTML = `<h2 id="cdT">Close loading?</h2><p>The ramp is raised and this loading list is signed off at ${fmt(nowMin())}.</p>
+      <dl class="kv"><dt>Loaded</dt><dd>${c.loaded}</dd><dt>Checked in, not loaded</dt><dd>${c.here}</dd><dt>Not arrived</dt><dd>${c.away}</dd><dt>Weight on board</dt><dd>${t1(sideKg("P") + sideKg("S"))}</dd></dl>
+      ${c.here ? `<p class="small"><b>${c.here} checked-in vehicles will be left behind.</b></p>` : ""}
+      <div class="actions"><button class="btn" data-act="closeDlg" data-v="closeDlg">Keep loading</button><button class="btn primary" data-act="doClose">Close loading</button></div>`;
+    $("#closeDlg").showModal();
+  },
+  doClose() { D.closed = Math.floor(nowMin()); save(); $("#closeDlg").close(); toast("Loading closed and signed off"); render(); },
+  reopen() { D.closed = null; save(); render(); },
+  closeDlg(v) { $("#" + v).close(); },
+  askReset() { $("#resetDlg").showModal(); },
+  doReset() { const th = D.theme; D = seed(); D.theme = th; Object.assign(ui, { sel: null, tab: "here", deck: "main", q: "" }); $("#q").value = ""; save(); $("#resetDlg").close(); toast("Sample data reset"); render(); }
+};
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-act]");
+  if (b && A[b.dataset.act] && !b.disabled) A[b.dataset.act](b.dataset.v);
+});
+$("#q").addEventListener("input", e => { ui.q = e.target.value; renderQueue(); });
+
+render(); save();
+let pastCutoff = nowMin() >= SAILING.cutoff;
+setInterval(() => { tick(); const p = nowMin() >= SAILING.cutoff; if (p !== pastCutoff) { pastCutoff = p; renderSide(); } }, 15000);
+</script>
+</body>
+</html>

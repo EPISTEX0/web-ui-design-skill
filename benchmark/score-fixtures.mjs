@@ -63,6 +63,7 @@ for (const id of ids) {
 		dependenciesAdded: r.tokens?.dependenciesAdded ?? [],
 		collateralChanged: (r.collateral?.maxRatioIgnoringNav ?? 1) > 0.001,
 		mobileOverflow: Boolean(r.page?.mobileOverflowX),
+		actionsReachableMobile: Boolean(r.page?.actionsReachableMobile),
 		functionalPass: Boolean(r.functional?.passed),
 	}
 	writeFileSync(join(metrics, `${id}.extend.json`), JSON.stringify(out, null, 2))

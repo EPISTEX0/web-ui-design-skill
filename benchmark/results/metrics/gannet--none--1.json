@@ -1,0 +1,56 @@
+{
+  "id": "gannet--none--1",
+  "desktop": {
+    "fullH": 1099,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": {
+      "critical": 0,
+      "serious": 24,
+      "moderate": 1,
+      "minor": 0,
+      "rules": [
+        "color-contrast:2",
+        "label-content-name-mismatch:4",
+        "nested-interactive:18",
+        "page-has-heading-one:1"
+      ]
+    },
+    "ux": {
+      "width": 1440,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": {
+      "focusStops": 30,
+      "focusInvisible": 0
+    }
+  },
+  "tablet": {
+    "fullH": 1080,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 1180,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  },
+  "mobile": {
+    "fullH": 2245,
+    "overflowX": 0,
+    "errors": 0,
+    "errorSamples": [],
+    "axe": null,
+    "ux": {
+      "width": 390,
+      "smallTargets": 0,
+      "cls": 0
+    },
+    "focus": null
+  }
+}

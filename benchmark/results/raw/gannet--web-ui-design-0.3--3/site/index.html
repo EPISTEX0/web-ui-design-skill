@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MV Gannet car deck loading · Skerra Ferry Company</title>
+<meta name="color-scheme" content="light dark">
+<script>
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('gannet-theme'); } catch (e) {}
+    if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    document.documentElement.dataset.theme = t;
+  })();
+</script>
+<style>
+/* ---------- Tokens ---------- */
+:root {
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --hull: oklch(0.27 0.05 250);
+  --hull-text: oklch(0.97 0.005 230);
+  --hull-text-2: oklch(0.8 0.025 240);
+  --hull-line: oklch(0.45 0.05 250);
+
+  --bg: oklch(0.955 0.01 230);
+  --surface: oklch(0.992 0.004 230);
+  --surface-2: oklch(0.935 0.012 235);
+  --deck: oklch(0.86 0.014 240);
+  --deck-paint: oklch(0.74 0.13 92);
+  --text: oklch(0.24 0.04 250);
+  --text-2: oklch(0.4 0.035 250);
+  --text-3: oklch(0.48 0.03 250);
+  --border: oklch(0.86 0.012 240);
+  --border-strong: oklch(0.58 0.025 245);
+
+  --accent: oklch(0.74 0.17 55);
+  --accent-hover: oklch(0.79 0.16 58);
+  --on-accent: oklch(0.2 0.04 250);
+  --focus: oklch(0.5 0.18 255);
+
+  --skerra: oklch(0.36 0.07 252);
+  --holm: oklch(0.43 0.09 190);
+  --veh-text: oklch(0.98 0.005 230);
+
+  --plate: oklch(0.88 0.17 95);
+  --plate-ink: oklch(0.15 0.01 250);
+
+  --ok: oklch(0.42 0.11 150);   --ok-bg: oklch(0.94 0.045 150);
+  --warn: oklch(0.43 0.1 65);   --warn-bg: oklch(0.95 0.07 90);
+  --bad: oklch(0.46 0.18 27);   --bad-bg: oklch(0.95 0.035 27);
+  --info: oklch(0.4 0.09 245);  --info-bg: oklch(0.94 0.025 245);
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 20px; --s6: 24px; --s8: 32px;
+  --r-sm: 6px; --r-md: 10px; --r-lg: 14px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --hdr: 76px;
+}
+html[data-theme="dark"] {
+  --bg: oklch(0.2 0.02 250);
+  --surface: oklch(0.255 0.025 250);
+  --surface-2: oklch(0.22 0.022 250);
+  --deck: oklch(0.33 0.02 250);
+  --deck-paint: oklch(0.6 0.11 92);
+  --text: oklch(0.95 0.01 230);
+  --text-2: oklch(0.82 0.02 240);
+  --text-3: oklch(0.74 0.02 240);
+  --border: oklch(0.37 0.025 250);
+  --border-strong: oklch(0.6 0.03 245);
+  --focus: oklch(0.78 0.13 245);
+  --skerra: oklch(0.52 0.1 250);
+  --holm: oklch(0.55 0.1 190);
+  --ok: oklch(0.82 0.13 150);   --ok-bg: oklch(0.32 0.06 150);
+  --warn: oklch(0.86 0.13 90);  --warn-bg: oklch(0.35 0.07 85);
+  --bad: oklch(0.8 0.14 27);    --bad-bg: oklch(0.34 0.08 27);
+  --info: oklch(0.82 0.09 245); --info-bg: oklch(0.32 0.05 245);
+}
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 17px/1.5 var(--font);
+  overflow-x: clip;
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { text-wrap: balance; letter-spacing: -0.01em; }
+p { text-wrap: pretty; }
+button, input, select { font: inherit; color: inherit; }
+button { touch-action: manipulation; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+  min-height: 44px; padding: 0 var(--s4);
+  border: 1.5px solid var(--border-strong); border-radius: var(--r-md);
+  background: var(--surface); color: var(--text);
+  font-weight: 600; font-size: 16px; line-height: 1.2;
+  transition: transform 120ms var(--ease-out), background-color 150ms, border-color 150ms;
+}
+.btn:active:not([aria-disabled="true"]) { transform: scale(0.97); }
+.btn[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
+@media (hover: hover) { .btn:hover:not([aria-disabled="true"]) { background: var(--surface-2); } }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (hover: hover) { .btn-primary:hover:not([aria-disabled="true"]) { background: var(--accent-hover); } }
+.btn-quiet { min-height: 44px; border-color: transparent; background: transparent; }
+.top .btn { background: transparent; border-color: var(--hull-line); color: var(--hull-text); }
+.top .btn:focus-visible, .top summary:focus-visible { outline-color: #fff; }
+@media (hover: hover) { .top .btn:hover:not([aria-disabled="true"]) { background: oklch(0.34 0.05 250); } }
+.top .btn.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+.plate {
+  display: inline-block; padding: 1px 7px; border-radius: 4px;
+  background: var(--plate); color: var(--plate-ink);
+  border: 1px solid oklch(0.15 0.01 250 / 0.55);
+  font-weight: 800; font-size: 14px; line-height: 1.35; letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums; white-space: nowrap; text-transform: uppercase;
+}
+
+.chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 0 7px; border-radius: 999px; min-height: 22px;
+  font-size: 13px; font-weight: 700; line-height: 1.2; white-space: nowrap;
+  font-style: normal;
+  background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border);
+}
+.chip.holm { background: var(--holm); color: var(--veh-text); border-color: transparent; }
+.chip.skerra { background: var(--skerra); color: var(--veh-text); border-color: transparent; }
+.chip.dg { background: var(--bad-bg); color: var(--bad); border-color: currentColor; }
+.chip.warn { background: var(--warn-bg); color: var(--warn); border-color: currentColor; }
+
+/* ---------- Header ---------- */
+.top {
+  position: sticky; top: 0; z-index: 20;
+  min-height: var(--hdr);
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s6);
+  padding: var(--s3) max(var(--s5), env(safe-area-inset-right)) var(--s3) max(var(--s5), env(safe-area-inset-left));
+  background: var(--hull); color: var(--hull-text);
+  border-bottom: 4px solid var(--deck-paint);
+}
+.ident .co { display: block; font-size: 14px; color: var(--hull-text-2); line-height: 1.2; }
+.ident h1 { font-size: 24px; line-height: 1.15; font-weight: 750; }
+.ident h1 span { font-weight: 500; color: var(--hull-text-2); }
+.sailing { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.sailing strong { font-size: 20px; font-weight: 700; }
+.sailing small { font-size: 14px; color: var(--hull-text-2); }
+.sample-tag {
+  display: inline-block; margin-left: var(--s2); padding: 0 var(--s2);
+  border: 1px solid var(--hull-line); border-radius: 999px; font-size: 13px; color: var(--hull-text);
+}
+.clock { margin-left: auto; text-align: right; line-height: 1.2; }
+.clock .big { display: block; font-size: 28px; font-weight: 750; }
+.clock .big.late { color: oklch(0.86 0.13 80); }
+.clock small { font-size: 14px; color: var(--hull-text-2); }
+.top-actions { display: flex; align-items: center; gap: var(--s2); }
+.more { position: relative; }
+.more > summary { list-style: none; }
+.more > summary::-webkit-details-marker { display: none; }
+.more-menu {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; min-width: 230px;
+  padding: var(--s2); border-radius: var(--r-md);
+  background: var(--surface); color: var(--text); border: 1px solid var(--border-strong);
+  box-shadow: 0 0 0 1px oklch(0 0 0 / 0.04), 0 8px 24px oklch(0.2 0.05 250 / 0.25);
+  display: grid; gap: var(--s1); transform-origin: top right;
+}
+.more[open] .more-menu { animation: pop 160ms var(--ease-out); }
+.more-menu .btn { justify-content: flex-start; background: transparent; border-color: transparent; color: var(--text); width: 100%; }
+@media (hover: hover) { .top .more-menu .btn:hover { background: var(--surface-2); } }
+.top .more-menu .btn { color: var(--text); border-color: transparent; }
+
+/* ---------- Layout ---------- */
+.layout { display: grid; grid-template-columns: minmax(300px, 360px) minmax(0, 1fr); align-items: start; }
+.queue {
+  position: sticky; top: var(--hdr); height: calc(100dvh - var(--hdr));
+  display: flex; flex-direction: column; min-height: 0;
+  background: var(--surface); border-right: 1px solid var(--border);
+}
+.main { container-type: inline-size; container-name: main; min-width: 0; padding: var(--s5) max(var(--s5), env(safe-area-inset-right)) var(--s8) var(--s5); display: grid; gap: var(--s5); }
+
+/* ---------- Queue ---------- */
+.q-head { padding: var(--s4) var(--s4) var(--s3); display: grid; gap: var(--s3); border-bottom: 1px solid var(--border); }
+.q-head h2 { font-size: 20px; display: flex; align-items: baseline; gap: var(--s2); }
+.q-head h2 .count { font-weight: 500; color: var(--text-2); }
+.field label { display: block; font-size: 15px; font-weight: 600; margin-bottom: var(--s1); color: var(--text-2); }
+.field input {
+  width: 100%; min-height: 48px; padding: 0 var(--s3); font-size: 18px; letter-spacing: 0.03em; text-transform: uppercase;
+  background: var(--bg); border: 1.5px solid var(--border-strong); border-radius: var(--r-md);
+}
+.field input::placeholder { text-transform: none; letter-spacing: 0; color: var(--text-3); opacity: 1; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1.5px solid var(--border-strong); border-radius: var(--r-md); overflow: hidden; }
+.seg button { min-height: 44px; border: 0; background: transparent; font-weight: 600; font-size: 15px; padding: 0 var(--s1); }
+.seg button + button { border-left: 1.5px solid var(--border-strong); }
+.seg button[aria-pressed="true"] { background: var(--hull); color: var(--hull-text); }
+.seg button:focus-visible { outline-offset: -3px; }
+.q-scroll { overflow: auto; flex: 1; min-height: 0; overscroll-behavior: contain; }
+.q-list { list-style: none; margin: 0; padding: 0; }
+.q-item { border-bottom: 1px solid var(--border); }
+.q-row {
+  width: 100%; min-height: 72px; text-align: left; border: 0; background: transparent;
+  display: grid; grid-template-columns: 28px 1fr; gap: var(--s3); align-items: start;
+  padding: var(--s3) var(--s4); border-left: 5px solid transparent;
+}
+.q-row .pos { font-size: 15px; color: var(--text-3); padding-top: 2px; text-align: right; }
+.q-row .l1 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); }
+.q-row .name { display: block; font-weight: 600; margin-top: 2px; line-height: 1.3; overflow-wrap: anywhere; }
+.q-row .meta { display: block; font-size: 15px; color: var(--text-2); margin-top: 2px; }
+.q-row .tags { display: flex; flex-wrap: wrap; gap: var(--s1); margin-top: var(--s2); }
+@media (hover: hover) { .q-row:hover { background: var(--surface-2); } }
+.q-item.sel { background: var(--surface-2); }
+.q-item.sel .q-row { border-left-color: var(--accent); }
+.q-more { padding: 0 var(--s4) var(--s3) calc(var(--s4) + 28px + var(--s3) + 5px); display: grid; gap: var(--s2); }
+.q-more p { font-size: 15px; color: var(--text-2); }
+.q-more .row { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); font-size: 15px; color: var(--text-2); }
+.empty { padding: var(--s6) var(--s4); display: grid; gap: var(--s3); justify-items: start; }
+.empty h3 { font-size: 18px; }
+.empty p { color: var(--text-2); }
+.noshows { border-top: 1px solid var(--border); padding: 0 var(--s4); background: var(--surface); }
+.noshows summary { min-height: 52px; display: flex; align-items: center; font-weight: 600; cursor: pointer; }
+.noshows ul { list-style: none; margin: 0; padding: 0 0 var(--s3); display: grid; gap: var(--s2); }
+.noshows li { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); }
+
+/* ---------- Summary ---------- */
+.summary {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+}
+.stat { padding: var(--s3) var(--s4); display: grid; align-content: start; gap: 2px; min-width: 0; }
+.stat + .stat { border-left: 1px solid var(--border); }
+.stat .label { font-size: 15px; color: var(--text-2); font-weight: 600; }
+.stat .val { font-size: 26px; line-height: 1.15; font-weight: 750; }
+.stat .val small { font-size: 16px; font-weight: 500; color: var(--text-2); }
+.stat .sub { font-size: 14px; color: var(--text-2); line-height: 1.3; }
+.bar { height: 8px; border-radius: 99px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; margin-top: var(--s1); }
+.bar i { display: block; height: 100%; background: var(--skerra); border-radius: 99px; }
+.bar.hot i { background: var(--warn); }
+.bal svg { display: block; width: 100%; max-width: 168px; height: auto; margin-top: 2px; }
+.bal .zone { fill: var(--ok-bg); stroke: var(--ok); stroke-width: 1; stroke-dasharray: 3 3; }
+.bal .frame { fill: var(--surface-2); stroke: var(--border-strong); stroke-width: 1.5; }
+.bal .axis { stroke: var(--border-strong); stroke-width: 1; }
+.bal .dot { fill: var(--skerra); stroke: var(--surface); stroke-width: 2; }
+.bal.warn .dot { fill: var(--warn); } .bal.bad .dot { fill: var(--bad); } .bal.ok .dot { fill: var(--ok); }
+
+/* ---------- Placement bar ---------- */
+.place {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg);
+  padding: var(--s4); display: grid; gap: var(--s3);
+}
+.pv { display: flex; align-items: center; gap: var(--s3); min-width: 0; }
+.pv-info { flex: 1; min-width: 0; }
+.pv-info .l1 { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); }
+.pv-info .name { font-weight: 650; }
+.pv-info .meta { font-size: 15px; color: var(--text-2); }
+.pv .btn { min-width: 48px; padding: 0; }
+.lane-btns { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
+.lane-btn {
+  min-height: 76px; padding: var(--s2) var(--s3); text-align: left;
+  display: grid; align-content: center; gap: 2px;
+  border: 1.5px solid var(--border-strong); border-radius: var(--r-md); background: var(--surface);
+  transition: transform 120ms var(--ease-out), background-color 150ms;
+}
+.lane-btn:active:not([aria-disabled="true"]) { transform: scale(0.97); }
+.lane-btn b { font-size: 18px; line-height: 1.2; }
+.lane-btn .why { font-size: 14px; line-height: 1.3; color: var(--text-2); }
+.lane-btn .why-short { display: none; }
+.lane-btn[aria-disabled="true"] { background: var(--surface-2); border-style: dashed; cursor: not-allowed; }
+.lane-btn[aria-disabled="true"] .why { color: var(--bad); font-weight: 600; }
+.lane-btn.best { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.lane-btn.best .why { color: var(--on-accent); font-weight: 600; }
+@media (hover: hover) { .lane-btn:hover:not([aria-disabled="true"]):not(.best) { background: var(--surface-2); } .lane-btn.best:hover { background: var(--accent-hover); } }
+.place-note { font-size: 15px; color: var(--text-2); }
+.banner { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s3); justify-content: space-between; }
+.banner p { font-weight: 600; }
+
+/* ---------- Deck ---------- */
+.deck-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--s4); display: grid; gap: var(--s3); }
+.deck-wrap h2 { font-size: 20px; }
+.deck { display: grid; gap: var(--s2); grid-template-columns: 1fr 1fr; grid-template-areas: "stern bow" "ruler ruler" "lanes lanes"; }
+.end { font-size: 14px; color: var(--text-2); font-weight: 600; }
+.end-stern { grid-area: stern; } .end-bow { grid-area: bow; text-align: right; }
+.ruler { grid-area: ruler; position: relative; height: 18px; margin-left: clamp(128px, calc(20cqw + 4px), 168px); font-size: 13px; color: var(--text-3); }
+.ruler span { position: absolute; top: 0; transform: translateX(50%); right: var(--at); white-space: nowrap; }
+.lanes { grid-area: lanes; display: grid; border: 2px solid var(--border-strong); border-radius: var(--r-md); overflow: hidden; background: var(--deck); }
+.lane { display: grid; grid-template-columns: clamp(124px, 20cqw, 164px) 1fr; }
+.lane + .lane { border-top: 3px dashed var(--deck-paint); }
+.lane-label { padding: var(--s2) var(--s3); background: var(--surface-2); border-right: 2px solid var(--border-strong); display: grid; align-content: center; line-height: 1.25; min-width: 0; }
+.lane-label b { font-size: 16px; }
+.lane-label span { font-size: 13px; color: var(--text-2); }
+.track {
+  --dir: to left;
+  position: relative; height: 68px; min-width: 0;
+  background-image: linear-gradient(var(--dir), transparent calc(25% - 1px), oklch(0.5 0.02 245 / 0.35) calc(25% - 1px) 25%, transparent 25% calc(50% - 1px), oklch(0.5 0.02 245 / 0.35) calc(50% - 1px) 50%, transparent 50% calc(75% - 1px), oklch(0.5 0.02 245 / 0.35) calc(75% - 1px) 75%, transparent 75%);
+}
+.veh {
+  position: absolute; right: var(--pos); width: var(--len); top: 6px; bottom: 6px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  padding: 0 2px; overflow: hidden; border: 0; border-radius: var(--r-sm);
+  color: var(--veh-text); background-color: var(--skerra);
+  background-image: linear-gradient(var(--dir), oklch(0 0 0 / 0.28) 0 11%, transparent 11%);
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.18);
+  transition: transform 120ms var(--ease-out);
+}
+.veh.holm { background-color: var(--holm); }
+.veh .plate { font-size: 12px; padding: 0 4px; letter-spacing: 0.02em; }
+.veh .chips { display: flex; gap: 3px; max-width: 100%; overflow: hidden; }
+.veh .chip { min-height: 18px; padding: 0 5px; font-size: 12px; border-radius: 4px; }
+.veh:active { transform: scale(0.97); }
+.veh[aria-pressed="true"] { outline: 3px solid var(--focus); outline-offset: 1px; z-index: 2; }
+.veh.blocked { box-shadow: inset 0 0 0 2px var(--warn-bg), 0 0 0 2px var(--warn); }
+.veh.ghost {
+  background: transparent; background-image: none; box-shadow: none; pointer-events: none;
+  border: 2px dashed var(--text-2); color: var(--text-2); opacity: 0.95;
+}
+.veh.ghost .plate { opacity: 0.8; }
+.veh.enter { animation: enter 220ms var(--ease-out); }
+.track.full::after { content: "Full"; position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 13px; font-weight: 700; color: var(--text-2); }
+.legend { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s5); font-size: 15px; color: var(--text-2); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: var(--s2); }
+.legend i { width: 28px; height: 14px; border-radius: 3px; display: inline-block; }
+.legend i.s { background: var(--skerra); } .legend i.h { background: var(--holm); }
+.legend i.g { border: 2px dashed var(--text-2); }
+
+@container main (max-width: 659px) {
+  .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat:nth-child(3) { border-left: 0; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--border); }
+  .lane-btns { gap: 6px; }
+  .lane-btn { padding: var(--s2); min-height: 72px; }
+  .lane-btn .why-long { display: none; } .lane-btn .why-short { display: block; }
+  .deck { grid-template-columns: 1fr; grid-template-areas: "bow" "lanes" "stern"; }
+  .end-bow, .end-stern { text-align: center; }
+  .ruler { display: none; }
+  .lanes { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; }
+  .lane { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .lane + .lane { border-top: 0; border-left: 3px dashed var(--deck-paint); }
+  .lane-label { border-right: 0; border-bottom: 2px solid var(--border-strong); text-align: center; min-height: 92px; align-content: start; padding: var(--s2) 2px; }
+  .track { --dir: to bottom; height: 640px; background-image: linear-gradient(var(--dir), transparent calc(25% - 1px), oklch(0.5 0.02 245 / 0.35) calc(25% - 1px) 25%, transparent 25% calc(50% - 1px), oklch(0.5 0.02 245 / 0.35) calc(50% - 1px) 50%, transparent 50% calc(75% - 1px), oklch(0.5 0.02 245 / 0.35) calc(75% - 1px) 75%, transparent 75%); }
+  .veh { right: 2px; left: 2px; width: auto; top: var(--pos); height: var(--len); bottom: auto; }
+  .track.full::after { left: 50%; top: auto; bottom: 8px; transform: translateX(-50%); }
+}
+
+/* ---------- Checks and detail ---------- */
+.lower { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--s5); align-items: start; }
+@container main (max-width: 799px) { .lower { grid-template-columns: 1fr; } }
+.panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--s4); display: grid; gap: var(--s3); align-content: start; }
+.panel h2 { font-size: 20px; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+.check { display: grid; grid-template-columns: 24px 1fr; gap: var(--s3); padding: var(--s3); border-radius: var(--r-md); }
+.check svg { width: 24px; height: 24px; margin-top: 1px; }
+.check b { display: block; line-height: 1.3; }
+.check span { display: block; font-size: 15px; line-height: 1.4; }
+.check.warn { background: var(--warn-bg); color: var(--warn); }
+.check.bad { background: var(--bad-bg); color: var(--bad); }
+.check.ok { background: var(--ok-bg); color: var(--ok); }
+.check.info { background: var(--info-bg); color: var(--info); }
+.check button { margin-top: var(--s2); }
+.detail dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: var(--s1) var(--s4); font-size: 16px; }
+.detail dt { color: var(--text-2); } .detail dd { margin: 0; font-weight: 600; text-align: right; }
+.detail .note { font-size: 15px; color: var(--text-2); }
+.detail .head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2); }
+
+/* ---------- Toast, dialog ---------- */
+.toast {
+  position: fixed; left: max(var(--s4), env(safe-area-inset-left)); bottom: max(var(--s4), env(safe-area-inset-bottom)); z-index: 40;
+  display: flex; align-items: center; gap: var(--s3); max-width: min(520px, calc(100vw - 32px));
+  padding: var(--s2) var(--s2) var(--s2) var(--s4); border-radius: var(--r-md);
+  background: var(--hull); color: var(--hull-text); border: 1px solid var(--hull-line);
+  box-shadow: 0 8px 24px oklch(0.2 0.05 250 / 0.35);
+  opacity: 0; transform: translateY(8px) scale(0.98); pointer-events: none; visibility: hidden;
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out), visibility 0s 180ms;
+}
+.toast.show { opacity: 1; transform: none; pointer-events: auto; visibility: visible; transition-delay: 0s; }
+.toast .btn { background: transparent; color: var(--hull-text); border-color: var(--hull-line); min-height: 44px; }
+.toast .btn:focus-visible { outline-color: #fff; }
+dialog {
+  width: min(520px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--border-strong); border-radius: var(--r-lg);
+  background: var(--surface); color: var(--text);
+  box-shadow: 0 16px 48px oklch(0.2 0.05 250 / 0.4);
+}
+dialog::backdrop { background: oklch(0.15 0.04 250 / 0.55); }
+dialog[open] { animation: pop 220ms var(--ease-out); }
+.dlg { padding: var(--s5); display: grid; gap: var(--s4); }
+.dlg h2 { font-size: 22px; }
+.dlg ul { margin: 0; padding-left: var(--s5); display: grid; gap: var(--s1); }
+.dlg .btns { display: flex; flex-wrap: wrap; gap: var(--s3); justify-content: flex-end; }
+.left-list { max-height: 200px; overflow: auto; }
+
+.manifest { display: none; }
+
+@keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: none; } }
+@keyframes enter { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: none; } }
+
+/* ---------- Narrow: single column ---------- */
+@media (max-width: 859px) {
+  :root { --hdr: auto; }
+  .top { position: static; gap: var(--s2) var(--s4); }
+  .ident h1 { font-size: 22px; }
+  .sailing small { display: none; }
+  .clock { margin-left: auto; }
+  .clock .big { font-size: 24px; }
+  .top-actions { width: 100%; }
+  .top-actions .btn-primary { margin-left: auto; }
+  .layout { grid-template-columns: 1fr; }
+  .queue { position: static; height: auto; border-right: 0; border-top: 1px solid var(--border); order: 2; }
+  .q-scroll { overflow: visible; }
+  .main { padding: var(--s3); gap: var(--s3); }
+  .place {
+    position: sticky; bottom: 0; z-index: 15; border-radius: var(--r-lg) var(--r-lg) 0 0;
+    border-color: var(--border-strong); padding: var(--s3) var(--s3) max(var(--s3), env(safe-area-inset-bottom));
+    margin: 0 calc(var(--s3) * -1) calc(var(--s3) * -1);
+  }
+  .toast { bottom: 190px; }
+}
+@media (max-width: 859px) { .main { order: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Print: the loading plan ---------- */
+@media print {
+  body { background: #fff; color: #000; font-size: 12pt; }
+  .top, .layout, .toast, dialog { display: none !important; }
+  .manifest { display: block; padding: 0; }
+  .manifest h1 { font-size: 18pt; margin-bottom: 4pt; }
+  .manifest p { margin: 0 0 8pt; }
+  .manifest table { width: 100%; border-collapse: collapse; margin-bottom: 12pt; }
+  .manifest th, .manifest td { border: 1px solid #000; padding: 3pt 6pt; text-align: left; font-size: 10.5pt; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="ident">
+    <span class="co">Skerra Ferry Company</span>
+    <h1>MV Gannet <span>car deck</span></h1>
+  </div>
+  <div class="sailing">
+    <strong>14:30 Kirkhaven to Holm to Skerra</strong>
+    <small>Tuesday 20 October <span class="sample-tag">Sample data</span></small>
+  </div>
+  <div class="clock" aria-live="off">
+    <span class="big num" id="countdown">28 min</span>
+    <small class="num" id="clocksub">Ramp up 14:20 · now 14:02</small>
+  </div>
+  <div class="top-actions">
+    <button class="btn" id="undoBtn" type="button">Undo</button>
+    <details class="more" id="more">
+      <summary class="btn" role="button">More</summary>
+      <div class="more-menu">
+        <button class="btn" id="themeBtn" type="button">Night mode</button>
+        <button class="btn" id="printBtn" type="button">Print loading plan</button>
+        <button class="btn" id="resetBtn" type="button">Reset sample loading</button>
+      </div>
+    </details>
+    <button class="btn" id="closeBtn" type="button">Close deck</button>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="queue" aria-label="Vehicles waiting on the pier">
+    <div class="q-head">
+      <h2>Waiting on the pier <span class="count num" id="qcount"></span></h2>
+      <div class="field">
+        <label for="find">Find by registration</label>
+        <input id="find" type="search" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Type any part, e.g. NHC">
+      </div>
+      <div class="seg" role="group" aria-label="Show vehicles for" id="seg"></div>
+    </div>
+    <div class="q-scroll">
+      <ul class="q-list" id="qlist"></ul>
+      <div id="qempty"></div>
+    </div>
+    <div id="noshows"></div>
+  </aside>
+
+  <main class="main">
+    <section class="summary" id="summary" aria-label="Deck totals"></section>
+    <section class="place" id="place" aria-label="Place the selected vehicle"></section>
+    <section class="deck-wrap" aria-labelledby="deckH">
+      <h2 id="deckH">Car deck plan</h2>
+      <div class="deck" id="deck"></div>
+      <div class="legend">
+        <span><i class="s"></i>Skerra, last off</span>
+        <span><i class="h"></i>Holm, first off</span>
+        <span><i class="g"></i>Preview of where the selected vehicle goes</span>
+      </div>
+    </section>
+    <div class="lower">
+      <section class="panel" aria-labelledby="chkH"><h2 id="chkH">Checks</h2><ul class="checks" id="checks"></ul></section>
+      <section class="panel detail" id="detail" aria-live="polite"></section>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toastMsg"></span><button class="btn" id="toastUndo" type="button">Undo</button></div>
+
+<dialog id="closeDlg" aria-labelledby="closeH">
+  <form method="dialog" class="dlg" id="closeForm"></form>
+</dialog>
+
+<section class="manifest" id="manifest" aria-hidden="true"></section>
+
+<script>
+(function () {
+'use strict';
+
+/* ---------- Sample data (not real bookings) ---------- */
+const LANE_LEN = 32, GAP = 0.6, START = 0.4, WEIGHT_LIMIT = 85;
+const SAILING_MIN = 14 * 60 + 30, RAMP_UP_MIN = 14 * 60 + 20, START_MIN = 14 * 60 + 2;
+const LANES = [
+  { n: 1, tag: 'Port',      maxH: 2.1, y: -4.2, outer: true },
+  { n: 2, tag: 'Open deck', maxH: 4.2, y: -1.4 },
+  { n: 3, tag: 'Reefer', maxH: 4.2, y: 1.4 },
+  { n: 4, tag: 'Starboard', maxH: 2.1, y: 4.2, outer: true }
+];
+const STOP = { S: 'Skerra', H: 'Holm' };
+// reg, description, length m, height m, gross t, stop, booking ref, flags (dg, ref, bb)
+const RAW = [
+  ['YB19 GLK', 'Autotrail F60 motorhome', 7.40, 3.10, 3.5, 'S', 'GN-48102'],
+  ['SD22 KFH', 'Scania P-series tanker, heating oil', 9.80, 3.30, 14.5, 'S', 'GN-48107', 'dg'],
+  ['SX23 RBN', 'VW Golf', 4.28, 1.46, 1.3, 'S', 'GN-48111', 'bb'],
+  ['SW19 MJO', 'Iveco Eurocargo reefer, Skerra Shellfish', 9.00, 3.60, 10.2, 'S', 'GN-48115', 'ref'],
+  ['SG20 TRX', 'Skoda Octavia Estate', 4.69, 1.47, 1.4, 'S', 'GN-48121'],
+  ['SN20 ZRV', 'DAF LF box lorry', 8.00, 3.40, 7.2, 'S', 'GN-48124'],
+  ['SL20 WGH', 'Suzuki Swift', 3.84, 1.50, 1.0, 'S', 'GN-48130', 'bb'],
+  ['SK22 PHF', 'Mazda CX-5', 4.55, 1.68, 1.6, 'S', 'GN-48133'],
+  ['SK71 HNE', 'Ford Puma', 4.19, 1.54, 1.3, 'H', 'GN-48138'],
+  ['SB67 TEL', 'Fiat Ducato post van', 5.99, 2.52, 2.9, 'H', 'GN-48140'],
+  ['SA68 KLM', 'Vauxhall Corsa', 4.06, 1.43, 1.1, 'S', 'GN-48146'],
+  ['SG17 WLE', 'Mercedes Sprinter LWB', 7.00, 2.65, 3.3, 'H', 'GN-48149'],
+  ['SH22 KVA', 'Peugeot 3008', 4.45, 1.64, 1.5, 'S', 'GN-48152'],
+  ['SH19 PEV', 'Volvo XC60', 4.69, 1.66, 1.9, 'S', 'GN-48155'],
+  ['SV70 DPW', 'Land Rover Defender 110', 4.76, 1.97, 2.3, 'S', 'GN-48160'],
+  ['SK69 FDT', 'Toyota Hilux', 5.33, 1.81, 2.2, 'H', 'GN-48163'],
+  ['SJ21 DOU', 'Triumph Tiger 900 motorbike', 2.20, 1.30, 0.24, 'H', 'GN-48166'],
+  ['SF21 NHC', 'Tesla Model Y', 4.75, 1.62, 2.0, 'S', 'GN-48170'],
+  ['SJ22 MBK', 'BMW R1250 GS motorbike', 2.20, 1.35, 0.26, 'S', 'GN-48172'],
+  ['SA16 RGO', 'Ford Transit Custom', 5.05, 1.99, 2.1, 'S', 'GN-48177'],
+  ['SP71 JDK', 'Hyundai Kona Electric', 4.20, 1.58, 1.7, 'S', 'GN-48181', 'bb'],
+  ['SN21 BYU', 'Nissan Qashqai', 4.43, 1.63, 1.5, 'S', 'GN-48185'],
+  ['SC70 AHV', 'Ford Fiesta', 3.97, 1.48, 1.1, 'H', 'GN-48188'],
+  ['SG21 YAD', 'Polestar 2', 4.60, 1.48, 2.1, 'S', 'GN-48192']
+];
+const VEHICLES = RAW.map(r => ({
+  id: r[0].replace(' ', ''), reg: r[0], name: r[1], len: r[2], h: r[3], w: r[4], stop: r[5], ref: r[6],
+  dg: r.includes('dg'), reefer: r.includes('ref'), bb: r.includes('bb')
+}));
+const byId = Object.fromEntries(VEHICLES.map(v => [v.id, v]));
+const seed = () => ({
+  lanes: [
+    ['SX23RBN', 'SL20WGH', 'SA68KLM', 'SH19PEV'],
+    ['YB19GLK', 'SD22KFH', 'SB67TEL'],
+    ['SW19MJO', 'SN20ZRV', 'SG17WLE'],
+    ['SG20TRX', 'SK22PHF', 'SK71HNE', 'SH22KVA']
+  ],
+  noShow: ['SG21YAD'],
+  closed: null,
+  t0: Date.now()
+});
+
+/* ---------- State ---------- */
+const KEY = 'gannet-loading-v1';
+let S;
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
+if (!S || !Array.isArray(S.lanes) || S.lanes.length !== 4) S = seed();
+const ui = { sel: null, deckSel: null, filter: 'all', q: '', preview: null, hover: null, lastPlaced: null };
+let hist = [];
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const snapshot = () => { hist.push(JSON.stringify(S)); if (hist.length > 40) hist.shift(); };
+
+/* ---------- Helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const f1 = n => n.toFixed(1);
+const f2 = n => n.toFixed(2);
+const plate = (v, short) => `<span class="plate">${esc(short ? v.reg.slice(-3) : v.reg)}</span>`;
+const loadedIds = () => S.lanes.flat();
+const waiting = () => VEHICLES.filter(v => !loadedIds().includes(v.id) && !S.noShow.includes(v.id));
+const laneNext = l => START + S.lanes[l].reduce((a, id) => a + byId[id].len + GAP, 0);
+const laneFree = l => Math.max(0, LANE_LEN - laneNext(l));
+const loadedWeight = () => loadedIds().reduce((a, id) => a + byId[id].w, 0);
+const usedMetres = () => S.lanes.reduce((a, ids) => a + ids.reduce((b, id) => b + byId[id].len + GAP, 0), 0);
+const CAP_M = LANES.length * (LANE_LEN - START);
+const fmtTime = m => { const h = Math.floor(m / 60) % 24, mm = Math.floor(m % 60); return String(h).padStart(2, '0') + ':' + String(mm).padStart(2, '0'); };
+const nowMin = () => START_MIN + (Date.now() - S.t0) / 60000;
+const posOf = (l, i) => START + S.lanes[l].slice(0, i).reduce((a, id) => a + byId[id].len + GAP, 0);
+const findLoaded = id => { for (let l = 0; l < 4; l++) { const i = S.lanes[l].indexOf(id); if (i >= 0) return { l, i }; } return null; };
+
+const ICON = {
+  ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="m8 12.5 3 3 5-6"/></svg>',
+  warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2.5 20h19z"/><path d="M12 10v4.5M12 17.5v.01"/></svg>',
+  bad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.5h8L21.5 8v8L16 21.5H8L2.5 16V8z"/><path d="M12 7.5v6M12 16.5v.01"/></svg>',
+  info: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>'
+};
+
+/* ---------- Rules ---------- */
+function check(v, l) {
+  const L = LANES[l], free = laneFree(l);
+  if (v.h > L.maxH) return { ok: false, why: `Too tall: ${f2(v.h)} m, lane max ${L.maxH} m`, short: 'Too tall' };
+  if (v.dg && L.outer) return { ok: false, why: 'Dangerous goods: lanes 2 and 3 only', short: 'Not for DG' };
+  if (v.reefer && L.n !== 3) return { ok: false, why: 'Needs a reefer point: lane 3 only', short: 'Lane 3 only' };
+  if (free < v.len) return { ok: false, why: `No room: ${f1(free)} m free, needs ${f2(v.len)} m`, short: 'No room' };
+  if (loadedWeight() + v.w > WEIGHT_LIMIT) return { ok: false, why: 'Over the deck weight limit', short: 'Too heavy' };
+  return { ok: true };
+}
+function latAfter(v, l) {
+  let w = v.w + loadedWeight(), m = v.w * LANES[l].y;
+  S.lanes.forEach((ids, i) => ids.forEach(id => { m += byId[id].w * LANES[i].y; }));
+  return m / w;
+}
+function suggest(v) {
+  let best = -1, bs = Infinity;
+  LANES.forEach((L, l) => {
+    if (!check(v, l).ok) return;
+    let s = (laneFree(l) - v.len) * 0.4;
+    if (v.stop === 'S' && S.lanes[l].some(id => byId[id].stop === 'H')) s += 50;
+    if (v.bb) s += L.outer ? -20 : 20;
+    if (!L.outer && v.h <= 2.1 && !v.dg && !v.reefer) s += 4;
+    s += Math.abs(latAfter(v, l)) * 8;
+    if (s < bs) { bs = s; best = l; }
+  });
+  return best;
+}
+function blockedHolm() {
+  const out = [];
+  S.lanes.forEach((ids, l) => ids.forEach((id, i) => {
+    const v = byId[id];
+    if (v.stop !== 'H') return;
+    const by = ids.slice(i + 1).map(x => byId[x]).find(x => x.stop === 'S');
+    if (by) out.push({ l, v, by });
+  }));
+  return out;
+}
+function balance() {
+  const W = loadedWeight();
+  if (!W) return { lat: 0, lon: 0, W };
+  let my = 0, mx = 0;
+  S.lanes.forEach((ids, l) => ids.forEach((id, i) => {
+    const v = byId[id];
+    my += v.w * LANES[l].y;
+    mx += v.w * (posOf(l, i) + v.len / 2);
+  }));
+  return { lat: my / W, lon: LANE_LEN / 2 - mx / W, W }; // lat + = starboard, lon + = bow-heavy
+}
+function balanceState(b) {
+  const full = usedMetres() / CAP_M >= 0.75;
+  const a = Math.abs(b.lat);
+  let lat = a > 0.9 ? 'bad' : a > 0.5 ? 'warn' : 'ok';
+  let lon = 'ok';
+  if (full) { const t = Math.abs(b.lon); lon = t > 5 ? 'bad' : t > 3 ? 'warn' : 'ok'; }
+  const rank = { ok: 0, warn: 1, bad: 2 };
+  const worst = rank[lat] >= rank[lon] ? lat : lon;
+  return { lat, lon, full, worst: b.W < 5 ? 'none' : worst };
+}
+function checks() {
+  const out = [];
+  blockedHolm().forEach(({ l, v, by }) => out.push({
+    sev: 'warn', title: `Lane ${l + 1}: Holm vehicle is blocked in`,
+    text: `${v.reg} gets off at Holm but ${by.reg} (Skerra) is parked nearer the ramp. ${by.reg} has to move first, or swap them.`, focus: v.id
+  }));
+  S.lanes.forEach((ids, l) => ids.forEach(id => {
+    const v = byId[id];
+    if (v.bb && !LANES[l].outer) out.push({ sev: 'warn', title: `Blue badge vehicle in lane ${l + 1}`, text: `${v.reg} is in a centre lane, away from the passenger stairs. Outer lanes 1 and 4 give the driver door room.`, focus: v.id });
+  }));
+  const b = balance(), bs = balanceState(b);
+  const side = b.lat < 0 ? 'port' : 'starboard';
+  if (bs.lat !== 'ok') out.push({ sev: bs.lat, title: `Weight is heavy to ${side}`, text: `Centre of weight is ${f2(Math.abs(b.lat))} m to ${side}. Keep it within 0.5 m. Put the next heavy vehicle on the other side.` });
+  if (bs.full && bs.lon !== 'ok') out.push({ sev: bs.lon, title: `Deck is trimmed by the ${b.lon > 0 ? 'bow' : 'stern'}`, text: `Centre of weight is ${f1(Math.abs(b.lon))} m ${b.lon > 0 ? 'forward of' : 'aft of'} midships. Keep it within 3 m.` });
+  const wl = waiting();
+  const need = wl.reduce((a, v) => a + v.len + GAP, 0), free = S.lanes.reduce((a, _, l) => a + laneFree(l), 0);
+  if (wl.length && need > free) out.push({ sev: 'info', title: 'Not everything on the pier will fit', text: `The ${wl.length} waiting vehicles need about ${Math.round(need)} m and the lanes have ${Math.round(free)} m free. Expect to leave some for the 16:30.` });
+  if (loadedWeight() > WEIGHT_LIMIT * 0.9) out.push({ sev: 'warn', title: 'Close to the weight limit', text: `${f1(loadedWeight())} t of ${WEIGHT_LIMIT} t. Check heavy vehicles before loading more.` });
+  if (!out.length) out.push({ sev: 'ok', title: 'No problems found', text: 'Height, lane and weight rules are met and no Holm vehicle is blocked in.' });
+  return out;
+}
+
+/* ---------- Actions ---------- */
+let toastTimer;
+function toast(msg, withUndo) {
+  $('#toastMsg').textContent = msg;
+  $('#toastUndo').style.display = withUndo ? '' : 'none';
+  $('#toast').classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => $('#toast').classList.remove('show'), 7000);
+}
+function place(id, l) {
+  const v = byId[id];
+  if (S.closed || !check(v, l).ok) return;
+  const wl = waiting(), idx = wl.findIndex(x => x.id === id);
+  snapshot();
+  const pos = laneNext(l);
+  S.lanes[l].push(id);
+  save();
+  ui.lastPlaced = id;
+  const after = wl.filter(x => x.id !== id);
+  ui.sel = after.length ? after[Math.min(idx, after.length - 1)].id : null;
+  ui.deckSel = null;
+  render();
+  toast(`${v.reg} placed in lane ${l + 1}, ${f1(pos)} m from the bow.`, true);
+}
+function takeOff(id) {
+  const loc = findLoaded(id);
+  if (!loc || S.closed || loc.i !== S.lanes[loc.l].length - 1) return;
+  snapshot();
+  S.lanes[loc.l].pop(); save();
+  ui.sel = id; ui.deckSel = null; ui.lastPlaced = null;
+  render();
+  toast(`${byId[id].reg} is back in the queue.`, true);
+}
+function setNoShow(id, on) {
+  snapshot();
+  if (on) { S.noShow.push(id); if (ui.sel === id) ui.sel = null; }
+  else { S.noShow = S.noShow.filter(x => x !== id); ui.sel = id; }
+  save(); render();
+  toast(on ? `${byId[id].reg} marked as a no-show.` : `${byId[id].reg} is back in the queue.`, true);
+}
+function undo() {
+  if (!hist.length) return;
+  S = JSON.parse(hist.pop());
+  save(); ui.deckSel = null; ui.lastPlaced = null; ui.sel = null;
+  render();
+  toast('Last change undone.', false);
+}
+
+/* ---------- Rendering ---------- */
+function keepFocus(fn) {
+  const a = document.activeElement, k = a && a.dataset ? a.dataset.fk : null;
+  fn();
+  if (k) { const n = document.querySelector(`[data-fk="${k}"]`); if (n) n.focus({ preventScroll: true }); }
+}
+function flagTags(v) {
+  const t = [`<span class="chip ${v.stop === 'H' ? 'holm' : 'skerra'}">${STOP[v.stop]}</span>`];
+  if (v.dg) t.push('<span class="chip dg">Dangerous goods</span>');
+  if (v.reefer) t.push('<span class="chip">Reefer</span>');
+  if (v.bb) t.push('<span class="chip">Blue badge</span>');
+  return t.join('');
+}
+function notes(v) {
+  const n = [];
+  if (v.dg) n.push('Dangerous goods: lanes 2 and 3 only.');
+  if (v.reefer) n.push('Refrigerated: needs a reefer point, lane 3 only.');
+  if (v.bb) n.push('Blue badge: outer lane, by the passenger stairs.');
+  if (v.h > 2.1) n.push(`${f2(v.h)} m high: centre lanes only.`);
+  return n;
+}
+const meta = v => `${f2(v.len)} m long · ${f2(v.h)} m high · ${v.w} t`;
+
+function renderSummary() {
+  const on = loadedIds().length, wl = waiting().length, used = usedMetres(), W = loadedWeight();
+  const b = balance(), bs = balanceState(b);
+  // mini plan: bow right, port top
+  const cx = 84, cy = 26, px = cx + (b.lon / 16) * 74, py = cy + (b.lat / 5.6) * 20;
+  const zx = (3 / 16) * 74, zy = (0.5 / 5.6) * 20;
+  const latTxt = Math.abs(b.lat) < 0.05 ? 'on the centreline' : `${f2(Math.abs(b.lat))} m to ${b.lat < 0 ? 'port' : 'starboard'}`;
+  const lonTxt = `${f1(Math.abs(b.lon))} m ${b.lon >= 0 ? 'forward' : 'aft'}`;
+  const state = bs.worst === 'none' ? '' : bs.worst;
+  $('#summary').innerHTML = `
+    <div class="stat"><span class="label">Vehicles</span><span class="val num">${on} <small>on deck</small></span><span class="sub num">${wl} waiting · ${S.noShow.length} no-show</span></div>
+    <div class="stat"><span class="label">Lane space</span><span class="val num">${Math.round(used)} <small>of ${Math.round(CAP_M)} m</small></span><div class="bar" aria-hidden="true"><i style="width:${Math.min(100, used / CAP_M * 100)}%"></i></div></div>
+    <div class="stat"><span class="label">Weight</span><span class="val num">${f1(W)} <small>of ${WEIGHT_LIMIT} t</small></span><div class="bar ${W > WEIGHT_LIMIT * 0.9 ? 'hot' : ''}" aria-hidden="true"><i style="width:${Math.min(100, W / WEIGHT_LIMIT * 100)}%"></i></div></div>
+    <div class="stat bal ${state}"><span class="label">Balance</span>
+      <svg viewBox="0 0 168 52" role="img" aria-label="Centre of weight on the deck: ${latTxt}, ${lonTxt} of midships">
+        <rect class="frame" x="10" y="4" width="148" height="44" rx="5"/>
+        <rect class="zone" x="${cx - zx}" y="${cy - zy}" width="${zx * 2}" height="${zy * 2}"/>
+        <line class="axis" x1="${cx}" y1="4" x2="${cx}" y2="48"/><line class="axis" x1="10" y1="${cy}" x2="158" y2="${cy}"/>
+        <circle class="dot" cx="${Math.max(16, Math.min(152, px))}" cy="${Math.max(10, Math.min(42, py))}" r="6.5"/>
+      </svg>
+      <span class="sub num">${W ? latTxt + ', ' + lonTxt : 'Nothing loaded'}</span></div>`;
+}
+
+function renderPlace() {
+  const el = $('#place');
+  if (S.closed) {
+    el.innerHTML = `<div class="banner"><p>Deck closed at ${esc(S.closed.at)}. ${S.closed.left} ${S.closed.left === 1 ? 'vehicle' : 'vehicles'} left for the 16:30.</p><button class="btn" id="reopen" type="button" data-fk="reopen">Reopen deck</button></div>`;
+    return;
+  }
+  const wl = waiting();
+  if (!wl.length) {
+    el.innerHTML = `<div class="banner"><p>Everyone on the pier is on deck.</p><span class="place-note">Check the list below, then close the deck.</span></div>`;
+    return;
+  }
+  if (!ui.sel || !wl.some(v => v.id === ui.sel)) ui.sel = wl[0].id;
+  const v = byId[ui.sel], idx = wl.findIndex(x => x.id === v.id), best = suggest(v);
+  const btns = LANES.map((L, l) => {
+    const c = check(v, l), cls = !c.ok ? '' : l === best ? 'best' : '';
+    const sub = c.ok ? `${l === best ? 'Best fit · ' : ''}${f1(laneFree(l))} m free` : '';
+    return `<button class="lane-btn ${cls}" type="button" data-lane="${l}" data-fk="lane${l}" ${c.ok ? '' : 'aria-disabled="true"'}>
+      <b>Lane ${L.n}</b>${c.ok ? `<span class="why num">${sub}</span>` : `<span class="why why-long">${esc(c.why)}</span><span class="why why-short">${esc(c.short)}</span>`}</button>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="pv">
+      <button class="btn" type="button" id="prevV" aria-label="Previous waiting vehicle" data-fk="prevV">‹</button>
+      <div class="pv-info"><div class="l1">${plate(v)}<span class="name">${esc(v.name)}</span></div>
+        <div class="meta num">${meta(v)} · ${idx + 1} of ${wl.length} waiting</div></div>
+      <button class="btn" type="button" id="nextV" aria-label="Next waiting vehicle" data-fk="nextV">›</button>
+    </div>
+    <div class="lane-btns" role="group" aria-label="Choose a lane for ${esc(v.reg)}">${btns}</div>
+    ${best < 0 ? `<p class="place-note">${v.name} fits no lane right now. Mark it as a no-show, or take a vehicle off to make room.</p>` : ''}`;
+  ui.preview = best;
+}
+
+function renderDeck() {
+  const blocked = new Set(blockedHolm().map(x => x.v.id));
+  const ruler = [8, 16, 24].map(m => `<span style="--at:${m / LANE_LEN * 100}%">${m} m</span>`).join('');
+  const lanes = LANES.map((L, l) => {
+    const veh = S.lanes[l].map((id, i) => {
+      const v = byId[id], pos = posOf(l, i), small = v.len < 3.2;
+      const chip = blocked.has(id) ? '<i class="chip warn">Blocked</i>' : v.dg ? '<i class="chip dg">DG</i>' : v.reefer ? '<i class="chip">Reefer</i>'
+        : v.bb ? '<i class="chip">Badge</i>' : v.stop === 'H' ? '<i class="chip holm">Holm</i>' : '';
+      return `<button type="button" class="veh ${v.stop === 'H' ? 'holm' : ''} ${blocked.has(id) ? 'blocked' : ''} ${ui.lastPlaced === id ? 'enter' : ''}" data-veh="${id}" data-fk="veh${id}"
+        style="--pos:${pos / LANE_LEN * 100}%;--len:${v.len / LANE_LEN * 100}%" aria-pressed="${ui.deckSel === id}"
+        aria-label="${esc(v.reg)}, ${esc(v.name)}, lane ${L.n}, ${f1(pos)} metres from the bow, for ${STOP[v.stop]}${blocked.has(id) ? ', blocked in' : ''}">
+        ${plate(v, small)}${!small && chip ? `<span class="chips">${chip}</span>` : ''}</button>`;
+    }).join('');
+    const free = laneFree(l);
+    return `<div class="lane">
+      <div class="lane-label"><b>Lane ${L.n}</b><span>${L.tag} · max ${L.maxH} m</span><span class="num">${f1(free)} m free</span></div>
+      <div class="track ${free < 2.2 ? 'full' : ''}" data-track="${l}">${veh}</div></div>`;
+  }).join('');
+  $('#deck').innerHTML = `<div class="end end-stern">Stern ramp, vehicles drive on here</div><div class="end end-bow">Bow, loaded first</div>
+    <div class="ruler" aria-hidden="true">${ruler}</div><div class="lanes">${lanes}</div>`;
+  ui.lastPlaced = null;
+  drawGhost();
+}
+function drawGhost() {
+  document.querySelectorAll('.veh.ghost').forEach(n => n.remove());
+  if (S.closed || !ui.sel) return;
+  const l = ui.hover != null ? ui.hover : ui.preview;
+  if (l == null || l < 0) return;
+  const v = byId[ui.sel];
+  if (!v || !check(v, l).ok) return;
+  const t = document.querySelector(`[data-track="${l}"]`);
+  if (!t) return;
+  const g = document.createElement('div');
+  g.className = 'veh ghost';
+  g.style.setProperty('--pos', laneNext(l) / LANE_LEN * 100 + '%');
+  g.style.setProperty('--len', v.len / LANE_LEN * 100 + '%');
+  g.setAttribute('aria-hidden', 'true');
+  g.innerHTML = plate(v, v.len < 3.2);
+  t.appendChild(g);
+  fitPlates();
+}
+// Long plates that do not fit a narrow vehicle fall back to the last 4 characters
+function fitPlates() {
+  document.querySelectorAll('#deck .veh').forEach(b => {
+    const p = b.querySelector('.plate');
+    if (!p) return;
+    const id = b.dataset.veh || ui.sel, v = byId[id];
+    if (!v || v.len < 3.2) return;
+    p.textContent = v.reg;
+    if (p.offsetWidth > b.clientWidth - 2) p.textContent = v.reg.slice(-4);
+  });
+}
+new ResizeObserver(() => fitPlates()).observe(document.getElementById('deck'));
+
+function renderChecks() {
+  $('#checks').innerHTML = checks().map(c => `<li class="check ${c.sev}">${ICON[c.sev]}<div><b>${esc(c.title)}</b><span>${esc(c.text)}</span>${c.focus ? `<button class="btn" type="button" data-show="${c.focus}">Show on deck</button>` : ''}</div></li>`).join('');
+}
+
+function renderDetail() {
+  const el = $('#detail');
+  const v = ui.deckSel && byId[ui.deckSel];
+  const loc = v && findLoaded(v.id);
+  if (!v || !loc) {
+    el.innerHTML = `<h2>On the deck</h2><p class="note">Tap a vehicle on the plan to see its booking, or to take it off again.</p>`;
+    return;
+  }
+  const lane = S.lanes[loc.l], last = loc.i === lane.length - 1;
+  const behind = lane[loc.i + 1] ? byId[lane[loc.i + 1]] : null;
+  const dis = !last || S.closed;
+  el.innerHTML = `
+    <div class="head">${plate(v)}${flagTags(v)}</div>
+    <h2>${esc(v.name)}</h2>
+    <dl class="num"><dt>Position</dt><dd>Lane ${loc.l + 1}, ${f1(posOf(loc.l, loc.i))} m from bow</dd><dt>Size</dt><dd>${f2(v.len)} × ${f2(v.h)} m</dd><dt>Weight</dt><dd>${v.w} t</dd><dt>Getting off at</dt><dd>${STOP[v.stop]}</dd><dt>Booking</dt><dd>${esc(v.ref)}</dd></dl>
+    <button class="btn" type="button" data-takeoff="${v.id}" ${dis ? 'aria-disabled="true"' : ''}>Send back to the queue</button>
+    ${S.closed ? '<p class="note">Reopen the deck to change the loading.</p>' : !last ? `<p class="note">${esc(behind.reg)} is behind it. Only the last vehicle in a lane can come off.</p>` : ''}`;
+}
+
+function renderQueue() {
+  const wl = waiting();
+  const holm = wl.filter(v => v.stop === 'H').length, sk = wl.length - holm;
+  $('#qcount').textContent = wl.length;
+  $('#seg').innerHTML = [['all', 'All', wl.length], ['H', 'Holm', holm], ['S', 'Skerra', sk]].map(([k, t, n]) =>
+    `<button type="button" data-filter="${k}" aria-pressed="${ui.filter === k}" data-fk="f${k}">${t} <span class="num">${n}</span></button>`).join('');
+  const q = ui.q.replace(/\s/g, '').toUpperCase();
+  const list = wl.filter(v => (ui.filter === 'all' || v.stop === ui.filter) && (!q || v.id.includes(q) || v.name.toUpperCase().includes(ui.q.trim().toUpperCase())));
+  $('#qlist').innerHTML = list.map(v => {
+    const sel = v.id === ui.sel, n = notes(v), order = wl.indexOf(v) + 1;
+    return `<li class="q-item ${sel ? 'sel' : ''}"><button class="q-row" type="button" data-pick="${v.id}" aria-pressed="${sel}" data-fk="pick${v.id}">
+      <span class="pos num" aria-label="Number ${order} in the queue">${order}</span>
+      <span><span class="l1">${plate(v)}</span><span class="name">${esc(v.name)}</span><span class="meta num">${meta(v)}</span><span class="tags">${flagTags(v)}</span></span></button>
+      ${sel ? `<div class="q-more">${n.map(t => `<p>${esc(t)}</p>`).join('')}<div class="row"><span class="num">Booking ${esc(v.ref)}</span><button class="btn" type="button" data-noshow="${v.id}" data-fk="ns${v.id}">No-show</button></div></div>` : ''}</li>`;
+  }).join('');
+  let empty = '';
+  if (!wl.length) empty = `<div class="empty"><h3>The pier is clear</h3><p>Every checked-in vehicle is on deck or marked as a no-show. Close the deck when the ramp is clear.</p></div>`;
+  else if (!list.length) empty = `<div class="empty"><h3>Nothing matches “${esc(ui.q.trim() || ui.filter)}”</h3><p>No waiting vehicle fits that search. Loaded vehicles are on the deck plan.</p><button class="btn" type="button" id="clearFind">Clear search</button></div>`;
+  $('#qempty').innerHTML = empty;
+  const ns = S.noShow.map(id => byId[id]);
+  $('#noshows').innerHTML = ns.length ? `<details class="noshows"><summary>No-shows (${ns.length})</summary><ul>${ns.map(v => `<li><span>${plate(v)} ${esc(v.name)}</span><button class="btn" type="button" data-restore="${v.id}">Restore</button></li>`).join('')}</ul></details>` : '';
+}
+
+function renderHeader() {
+  $('#undoBtn').setAttribute('aria-disabled', hist.length ? 'false' : 'true');
+  const cb = $('#closeBtn');
+  cb.textContent = S.closed ? 'Deck closed' : 'Close deck';
+  cb.setAttribute('aria-disabled', S.closed ? 'true' : 'false');
+  cb.classList.toggle('btn-primary', !S.closed && !waiting().length);
+  $('#themeBtn').textContent = document.documentElement.dataset.theme === 'dark' ? 'Day mode' : 'Night mode';
+}
+function tick() {
+  const n = nowMin(), left = Math.ceil(SAILING_MIN - n), el = $('#countdown');
+  if (left >= 0) { el.textContent = `${left} min`; el.classList.remove('late'); }
+  else { el.textContent = `${-left} min late`; el.classList.add('late'); }
+  $('#clocksub').textContent = `${left >= 0 ? 'to departure · ' : ''}ramp up ${fmtTime(RAMP_UP_MIN)} · now ${fmtTime(n)}`;
+}
+function renderManifest() {
+  const rows = [];
+  S.lanes.forEach((ids, l) => ids.forEach((id, i) => { const v = byId[id]; rows.push(`<tr><td>Lane ${l + 1}</td><td>${f1(posOf(l, i))}</td><td>${esc(v.reg)}</td><td>${esc(v.name)}</td><td>${STOP[v.stop]}</td><td>${v.w}</td></tr>`); }));
+  const left = waiting();
+  $('#manifest').innerHTML = `<h1>MV Gannet loading plan, 14:30 Kirkhaven to Holm to Skerra</h1>
+    <p>Tuesday 20 October · Sample data · ${loadedIds().length} vehicles, ${f1(loadedWeight())} t · ${S.closed ? 'Deck closed at ' + esc(S.closed.at) : 'Deck still open'}</p>
+    <table><thead><tr><th>Lane</th><th>m from bow</th><th>Registration</th><th>Vehicle</th><th>Off at</th><th>t</th></tr></thead><tbody>${rows.join('')}</tbody></table>
+    <p>Not loaded: ${left.length ? left.map(v => esc(v.reg)).join(', ') : 'none'}. No-shows: ${S.noShow.length ? S.noShow.map(id => esc(byId[id].reg)).join(', ') : 'none'}.</p>`;
+}
+function render() {
+  keepFocus(() => { renderHeader(); renderSummary(); renderPlace(); renderDeck(); renderChecks(); renderDetail(); renderQueue(); renderManifest(); });
+}
+
+/* ---------- Events ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('button, summary');
+  if (!t) { return; }
+  if (t.dataset.lane != null) { if (t.getAttribute('aria-disabled') === 'true') { toast($('#place') && byId[ui.sel] ? check(byId[ui.sel], +t.dataset.lane).why + '.' : '', false); return; } place(ui.sel, +t.dataset.lane); }
+  else if (t.dataset.pick) { ui.sel = t.dataset.pick; ui.hover = null; render(); }
+  else if (t.dataset.veh) { ui.deckSel = ui.deckSel === t.dataset.veh ? null : t.dataset.veh; render(); }
+  else if (t.dataset.show) { ui.deckSel = t.dataset.show; render(); const n = document.querySelector(`[data-veh="${t.dataset.show}"]`); if (n) n.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+  else if (t.dataset.takeoff) { if (t.getAttribute('aria-disabled') !== 'true') takeOff(t.dataset.takeoff); }
+  else if (t.dataset.noshow) setNoShow(t.dataset.noshow, true);
+  else if (t.dataset.restore) setNoShow(t.dataset.restore, false);
+  else if (t.dataset.filter) { ui.filter = t.dataset.filter; render(); }
+  else if (t.id === 'prevV' || t.id === 'nextV') {
+    const wl = waiting(), i = wl.findIndex(v => v.id === ui.sel), d = t.id === 'nextV' ? 1 : -1;
+    ui.sel = wl[(i + d + wl.length) % wl.length].id; render();
+  }
+  else if (t.id === 'clearFind') { ui.q = ''; ui.filter = 'all'; $('#find').value = ''; render(); $('#find').focus(); }
+  else if (t.id === 'undoBtn') undo();
+  else if (t.id === 'toastUndo') { undo(); }
+  else if (t.id === 'reopen') { snapshot(); S.closed = null; save(); render(); }
+  else if (t.id === 'closeBtn') { if (!S.closed) openClose(); }
+  else if (t.id === 'themeBtn') {
+    const d = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = d; try { localStorage.setItem('gannet-theme', d); } catch (x) {}
+    $('#more').open = false; renderHeader();
+  }
+  else if (t.id === 'printBtn') { $('#more').open = false; window.print(); }
+  else if (t.id === 'resetBtn') { $('#more').open = false; hist = []; S = seed(); save(); ui.sel = null; ui.deckSel = null; render(); toast('Sample loading reset to 14:02.', false); }
+  if (!t.closest('#more')) $('#more').open = false;
+});
+$('#find').addEventListener('input', e => { ui.q = e.target.value; renderQueue(); });
+$('#place').addEventListener('mouseover', e => { const b = e.target.closest('[data-lane]'); if (b) { ui.hover = +b.dataset.lane; drawGhost(); } });
+$('#place').addEventListener('mouseleave', () => { ui.hover = null; drawGhost(); });
+$('#place').addEventListener('focusin', e => { const b = e.target.closest('[data-lane]'); if (b) { ui.hover = +b.dataset.lane; drawGhost(); } });
+$('#place').addEventListener('focusout', () => { ui.hover = null; drawGhost(); });
+document.addEventListener('keydown', e => {
+  const tag = (e.target.tagName || '').toLowerCase();
+  if (tag === 'input' || e.target.closest('dialog')) return;
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z') { e.preventDefault(); undo(); return; }
+  if (e.key === '/') { e.preventDefault(); $('#find').focus(); return; }
+  if (/^[1-4]$/.test(e.key) && !e.ctrlKey && !e.metaKey && !e.altKey && ui.sel && !S.closed) {
+    const l = +e.key - 1, c = check(byId[ui.sel], l);
+    if (c.ok) place(ui.sel, l); else toast(c.why + '.', false);
+  }
+  if (e.key === 'Escape') $('#more').open = false;
+});
+
+/* ---------- Close deck ---------- */
+function openClose() {
+  const left = waiting(), issues = checks().filter(c => c.sev === 'warn' || c.sev === 'bad');
+  $('#closeForm').innerHTML = `
+    <h2 id="closeH">Close the deck for the 14:30?</h2>
+    <p class="num">${loadedIds().length} vehicles, ${f1(loadedWeight())} t and ${Math.round(usedMetres())} lane metres on deck.</p>
+    ${issues.length ? `<div><b>Still open</b><ul>${issues.map(c => `<li>${esc(c.title)}</li>`).join('')}</ul></div>` : ''}
+    ${left.length ? `<div><b>${left.length} ${left.length === 1 ? 'vehicle stays' : 'vehicles stay'} on the pier</b><ul class="left-list">${left.map(v => `<li>${esc(v.reg)}, ${esc(v.name)}</li>`).join('')}</ul></div>` : ''}
+    <div class="btns"><button class="btn" value="keep" id="keepBtn">Keep loading</button>
+    <button class="btn btn-primary" value="close" id="confirmClose">${left.length ? `Close deck, leave ${left.length} behind` : 'Close deck'}</button></div>`;
+  $('#closeDlg').showModal();
+}
+$('#closeDlg').addEventListener('close', () => {
+  if ($('#closeDlg').returnValue === 'close') {
+    snapshot(); S.closed = { at: fmtTime(nowMin()), left: waiting().length }; save(); ui.deckSel = null; render();
+    toast(`Deck closed at ${S.closed.at}.`, true);
+  }
+  $('#closeDlg').returnValue = '';
+});
+
+render(); tick(); setInterval(tick, 15000);
+})();
+</script>
+</body>
+</html>

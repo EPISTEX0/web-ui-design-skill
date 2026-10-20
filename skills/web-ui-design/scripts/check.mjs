@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // Renders a page at several widths in headless Chrome, audits layout, contrast, fonts, tap targets and wide tables, saves full-page JPEG tiles.
 // Extra checks: tap targets (WCAG 2.5.8 24px FAIL, 44px height WARN under 600px wide) and sideways-scrolling tables run at every width.
+// Under 600px a control starting past the right edge of the viewport or of a clipping or scrolling ancestor is a FAIL (out of reach); a sideways-scrolling chip row or scroll-snap carousel is a NOTE.
+// Placeholder text (TBC, "dates to confirm", [Bracketed gaps], lorem ipsum) is a WARN, reported once at the narrowest width.
 // Keyboard focus (up to 40 Tab presses, FAIL when a focused element shows no visible change) runs at the widest width.
 // Performance (LCP, CLS, bytes by type, WARN over budget) runs on a cache-free load at the narrowest width.
 // Exit codes: 0 no FAIL, 1 any FAIL, 2 setup error. --dark repeats layout checks in dark mode but not focus or performance.
@@ -58,7 +60,7 @@ function selectorTools() {
 
 // In-page: returns { vw, pageH, pageOverflow, offenders, clipped, scrollers, contrast, unknown, taps, tables, fonts }.
 // offenders {sel,right}; clipped/scrollers {sel,content,box}; contrast {sel,text,fg,bg,ratio,need}; unknown {sel,text};
-// taps {sel,pat,text,w,h,fail}; tables {sel,content,box,sticky} (phone widths only); fonts [name].
+// taps {sel,pat,text,w,h,fail}; tables {sel,content,box,sticky} and reach {sel,text,left,by,edge,chip} (phone widths only); fonts [name].
 function audit(selectorTools) {
 	const vw = innerWidth;
 	const root = document.documentElement;
@@ -161,7 +163,7 @@ function audit(selectorTools) {
 	const SYSTEM = /^(helvetica( neue)?|arial|georgia|times( new roman)?|segoe[\w ]*|sf pro[\w ]*|san francisco|menlo|monaco|consolas|courier( new)?|verdana|tahoma|trebuchet ms|palatino[\w ]*|cambria|calibri|avenir[\w ]*|optima|gill sans|baskerville|didot|futura|lucida[\w ]*|impact|ubuntu|cantarell|noto[\w ]*|droid[\w ]*)$/i;
 	const clean = f => f.trim().replace(/^["']|["']$/g, '');
 
-	const res = { vw, viewportMeta: !!document.querySelector('meta[name=viewport]'), pageH: root.scrollHeight, pageOverflow: root.scrollWidth - vw, offenders: [], clipped: [], scrollers: [], contrast: [], unknown: [], taps: [], tables: [], fonts: [] };
+	const res = { vw, viewportMeta: !!document.querySelector('meta[name=viewport]'), pageH: root.scrollHeight, pageOverflow: root.scrollWidth - vw, offenders: [], clipped: [], scrollers: [], contrast: [], unknown: [], taps: [], tables: [], reach: [], fonts: [] };
 	const families = new Set();
 	for (const el of document.body.querySelectorAll('*')) {
 		if (!visible(el)) continue;
@@ -214,6 +216,7 @@ function audit(selectorTools) {
 		}
 		return false;
 	};
+	const textOf = el => (el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
 	for (const el of document.body.querySelectorAll(`${NATIVE},[tabindex]`)) {
 		if (el.matches(':disabled') || el.closest('[inert]')) continue;
 		if (!el.matches(NATIVE) && el.tabIndex < 0) continue;
@@ -225,8 +228,7 @@ function audit(selectorTools) {
 		const [w, h] = [Math.round(r.width), Math.round(r.height)];
 		const fail = w < 24 || h < 24;
 		if (!fail && !(vw < 600 && h < 44)) continue;
-		const text = (el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
-		res.taps.push({ sel: label(el), pat: pat(el), text, w, h, fail });
+		res.taps.push({ sel: label(el), pat: pat(el), text: textOf(el), w, h, fail });
 	}
 
 	if (vw < 600) {
@@ -244,6 +246,58 @@ function audit(selectorTools) {
 		}
 	}
 
+	if (vw < 600) {
+		const CONTROL = 'button,[role=button],a[href],input:not([type=hidden]),select,textarea';
+		const closedDetails = el => {
+			for (let d = el.closest('details:not([open])'); d; d = d.parentElement?.closest('details:not([open])')) {
+				if (!d.querySelector(':scope > summary')?.contains(el)) return true;
+			}
+			return false;
+		};
+		// an off-canvas drawer or a skip link parked past the right edge on purpose
+		const parked = el => {
+			for (let p = el; p && p !== document.body; p = p.parentElement) if (/absolute|fixed/.test(cs(p).position) && rect(p).left >= vw) return true;
+			return false;
+		};
+		// a scroller whose children are all small controls in one row, like a filter bar
+		const chipRow = scroller => {
+			let row = scroller;
+			while (row.children.length === 1 && !row.firstElementChild.matches(CONTROL)) row = row.firstElementChild;
+			const kids = [...row.children].filter(visible);
+			if (kids.length < 2) return false;
+			const first = rect(kids[0]);
+			return kids.every(k => {
+				const r = rect(k);
+				const own = k.matches(CONTROL) ? k : k.querySelectorAll(CONTROL).length === 1 ? k.querySelector(CONTROL) : null;
+				return own && own.textContent.trim() === k.textContent.trim() && r.height <= 56 && r.width <= 240 && r.top < first.bottom && r.bottom > first.top;
+			});
+		};
+		for (const el of document.body.querySelectorAll(CONTROL)) {
+			if (!visible(el) || !el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) || clippedAway(el) || el.closest('[hidden],[aria-hidden="true"],[inert]') || closedDetails(el)) continue;
+			const r = rect(el);
+			if (tiny(r)) continue;
+			// walk the containing blocks: a fixed box ignores ancestors' clipping and an absolute one ignores those it is not inside of
+			const cuts = [];
+			let mode = cs(el).position;
+			for (let p = el.parentElement; p && p !== document.body && p !== root; p = p.parentElement) {
+				const ps = cs(p);
+				const skip = mode === 'fixed' ? ps.transform === 'none' : mode === 'absolute' && ps.position === 'static' && ps.transform === 'none';
+				if (skip) continue;
+				const edge = Math.round(rect(p).left + p.clientLeft + p.clientWidth);
+				if (ps.overflowX !== 'visible' && r.left >= edge) cuts.push({ p, edge });
+				mode = /absolute|fixed/.test(ps.position) ? ps.position : 'flow';
+			}
+			const pastViewport = r.left >= vw;
+			if ((!cuts.length && !pastViewport) || parked(el)) continue;
+			const by = cuts[0];
+			const inside = !!by && (!pastViewport || by.edge <= vw + 1);
+			const chip = inside && chipRow(by.p);
+			// a scroll-snap carousel is a swipe pattern people know, unlike a table that hides its last columns
+			const carousel = inside && !chip && cs(by.p).scrollSnapType !== 'none';
+			res.reach.push({ sel: label(el), text: textOf(el) || pat(el), left: Math.round(r.left), by: by ? label(by.p) : null, edge: by?.edge, chip, carousel });
+		}
+	}
+
 	const declared = new Set(), errored = new Set();
 	document.fonts.forEach(f => {
 		declared.add(clean(f.family));
@@ -257,6 +311,8 @@ function audit(selectorTools) {
 		if (unavailable(f)) errored.add(f);
 	}
 	res.fonts = [...errored];
+	const PLACEHOLDER = /\b(?:TBC|TBD|TBA|to be (?:confirmed|announced)|lorem ipsum|(?:dates?|times?|prices?|details?|hours?|address) (?:to|coming) (?:confirm|come|soon))\b|\[(?:[A-Z][a-z]+(?: [a-z]+){0,3}|\.\.\.|…)\]/gi;
+	res.placeholders = [...new Set(document.body.innerText.match(PLACEHOLDER) ?? [])];
 	return res;
 }
 
@@ -550,6 +606,12 @@ async function runWidth(cdp, o, width, dark, errors, { perf, focus }) {
 		if (x.sticky) rows.add('NOTE', 'table', x.sel, `${x.sel}  table scrolls sideways at ${a.vw}px with a sticky first column (content ${x.content}px in a ${x.box}px box)`);
 		else rows.add('WARN', 'table', x.sel, `${x.sel}  ${how}`);
 	}
+	for (const x of a.reach) {
+		if (x.carousel) rows.add('NOTE', 'reach', x.by, `${x.by}  scroll-snap carousel at ${a.vw}px, "${x.text}" starts past its visible edge ${x.edge}px; check the cut edge shows there is more`);
+		else if (x.chip) rows.add('NOTE', 'reach', x.by, `${x.by}  chip row scrolls sideways at ${a.vw}px, "${x.text}" starts at ${x.left}px past its visible edge ${x.edge}px; check the cut edge shows there is more`);
+		else rows.add('FAIL', 'reach', x.sel + x.text, `${x.sel} "${x.text}"  control out of reach, starts at ${x.left}px, ${x.by ? `past the visible edge ${x.edge}px of ${x.by}` : `past the viewport edge ${a.vw}px`}; keep it inside the visible area, e.g. stack the row as a card`, 8);
+	}
+	if (perf && a.placeholders.length) rows.add('WARN', 'placeholder', 'text', `placeholder text on the page: ${a.placeholders.slice(0, 6).map((t) => `"${t}"`).join(', ')}; write the real or sample value and list it for the user`);
 	for (const f of a.fonts) rows.add('FAIL', 'font', f, `"${f}" not loaded, text renders in fallback`);
 	for (const e of [...new Set(errors)].slice(0, 5)) rows.add('FAIL', 'js', e, e);
 	if (p) perfRows(rows, p);
