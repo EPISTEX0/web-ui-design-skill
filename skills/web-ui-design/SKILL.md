@@ -1,6 +1,6 @@
 ---
 name: web-ui-design
-description: Design and build web UI that looks deliberate, not generated. Use for any frontend UI work, in React, Vue, Svelte or plain HTML: building a page, screen or component (landing page, app page, dashboard, docs, form), adding a page or feature with UI to an existing app, improving a UI's look or UX, or critiquing how a UI looks.
+description: "Design and build web UI that looks deliberate, not generated. Use for any frontend UI work, in React, Vue, Svelte or plain HTML: building a page, screen or component (landing page, app page, dashboard, docs, form), adding a page or feature with UI to an existing app, improving a UI's look or UX, or critiquing how a UI looks."
 ---
 
 # Web UI design
