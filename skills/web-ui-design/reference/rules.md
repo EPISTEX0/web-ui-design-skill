@@ -1,6 +1,6 @@
 # Web UI rules
 
-These values are where at least three independent design skills agree. Where sources disagreed, one side was chosen, and the line says which. The project's `DESIGN.md` and the brief override any line here.
+These values are where at least three independent design skills agree. The project's `DESIGN.md` and the brief override any line here.
 
 ## Tells
 
