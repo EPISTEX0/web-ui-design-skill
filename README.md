@@ -53,13 +53,13 @@ As a Claude Code plugin:
 /plugin install web-ui-design@web-ui-design
 ```
 
-Then add one line to your project's `CLAUDE.md` or `AGENTS.md`, or to your user-level one:
+Optional, if the skill does not trigger in your setup: add one line to your project's `CLAUDE.md` or `AGENTS.md`, or to your user-level one:
 
 ```
 Use the web-ui-design skill for any UI work, and read DESIGN.md first when it exists.
 ```
 
-Without it, the skill triggers on new pages and redesigns but not on "add a page to this app". In the benchmark it triggered 0 of 3 times there without the line and 3 of 3 with it.
+The skill triggers on new pages and redesigns. For "add a page to this app", the benchmark found it triggered 0 of 3 times without the line and 3 of 3 with it. A later 3-run check on Claude Opus 5.5 with project-only settings did not reproduce that: without the line it triggered 3 of 3 times, once per prompt, including "add a settings page to this app". If your setup behaves like the benchmark, add the line.
 
 ## What the agent does
 
@@ -123,7 +123,7 @@ Version 0.4, benchmarked on 2026-10-20. It met three of four bars set before the
 
 - **A user who will not answer gets no measurable gain overall.** The bar was 1.0 above defaults, and 0.4 reached 0.26. The page is better built, but the facts that decide fit live only with the user.
 - **A redesign can rewrite existing facts.** Told to refresh a site's 2013 dates, one of 3 builds also moved an Easter closure to Christmas and invented four notices. It listed every change, but the sample-value rule should apply only to missing facts.
-- **Extend needs the `CLAUDE.md` line** to trigger at all.
+- **Extend may need the `CLAUDE.md` line** to trigger. The benchmark saw 0 of 3 triggers without it; a later 3-run check on Opus 5.5 saw 3 of 3.
 - **The render loop still gets cut short.** Some builds say in their reply that they did not open every screenshot or walk the main flow.
 - **The checker trusts positioned controls.** A control placed off screen with absolute or fixed positioning is treated as a deliberate off-canvas panel, so a misplaced one passes.
 - **New sites cost about 3 times defaults** ($0.95 against $0.30) and take about 5 minutes.

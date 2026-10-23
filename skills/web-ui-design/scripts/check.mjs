@@ -23,6 +23,9 @@ const BUDGETS = {
 	landing: { level: 'FAIL', js: 50 * 1024, fontFiles: 2 },
 };
 const FONT_BYTES = 250 * 1024;
+// Chrome makes its singleton socket in TMPDIR/org.chromium.Chromium.XXXXXX/SingletonSocket (45 bytes past TMPDIR) and a Unix socket path holds 108 bytes (104 on macOS).
+// A TMPDIR over 50 bytes risks that limit; macOS's usual 49-byte /var/folders/.../T stays under it.
+const LONG_TMPDIR = 50;
 
 class SetupError extends Error {}
 
@@ -67,7 +70,7 @@ function selectorTools() {
 
 // In-page: returns { vw, pageH, pageOverflow, offenders, clipped, scrollers, contrast, unknown, taps, tables, fonts }.
 // offenders {sel,right}; clipped/scrollers {sel,content,box}; contrast {sel,text,fg,bg,ratio,need}; unknown {sel,text};
-// taps {sel,pat,text,w,h,fail}; tables {sel,content,box,sticky} and reach {sel,text,left,by,edge,chip} (phone widths only); fonts [name].
+// taps {sel,pat,text,w,h,shownW,shownH,fail}; tables {sel,content,box,sticky} and reach {sel,text,left,by,edge,chip} (phone widths only); fonts [name].
 function audit(selectorTools) {
 	const vw = innerWidth;
 	const root = document.documentElement;
@@ -223,23 +226,31 @@ function audit(selectorTools) {
 		}
 		return false;
 	};
-	const textOf = el => (el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+	const textOf = el => String(el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+	// A widget role makes a target even without a tabindex or with tabindex=-1 (roving tabindex).
+	const INTERACTIVE = `${NATIVE},${['button', 'link', 'checkbox', 'radio', 'switch', 'tab', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'option', 'treeitem', 'slider', 'spinbutton', 'textbox', 'searchbox', 'combobox', 'gridcell'].map(r => `[role~=${r}]`).join(',')}`;
+	// A size under 24 that rounds to 24 would read "24x24, needs 24x24", so it keeps a decimal, cut rather than rounded up.
+	const shown = v => {
+		const n = Math.round(v);
+		if (v >= 24 || n !== 24) return String(n);
+		const d = v.toFixed(1);
+		return +d < 24 ? d : String(Math.floor(v * 10) / 10);
+	};
 	const targets = [];
-	for (const el of document.body.querySelectorAll(`${NATIVE},[tabindex]`)) {
+	for (const el of document.body.querySelectorAll(`${INTERACTIVE},[tabindex]`)) {
 		if (el.matches(':disabled') || el.closest('[inert]')) continue;
-		if (!el.matches(NATIVE) && el.tabIndex < 0) continue;
+		if (!el.matches(INTERACTIVE) && el.tabIndex < 0) continue;
 		if (!visible(el) || !el.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true }) || clippedAway(el)) continue;
 		let r = rect(el);
 		// a native checkbox or radio is clicked through its label
 		if (el.matches('input[type=checkbox],input[type=radio]')) for (const l of el.labels) { const m = rect(l); if (m.width * m.height > r.width * r.height) r = m; }
 		if (tiny(r) || r.right <= 0 || r.bottom <= 0) continue;
 		const [w, h] = [Math.round(r.width), Math.round(r.height)];
-		targets.push({ el, r, w, h, small: r.width < 24 || r.height < 24, exempt: inlineLink(el) });
+		targets.push({ el, r, w, h, shownW: shown(r.width), shownH: shown(r.height), small: r.width < 24 || r.height < 24, exempt: inlineLink(el) });
 	}
 	// WCAG 2.5.8 spacing exception: a 24px circle centred on an undersized target must not meet another target or the circle of another undersized one.
 	// A target and the targets nested in it do not count against each other, unless the ancestor is itself a native control or has an interactive role:
 	// then it is a separate target. A generic container focusable only through tabindex is just a wrapper.
-	const INTERACTIVE = `${NATIVE},${['button', 'link', 'checkbox', 'radio', 'switch', 'tab', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'option', 'treeitem', 'slider', 'spinbutton', 'textbox', 'searchbox', 'combobox'].map(r => `[role~=${r}]`).join(',')}`;
 	const EPS = 0.01;
 	const crowded = t => {
 		const [x, y] = [(t.r.left + t.r.right) / 2, (t.r.top + t.r.bottom) / 2];
@@ -253,7 +264,7 @@ function audit(selectorTools) {
 		if (t.exempt) continue;
 		const fail = t.small && crowded(t);
 		if (!fail && !(vw < 600 && t.h < 44)) continue;
-		res.taps.push({ sel: label(t.el), pat: pat(t.el), text: textOf(t.el), w: t.w, h: t.h, fail });
+		res.taps.push({ sel: label(t.el), pat: pat(t.el), text: textOf(t.el), w: t.w, h: t.h, shownW: t.shownW, shownH: t.shownH, fail });
 	}
 
 	if (vw < 600) {
@@ -471,9 +482,9 @@ function findChrome() {
 	throw fail();
 }
 
-async function launch(exe, profile, extra = []) {
+async function launch(exe, profile, env, extra = []) {
 	const args = ['--headless', '--remote-debugging-port=0', `--user-data-dir=${profile}`, '--no-first-run', '--no-default-browser-check', '--hide-scrollbars', '--mute-audio', '--disable-gpu', ...extra, 'about:blank'];
-	const child = spawn(exe, args, { stdio: ['ignore', 'ignore', 'pipe'], detached: true });
+	const child = spawn(exe, args, { stdio: ['ignore', 'ignore', 'pipe'], detached: true, env });
 	let exited = false, tail = '';
 	const gone = new Promise(r => { child.once('exit', () => { exited = true; r(); }); child.once('error', e => { tail = e.message; exited = true; r(); }); });
 	const wsUrl = await new Promise(res => {
@@ -634,7 +645,7 @@ async function runWidth(cdp, o, width, dark, errors, { perf, focus }) {
 	for (const x of a.contrast) rows.add('FAIL', 'contrast', x.fg + x.bg + x.need, `${x.fg} on ${x.bg}  ${x.ratio.toFixed(1)}:1, needs ${x.need}:1, e.g. ${x.sel} "${x.text}"`);
 	for (const x of a.unknown) rows.add('NOTE', 'contrast', x.sel, `${x.sel} "${x.text}"  text over image or gradient, check visually`, 5);
 	for (const x of a.taps) {
-		if (x.fail) rows.add('FAIL', 'tap', x.pat + (x.w < 24 ? ` w${x.w}` : '') + (x.h < 24 ? ` h${x.h}` : ''), `${x.pat}  ${x.w}x${x.h}px, WCAG 2.5.8 needs at least 24x24, e.g. ${x.sel} "${x.text}"`);
+		if (x.fail) rows.add('FAIL', 'tap', x.pat + (x.w < 24 ? ` w${x.w}` : '') + (x.h < 24 ? ` h${x.h}` : ''), `${x.pat}  ${x.shownW}x${x.shownH}px, WCAG 2.5.8 needs at least 24x24, e.g. ${x.sel} "${x.text}"`);
 		else rows.add('WARN', 'tap', x.pat, `${x.pat}  ${x.h}px tall, under 44px for phones; likely fix is padding or an ::after pseudo-element that enlarges the hit area (not measurable here), e.g. ${x.sel} "${x.text}"`);
 	}
 	for (const x of a.tables) {
@@ -674,7 +685,10 @@ async function main() {
 	fs.mkdirSync(o.out, { recursive: true });
 	for (const f of fs.readdirSync(o.out)) if (/^\d+(-dark)?-\d+\.jpg$/.test(f)) fs.rmSync(path.join(o.out, f));
 
-	const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'ui-check-profile-'));
+	// On a long TMPDIR the profile moves to /tmp and Chrome gets that profile as its TMPDIR, so its socket dir is short and goes with the profile.
+	const longTmp = process.platform !== 'win32' && Buffer.byteLength(os.tmpdir(), 'utf8') > LONG_TMPDIR;
+	const profile = fs.mkdtempSync(path.join(longTmp ? '/tmp' : os.tmpdir(), 'ui-check-profile-'));
+	const env = longTmp ? { ...process.env, TMPDIR: profile } : process.env;
 	let browser, cdp;
 	const cleanup = async () => {
 		cdp?.close();
@@ -683,11 +697,11 @@ async function main() {
 	};
 	for (const sig of ['SIGINT', 'SIGTERM']) process.once(sig, () => cleanup().finally(() => process.exit(2)));
 	try {
-		browser = await launch(exe, profile);
+		browser = await launch(exe, profile, env);
 		if (!browser.wsUrl) {
 			await browser.kill();
 			console.error('NOTE: Chrome did not start with the sandbox; retrying with --no-sandbox');
-			browser = await launch(exe, profile, ['--no-sandbox']);
+			browser = await launch(exe, profile, env, ['--no-sandbox']);
 		}
 		if (!browser.wsUrl) throw new SetupError(`Chrome failed to start (${exe}): ${browser.tail || 'no output'}. Set CHROME_PATH to a working browser.`);
 		const port = new URL(browser.wsUrl).port;
