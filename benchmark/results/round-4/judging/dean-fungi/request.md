@@ -1,1 +1,0 @@
-I'm the recorder for the Dean Fungus Group in the Forest of Dean. We'd like a species guide on our website so members can look up what they found on a foray. Put it in this folder as index.html (plain HTML, CSS and JS, no build step).

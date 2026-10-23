@@ -1,1 +1,0 @@
-We're the Skerra Ferry Company and our crew still loads cars onto the MV Gannet off a paper clipboard. Build them a loading screen to replace it. Use realistic sample data. Put it in this folder as index.html (plain HTML, CSS and JS, no build step).

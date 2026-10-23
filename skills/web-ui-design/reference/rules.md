@@ -86,7 +86,7 @@ These are defaults that read as generated because they appear whatever the subje
 
 ## Performance
 
-- Load only the fonts you use. The defaults are at most 2 families and 4 files (a landing page has a stricter budget below), subset, with `font-display: swap` and a metric-matched fallback.
+- Load only the fonts you use. The defaults are at most 2 families, 4 files and 250 KB of fonts in total (a landing page has a stricter budget below), subset, with `font-display: swap` and a metric-matched fallback.
 - Every image has dimensions or `aspect-ratio`, the hero image is preloaded with `fetchpriority="high"`, and images below the fold use `loading="lazy"`.
 - Ship no JS a static page does not need. A Persuade or Read page works with scripts off, except the interactive parts.
 - Animate only `transform` and `opacity`. Blur filters and large shadows on scrolling elements cost frames on phones.

@@ -36,7 +36,7 @@ Round 3 gave every build a simulated client with private notes (brand colors, pr
 
 Rounds 1 and 2 (36 builds, briefs without a client) found every design skill about 2 points above defaults, with 0.2 ahead on measurable defects: 0 contrast failures against 6 of 9 for 0.1.
 
-The method, every score, the integrity notes, the limits and a script to rerun it are in [`benchmark/`](benchmark/). Judge for yourself in the blind galleries for [round 4](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-4/gallery/), [round 3](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-3/gallery/) and [round 2](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/).
+The method, every score, the integrity notes, the limits and a script to rerun it are in [`benchmark/`](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark). Judge for yourself in the blind galleries for [round 4](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark/results/round-4/gallery), [round 3](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark/results/round-3/gallery) and [round 2](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark/results/gallery). The benchmark and the research notes live on the [`benchmark` branch](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark), not on the main line.
 
 ## Install
 
@@ -90,7 +90,7 @@ Every case shares four parts:
 | [`reference/rules.md`](skills/web-ui-design/reference/rules.md) | While building and checking | Tells, layout, type, color, depth, motion, states, feedback and flows, performance, mobile, copy, stress test |
 | [`reference/design-md-template.md`](skills/web-ui-design/reference/design-md-template.md) | When writing `DESIGN.md` | YAML tokens, the Brief with sources, a decisions table |
 | [`scripts/check.mjs`](skills/web-ui-design/scripts/check.mjs) | Run in the render loop, never read | Full-page screenshot tiles plus layout, reach, contrast, font, error, tap target, focus, table, placeholder and performance checks. Needs Node 22 and Chrome or Chromium, and no npm install |
-| [`research/`](research/) | Never | The reports this skill was distilled from, with sources |
+| [`research/`](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/research) | Never | The reports this skill was distilled from, with sources |
 
 A New build reads about 25 KB of instructions (roughly 6k tokens): `SKILL.md`, its case file, the catalog, the rules and the template. Extend and Improve read about the same. The large design skills we read load 17k to 50k tokens per page build.
 
@@ -104,7 +104,7 @@ A New build reads about 25 KB of instructions (roughly 6k tokens): `SKILL.md`, i
 | Review and audit skills found checkable defects (overflow, contrast, tap targets, an unloaded font). Build skills produced taste claims | [Paralect side-by-side](https://www.paralect.com/skills/top-design-skills) | Anecdotal |
 | References, a design system file, a screenshot loop and diverge-then-converge recur across vendors and practitioners | [OpenAI](https://developers.openai.com/blog/designing-delightful-frontends-with-gpt-5-4), [Anthropic](https://claude.com/blog/improving-frontend-design-through-skills), [Luke Wroblewski](https://www.lukew.com/ff/2164/design-systems-for-ai-agents), [Emil Kowalski](https://emilkowal.ski/ui/agents-with-taste) | Vendor and anecdotal |
 
-The full write-up, with every source and its date, is in [`research/evidence.md`](research/evidence.md). The per-skill deep reads are in [`research/deep-A.md`](research/deep-A.md), [`deep-B.md`](research/deep-B.md) and [`deep-C.md`](research/deep-C.md), and the market inventory is in [`research/inventory.md`](research/inventory.md).
+The full write-up, with every source and its date, is in [`research/evidence.md`](https://github.com/EPISTEX0/web-ui-design-skill/blob/benchmark/research/evidence.md). The per-skill deep reads are in [`research/deep-A.md`](https://github.com/EPISTEX0/web-ui-design-skill/blob/benchmark/research/deep-A.md), [`deep-B.md`](https://github.com/EPISTEX0/web-ui-design-skill/blob/benchmark/research/deep-B.md) and [`deep-C.md`](https://github.com/EPISTEX0/web-ui-design-skill/blob/benchmark/research/deep-C.md), and the market inventory is in [`research/inventory.md`](https://github.com/EPISTEX0/web-ui-design-skill/blob/benchmark/research/inventory.md).
 
 ## How the rules were chosen
 
