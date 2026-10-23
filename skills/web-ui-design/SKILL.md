@@ -1,6 +1,6 @@
 ---
 name: web-ui-design
-description: "Designs and builds web UI that looks deliberate, not generated, in React, Vue, Svelte or plain HTML: landing pages, app screens, dashboards, docs, forms and components, adding a page or feature with UI to an existing app, improving a UI's look or UX, and reviewing a UI. Use when the user asks to build or add a page, screen, landing page, dashboard, form or component; add a feature with UI to an existing app; restyle, redesign or \"make it look better\"; or review a UI."
+description: "Designs and builds web UI that looks deliberate, not generated, in React, Vue, Svelte or plain HTML: landing pages, web apps and app screens (including small apps built from scratch, such as a todo or CRUD app with a settings screen), dashboards, docs, forms and components; adding a page or feature with UI to an existing app; improving a UI's look or UX; and reviewing a UI. Use whenever the task produces a web page or screen a person will see, even when the brief is mostly about functionality: build, make or add an app, page, screen, landing page, dashboard, form or component; restyle, redesign or \"make it look better\"; review a UI. Use it alongside web-platform API guidance skills, which cover APIs and browser support, not visual design."
 ---
 
 # Web UI design
