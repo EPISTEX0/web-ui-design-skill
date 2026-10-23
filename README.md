@@ -36,7 +36,7 @@ Round 3 gave every build a simulated client with private notes (brand colors, pr
 
 Rounds 1 and 2 (36 builds, briefs without a client) found every design skill about 2 points above defaults, with 0.2 ahead on measurable defects: 0 contrast failures against 6 of 9 for 0.1.
 
-The method, every score, the integrity notes, the limits and a script to rerun it are in [`benchmark/`](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark). Judge for yourself in the blind galleries for [round 4](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark/results/round-4/gallery), [round 3](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark/results/round-3/gallery) and [round 2](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark/results/gallery). The benchmark and the research notes live on the [`benchmark` branch](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark), not on the main line.
+The method, every score, the integrity notes, the limits and a script to rerun it are in [`benchmark/`](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark/benchmark). Judge for yourself in the blind galleries for [round 4](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-4/gallery/), [round 3](https://epistex0.github.io/web-ui-design-skill/benchmark/results/round-3/gallery/) and [round 2](https://epistex0.github.io/web-ui-design-skill/benchmark/results/gallery/). The benchmark and the research notes live on the [`benchmark` branch](https://github.com/EPISTEX0/web-ui-design-skill/tree/benchmark), not on the main line.
 
 ## Install
 
