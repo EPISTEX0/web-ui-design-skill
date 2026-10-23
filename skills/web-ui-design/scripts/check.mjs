@@ -1,21 +1,28 @@
 #!/usr/bin/env node
 // Renders a page at several widths in headless Chrome, audits layout, contrast, fonts, tap targets and wide tables, saves full-page JPEG tiles.
-// Extra checks: tap targets (WCAG 2.5.8 24px FAIL, 44px height WARN under 600px wide) and sideways-scrolling tables run at every width.
+// Extra checks: tap targets (WCAG 2.5.8 24px FAIL unless the spacing exception holds, 44px height WARN under 600px wide) and sideways-scrolling tables run at every width.
 // Under 600px a control starting past the right edge of the viewport or of a clipping or scrolling ancestor is a FAIL (out of reach); a sideways-scrolling chip row or scroll-snap carousel is a NOTE.
 // Placeholder text (TBC, "dates to confirm", [Bracketed gaps], lorem ipsum) is a WARN, reported once at the narrowest width.
 // Keyboard focus (up to 40 Tab presses, FAIL when a focused element shows no visible change) runs at the widest width.
-// Performance (LCP, CLS, bytes by type, WARN over budget) runs on a cache-free load at the narrowest width.
+// Performance (LCP, CLS, bytes by type, WARN over budget; --budget landing makes JS over 50 KB or more than 2 font files a FAIL) runs on a cache-free load at the narrowest width.
 // Exit codes: 0 no FAIL, 1 any FAIL, 2 setup error. --dark repeats layout checks in dark mode but not focus or performance.
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const USAGE = 'Usage: node check.mjs <file-path-or-url> [--widths 390,768,1440] [--out <dir>] [--dark]';
+const USAGE = 'Usage: node check.mjs <file-path-or-url> [--widths 390,768,1440] [--out <dir>] [--dark] [--budget landing]';
 const TILE = 1600;
 const MAX_TABS = 40;
 const MAX_H = 9600;
+// Over-budget rows are WARN by default; a landing page has tighter JS and font-file limits and going over either is a FAIL (the 250 KB font total stays a WARN).
+const BUDGETS = {
+	default: { level: 'WARN', js: 300 * 1024, fontFiles: 4 },
+	landing: { level: 'FAIL', js: 50 * 1024, fontFiles: 2 },
+};
+const FONT_BYTES = 250 * 1024;
 
 class SetupError extends Error {}
 
@@ -217,6 +224,7 @@ function audit(selectorTools) {
 		return false;
 	};
 	const textOf = el => (el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+	const targets = [];
 	for (const el of document.body.querySelectorAll(`${NATIVE},[tabindex]`)) {
 		if (el.matches(':disabled') || el.closest('[inert]')) continue;
 		if (!el.matches(NATIVE) && el.tabIndex < 0) continue;
@@ -224,11 +232,26 @@ function audit(selectorTools) {
 		let r = rect(el);
 		// a native checkbox or radio is clicked through its label
 		if (el.matches('input[type=checkbox],input[type=radio]')) for (const l of el.labels) { const m = rect(l); if (m.width * m.height > r.width * r.height) r = m; }
-		if (tiny(r) || r.right <= 0 || r.bottom <= 0 || inlineLink(el)) continue;
+		if (tiny(r) || r.right <= 0 || r.bottom <= 0) continue;
 		const [w, h] = [Math.round(r.width), Math.round(r.height)];
-		const fail = w < 24 || h < 24;
-		if (!fail && !(vw < 600 && h < 44)) continue;
-		res.taps.push({ sel: label(el), pat: pat(el), text: textOf(el), w, h, fail });
+		targets.push({ el, r, w, h, small: w < 24 || h < 24, exempt: inlineLink(el) });
+	}
+	// WCAG 2.5.8 spacing exception: a 24px circle centred on an undersized target must not meet another target or the circle of another undersized one.
+	// A target and the targets nested in it do not count against each other.
+	const EPS = 0.01;
+	const crowded = t => {
+		const [x, y] = [(t.r.left + t.r.right) / 2, (t.r.top + t.r.bottom) / 2];
+		return targets.some(o => {
+			if (o === t || o.el.contains(t.el) || t.el.contains(o.el)) return false;
+			if (Math.hypot(Math.max(o.r.left - x, x - o.r.right, 0), Math.max(o.r.top - y, y - o.r.bottom, 0)) < 12 - EPS) return true;
+			return o.small && Math.hypot(x - (o.r.left + o.r.right) / 2, y - (o.r.top + o.r.bottom) / 2) < 24 - EPS;
+		});
+	};
+	for (const t of targets) {
+		if (t.exempt) continue;
+		const fail = t.small && crowded(t);
+		if (!fail && !(vw < 600 && t.h < 44)) continue;
+		res.taps.push({ sel: label(t.el), pat: pat(t.el), text: textOf(t.el), w: t.w, h: t.h, fail });
 	}
 
 	if (vw < 600) {
@@ -385,12 +408,16 @@ async function perfProbe() {
 }
 
 function parseArgs(argv) {
-	const o = { widths: [390, 768, 1440], dark: false };
+	const o = { widths: [390, 768, 1440], dark: false, budget: 'default' };
 	const rest = [];
 	for (let i = 0; i < argv.length; i++) {
 		const a = argv[i];
 		if (a === '--dark') o.dark = true;
 		else if (a === '--widths') o.widths = (argv[++i] ?? '').split(',').map(Number);
+		else if (a === '--budget') {
+			o.budget = argv[++i];
+			if (o.budget !== 'landing') throw new SetupError('--budget takes landing, e.g. --budget landing.');
+		}
 		else if (a === '--out') { o.out = argv[++i]; if (!o.out) throw new SetupError(`--out needs a directory. ${USAGE}`); }
 		else if (a.startsWith('--')) throw new SetupError(`Unknown option ${a}. ${USAGE}`);
 		else rest.push(a);
@@ -402,13 +429,16 @@ function parseArgs(argv) {
 		const u = new URL(t);
 		o.url = t;
 		o.name = path.basename(u.pathname, path.extname(u.pathname)) || u.hostname;
+		o.id = t;
 	} else {
 		const abs = path.resolve(t);
 		if (!fs.existsSync(abs)) throw new SetupError(`File not found: ${t}`);
 		o.url = pathToFileURL(abs).href;
 		o.name = path.basename(abs, path.extname(abs));
+		o.id = abs;
 	}
-	o.out ??= path.join(os.tmpdir(), 'ui-check', o.name.replace(/[^\w.-]/g, '_'));
+	// Two index.html files must not share tiles, so the folder name carries a short hash of what was checked.
+	o.out ??= path.join(os.tmpdir(), 'ui-check', `${o.name.replace(/[^\w.-]/g, '_')}-${createHash('sha1').update(o.id).digest('hex').slice(0, 8)}`);
 	return o;
 }
 
@@ -419,12 +449,12 @@ function findChrome() {
 		if (ok(process.env.CHROME_PATH)) return process.env.CHROME_PATH;
 		throw new SetupError(`CHROME_PATH is not an executable file: ${process.env.CHROME_PATH}`);
 	}
-	const names = ['chromium', 'chromium-browser', 'google-chrome', 'google-chrome-stable', 'chrome', 'microsoft-edge'];
+	const names = ['chromium', 'chromium-browser', 'google-chrome', 'google-chrome-stable', 'chrome', 'microsoft-edge', 'brave', 'brave-browser'];
 	for (const dir of (process.env.PATH ?? '').split(path.delimiter)) {
 		for (const n of names) if (dir && ok(path.join(dir, n))) return path.join(dir, n);
 	}
-	const mac = ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/Applications/Chromium.app/Contents/MacOS/Chromium'];
-	const found = mac.find(ok);
+	const fixed = ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/Applications/Chromium.app/Contents/MacOS/Chromium', '/usr/bin/brave', '/opt/brave-bin/brave', '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'];
+	const found = fixed.find(ok);
 	if (found) return found;
 	const pw = path.join(os.homedir(), '.cache', 'ms-playwright');
 	const dirs = fs.existsSync(pw) ? fs.readdirSync(pw).sort().reverse() : [];
@@ -549,7 +579,9 @@ async function watchNetwork(cdp) {
 	};
 }
 
-function perfRows(rows, p) {
+function perfRows(rows, p, budget) {
+	const limit = BUDGETS[budget];
+	const tag = budget === 'default' ? '' : ` (${budget} budget)`;
 	const kinds = { script: [], stylesheet: [], font: [], image: [] };
 	const unknown = p.files.filter(e => NET_KINDS[e.type] && !e.bytes);
 	for (const e of p.files) if (NET_KINDS[e.type]) kinds[NET_KINDS[e.type]].push({ name: e.name.split(/[?#]/)[0], bytes: e.bytes });
@@ -568,8 +600,8 @@ function perfRows(rows, p) {
 	rows.add('NOTE', 'perf', 'numbers', parts.join(', ') + (unknown.length ? `; ${plural(unknown.length, 'file')} of unknown size` : ''));
 	if (p.cls > 0.1) rows.add('WARN', 'perf', 'cls', `CLS ${p.cls.toFixed(3)}, over 0.1; give images and embeds a width and height, and keep late content from pushing text down`);
 	if (p.lcp > 2500) rows.add('WARN', 'perf', 'lcp', `LCP ${p.lcp} ms, over 2500 ms; shrink or preload the largest image or text block`);
-	if (sum(kinds.script) > 300 * 1024) rows.add('WARN', 'perf', 'js', `JS ${kb(sum(kinds.script))}, over 300 KB`);
-	if (kinds.font.length > 4 || sum(kinds.font) > 250 * 1024) rows.add('WARN', 'perf', 'fonts', `${plural(kinds.font.length, 'font file')} totalling ${kb(sum(kinds.font))}, over 4 files or 250 KB; subset them or drop weights`);
+	if (sum(kinds.script) > limit.js) rows.add(limit.level, 'perf', 'js', `JS ${kb(sum(kinds.script))}, over ${kb(limit.js)}${tag}`);
+	if (kinds.font.length > limit.fontFiles || sum(kinds.font) > FONT_BYTES) rows.add(kinds.font.length > limit.fontFiles ? limit.level : 'WARN', 'perf', 'fonts', `${plural(kinds.font.length, 'font file')} totalling ${kb(sum(kinds.font))}, over ${limit.fontFiles} files or 250 KB${tag}; subset them or drop weights`);
 	for (const x of kinds.image) if (x.bytes > 500 * 1024) rows.add('WARN', 'perf', x.name, `image ${path.basename(x.name)} ${kb(x.bytes)}, over 500 KB`);
 }
 
@@ -614,7 +646,7 @@ async function runWidth(cdp, o, width, dark, errors, { perf, focus }) {
 	if (perf && a.placeholders.length) rows.add('WARN', 'placeholder', 'text', `placeholder text on the page: ${a.placeholders.slice(0, 6).map((t) => `"${t}"`).join(', ')}; write the real or sample value and list it for the user`);
 	for (const f of a.fonts) rows.add('FAIL', 'font', f, `"${f}" not loaded, text renders in fallback`);
 	for (const e of [...new Set(errors)].slice(0, 5)) rows.add('FAIL', 'js', e, e);
-	if (p) perfRows(rows, p);
+	if (p) perfRows(rows, p, o.budget);
 
 	const height = Math.min(a.pageH, MAX_H);
 	const tag = `${width}${dark ? '-dark' : ''}`;
@@ -650,6 +682,7 @@ async function main() {
 		browser = await launch(exe, profile);
 		if (!browser.wsUrl) {
 			await browser.kill();
+			console.error('NOTE: Chrome did not start with the sandbox; retrying with --no-sandbox');
 			browser = await launch(exe, profile, ['--no-sandbox']);
 		}
 		if (!browser.wsUrl) throw new SetupError(`Chrome failed to start (${exe}): ${browser.tail || 'no output'}. Set CHROME_PATH to a working browser.`);
