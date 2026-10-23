@@ -124,6 +124,62 @@ describe('checker', { skip }, () => {
 			assert.equal(r.code, 0);
 		});
 
+		test('a dimension under 24 that rounds to 24 prints with one decimal, other sizes print as before', () => {
+			const html = `<div style="display:flex;align-items:center;gap:4px">${btn(16, 16)}${btn(23.6, 24)}</div>`;
+			const r = run([page('tap-decimal.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.match(r.out, /^ {2}FAIL tap {7}button {2}23\.6x24px, WCAG 2\.5\.8 needs at least 24x24, e\.g\. /m, r.out);
+			assert.match(r.out, /^ {2}FAIL tap {7}button {2}16x16px, WCAG 2\.5\.8 needs at least 24x24, e\.g\. /m, r.out);
+		});
+
+		test('a dimension that would round up to 24.0 under one decimal is cut, not rounded up', () => {
+			const html = `<div style="display:flex;align-items:center;gap:4px">${btn(16, 16)}${btn(23.96, 30)}</div>`;
+			const r = run([page('tap-decimal-edge.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.match(r.out, /^ {2}FAIL tap {7}button {2}23\.9x30px, WCAG 2\.5\.8 needs at least 24x24, e\.g\. /m, r.out);
+		});
+
+		test('a link nested in a gridcell still counts the gridcell as a neighbour', () => {
+			const html = `<div role="gridcell" tabindex="0" style="display:flex;align-items:center;justify-content:center;width:120px;height:48px"><a href="#x" style="display:block;width:16px;height:16px" aria-label="x"></a></div>`;
+			const r = run([page('tap-in-gridcell.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.equal(lines(r.out, 'FAIL', 'tap').length, 1, `expected the nested link to FAIL, got exit ${r.code}:\n${r.out}`);
+		});
+
+		test('a link nested in a roving-tabindex tab (tabindex -1) fails', () => {
+			const html = `<div role="tab" tabindex="-1" style="display:flex;align-items:center;justify-content:center;width:120px;height:48px"><a href="#x" style="display:block;width:16px;height:16px" aria-label="x"></a></div>`;
+			const r = run([page('tap-in-tab.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.equal(lines(r.out, 'FAIL', 'tap').length, 1, `expected the nested link to FAIL, got exit ${r.code}:\n${r.out}`);
+			assert.equal(r.code, 1);
+		});
+
+		test('a link nested in a gridcell without tabindex fails', () => {
+			const html = `<div role="gridcell" style="display:flex;align-items:center;justify-content:center;width:120px;height:48px"><a href="#x" style="display:block;width:16px;height:16px" aria-label="x"></a></div>`;
+			const r = run([page('tap-in-gridcell-bare.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.equal(lines(r.out, 'FAIL', 'tap').length, 1, `expected the nested link to FAIL, got exit ${r.code}:\n${r.out}`);
+		});
+
+		test('an isolated 16x16 role=button div without tabindex is checked like a button', () => {
+			const div = `<div role="button" style="width:16px;height:16px"></div>`;
+			const alone = run([page('tap-role-button-alone.html', `</head><body><main style="padding:100px">${div}</main></body></html>`), '--widths', '390']);
+			assert.deepEqual(lines(alone.out, 'FAIL', 'tap'), [], alone.out);
+			assert.match(alone.out, /^ {2}WARN tap {7}div\[role=button\] {2}16px tall, under 44px for phones/m);
+			const pair = run([page('tap-role-button-pair.html', `</head><body><main style="padding:100px;display:flex;gap:4px">${div}${div}</main></body></html>`), '--widths', '390']);
+			assert.match(pair.out, /^ {2}FAIL tap {7}div\[role=button\] {2}16x16px/m, pair.out);
+		});
+
+		test('an isolated 16x16 role=switch div without tabindex is checked like a button', () => {
+			const div = `<div role="switch" aria-checked="false" style="width:16px;height:16px"></div>`;
+			const alone = run([page('tap-role-switch-alone.html', `</head><body><main style="padding:100px">${div}</main></body></html>`), '--widths', '390']);
+			assert.deepEqual(lines(alone.out, 'FAIL', 'tap'), [], alone.out);
+			assert.match(alone.out, /^ {2}WARN tap {7}div\[role=switch\] {2}16px tall, under 44px for phones/m);
+			const pair = run([page('tap-role-switch-pair.html', `</head><body><main style="padding:100px;display:flex;gap:4px">${div}${div}</main></body></html>`), '--widths', '390']);
+			assert.match(pair.out, /^ {2}FAIL tap {7}div\[role=switch\] {2}16x16px/m, pair.out);
+		});
+
+		test('a role-only element that is hidden or zero-sized is not a target', () => {
+			const html = `<div role="tab" style="display:none;width:16px;height:16px"></div><div role="tab" style="width:0;height:0"></div><div role="tab" style="width:16px;height:16px;visibility:hidden"></div>`;
+			const r = run([page('tap-role-hidden.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.deepEqual([...lines(r.out, 'FAIL', 'tap'), ...lines(r.out, 'WARN', 'tap')], [], r.out);
+		});
+
 		test('an inline link in a sentence stays exempt and the phone height note stays', () => {
 			const r = run([page('tap-inline.html', `</head><body><main style="padding:20px"><p>Read the <a href="#x">terms</a> before you sign up for anything here.</p><a href="#y" style="display:inline-block;padding:0;line-height:32px">Thirty-two</a></main></body></html>`), '--widths', '390']);
 			assert.deepEqual(lines(r.out, 'FAIL', 'tap'), [], r.out);
@@ -216,6 +272,22 @@ describe('checker', { skip }, () => {
 				assert.ok(fs.existsSync(w.log), 'the Brave stand-in was never launched');
 			});
 		}
+	});
+
+	describe('long TMPDIR', () => {
+		const profiles = () => fs.readdirSync('/tmp').filter(f => f.startsWith('ui-check-profile-'));
+
+		// Chromium puts its singleton socket under TMPDIR, and a Unix socket path holds about 108 bytes.
+		test('h) a TMPDIR of 100+ characters still starts the browser and leaves nothing behind', { skip: process.platform === 'win32' }, () => {
+			const deep = path.join(root, ...Array(9).fill('abcdefghi'));
+			fs.mkdirSync(deep, { recursive: true });
+			assert.ok(deep.length > 100, deep);
+			const before = profiles();
+			const r = run([path.join(FIXTURES, 'good.html'), '--widths', '390'], { env: { TMPDIR: deep } });
+			assert.equal(r.code, 0, r.err + r.out);
+			assert.deepEqual(profiles().filter(f => !before.includes(f)), [], 'profile dir left in /tmp');
+			assert.deepEqual(fs.readdirSync(deep).filter(f => f.startsWith('org.chromium')), [], 'browser temp dir left in TMPDIR');
+		});
 	});
 
 	describe('browser search order', () => {
