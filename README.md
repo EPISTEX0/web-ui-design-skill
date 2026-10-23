@@ -98,7 +98,7 @@ A New build reads about 25 KB of instructions (roughly 6k tokens): `SKILL.md`, i
 
 | Finding | Source | Strength |
 | --- | --- | --- |
-| Front-end skills scored 4.54 to 4.67 against 4.65 with no skill. Agents read the provided skill about 48% of the time | [OpenSkillEval](https://arxiv.org/abs/2605.23657), 677 tasks, 30 skills | Measured, AI judge |
+| 8 front-end web design skills scored 4.54 to 4.67 overall (1 to 5) against 4.65 with no skill. Agents explicitly read the provided skill in about 48% of cases on average | [OpenSkillEval](https://arxiv.org/abs/2605.23657), 677 task instances across 5 categories, 30 skills (Table 2 and section 3.1) | Measured, AI judge |
 | taste-skill's own blind test: it averaged at or below the no-skill baseline in all 5 rounds | taste-skill `references/research.md`, section 11 | Measured by the author |
 | Anthropic's `frontend-design` tied for first (8.0) while using about 6 times less context than taste-skill | [Happycapy Skill Arena](https://happycapy.ai/skill-arena/frontend-design), 3 tasks | Measured, single run |
 | Review and audit skills found checkable defects (overflow, contrast, tap targets, an unloaded font). Build skills produced taste claims | [Paralect side-by-side](https://www.paralect.com/skills/top-design-skills) | Anecdotal |

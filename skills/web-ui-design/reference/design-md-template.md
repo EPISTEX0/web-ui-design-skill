@@ -1,6 +1,6 @@
 # DESIGN.md template
 
-Copy into the repo root as `DESIGN.md`. Fill every value. Add `Read DESIGN.md before any UI work.` to the project's `CLAUDE.md` or `AGENTS.md` so the contract loads even when no design skill triggers.
+Copy into the repo root as `DESIGN.md`. Fill every value. Suggest to the user adding `Read DESIGN.md before any UI work.` to the project's `CLAUDE.md` or `AGENTS.md`, so the contract loads even when no design skill triggers. Edit those files only if the user agrees.
 
 ```markdown
 ---
@@ -10,12 +10,12 @@ page-type: <from the catalog>
 family: <from the catalog, or "as found">
 stack: <framework, styling system, component library>
 colors:
-  bg: "#..."
-  surface: "#..."
-  text: "#..."
-  text-secondary: "#..."
-  border: "#..."
-  accent: "#..."
+  bg: "oklch(L C H)"
+  surface: "oklch(L C H)"
+  text: "oklch(L C H)"
+  text-secondary: "oklch(L C H)"
+  border: "oklch(L C H)"
+  accent: "oklch(L C H)"
 typography:
   display: "<family>, <fallback>"
   body: "<family>, <fallback>"

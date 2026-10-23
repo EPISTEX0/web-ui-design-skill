@@ -1,11 +1,11 @@
 ---
 name: web-ui-design
-description: "Design and build web UI that looks deliberate, not generated. Use for any frontend UI work, in React, Vue, Svelte or plain HTML: building a page, screen or component (landing page, app page, dashboard, docs, form), adding a page or feature with UI to an existing app, improving a UI's look or UX, or critiquing how a UI looks."
+description: "Designs and builds web UI that looks deliberate, not generated, in React, Vue, Svelte or plain HTML: landing pages, app screens, dashboards, docs, forms and components, adding a page or feature with UI to an existing app, improving a UI's look or UX, and reviewing a UI. Use when the user asks to build or add a page, screen, landing page, dashboard, form or component; add a feature with UI to an existing app; restyle, redesign or \"make it look better\"; or review a UI."
 ---
 
 # Web UI design
 
-The look comes from the process, not from a rule list. Name the case first, then run that case's steps. Every case shares the contract, the question round, the render loop and the record below. Choices come from [reference/patterns.md](reference/patterns.md), and [reference/rules.md](reference/rules.md) applies to everything you build or judge.
+The look comes from the process, not from a rule list. Name the case first, then run that case's steps. New, Extend and Improve share the contract, the question round, the render loop and the record below. Review and Small edit skip the question round and the `DESIGN.md` record. Choices come from [reference/patterns.md](reference/patterns.md), and [reference/rules.md](reference/rules.md) applies to everything you build or judge.
 
 ## 1. Name the case
 
@@ -45,10 +45,10 @@ Skip the round only when the request, the repo or `DESIGN.md` already answer eve
 
 ## Render loop
 
-Run the checker on the page. For an app with a build step, start its dev server or build it and pass the URL or the built file.
+Run the checker from this skill's directory (`${CLAUDE_SKILL_DIR}` in Claude Code) on the page. For an app with a build step, start its dev server or build it and pass the URL or the built file.
 
 ```bash
-node <this skill's directory>/scripts/check.mjs <page file or URL>   # add --dark if the page has dark mode
+node <this skill's directory>/scripts/check.mjs <page file or URL>   # add --dark if the page has dark mode, --budget landing for a landing page
 ```
 
 It renders the full page at 390, 768 and 1440 px. It reports overflow, clipped content, contrast, unloaded fonts, script errors, tap targets, controls out of reach on phones, keyboard focus, wide tables, placeholder text and a performance budget, and it saves screenshot tiles. Open every tile it lists, the 390 px tiles first. Then walk the primary flow once with your browser tool: the main action, one error and one empty state. Critique the tiles and the flow against every section of the rules, fix the failures and findings as one batch, and run the checker again. Stop after 3 rounds, and list any failure still open in your reply.
@@ -59,7 +59,7 @@ Done when the run after your last edit reports 0 failures, you opened every tile
 
 ## Record decisions
 
-Update `DESIGN.md` with the tokens as built and each non-obvious decision with its rationale. The next session reads it in step 2.
+Update `DESIGN.md`, laid out as in [reference/design-md-template.md](reference/design-md-template.md), with the tokens as built and each non-obvious decision with its rationale. The next session reads it in step 2.
 
 ## Review
 
