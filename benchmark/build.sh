@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# WARNING: run this only in a disposable VM or container. It gives the build write access to the whole
+# filesystem (`bwrap --dev-bind / /`), runs claude with `--permission-mode bypassPermissions`, and
+# copies `~/.claude/.credentials.json` into the run directory.
 # Usage: build.sh <brief> <arm> <rep>
 # arm: none | frontend-design | web-ui-design (0.1, frozen) | web-ui-design-0.2 | web-ui-design-0.3 (frozen, each with -silent and -wired)
 #      | web-ui-design-0.4 (this repo's skill)

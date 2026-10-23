@@ -1,5 +1,7 @@
 # Web UI rules
 
+Contents: [Tells](#tells) · [Layout and spacing](#layout-and-spacing) · [Type](#type) · [Color](#color) · [Surfaces and depth](#surfaces-and-depth) · [Motion](#motion) · [States and interaction](#states-and-interaction) · [Feedback and flows](#feedback-and-flows) · [Performance](#performance) · [Mobile](#mobile) · [Copy](#copy) · [Stress test](#stress-test)
+
 These values are where at least three independent design skills agree. The project's `DESIGN.md` and the brief override any line here.
 
 ## Tells
@@ -27,7 +29,7 @@ These are defaults that read as generated because they appear whatever the subje
 
 - Use 1 family for Operate screens and at most 2 for Persuade, clearly distinct. Pick the typeface from the subject. A neutral sans is a fine choice for Operate when chosen on purpose.
 - Build hierarchy from size, weight and color together. Emphasis is one weight step.
-- Body text is 16px or larger, line-height about 1.5. Large headings get tighter tracking (-0.01 to -0.03em). Body tracking stays 0.
+- Body text is 16px or larger, line-height about 1.5. The exception is the Dense tool family in [patterns.md](patterns.md), whose body text is 13 to 14px. Large headings get tighter tracking (-0.01 to -0.03em). Body tracking stays 0.
 - Headings get `text-wrap: balance`, and body gets `text-wrap: pretty`.
 - Changing or aligned numbers get `font-variant-numeric: tabular-nums`.
 - Use sentence case for headings, buttons and labels.
@@ -39,7 +41,7 @@ These are defaults that read as generated because they appear whatever the subje
 - Components reference semantic tokens (`--color-text-secondary`). Primitives (`--blue-600`) are referenced only by tokens.
 - Use 3 or 4 text levels (primary, secondary, tertiary, muted) on one neutral hue.
 - The accent marks actions and meaning, about 5% of the surface or less. Each view has one filled primary action.
-- Contrast: 4.5:1 for body text, 3:1 for large text, icons and control boundaries. The render loop measures it.
+- Contrast: 4.5:1 for body text, 3:1 for large text, icons and control boundaries. The render loop measures text contrast only. Check the 3:1 for icons and control boundaries from the CSS or by eye.
 - Color is paired with a second signal (icon, text, shape) wherever it carries meaning.
 
 ## Surfaces and depth
@@ -84,11 +86,11 @@ These are defaults that read as generated because they appear whatever the subje
 
 ## Performance
 
-- Load only the fonts you use: at most 2 families and 4 files, subset, with `font-display: swap` and a metric-matched fallback.
+- Load only the fonts you use. The defaults are at most 2 families and 4 files (a landing page has a stricter budget below), subset, with `font-display: swap` and a metric-matched fallback.
 - Every image has dimensions or `aspect-ratio`, the hero image is preloaded with `fetchpriority="high"`, and images below the fold use `loading="lazy"`.
 - Ship no JS a static page does not need. A Persuade or Read page works with scripts off, except the interactive parts.
 - Animate only `transform` and `opacity`. Blur filters and large shadows on scrolling elements cost frames on phones.
-- The checker's budget: CLS under 0.1, LCP under 2.5s, JS under 300 KB.
+- The checker's default budget: CLS under 0.1, LCP under 2.5s, JS under 300 KB. A landing page keeps JS under 50 KB and 2 font files or fewer ([patterns.md](patterns.md)), checked with `--budget landing`.
 
 ## Mobile
 
