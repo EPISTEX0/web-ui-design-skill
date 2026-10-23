@@ -1,1 +1,0 @@
-Build the docs page for backoff-kit, our small open-source TypeScript library for retrying async calls with exponential backoff and jitter. Cover install, a quick start, the retry(fn, options) API with each option, and a few recipes (HTTP 429 handling, aborting with AbortSignal, custom retry predicates). Put it in this folder as index.html (plain HTML, CSS and JS, no build step).
