@@ -9,13 +9,13 @@ mode: operate | persuade | read
 page-type: <from the catalog>
 family: <from the catalog, or "as found">
 stack: <framework, styling system, component library>
-colors:  # example values in OKLCH, replace with the project's
-  bg: "oklch(1 0 0)"
-  surface: "oklch(0.976 0.001 286.4)"
-  text: "oklch(0.21 0.006 285.9)"
-  text-secondary: "oklch(0.442 0.015 285.8)"
-  border: "oklch(0.92 0.004 286.3)"
-  accent: "oklch(0.546 0.215 262.9)"
+colors:
+  bg: "oklch(L C H)"
+  surface: "oklch(L C H)"
+  text: "oklch(L C H)"
+  text-secondary: "oklch(L C H)"
+  border: "oklch(L C H)"
+  accent: "oklch(L C H)"
 typography:
   display: "<family>, <fallback>"
   body: "<family>, <fallback>"
