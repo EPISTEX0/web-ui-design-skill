@@ -180,6 +180,13 @@ describe('checker', { skip }, () => {
 			assert.deepEqual([...lines(r.out, 'FAIL', 'tap'), ...lines(r.out, 'WARN', 'tap')], [], r.out);
 		});
 
+		test('a custom element whose value property is a number does not abort the audit', () => {
+			const html = `<script>customElements.define('x-slider', class extends HTMLElement { get value() { return 50; } });</script><span id="volume-label">Volume</span><x-slider role="slider" aria-labelledby="volume-label" style="display:block;width:120px;height:16px"></x-slider>`;
+			const r = run([page('tap-role-numeric-value.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.equal(r.code, 0, r.err + r.out);
+			assert.match(r.out, /^ {2}WARN tap {7}x-slider\[role=slider\] {2}16px tall, under 44px for phones/m, r.out);
+		});
+
 		test('an inline link in a sentence stays exempt and the phone height note stays', () => {
 			const r = run([page('tap-inline.html', `</head><body><main style="padding:20px"><p>Read the <a href="#x">terms</a> before you sign up for anything here.</p><a href="#y" style="display:inline-block;padding:0;line-height:32px">Thirty-two</a></main></body></html>`), '--widths', '390']);
 			assert.deepEqual(lines(r.out, 'FAIL', 'tap'), [], r.out);
@@ -287,6 +294,23 @@ describe('checker', { skip }, () => {
 			assert.equal(r.code, 0, r.err + r.out);
 			assert.deepEqual(profiles().filter(f => !before.includes(f)), [], 'profile dir left in /tmp');
 			assert.deepEqual(fs.readdirSync(deep).filter(f => f.startsWith('org.chromium')), [], 'browser temp dir left in TMPDIR');
+		});
+	});
+
+	describe('long multibyte TMPDIR', () => {
+		// 20 CJK characters are 3 bytes each: short by character count, over the Unix socket limit in bytes.
+		test('i) a TMPDIR that is short in characters but long in bytes still starts the browser and leaves nothing behind', { skip: process.platform === 'win32' }, () => {
+			const base = fs.mkdtempSync('/tmp/wt-');
+			try {
+				const deep = path.join(base, '汉'.repeat(20));
+				fs.mkdirSync(deep);
+				assert.ok(deep.length <= 50 && Buffer.byteLength(deep) > 50, deep);
+				const r = run([path.join(FIXTURES, 'good.html'), '--widths', '390'], { env: { TMPDIR: deep } });
+				assert.equal(r.code, 0, r.err + r.out);
+				assert.deepEqual(fs.readdirSync(deep).filter(f => f.startsWith('org.chromium')), [], 'browser temp dir left in TMPDIR');
+			} finally {
+				fs.rmSync(base, { recursive: true, force: true });
+			}
 		});
 	});
 

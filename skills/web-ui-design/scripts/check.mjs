@@ -226,7 +226,7 @@ function audit(selectorTools) {
 		}
 		return false;
 	};
-	const textOf = el => (el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
+	const textOf = el => String(el.getAttribute('aria-label') || el.innerText || el.value || el.title || el.getAttribute('placeholder') || '').replace(/\s+/g, ' ').trim().slice(0, 30);
 	// A widget role makes a target even without a tabindex or with tabindex=-1 (roving tabindex).
 	const INTERACTIVE = `${NATIVE},${['button', 'link', 'checkbox', 'radio', 'switch', 'tab', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'option', 'treeitem', 'slider', 'spinbutton', 'textbox', 'searchbox', 'combobox', 'gridcell'].map(r => `[role~=${r}]`).join(',')}`;
 	// A size under 24 that rounds to 24 would read "24x24, needs 24x24", so it keeps a decimal, cut rather than rounded up.
@@ -686,7 +686,7 @@ async function main() {
 	for (const f of fs.readdirSync(o.out)) if (/^\d+(-dark)?-\d+\.jpg$/.test(f)) fs.rmSync(path.join(o.out, f));
 
 	// On a long TMPDIR the profile moves to /tmp and Chrome gets that profile as its TMPDIR, so its socket dir is short and goes with the profile.
-	const longTmp = process.platform !== 'win32' && os.tmpdir().length > LONG_TMPDIR;
+	const longTmp = process.platform !== 'win32' && Buffer.byteLength(os.tmpdir(), 'utf8') > LONG_TMPDIR;
 	const profile = fs.mkdtempSync(path.join(longTmp ? '/tmp' : os.tmpdir(), 'ui-check-profile-'));
 	const env = longTmp ? { ...process.env, TMPDIR: profile } : process.env;
 	let browser, cdp;
