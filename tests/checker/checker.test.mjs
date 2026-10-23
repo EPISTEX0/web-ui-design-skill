@@ -97,6 +97,33 @@ describe('checker', { skip }, () => {
 			});
 		}
 
+		test('b) undersized is decided from unrounded sizes: 16x16 beside 23.6x24 four px apart fails', () => {
+			const html = `<div style="display:flex;align-items:center;gap:4px">${btn(16, 16)}${btn(23.6, 24)}</div>`;
+			const r = run([page('tap-unrounded.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.ok(lines(r.out, 'FAIL', 'tap').length > 0, `expected a FAIL tap line, got exit ${r.code}:\n${r.out}`);
+			assert.equal(r.code, 1);
+		});
+
+		test('b) a link nested in a native summary still counts the summary as a neighbour', () => {
+			const html = `<details open><summary style="display:flex;align-items:center;justify-content:center;width:120px;height:48px;padding:0"><a href="#x" style="display:block;width:16px;height:16px" aria-label="x"></a></summary></details>`;
+			const r = run([page('tap-in-summary.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.equal(lines(r.out, 'FAIL', 'tap').length, 1, `expected the nested link to FAIL, got exit ${r.code}:\n${r.out}`);
+			assert.equal(r.code, 1);
+		});
+
+		test('b) a link nested in an ARIA button still counts that button as a neighbour', () => {
+			const html = `<div role="button" tabindex="0" style="display:flex;align-items:center;justify-content:center;width:120px;height:48px"><a href="#x" style="display:block;width:16px;height:16px" aria-label="x"></a></div>`;
+			const r = run([page('tap-in-role.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.equal(lines(r.out, 'FAIL', 'tap').length, 1, `expected the nested link to FAIL, got exit ${r.code}:\n${r.out}`);
+		});
+
+		test('b) a button nested in a generic tabindex container passes', () => {
+			const html = `<div tabindex="0" style="display:flex;align-items:center;justify-content:center;width:120px;height:48px">${btn(16, 16)}</div>`;
+			const r = run([page('tap-in-tabindex.html', `</head><body><main style="padding:100px">${html}</main></body></html>`), '--widths', '390']);
+			assert.deepEqual(lines(r.out, 'FAIL', 'tap'), [], r.out);
+			assert.equal(r.code, 0);
+		});
+
 		test('an inline link in a sentence stays exempt and the phone height note stays', () => {
 			const r = run([page('tap-inline.html', `</head><body><main style="padding:20px"><p>Read the <a href="#x">terms</a> before you sign up for anything here.</p><a href="#y" style="display:inline-block;padding:0;line-height:32px">Thirty-two</a></main></body></html>`), '--widths', '390']);
 			assert.deepEqual(lines(r.out, 'FAIL', 'tap'), [], r.out);
@@ -189,6 +216,41 @@ describe('checker', { skip }, () => {
 				assert.ok(fs.existsSync(w.log), 'the Brave stand-in was never launched');
 			});
 		}
+	});
+
+	describe('browser search order', () => {
+		// Each directory holds a stand-in that logs its own name and then runs the real browser.
+		function stub(dir, name) {
+			fs.mkdirSync(dir, { recursive: true });
+			const log = path.join(dir, `${name}.log`);
+			fs.writeFileSync(path.join(dir, name), `#!/bin/sh\necho "$@" >> '${log}'\nPATH=/usr/bin:/bin:$PATH\nexec '${CHROME}' "$@"\n`, { mode: 0o755 });
+			return log;
+		}
+		const pick = (dirs, names) => {
+			const base = fs.mkdtempSync(path.join(root, 'order-'));
+			const paths = dirs.map(d => path.join(base, d));
+			const logs = names.map(([d, n]) => stub(path.join(base, d), n));
+			const r = run([path.join(FIXTURES, 'good.html'), '--widths', '390'], { env: { CHROME_PATH: '', PATH: paths.join(path.delimiter), HOME: fs.mkdtempSync(path.join(root, 'home-')) } });
+			return { r, used: logs.map(l => fs.existsSync(l)) };
+		};
+
+		test('g) chromium later on PATH beats brave in an earlier directory', () => {
+			const { r, used } = pick(['a', 'b'], [['a', 'brave'], ['b', 'chromium']]);
+			assert.equal(r.code, 0, r.err + r.out);
+			assert.deepEqual(used, [false, true], 'brave was launched although chromium is on PATH');
+		});
+
+		test('g) brave-browser later on PATH still loses to google-chrome', () => {
+			const { r, used } = pick(['a', 'b'], [['a', 'brave-browser'], ['b', 'google-chrome']]);
+			assert.equal(r.code, 0, r.err + r.out);
+			assert.deepEqual(used, [false, true]);
+		});
+
+		test('g) brave is used when it is the only match', () => {
+			const { r, used } = pick(['a', 'b'], [['b', 'brave']]);
+			assert.equal(r.code, 0, r.err + r.out);
+			assert.deepEqual(used, [true]);
+		});
 	});
 
 	describe('existing behavior', () => {

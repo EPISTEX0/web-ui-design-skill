@@ -234,15 +234,17 @@ function audit(selectorTools) {
 		if (el.matches('input[type=checkbox],input[type=radio]')) for (const l of el.labels) { const m = rect(l); if (m.width * m.height > r.width * r.height) r = m; }
 		if (tiny(r) || r.right <= 0 || r.bottom <= 0) continue;
 		const [w, h] = [Math.round(r.width), Math.round(r.height)];
-		targets.push({ el, r, w, h, small: w < 24 || h < 24, exempt: inlineLink(el) });
+		targets.push({ el, r, w, h, small: r.width < 24 || r.height < 24, exempt: inlineLink(el) });
 	}
 	// WCAG 2.5.8 spacing exception: a 24px circle centred on an undersized target must not meet another target or the circle of another undersized one.
-	// A target and the targets nested in it do not count against each other.
+	// A target and the targets nested in it do not count against each other, unless the ancestor is itself a native control or has an interactive role:
+	// then it is a separate target. A generic container focusable only through tabindex is just a wrapper.
+	const INTERACTIVE = `${NATIVE},${['button', 'link', 'checkbox', 'radio', 'switch', 'tab', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'option', 'treeitem', 'slider', 'spinbutton', 'textbox', 'searchbox', 'combobox'].map(r => `[role~=${r}]`).join(',')}`;
 	const EPS = 0.01;
 	const crowded = t => {
 		const [x, y] = [(t.r.left + t.r.right) / 2, (t.r.top + t.r.bottom) / 2];
 		return targets.some(o => {
-			if (o === t || o.el.contains(t.el) || t.el.contains(o.el)) return false;
+			if (o === t || t.el.contains(o.el) || (o.el.contains(t.el) && !o.el.matches(INTERACTIVE))) return false;
 			if (Math.hypot(Math.max(o.r.left - x, x - o.r.right, 0), Math.max(o.r.top - y, y - o.r.bottom, 0)) < 12 - EPS) return true;
 			return o.small && Math.hypot(x - (o.r.left + o.r.right) / 2, y - (o.r.top + o.r.bottom) / 2) < 24 - EPS;
 		});
@@ -450,8 +452,10 @@ function findChrome() {
 		throw new SetupError(`CHROME_PATH is not an executable file: ${process.env.CHROME_PATH}`);
 	}
 	const names = ['chromium', 'chromium-browser', 'google-chrome', 'google-chrome-stable', 'chrome', 'microsoft-edge', 'brave', 'brave-browser'];
-	for (const dir of (process.env.PATH ?? '').split(path.delimiter)) {
-		for (const n of names) if (dir && ok(path.join(dir, n))) return path.join(dir, n);
+	const pathDirs = (process.env.PATH ?? '').split(path.delimiter).filter(Boolean);
+	// Brave comes last: it is searched across every PATH dir only after the other names found nothing
+	for (const n of names) {
+		for (const dir of pathDirs) if (ok(path.join(dir, n))) return path.join(dir, n);
 	}
 	const fixed = ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/Applications/Chromium.app/Contents/MacOS/Chromium', '/usr/bin/brave', '/opt/brave-bin/brave', '/Applications/Brave Browser.app/Contents/MacOS/Brave Browser'];
 	const found = fixed.find(ok);
